@@ -7,11 +7,8 @@ module.exports = {
   ],
   theme: {
     extend: {
-      backgroundImage: {
-        coverPage: 'url("/public/image/coverPage.jpg")',
-        coverPage2: 'url("/public/image/coverPage2.jpg")',
-        coverPage3: 'url("/public/image/coverPage3.jpg")',
-        coverPage4: 'url("/public/image/coverPage4.jpg")',
+      colors: {
+        "orange-based": "#F15D43",
       },
     },
     theme: {
