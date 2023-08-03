@@ -1,3 +1,31 @@
+/* Header */
+.bg-gradient {
+  background: linear-gradient(
+    90deg,
+    rgba(149, 2, 2, 0.7972530076483718) 3%,
+    rgba(0, 0, 0, 1) 50% /* ,
+    rgba(149, 2, 2, 0.8000541280965512) 97% */
+  );
+}
+.black-background {
+  position: relative;
+  background-color: black;
+}
+
+.black-background::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(
+    30,
+    30,
+    32,
+    0
+  ); /* Adjust the alpha value to control the lightness */
+}
 /* Cover Page */
 .cover-page {
   width: 100%;

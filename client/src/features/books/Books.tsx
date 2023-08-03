@@ -1,10 +1,53 @@
 import { useState, useEffect } from "react";
 import { Book } from "../../app/models/book";
 import BookList from "./BookList";
+import * as React from "react";
+import { Theme, useTheme } from "@mui/material/styles";
+import Box from "@mui/material/Box";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+import Chip from "@mui/material/Chip";
+
+// Filter by city
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
+
+const names = [
+  "HCM",
+  "HN",
+  "Quang Ngai",
+  "Quang Ninh",
+  "Hue",
+  "Da Nang",
+  "Vung Tau",
+  "Binh Duong",
+  "Nha Trang",
+  "Phan Thiet",
+];
+
+function getStyles(name: string, personName: readonly string[], theme: Theme) {
+  return {
+    fontWeight:
+      personName.indexOf(name) === -1
+        ? theme.typography.fontWeightRegular
+        : theme.typography.fontWeightMedium,
+  };
+}
+// End of Filter by city
 
 export default function Books() {
   const [books, setBooks] = useState<Book[]>([]);
-
   useEffect(() => {
     fetch("https://fakestoreapi.com/products")
       .then((res) => res.json())
@@ -12,6 +55,38 @@ export default function Books() {
       .finally(() => setLoading(false));
   }, []);
   const [loading, setLoading] = useState(true);
+
+  // Filter by city
+  const theme = useTheme();
+  const [personName, setPersonName] = React.useState<string[]>([]);
+
+  const handleFilterByCityChange = (
+    event: SelectChangeEvent<typeof personName>
+  ) => {
+    const {
+      target: { value },
+    } = event;
+    setPersonName(
+      // On autofill we get a stringified value.
+      typeof value === "string" ? value.split(",") : value
+    );
+  };
+  // End of Filter by city
+
+  // Filter by price
+  const [priceFilter, setPriceFilter] = React.useState("");
+
+  const handleFilterByPriceChange = (event: SelectChangeEvent) => {
+    setPriceFilter(event.target.value);
+  };
+  // End of Filter by price
+
+  // Filter by status
+  const [statusFilter, setStatusFilter] = React.useState("");
+  const handleFilterByStatusChange = (event: SelectChangeEvent) => {
+    setStatusFilter(event.target.value);
+  };
+  // End of Filter by status
   if (loading)
     return (
       <div>
@@ -104,21 +179,7 @@ export default function Books() {
   return (
     <>
       <div className="container my-12 mx-auto px-4 md:px-12">
-        <div className="sm:hidden">
-          <label htmlFor="tabs" className="sr-only">
-            Select your option
-          </label>
-          <select
-            id="tabs"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          >
-            <option>Most viewed books</option>
-            <option>Lastest books</option>
-            <option>France</option>
-            <option>Germany</option>
-          </select>
-        </div>
-        <ul className="hidden text-sm font-medium text-center text-gray-500 divide-x divide-gray-200 rounded-lg shadow sm:flex dark:divide-gray-700 dark:text-gray-400">
+        {/* <ul className="hidden text-sm font-medium text-center text-gray-500 divide-x divide-gray-200 rounded-lg shadow sm:flex dark:divide-gray-700 dark:text-gray-400">
           <li className="w-full">
             <a
               href="#"
@@ -152,8 +213,85 @@ export default function Books() {
               Invoice
             </a>
           </li>
-        </ul>
+        </ul> */}
+        <div className="flex">
+          <p className="">Sort by</p>
+          {/* Filter by city form */}
+          <FormControl sx={{ m: 1, width: 200 }}>
+            <InputLabel id="demo-multiple-chip-label">City</InputLabel>
+            <Select
+              labelId="demo-multiple-chip-label"
+              id="demo-multiple-chip"
+              multiple
+              value={personName}
+              onChange={handleFilterByCityChange}
+              input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
+              renderValue={(selected) => (
+                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                  {selected.map((value) => (
+                    <Chip key={value} label={value} />
+                  ))}
+                </Box>
+              )}
+              MenuProps={MenuProps}
+            >
+              {names.map((name) => (
+                <MenuItem
+                  key={name}
+                  value={name}
+                  style={getStyles(name, personName, theme)}
+                >
+                  {name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          {/* End Filter by city form */}
 
+          {/* Filter by price form */}
+          <FormControl sx={{ m: 1, minWidth: 80 }}>
+            <InputLabel id="demo-simple-select-autowidth-label">
+              Price
+            </InputLabel>
+            <Select
+              labelId="demo-simple-select-autowidth-label"
+              id="demo-simple-select-autowidth"
+              value={priceFilter}
+              onChange={handleFilterByPriceChange}
+              autoWidth
+              label="Age"
+            >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              <MenuItem value={10}>Increasing</MenuItem>
+              <MenuItem value={21}>Descreasing</MenuItem>
+            </Select>
+          </FormControl>
+          {/* End Filter by price form */}
+
+          {/* Filter by status form */}
+          <FormControl sx={{ m: 1, minWidth: 90 }}>
+            <InputLabel id="demo-simple-select-autowidth-label">
+              Status
+            </InputLabel>
+            <Select
+              labelId="demo-simple-select-autowidth-label"
+              id="demo-simple-select-autowidth"
+              value={priceFilter}
+              onChange={handleFilterByStatusChange}
+              autoWidth
+              label="Age"
+            >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              <MenuItem value={0}>Available</MenuItem>
+              <MenuItem value={1}>Not available</MenuItem>
+            </Select>
+          </FormControl>
+          {/* End Filter by status form */}
+        </div>
         <div className="flex flex-wrap -mx-1 lg:-mx-4">
           <BookList books={books} />
         </div>

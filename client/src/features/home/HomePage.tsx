@@ -108,7 +108,7 @@ export default function HomePage() {
           alt="Cover website"
         />
 
-        <div className="content">
+        <div className="content mb-36">
           <h1>MotorMate</h1>
           <a href="#">Rent Motorcycles</a>
           <a href="#">Become a Lessor</a>
@@ -118,7 +118,7 @@ export default function HomePage() {
         <hr className="w-1/4"></hr>
       </div>
       <div className="text-center pt-5">
-        <h1 className="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
+        <h1 className="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl">
           We invest in the world’s potential
         </h1>
         <p className="mb-6 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 xl:px-48 dark:text-gray-400">
@@ -144,9 +144,90 @@ export default function HomePage() {
           </svg>
         </a>
       </div>
-
+      <div className="text-center pt-5">
+        <div className="">
+          <h1 className="text-uppercase mb-4 text-4xl font-extrabold leading-none tracking-tight text-blue-900 md:text-5xl lg:text-6xl">
+            WELCOME TO <span className=" text-orange-based">MOTORMATE</span>
+          </h1>
+          <div className="flex justify-center">
+            <div className="w-3/4 text-center">
+              <img className="w-full mb-4" src="/image/image1.png" alt="" />
+              <p className="leading-loose">
+                Justo et eos et ut takimata sed sadipscing dolore lorem, et
+                elitr labore labore voluptua no rebum sed, stet voluptua amet
+                sed elitr ea dolor dolores no clita. Dolores diam magna clita ea
+                eos amet, amet rebum voluptua vero vero sed clita accusam
+                takimata. Nonumy labore ipsum sea voluptua sea eos sit justo, no
+                ipsum sanctus sanctus no et no ipsum amet, tempor labore est
+                labore no. Eos diam eirmod lorem ut eirmod, ipsum diam
+                sadipscing stet dolores elitr elitr eirmod dolore. Magna elitr
+                accusam takimata labore, et at erat eirmod consetetur tempor
+                eirmod invidunt est, ipsum nonumy at et.
+              </p>
+            </div>
+          </div>
+          <div className="flex flex-wrap mt-3">
+            <div className="w-full lg:w-1/3 mb-2 ml-20">
+              <div className="flex items-center bg-gray-300 p-4 mb-4 h-40">
+                <div className="flex items-center justify-center flex-shrink-0 bg-orange-based mr-4 h-16 w-16 rounded-full">
+                  <svg
+                    width="100px"
+                    height="100px"
+                    viewBox="0 0 512 512"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="#000000"
+                  >
+                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                    <g
+                      id="SVGRepo_tracerCarrier"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    ></g>
+                    <g id="SVGRepo_iconCarrier">
+                      {" "}
+                      <defs> </defs> <title></title>{" "}
+                      <g data-name="Layer 4" id="Layer_4">
+                        {" "}
+                        <path
+                          className="cls-1"
+                          d="M171,226v93s-62,15-62-49C109,215,171,226,171,226Z"
+                        ></path>{" "}
+                        <path
+                          className="cls-2"
+                          d="M343,226v93s60,15,60-49C403,215,343,226,343,226Z"
+                        ></path>{" "}
+                        <path d="M369.87,216.24V203.48c0-30.55-10.81-58.94-30.41-80C319.37,101.86,291.75,90,261.62,90H251.08c-30.13,0-57.75,11.86-77.84,33.48-19.6,21.06-30.41,49.45-30.41,80v12.76a45.81,45.81,0,0,0-42.69,45.62v19.95a45.75,45.75,0,0,0,45.68,45.68h25.74a8.39,8.39,0,0,0,8.37-8.37V224.47a8.39,8.39,0,0,0-8.37-8.37h-12V203.48c0-55.17,39.34-96.74,91.44-96.74h10.53c52.17,0,91.44,41.57,91.44,96.74V216.1H341a8.39,8.39,0,0,0-8.37,8.37v94.58a8.39,8.39,0,0,0,8.37,8.37h11.72c-3.42,43.66-33.48,53.78-47.43,56.08a29.43,29.43,0,0,0-28-20.3H256.39a29.4,29.4,0,0,0,0,58.8h21a29.44,29.44,0,0,0,28.32-21.62,79.17,79.17,0,0,0,28.39-9.69c15.14-8.86,33.06-26.92,35.43-63.33a45.74,45.74,0,0,0,42.89-45.62V261.79A45.57,45.57,0,0,0,369.87,216.24ZM163.34,310.68H146A29,29,0,0,1,117,281.74V261.79A29,29,0,0,1,146,232.84h17.37Zm114,94.58h-21a12.62,12.62,0,1,1,0-25.25h21a12.62,12.62,0,0,1,0,25.25ZM395.74,281.74a29,29,0,0,1-28.95,28.95H349.43V232.84H366.8a29,29,0,0,1,28.95,28.95Z"></path>{" "}
+                        <path d="M296.15,263.82H296l-79,.37a8.5,8.5,0,0,1-.08-17l79-.37a8.5,8.5,0,0,1,.19,17Z"></path>{" "}
+                      </g>{" "}
+                    </g>
+                  </svg>
+                </div>
+                <h4 className=" text-2xl font-bold text-gray-800 uppercase">
+                  24/7 Car Rental Support
+                </h4>
+              </div>
+            </div>
+            <div className="w-full lg:w-1/3 mb-2">
+              <div className="flex items-center bg-gray-700 text-white p-4 mb-4 h-48">
+                <div className="flex items-center justify-center flex-shrink-0 bg-primary -ml-8 mr-4 h-16 w-16 rounded-full">
+                  <i className="fa fa-car fa-2x text-secondary"></i>
+                </div>
+                <h4 className="text-uppercase m-0">Car Reservation Anytime</h4>
+              </div>
+            </div>
+            <div className="w-full lg:w-1/3 mb-2">
+              <div className="flex items-center bg-gray-100 p-4 mb-4 h-48">
+                <div className="flex items-center justify-center flex-shrink-0 bg-primary -ml-8 mr-4 h-16 w-16 rounded-full">
+                  <i className="fa fa-map-marker-alt fa-2x text-secondary"></i>
+                </div>
+                <h4 className="text-uppercase m-0">Lots Of Pickup Locations</h4>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       {/* Most viewed books */}
-      <section className="bg-white dark:bg-gray-900">
+      <section className=" bg-white">
         <div className="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6 ">
           <div className="mx-auto max-w-screen-sm text-center mb-8 lg:mb-16">
             <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">
@@ -168,7 +249,8 @@ export default function HomePage() {
                   >
                     <div className="aspect-w-16 aspect-h-9">
                       <img
-                        className="object-scale-down h-80 w-full rounded-t-xl"
+                        className="object-scale-down h-80 rounded-t-xl"
+                        style={{ width: "100vw" }}
                         src={mostViewedBook.image}
                         alt="Image Book"
                       />
@@ -177,11 +259,63 @@ export default function HomePage() {
                       className="p-4 md:p-5 min-h-[128px]"
                       style={{ lineClamp: 2 }}
                     >
-                      <p className="mt-2 text-xs uppercase text-gray-600 dark:text-gray-400">
-                        {mostViewedBook.category}
-                      </p>
-                      <h3 className="mt-2 text-lg font-medium text-gray-800 group-hover:text-blue-600 dark:text-gray-300 dark:group-hover:text-white line-clamp-2 text-justify">
+                      <div style={{ display: "inline-flex" }}>
+                        <svg
+                          width="20px"
+                          height="20px"
+                          viewBox="0 0 1024 1024"
+                          className="icon mr-1 mt-1"
+                          version="1.1"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="#000000"
+                        >
+                          <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                          <g
+                            id="SVGRepo_tracerCarrier"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          ></g>
+                          <g id="SVGRepo_iconCarrier">
+                            <path
+                              d="M522.24 81.984a308.288 308.288 0 0 0-308.352 308.352c0 224.96 308.352 461.632 308.352 461.632s85.056-65.6 165.888-160.256a22.4 22.4 0 0 0-15.744-38.4 22.016 22.016 0 0 0-17.152 8.512l-0.064-0.064 74.496-109.376 3.52 2.176a21.568 21.568 0 0 0-3.968 11.968 22.4 22.4 0 0 0 22.4 22.464 22.272 22.272 0 0 0 20.992-15.36c33.92-58.56 57.92-121.216 57.92-183.232A308.224 308.224 0 0 0 522.24 81.984z"
+                              fill=""
+                            ></path>
+                            <path
+                              d="M716.864 620.416m-22.4 0a22.4 22.4 0 1 0 44.8 0 22.4 22.4 0 1 0-44.8 0Z"
+                              fill=""
+                            ></path>
+                            <path
+                              d="M522.24 126.784a263.808 263.808 0 0 0-263.552 263.552c0 163.008 191.168 341.824 263.552 403.648 72.384-61.824 263.552-240.64 263.552-403.648A263.872 263.872 0 0 0 522.24 126.784z m0 432.576a172.032 172.032 0 1 1 0-344.064 172.032 172.032 0 0 1 0 344.064z"
+                              fill="#F15D43"
+                            ></path>
+                            <path
+                              d="M522.24 387.328m-127.168 0a127.168 127.168 0 1 0 254.336 0 127.168 127.168 0 1 0-254.336 0Z"
+                              fill="#FFFFFF"
+                            ></path>
+                            <path
+                              d="M186.304 936.384m-22.4 0a22.4 22.4 0 1 0 44.8 0 22.4 22.4 0 1 0-44.8 0Z"
+                              fill=""
+                            ></path>
+                            <path
+                              d="M263.04 913.984a22.464 22.464 0 0 0-22.4 22.4v0.064c0 12.288 10.112 22.4 22.4 22.4h595.2c12.288 0 22.4-10.048 22.4-22.4v-0.064a22.464 22.464 0 0 0-22.4-22.4h-595.2z"
+                              fill=""
+                            ></path>
+                            <path
+                              d="M292.8 359.36a16 16 0 0 1-15.744-18.816c25.6-144 153.28-183.616 158.656-185.216a16 16 0 0 1 9.152 30.656c-4.672 1.408-114.24 35.968-136.384 160.192a16 16 0 0 1-15.68 13.184z"
+                              fill="#FFFFFF"
+                            ></path>
+                          </g>
+                        </svg>
+                        <p className="mt-2 text-xs uppercase text-gray-600 dark:text-gray-400">
+                          {mostViewedBook.category}
+                        </p>
+                      </div>
+
+                      <h3 className="mt-2 text-lg font-medium text-gray-800 group-hover:text-blue-600 dark:text-gray-300 dark:group-hover:text-white line-clamp-1 text-justify">
                         {mostViewedBook.title}
+                      </h3>
+                      <h3 className="mt-2 text-lg font-medium text-red-600  dark:text-gray-300 dark:group-hover:text-white line-clamp-1 text-justify">
+                        100.000vnd/day
                       </h3>
                     </div>
                   </a>
