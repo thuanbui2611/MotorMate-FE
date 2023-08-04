@@ -1,9 +1,7 @@
 import { useState } from "react";
-import LoginForm from "../../features/loginForm/LoginForm";
+import LoginForm from "../../features/login/LoginFormPopUp";
 
-interface Props {
-  onLoginFormOpen: () => void;
-}
+interface Props {}
 export default function Header(props: Props) {
   return (
     <nav className="bg-gradient border-gray-200 drop-shadow-xl shadow-inner">
@@ -70,9 +68,9 @@ export default function Header(props: Props) {
         </form> */}
         <div className="flex items-center md:order-2">
           {/* Test Login Form  */}
-          <button className="text-white" onClick={props.onLoginFormOpen}>
+          <a className="text-white" href="/login">
             Login
-          </button>
+          </a>
           {/* End Login Form */}
           <li className="font-sans block lg:inline-block mr-4 pt-1 lg:mt-0 lg:ml-6 text-black hover:text-gray-700">
             <a href="/my-cart" role="button" className="relative flex">

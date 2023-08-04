@@ -114,10 +114,131 @@ export default function HomePage() {
           <a href="#">Become a Lessor</a>
         </div>
       </div>
+      <div className=" text-center max-w-[85rem] px-4 py-5 sm:px-6 lg:px-8 lg:py-14 mx-auto">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 items-center gap-8 md:gap-12">
+          <div className="flex flex-col items-center border-1 rounded-lg pt-2 pb-2 shadow-xl shadow-orange-based  md:shadow-2xl md:shadow-orange-based ">
+            <div className="relative flex justify-center items-center w-12 h-12 bg-white rounded-xl mt-2 before:absolute before:-inset-px before:-z-[1] before:bg-gradient-to-br before:from-blue-600 before:via-transparent before:to-violet-600 before:rounded-xl">
+              <svg
+                width="100px"
+                height="100px"
+                viewBox="0 0 512 512"
+                xmlns="http://www.w3.org/2000/svg"
+                className="text-blue-600 dark:text-blue-500"
+                fill="currentColor"
+              >
+                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                <g
+                  id="SVGRepo_tracerCarrier"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                ></g>
+                <g id="SVGRepo_iconCarrier">
+                  {" "}
+                  <defs> </defs> <title></title>{" "}
+                  <g data-name="Layer 4" id="Layer_4">
+                    {" "}
+                    <path
+                      className="cls-1"
+                      d="M171,226v93s-62,15-62-49C109,215,171,226,171,226Z"
+                    ></path>{" "}
+                    <path
+                      className="cls-2"
+                      d="M343,226v93s60,15,60-49C403,215,343,226,343,226Z"
+                    ></path>{" "}
+                    <path d="M369.87,216.24V203.48c0-30.55-10.81-58.94-30.41-80C319.37,101.86,291.75,90,261.62,90H251.08c-30.13,0-57.75,11.86-77.84,33.48-19.6,21.06-30.41,49.45-30.41,80v12.76a45.81,45.81,0,0,0-42.69,45.62v19.95a45.75,45.75,0,0,0,45.68,45.68h25.74a8.39,8.39,0,0,0,8.37-8.37V224.47a8.39,8.39,0,0,0-8.37-8.37h-12V203.48c0-55.17,39.34-96.74,91.44-96.74h10.53c52.17,0,91.44,41.57,91.44,96.74V216.1H341a8.39,8.39,0,0,0-8.37,8.37v94.58a8.39,8.39,0,0,0,8.37,8.37h11.72c-3.42,43.66-33.48,53.78-47.43,56.08a29.43,29.43,0,0,0-28-20.3H256.39a29.4,29.4,0,0,0,0,58.8h21a29.44,29.44,0,0,0,28.32-21.62,79.17,79.17,0,0,0,28.39-9.69c15.14-8.86,33.06-26.92,35.43-63.33a45.74,45.74,0,0,0,42.89-45.62V261.79A45.57,45.57,0,0,0,369.87,216.24ZM163.34,310.68H146A29,29,0,0,1,117,281.74V261.79A29,29,0,0,1,146,232.84h17.37Zm114,94.58h-21a12.62,12.62,0,1,1,0-25.25h21a12.62,12.62,0,0,1,0,25.25ZM395.74,281.74a29,29,0,0,1-28.95,28.95H349.43V232.84H366.8a29,29,0,0,1,28.95,28.95Z"></path>{" "}
+                    <path d="M296.15,263.82H296l-79,.37a8.5,8.5,0,0,1-.08-17l79-.37a8.5,8.5,0,0,1,.19,17Z"></path>{" "}
+                  </g>{" "}
+                </g>
+              </svg>
+            </div>
+            <div className="mt-5">
+              <h3 className="text-2xl font-bold text-gray-800 ">
+                24/7 <span className=" block">Car Rental Support</span>
+              </h3>
+              <p className="mt-1 text-gray-600 dark:text-gray-400 mx-1 mb-3">
+                Contact us 24 hours a day, 7 days a week
+              </p>
+            </div>
+          </div>
+
+          <div className="flex flex-col items-center border-4 rounded-lg pt-2 pb-2">
+            <div className="relative flex justify-center items-center w-12 h-12 bg-white rounded-xl before:absolute before:-inset-px before:-z-[1] before:bg-gradient-to-br before:from-blue-600 before:via-transparent before:to-violet-600 before:rounded-xl dark:bg-slate-900">
+              <svg
+                className="w-7 h-7 text-blue-600 dark:text-blue-500"
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                viewBox="0 0 16 16"
+              >
+                <path d="M9.465 10H12a2 2 0 1 1 0 4H9.465c.34-.588.535-1.271.535-2 0-.729-.195-1.412-.535-2z" />
+                <path d="M6 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 1a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm.535-10a3.975 3.975 0 0 1-.409-1H4a1 1 0 0 1 0-2h2.126c.091-.355.23-.69.41-1H4a2 2 0 1 0 0 4h2.535z" />
+                <path d="M14 4a4 4 0 1 1-8 0 4 4 0 0 1 8 0z" />
+              </svg>
+            </div>
+            <div className="mt-5">
+              <h3 className="text-lg font-semibold text-gray-800 dark:text-white">
+                Car Reservation Anytime
+              </h3>
+              <p className="mt-1 text-gray-600 dark:text-gray-400">
+                Car Reservation Anytime
+              </p>
+            </div>
+          </div>
+
+          <div className="flex flex-col items-center border-4 rounded-lg pt-2 pb-2">
+            <div className="relative flex justify-center items-center w-12 h-12 bg-white rounded-xl before:absolute before:-inset-px before:-z-[1] before:bg-gradient-to-br before:from-blue-600 before:via-transparent before:to-violet-600 before:rounded-xl dark:bg-slate-900">
+              <svg
+                className="w-7 h-7 text-blue-600 dark:text-blue-500"
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                viewBox="0 0 16 16"
+              >
+                <path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z" />
+                <path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5L9.5 0zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z" />
+              </svg>
+            </div>
+            <div className="mt-5">
+              <h3 className="text-lg font-semibold text-gray-800 dark:text-white">
+                Lots Of Pickup Locations
+              </h3>
+              <p className="mt-1 text-gray-600 dark:text-gray-400">
+                Every component and plugin is well documented
+              </p>
+            </div>
+          </div>
+
+          <div className="flex flex-col items-center border-4 rounded-lg pt-2 pb-2">
+            <div className="relative flex justify-center items-center w-12 h-12 bg-white rounded-xl before:absolute before:-inset-px before:-z-[1] before:bg-gradient-to-br before:from-blue-600 before:via-transparent before:to-violet-600 before:rounded-xl dark:bg-slate-900">
+              <svg
+                className="w-7 h-7 text-blue-600 dark:text-blue-500"
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                viewBox="0 0 16 16"
+              >
+                <path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
+                <path d="M5 6a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
+              </svg>
+            </div>
+            <div className="mt-5">
+              <h3 className="text-lg font-semibold text-gray-800 dark:text-white">
+                24/7 Support
+              </h3>
+              <p className="mt-1 text-gray-600 dark:text-gray-400">
+                Contact us 24 hours a day, 7 days a week
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
       <div className="flex justify-center">
         <hr className="w-1/4"></hr>
       </div>
-      <div className="text-center pt-5">
+      {/* <div className="text-center pt-5">
         <h1 className="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl">
           We invest in the world’s potential
         </h1>
@@ -143,14 +264,22 @@ export default function HomePage() {
             ></path>
           </svg>
         </a>
-      </div>
-      <div className="text-center pt-5">
+      </div> */}
+      <div className="text-center pt-10">
         <div className="">
-          <h1 className="text-uppercase mb-4 text-4xl font-extrabold leading-none tracking-tight text-blue-900 md:text-5xl lg:text-6xl">
-            WELCOME TO <span className=" text-orange-based">MOTORMATE</span>
-          </h1>
+          <div className="w-full py-8 mx-auto flex justify-center ">
+            <h1 className=" bg-cyan-500 shadow-lg shadow-cyan-500/50 pb-2 text-center text-uppercase mb-6 text-4xl font-extrabold leading-none tracking-tight md:text-5xl lg:text-6xl px-6">
+              <span className="drop-shadow-lg text-white ">WELCOME TO </span>
+              <span className=" text-black drop-shadow-lg">MOTORMATE</span>
+            </h1>
+          </div>
+
           <div className="flex justify-center">
-            <div className="w-3/4 text-center">
+            <div className="w-3/4 text-left">
+              <p className="leading-loose">
+                Motormate is ....................................
+              </p>
+
               <img className="w-full mb-4" src="/image/image1.png" alt="" />
               <p className="leading-loose">
                 Justo et eos et ut takimata sed sadipscing dolore lorem, et
@@ -164,64 +293,6 @@ export default function HomePage() {
                 accusam takimata labore, et at erat eirmod consetetur tempor
                 eirmod invidunt est, ipsum nonumy at et.
               </p>
-            </div>
-          </div>
-          <div className="flex flex-wrap mt-3">
-            <div className="w-full lg:w-1/3 mb-2 ml-20">
-              <div className="flex items-center bg-gray-300 p-4 mb-4 h-40">
-                <div className="flex items-center justify-center flex-shrink-0 bg-orange-based mr-4 h-16 w-16 rounded-full">
-                  <svg
-                    width="100px"
-                    height="100px"
-                    viewBox="0 0 512 512"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="#000000"
-                  >
-                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                    <g
-                      id="SVGRepo_tracerCarrier"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    ></g>
-                    <g id="SVGRepo_iconCarrier">
-                      {" "}
-                      <defs> </defs> <title></title>{" "}
-                      <g data-name="Layer 4" id="Layer_4">
-                        {" "}
-                        <path
-                          className="cls-1"
-                          d="M171,226v93s-62,15-62-49C109,215,171,226,171,226Z"
-                        ></path>{" "}
-                        <path
-                          className="cls-2"
-                          d="M343,226v93s60,15,60-49C403,215,343,226,343,226Z"
-                        ></path>{" "}
-                        <path d="M369.87,216.24V203.48c0-30.55-10.81-58.94-30.41-80C319.37,101.86,291.75,90,261.62,90H251.08c-30.13,0-57.75,11.86-77.84,33.48-19.6,21.06-30.41,49.45-30.41,80v12.76a45.81,45.81,0,0,0-42.69,45.62v19.95a45.75,45.75,0,0,0,45.68,45.68h25.74a8.39,8.39,0,0,0,8.37-8.37V224.47a8.39,8.39,0,0,0-8.37-8.37h-12V203.48c0-55.17,39.34-96.74,91.44-96.74h10.53c52.17,0,91.44,41.57,91.44,96.74V216.1H341a8.39,8.39,0,0,0-8.37,8.37v94.58a8.39,8.39,0,0,0,8.37,8.37h11.72c-3.42,43.66-33.48,53.78-47.43,56.08a29.43,29.43,0,0,0-28-20.3H256.39a29.4,29.4,0,0,0,0,58.8h21a29.44,29.44,0,0,0,28.32-21.62,79.17,79.17,0,0,0,28.39-9.69c15.14-8.86,33.06-26.92,35.43-63.33a45.74,45.74,0,0,0,42.89-45.62V261.79A45.57,45.57,0,0,0,369.87,216.24ZM163.34,310.68H146A29,29,0,0,1,117,281.74V261.79A29,29,0,0,1,146,232.84h17.37Zm114,94.58h-21a12.62,12.62,0,1,1,0-25.25h21a12.62,12.62,0,0,1,0,25.25ZM395.74,281.74a29,29,0,0,1-28.95,28.95H349.43V232.84H366.8a29,29,0,0,1,28.95,28.95Z"></path>{" "}
-                        <path d="M296.15,263.82H296l-79,.37a8.5,8.5,0,0,1-.08-17l79-.37a8.5,8.5,0,0,1,.19,17Z"></path>{" "}
-                      </g>{" "}
-                    </g>
-                  </svg>
-                </div>
-                <h4 className=" text-2xl font-bold text-gray-800 uppercase">
-                  24/7 Car Rental Support
-                </h4>
-              </div>
-            </div>
-            <div className="w-full lg:w-1/3 mb-2">
-              <div className="flex items-center bg-gray-700 text-white p-4 mb-4 h-48">
-                <div className="flex items-center justify-center flex-shrink-0 bg-primary -ml-8 mr-4 h-16 w-16 rounded-full">
-                  <i className="fa fa-car fa-2x text-secondary"></i>
-                </div>
-                <h4 className="text-uppercase m-0">Car Reservation Anytime</h4>
-              </div>
-            </div>
-            <div className="w-full lg:w-1/3 mb-2">
-              <div className="flex items-center bg-gray-100 p-4 mb-4 h-48">
-                <div className="flex items-center justify-center flex-shrink-0 bg-primary -ml-8 mr-4 h-16 w-16 rounded-full">
-                  <i className="fa fa-map-marker-alt fa-2x text-secondary"></i>
-                </div>
-                <h4 className="text-uppercase m-0">Lots Of Pickup Locations</h4>
-              </div>
             </div>
           </div>
         </div>
@@ -346,6 +417,102 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      <div className="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
+        <div className="max-w-2xl mx-auto">
+          <div className="grid gap-12">
+            <div>
+              <h2 className="text-3xl text-gray-800 font-bold lg:text-4xl dark:text-white">
+                Procedures for renting a motorbike
+              </h2>
+              <p className="mt-3 text-gray-800 dark:text-gray-400">
+                For as long as there have been cities, the public square has
+                been a fundamental part of the urban landscape - an open,
+                approachable space to meet and engage with friends and
+                neighbours. Space aims to capture this spirit of bringing people
+                together in an exciting, welcoming environment.
+              </p>
+            </div>
+
+            <div className="space-y-6 lg:space-y-10">
+              <div className="flex">
+                <svg
+                  className="flex-shrink-0 mt-2 h-6 w-6 text-gray-800 dark:text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M14.763.075A.5.5 0 0 1 15 .5v15a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5V14h-1v1.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V10a.5.5 0 0 1 .342-.474L6 7.64V4.5a.5.5 0 0 1 .276-.447l8-4a.5.5 0 0 1 .487.022zM6 8.694 1 10.36V15h5V8.694zM7 15h2v-1.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5V15h2V1.309l-7 3.5V15z"
+                  />
+                  <path d="M2 11h1v1H2v-1zm2 0h1v1H4v-1zm-2 2h1v1H2v-1zm2 0h1v1H4v-1zm4-4h1v1H8V9zm2 0h1v1h-1V9zm-2 2h1v1H8v-1zm2 0h1v1h-1v-1zm2-2h1v1h-1V9zm0 2h1v1h-1v-1zM8 7h1v1H8V7zm2 0h1v1h-1V7zm2 0h1v1h-1V7zM8 5h1v1H8V5zm2 0h1v1h-1V5zm2 0h1v1h-1V5zm0-2h1v1h-1V3z" />
+                </svg>
+                <div className="ml-5 sm:ml-8">
+                  <h3 className="text-base sm:text-lg font-semibold text-gray-800 dark:text-gray-200">
+                    High quality Co-Living spaces
+                  </h3>
+                  <p className="mt-1 text-gray-600 dark:text-gray-400">
+                    Our fully furnished spaces are designed and purpose-built
+                    with Co-Living in mind, featuring high-end finishes and
+                    amenities that go far beyond traditional apartment
+                    buildings.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex">
+                <svg
+                  className="flex-shrink-0 mt-2 h-6 w-6 text-gray-800 dark:text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  viewBox="0 0 16 16"
+                >
+                  <path d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1h8zm-7.978-1A.261.261 0 0 1 7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002a.274.274 0 0 1-.014.002H7.022zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM6.936 9.28a5.88 5.88 0 0 0-1.23-.247A7.35 7.35 0 0 0 5 9c-4 0-5 3-5 4 0 .667.333 1 1 1h4.216A2.238 2.238 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816zM4.92 10A5.493 5.493 0 0 0 4 13H1c0-.26.164-1.03.76-1.724.545-.636 1.492-1.256 3.16-1.275zM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0zm3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4z" />
+                </svg>
+                <div className="ml-5 sm:ml-8">
+                  <h3 className="text-base sm:text-lg font-semibold text-gray-800 dark:text-gray-200">
+                    Fostering vibrant communities
+                  </h3>
+                  <p className="mt-1 text-gray-600 dark:text-gray-400">
+                    Our passion is bringing people together. Beyond creating
+                    beautiful spaces, we provide shared experiences.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex">
+                <svg
+                  className="flex-shrink-0 mt-2 h-6 w-6 text-gray-800 dark:text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  viewBox="0 0 16 16"
+                >
+                  <path d="M8.864.046C7.908-.193 7.02.53 6.956 1.466c-.072 1.051-.23 2.016-.428 2.59-.125.36-.479 1.013-1.04 1.639-.557.623-1.282 1.178-2.131 1.41C2.685 7.288 2 7.87 2 8.72v4.001c0 .845.682 1.464 1.448 1.545 1.07.114 1.564.415 2.068.723l.048.03c.272.165.578.348.97.484.397.136.861.217 1.466.217h3.5c.937 0 1.599-.477 1.934-1.064a1.86 1.86 0 0 0 .254-.912c0-.152-.023-.312-.077-.464.201-.263.38-.578.488-.901.11-.33.172-.762.004-1.149.069-.13.12-.269.159-.403.077-.27.113-.568.113-.857 0-.288-.036-.585-.113-.856a2.144 2.144 0 0 0-.138-.362 1.9 1.9 0 0 0 .234-1.734c-.206-.592-.682-1.1-1.2-1.272-.847-.282-1.803-.276-2.516-.211a9.84 9.84 0 0 0-.443.05 9.365 9.365 0 0 0-.062-4.509A1.38 1.38 0 0 0 9.125.111L8.864.046zM11.5 14.721H8c-.51 0-.863-.069-1.14-.164-.281-.097-.506-.228-.776-.393l-.04-.024c-.555-.339-1.198-.731-2.49-.868-.333-.036-.554-.29-.554-.55V8.72c0-.254.226-.543.62-.65 1.095-.3 1.977-.996 2.614-1.708.635-.71 1.064-1.475 1.238-1.978.243-.7.407-1.768.482-2.85.025-.362.36-.594.667-.518l.262.066c.16.04.258.143.288.255a8.34 8.34 0 0 1-.145 4.725.5.5 0 0 0 .595.644l.003-.001.014-.003.058-.014a8.908 8.908 0 0 1 1.036-.157c.663-.06 1.457-.054 2.11.164.175.058.45.3.57.65.107.308.087.67-.266 1.022l-.353.353.353.354c.043.043.105.141.154.315.048.167.075.37.075.581 0 .212-.027.414-.075.582-.05.174-.111.272-.154.315l-.353.353.353.354c.047.047.109.177.005.488a2.224 2.224 0 0 1-.505.805l-.353.353.353.354c.006.005.041.05.041.17a.866.866 0 0 1-.121.416c-.165.288-.503.56-1.066.56z" />
+                </svg>
+                <div className="ml-5 sm:ml-8">
+                  <h3 className="text-base sm:text-lg font-semibold text-gray-800 dark:text-gray-200">
+                    Simple and all-inclusive
+                  </h3>
+                  <p className="mt-1 text-gray-600 dark:text-gray-400">
+                    We worry about the details so that our residents don't have
+                    to. From our online application process to simple,
+                    all-inclusive billing we aim to make the living experience
+                    as effortless as possible.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Popular author */}
       <section className="bg-white dark:bg-gray-900">
         <div className="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16 lg:px-6">
