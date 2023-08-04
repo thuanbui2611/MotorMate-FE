@@ -4,14 +4,10 @@ import LoginForm from "../../features/login/LoginFormPopUp";
 interface Props {}
 export default function Header(props: Props) {
   return (
-    <nav className="bg-gradient border-gray-200 drop-shadow-xl shadow-inner">
+    <nav className="bg-black border-1 border-white shadow-white shadow-inner">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <a href="/" className="flex items-center">
-          <img
-            src="/image/logo-MotoMate01.png"
-            className="h-8 mr-3"
-            alt="MotoMate Logo"
-          />
+          <img src="/favicon.ico" className="h-8 mr-3" alt="MotoMate Logo" />
           <span className=" text-white self-center text-2xl font-semibold whitespace-nowrap ">
             MotorMate
           </span>
@@ -187,7 +183,7 @@ export default function Header(props: Props) {
             </li>
             <li>
               <a
-                href="#"
+                href="/about"
                 className="block py-2 pl-3 pr-4 text-black rounded font-bold shadow-md hover:bg-gray-100 md:hover:bg-transparent md:p-0 md:text-white md:hover:bg-orange-based md:px-4 md:py-2"
               >
                 About
@@ -201,17 +197,10 @@ export default function Header(props: Props) {
                 Rent Motorcycles
               </a>
             </li>
+
             <li>
               <a
-                href="#"
-                className="block py-2 pl-3 pr-4 text-black rounded font-bold shadow-md hover:bg-gray-100 md:hover:bg-transparent md:p-0 md:text-white md:hover:bg-orange-based md:px-4 md:py-2"
-              >
-                Pricing
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
+                href="/contact"
                 className="block py-2 pl-3 pr-4 text-black rounded font-bold shadow-md hover:bg-gray-100 md:hover:bg-transparent md:p-0 md:text-white md:hover:bg-orange-based md:px-4 md:py-2"
               >
                 Contact

@@ -12,6 +12,8 @@ import { useState } from "react";
 import LoginFormPopUp from "../../features/login/LoginFormPopUp";
 import LoginPage from "../../features/login/LoginPage";
 import SignUpPage from "../../features/signup/SignUpPage";
+import About from "../../features/about/About";
+import Contact from "../../features/contact/Contact";
 
 function App() {
   const [showLoginForm, setShowLoginForm] = useState(false);
@@ -32,6 +34,8 @@ function App() {
     <div className="flex flex-col min-h-screen">
       {!shouldHideHeaderFooter && <Header />}
       <Route exact path="/" component={HomePage} />
+      <Route exact path="/about" component={About} />
+      <Route path="/contact" component={Contact} />
       <Route path="/books" component={Books} />
       <Route path="/book-detail/:id" component={BookDetails} />
       <Route exact path="/my-cart" component={Cart} />

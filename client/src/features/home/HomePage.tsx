@@ -114,16 +114,16 @@ export default function HomePage() {
           <a href="#">Become a Lessor</a>
         </div>
       </div>
-      <div className=" text-center max-w-[85rem] px-4 py-5 sm:px-6 lg:px-8 lg:py-14 mx-auto">
+      {/* <div className=" text-center max-w-[85rem] px-4 py-5 sm:px-6 lg:px-8 lg:py-14 mx-auto">
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 items-center gap-8 md:gap-12">
-          <div className="flex flex-col items-center border-1 rounded-lg pt-2 pb-2 shadow-xl shadow-orange-based  md:shadow-2xl md:shadow-orange-based ">
+          <div className="flex flex-col min-h- items-center border-1 border-orange-based rounded-lg pt-2 pb-2 shadow-xl shadow-orange-based md:shadow-lg md:shadow-orange-based ">
             <div className="relative flex justify-center items-center w-12 h-12 bg-white rounded-xl mt-2 before:absolute before:-inset-px before:-z-[1] before:bg-gradient-to-br before:from-blue-600 before:via-transparent before:to-violet-600 before:rounded-xl">
               <svg
                 width="100px"
                 height="100px"
                 viewBox="0 0 512 512"
                 xmlns="http://www.w3.org/2000/svg"
-                className="text-blue-600 dark:text-blue-500"
+                className="text-blue-600"
                 fill="currentColor"
               >
                 <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -153,7 +153,7 @@ export default function HomePage() {
             </div>
             <div className="mt-5">
               <h3 className="text-2xl font-bold text-gray-800 ">
-                24/7 <span className=" block">Car Rental Support</span>
+                24/7 Support
               </h3>
               <p className="mt-1 text-gray-600 dark:text-gray-400 mx-1 mb-3">
                 Contact us 24 hours a day, 7 days a week
@@ -161,8 +161,8 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div className="flex flex-col items-center border-4 rounded-lg pt-2 pb-2">
-            <div className="relative flex justify-center items-center w-12 h-12 bg-white rounded-xl before:absolute before:-inset-px before:-z-[1] before:bg-gradient-to-br before:from-blue-600 before:via-transparent before:to-violet-600 before:rounded-xl dark:bg-slate-900">
+          <div className="flex flex-col items-center border-1 border-orange-based rounded-lg pt-2 pb-2 shadow-xl shadow-orange-based md:shadow-lg md:shadow-orange-based ">
+            <div className="relative flex justify-center items-center w-12 h-12 bg-white rounded-xl mt-2 before:absolute before:-inset-px before:-z-[1] before:bg-gradient-to-br before:from-blue-600 before:via-transparent before:to-violet-600 before:rounded-xl">
               <svg
                 className="w-7 h-7 text-blue-600 dark:text-blue-500"
                 xmlns="http://www.w3.org/2000/svg"
@@ -177,19 +177,19 @@ export default function HomePage() {
               </svg>
             </div>
             <div className="mt-5">
-              <h3 className="text-lg font-semibold text-gray-800 dark:text-white">
-                Car Reservation Anytime
+              <h3 className="text-2xl font-bold text-gray-800 ">
+                Motorcycle Reservation Anytime
               </h3>
-              <p className="mt-1 text-gray-600 dark:text-gray-400">
-                Car Reservation Anytime
+              <p className="mt-1 text-gray-600 dark:text-gray-400 mx-1 mb-3">
+                Feel free to choose time and date for your reservation
               </p>
             </div>
           </div>
 
-          <div className="flex flex-col items-center border-4 rounded-lg pt-2 pb-2">
-            <div className="relative flex justify-center items-center w-12 h-12 bg-white rounded-xl before:absolute before:-inset-px before:-z-[1] before:bg-gradient-to-br before:from-blue-600 before:via-transparent before:to-violet-600 before:rounded-xl dark:bg-slate-900">
+          <div className="flex flex-col items-center border-1 border-orange-based rounded-lg pt-2 pb-2 shadow-xl shadow-orange-based md:shadow-lg md:shadow-orange-based ">
+            <div className="relative flex justify-center items-center w-12 h-12 bg-white rounded-xl mt-2 before:absolute before:-inset-px before:-z-[1] before:bg-gradient-to-br before:from-blue-600 before:via-transparent before:to-violet-600 before:rounded-xl">
               <svg
-                className="w-7 h-7 text-blue-600 dark:text-blue-500"
+                className="w-7 h-7 text-blue-600"
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
                 height="16"
@@ -201,17 +201,17 @@ export default function HomePage() {
               </svg>
             </div>
             <div className="mt-5">
-              <h3 className="text-lg font-semibold text-gray-800 dark:text-white">
+              <h3 className="text-2xl font-bold text-gray-800 ">
                 Lots Of Pickup Locations
               </h3>
-              <p className="mt-1 text-gray-600 dark:text-gray-400">
+              <p className="mt-1 text-gray-600 dark:text-gray-400 mx-1 mb-3">
                 Every component and plugin is well documented
               </p>
             </div>
           </div>
 
-          <div className="flex flex-col items-center border-4 rounded-lg pt-2 pb-2">
-            <div className="relative flex justify-center items-center w-12 h-12 bg-white rounded-xl before:absolute before:-inset-px before:-z-[1] before:bg-gradient-to-br before:from-blue-600 before:via-transparent before:to-violet-600 before:rounded-xl dark:bg-slate-900">
+          <div className="flex flex-col items-center border-1 border-orange-based rounded-lg pt-2 pb-2 shadow-xl shadow-orange-based md:shadow-lg md:shadow-orange-based ">
+            <div className="relative flex justify-center items-center w-12 h-12 bg-white rounded-xl mt-2 before:absolute before:-inset-px before:-z-[1] before:bg-gradient-to-br before:from-blue-600 before:via-transparent before:to-violet-600 before:rounded-xl">
               <svg
                 className="w-7 h-7 text-blue-600 dark:text-blue-500"
                 xmlns="http://www.w3.org/2000/svg"
@@ -225,19 +225,17 @@ export default function HomePage() {
               </svg>
             </div>
             <div className="mt-5">
-              <h3 className="text-lg font-semibold text-gray-800 dark:text-white">
+              <h3 className="text-2xl font-bold text-gray-800 ">
                 24/7 Support
               </h3>
-              <p className="mt-1 text-gray-600 dark:text-gray-400">
+              <p className="mt-1 text-gray-600 dark:text-gray-400 mx-1 mb-3">
                 Contact us 24 hours a day, 7 days a week
               </p>
             </div>
           </div>
         </div>
-      </div>
-      <div className="flex justify-center">
-        <hr className="w-1/4"></hr>
-      </div>
+      </div> */}
+
       {/* <div className="text-center pt-5">
         <h1 className="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl">
           We invest in the world’s potential
@@ -267,19 +265,18 @@ export default function HomePage() {
       </div> */}
       <div className="text-center pt-10">
         <div className="">
+          <div className="flex justify-center">
+            <hr className="w-1/4"></hr>
+          </div>
           <div className="w-full py-8 mx-auto flex justify-center ">
-            <h1 className=" bg-cyan-500 shadow-lg shadow-cyan-500/50 pb-2 text-center text-uppercase mb-6 text-4xl font-extrabold leading-none tracking-tight md:text-5xl lg:text-6xl px-6">
+            <h1 className=" bg-cyan-500 shadow-lg shadow-cyan-500/50 pb-2 text-center text-uppercase text-4xl font-extrabold leading-none tracking-tight md:text-5xl lg:text-6xl px-6">
               <span className="drop-shadow-lg text-white ">WELCOME TO </span>
               <span className=" text-black drop-shadow-lg">MOTORMATE</span>
             </h1>
           </div>
 
-          <div className="flex justify-center">
+          <div className="flex justify-center  pb-40">
             <div className="w-3/4 text-left">
-              <p className="leading-loose">
-                Motormate is ....................................
-              </p>
-
               <img className="w-full mb-4" src="/image/image1.png" alt="" />
               <p className="leading-loose">
                 Justo et eos et ut takimata sed sadipscing dolore lorem, et
@@ -297,19 +294,22 @@ export default function HomePage() {
           </div>
         </div>
       </div>
-      {/* Most viewed books */}
+      {/* Choose your motorcycle */}
       <section className=" bg-white">
-        <div className="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6 ">
+        <div className="py-8 px-4 mx-auto max-w-screen-xl lg:py-10 lg:px-6 ">
           <div className="mx-auto max-w-screen-sm text-center mb-8 lg:mb-16">
+            <div className="flex justify-center">
+              <hr className="w-1/4 pb-3"></hr>
+            </div>
             <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">
-              Most Viewed Books
+              Choose your Motorcycle
             </h2>
             <p className="font-light text-gray-500 lg:mb-16 sm:text-xl dark:text-gray-400">
               Explore the whole collection of open-source web components and
               elements built with the utility classes from Tailwind
             </p>
           </div>
-          <div className="grid gap-8 mb-6 lg:mb-16 md:grid-cols-4">
+          <div className="grid gap-8 mb-6 lg:mb-8 md:grid-cols-4">
             {mostViewedBook.slice(0, 8).map((mostViewedBook) => (
               <div className="items-center sm:flex max-w-lg">
                 <div>
@@ -418,9 +418,12 @@ export default function HomePage() {
         </div>
       </section>
 
-      <div className="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
-        <div className="max-w-2xl mx-auto">
+      <div className=" px-4 py-10 sm:px-6 lg:px-8 lg:py-0 mx-auto">
+        {/* <div className="max-w-2xl mx-auto">
           <div className="grid gap-12">
+            <div className="flex justify-center">
+              <hr className="w-1/4"></hr>
+            </div>
             <div>
               <h2 className="text-3xl text-gray-800 font-bold lg:text-4xl dark:text-white">
                 Procedures for renting a motorbike
@@ -510,15 +513,183 @@ export default function HomePage() {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
+        <section
+          className="items-center py-8 bg-gray-100 lg:h-screen font-poppins md:pr-12"
+          style={{ height: "auto" }}
+        >
+          <div className="block justify-center max-w-6xl px-4 py-4 mx-auto lg:py-8 md:px-6">
+            <div className="max-w-xl mx-auto">
+              <div className="text-center ">
+                <div className="relative flex flex-col items-center">
+                  <div className="absolute hidden md:block -top-14 -left-[4.5rem] text-[120px] text-gray-400 font-bold opacity-10">
+                    PROCEDURES
+                  </div>
+                  <h1 className="text-5xl font-bold leading-tight dark:text-white">
+                    {" "}
+                    Procedures for renting{" "}
+                    <span className="text-blue-500">motorcycles</span>{" "}
+                  </h1>
+                  <div className="flex w-24 mt-1 mb-10 overflow-hidden rounded">
+                    <div className="flex-1 h-2 bg-blue-200"></div>
+                    <div className="flex-1 h-2 bg-blue-400"></div>
+                    <div className="flex-1 h-2 bg-blue-600"></div>
+                  </div>
+                </div>
+                <p className="mb-16 text-base text-center text-gray-500">
+                  Make sure that you have a valid motorcycle license and a valid
+                  ID card.
+                </p>
+              </div>
+            </div>
+            <div className="w-full mx-auto lg:max-w-3xl">
+              <div className="relative flex justify-between">
+                <div className="hidden w-24 py-3 md:block ">
+                  <h2 className=" text-xl font-bold text-gray-700 text-right">
+                    Step 1
+                  </h2>
+                </div>
+                <div className="absolute inline-block w-24 py-3 left-16 -top-12 md:hidden">
+                  <h2 className="text-base font-medium text-gray-700">
+                    Step 1
+                  </h2>
+                </div>
+                <div className="flex flex-col items-center w-10 mr-4 md:w-24">
+                  <div>
+                    <div className="flex items-center justify-center w-10 h-10 border border-blue-500 rounded-full dark:border-blue-400">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        fill="currentColor"
+                        className="w-4 h-4 text-blue-500 dark:text-blue-400 bi bi-building"
+                        viewBox="0 0 16 16"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M14.763.075A.5.5 0 0 1 15 .5v15a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5V14h-1v1.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V10a.5.5 0 0 1 .342-.474L6 7.64V4.5a.5.5 0 0 1 .276-.447l8-4a.5.5 0 0 1 .487.022zM6 8.694 1 10.36V15h5V8.694zM7 15h2v-1.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5V15h2V1.309l-7 3.5V15z"
+                        ></path>
+                        <path d="M2 11h1v1H2v-1zm2 0h1v1H4v-1zm-2 2h1v1H2v-1zm2 0h1v1H4v-1zm4-4h1v1H8V9zm2 0h1v1h-1V9zm-2 2h1v1H8v-1zm2 0h1v1h-1v-1zm2-2h1v1h-1V9zm0 2h1v1h-1v-1zM8 7h1v1H8V7zm2 0h1v1h-1V7zm2 0h1v1h-1V7zM8 5h1v1H8V5zm2 0h1v1h-1V5zm2 0h1v1h-1V5zm0-2h1v1h-1V3z"></path>
+                      </svg>
+                    </div>
+                  </div>
+                  <div className="w-px h-full bg-blue-300"></div>
+                </div>
+                <div className="relative flex-1 mb-16 bg-white rounded shadow md:mb-8 dark:bg-gray-900">
+                  <div className="absolute inline-block w-4 overflow-hidden -translate-y-1/2 top-7 -left-4">
+                    <div className="h-10 origin-top-right transform -rotate-45 bg-white dark:bg-gray-900 drop-shadow-lg"></div>
+                  </div>
+                  <div className="relative z-20 p-6">
+                    <p className="mb-2 text-xl font-bold text-gray-600 dark:text-gray-400">
+                      Find your "motor mate"
+                    </p>
+                    <p className="text-gray-700 font-medium">
+                      Make sure you have selected the vehicle in the right
+                      location!
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="relative flex justify-between">
+                <div className="hidden w-24 py-3 md:block">
+                  <h2 className=" text-xl font-bold text-gray-700  text-right">
+                    Step 2
+                  </h2>
+                </div>
+                <div className="absolute inline-block w-24 py-3 left-16 -top-12 md:hidden ">
+                  <h2 className="text-base font-medium text-gray-700 dark:text-gray-400">
+                    Step 2
+                  </h2>
+                </div>
+                <div className="flex flex-col items-center w-10 mr-4 md:w-24">
+                  <div>
+                    <div className="flex items-center justify-center w-10 h-10 border border-blue-500 rounded-full dark:border-blue-400">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        fill="currentColor"
+                        className="w-4 h-4 text-blue-500 dark:text-blue-400 bi bi-globe"
+                        viewBox="0 0 16 16"
+                      >
+                        <path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm7.5-6.923c-.67.204-1.335.82-1.887 1.855A7.97 7.97 0 0 0 5.145 4H7.5V1.077zM4.09 4a9.267 9.267 0 0 1 .64-1.539 6.7 6.7 0 0 1 .597-.933A7.025 7.025 0 0 0 2.255 4H4.09zm-.582 3.5c.03-.877.138-1.718.312-2.5H1.674a6.958 6.958 0 0 0-.656 2.5h2.49zM4.847 5a12.5 12.5 0 0 0-.338 2.5H7.5V5H4.847zM8.5 5v2.5h2.99a12.495 12.495 0 0 0-.337-2.5H8.5zM4.51 8.5a12.5 12.5 0 0 0 .337 2.5H7.5V8.5H4.51zm3.99 0V11h2.653c.187-.765.306-1.608.338-2.5H8.5zM5.145 12c.138.386.295.744.468 1.068.552 1.035 1.218 1.65 1.887 1.855V12H5.145zm.182 2.472a6.696 6.696 0 0 1-.597-.933A9.268 9.268 0 0 1 4.09 12H2.255a7.024 7.024 0 0 0 3.072 2.472zM3.82 11a13.652 13.652 0 0 1-.312-2.5h-2.49c.062.89.291 1.733.656 2.5H3.82zm6.853 3.472A7.024 7.024 0 0 0 13.745 12H11.91a9.27 9.27 0 0 1-.64 1.539 6.688 6.688 0 0 1-.597.933zM8.5 12v2.923c.67-.204 1.335-.82 1.887-1.855.173-.324.33-.682.468-1.068H8.5zm3.68-1h2.146c.365-.767.594-1.61.656-2.5h-2.49a13.65 13.65 0 0 1-.312 2.5zm2.802-3.5a6.959 6.959 0 0 0-.656-2.5H12.18c.174.782.282 1.623.312 2.5h2.49zM11.27 2.461c.247.464.462.98.64 1.539h1.835a7.024 7.024 0 0 0-3.072-2.472c.218.284.418.598.597.933zM10.855 4a7.966 7.966 0 0 0-.468-1.068C9.835 1.897 9.17 1.282 8.5 1.077V4h2.355z"></path>
+                      </svg>
+                    </div>
+                  </div>
+                  <div className="w-px h-full bg-blue-300"></div>
+                </div>
+                <div className="relative flex-1 mb-16 bg-white rounded shadow md:mb-8 dark:bg-gray-900">
+                  <div className="absolute inline-block w-4 overflow-hidden -translate-y-1/2 top-7 -left-4">
+                    <div className="h-10 origin-top-right transform -rotate-45 bg-white dark:bg-gray-900 drop-shadow-lg"></div>
+                  </div>
+                  <div className="relative z-20 p-6">
+                    <p className="mb-2 text-xl font-bold text-gray-600 ">
+                      Fill and check your information
+                    </p>
+                    <p className="text-gray-700 dark:text-gray-500">
+                      Choose the number of days you want to rent and fill
+                      neccessary information.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="relative flex justify-between">
+                <div className="hidden w-24 py-3 md:block ">
+                  <h2 className=" text-xl font-bold text-gray-700 text-right">
+                    Step 3
+                  </h2>
+                </div>
+                <div className="absolute inline-block w-24 py-3 left-16 -top-12 md:hidden ">
+                  <h2 className="text-base font-medium text-gray-700 ">
+                    Step 3
+                  </h2>
+                </div>
+                <div className="flex flex-col items-center w-10 mr-4 md:w-24">
+                  <div>
+                    <div className="flex items-center justify-center w-10 h-10 border border-blue-500 rounded-full dark:border-blue-400">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        fill="currentColor"
+                        className="w-4 h-4 text-blue-500 dark:text-blue-400 bi bi-code-slash"
+                        viewBox="0 0 16 16"
+                      >
+                        <path d="M10.478 1.647a.5.5 0 1 0-.956-.294l-4 13a.5.5 0 0 0 .956.294l4-13zM4.854 4.146a.5.5 0 0 1 0 .708L1.707 8l3.147 3.146a.5.5 0 0 1-.708.708l-3.5-3.5a.5.5 0 0 1 0-.708l3.5-3.5a.5.5 0 0 1 .708 0zm6.292 0a.5.5 0 0 0 0 .708L14.293 8l-3.147 3.146a.5.5 0 0 0 .708.708l3.5-3.5a.5.5 0 0 0 0-.708l-3.5-3.5a.5.5 0 0 0-.708 0z"></path>
+                      </svg>
+                    </div>
+                  </div>
+                  <div className="w-px h-full bg-blue-300"></div>
+                </div>
+                <div className="relative flex-1 mb-16 bg-white rounded shadow md:mb-8 dark:bg-gray-900">
+                  <div className="absolute inline-block w-4 overflow-hidden -translate-y-1/2 top-7 -left-4">
+                    <div className="h-10 origin-top-right transform -rotate-45 bg-white dark:bg-gray-900 drop-shadow-lg"></div>
+                  </div>
+                  <div className="relative z-20 p-6">
+                    <p className="mb-2 text-xl font-bold text-gray-600 dark:text-gray-400">
+                      Payment
+                    </p>
+                    <p className="text-gray-700 dark:text-gray-500">
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                      veniam libero facilis minus reprehenderit.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
       </div>
 
-      {/* Popular author */}
+      {/* Our team */}
       <section className="bg-white dark:bg-gray-900">
-        <div className="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16 lg:px-6">
+        <div className="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-10 lg:px-6">
+          <div className="flex justify-center">
+            <hr className="w-1/4"></hr>
+          </div>
           <div className="mx-auto mb-8 max-w-screen-sm lg:mb-16">
-            <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">
-              Popular author
+            <h2 className=" my-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">
+              Our team
             </h2>
             <p className="font-light text-gray-500 sm:text-xl dark:text-gray-400">
               Explore the whole collection of open-source web components and
