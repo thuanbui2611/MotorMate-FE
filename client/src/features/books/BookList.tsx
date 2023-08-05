@@ -8,9 +8,9 @@ interface Props {
 export default function BookList({ books }: Props) {
   return (
     <>
-      {/* {books.map((book) => (
+      {books.map((book) => (
         <BookCard key={book.id} book={book} />
-      ))} */}
+      ))}
     </>
   );
 }

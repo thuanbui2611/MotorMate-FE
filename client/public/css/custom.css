@@ -668,3 +668,28 @@ p {
   }
 }
 /* End Login Form */
+
+/* Custom scroll bar filter in product page */
+/* Customize scrollbar */
+.scrollbar::-webkit-scrollbar {
+  width: 6px; /* Adjust the width as needed */
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  background-color: #4a5568; /* Adjust the color as needed */
+  border-radius: 3px; /* Adjust the border radius as needed */
+}
+
+.scrollbar::-webkit-scrollbar-track {
+  background-color: #edf2f7; /* Adjust the background color as needed */
+}
+/* End of custom scroll bar filter in product page */
+
+/* Date picker */
+
+@media (max-width: 640px) {
+  .custom-datepicker {
+    width: 3000px;
+  }
+}
+/* End date picker */
