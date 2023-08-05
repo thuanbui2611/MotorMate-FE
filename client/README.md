@@ -1,2 +1,4 @@
 ## React app
-Start the project: npm start
+Run the project: 
+npm install
+npm start
