@@ -10,6 +10,10 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Chip from "@mui/material/Chip";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs, { Dayjs } from "dayjs";
 
 // Filter by city
 const ITEM_HEIGHT = 48;
@@ -87,6 +91,13 @@ export default function Books() {
     setStatusFilter(event.target.value);
   };
   // End of Filter by status
+
+  //Date picker
+  const [startDate, setStartDate] = React.useState<Dayjs | null>();
+  // dayjs("2022-04-17")
+  const [endDate, setEndDate] = React.useState<Dayjs | null>();
+  // dayjs("20-10-2022")
+  //End of date picker
   if (loading)
     return (
       <div>
@@ -179,6 +190,22 @@ export default function Books() {
   return (
     <>
       <div className="container my-12 mx-auto px-4 md:px-12">
+        <div className="flex">
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DatePicker
+              label="Start day"
+              defaultValue={dayjs("2022-04-17")}
+              value={startDate}
+              onChange={(newValue) => setStartDate(newValue)}
+            />
+            <DatePicker
+              label="End day"
+              value={endDate}
+              onChange={(newValue) => setEndDate(newValue)}
+            />
+          </LocalizationProvider>
+        </div>
+
         {/* <ul className="hidden text-sm font-medium text-center text-gray-500 divide-x divide-gray-200 rounded-lg shadow sm:flex dark:divide-gray-700 dark:text-gray-400">
           <li className="w-full">
             <a
@@ -221,10 +248,49 @@ export default function Books() {
             <div className="px-4 py-4 mx-auto max-w-7xl lg:py-6 md:px-6">
               <div className="flex flex-wrap mb-24 -mx-3">
                 <div className="w-full pr-2 lg:w-1/4 lg:block">
+                  {/* Filter by city form */}
+                  <FormControl sx={{ m: 1, width: 200 }}>
+                    <InputLabel id="demo-multiple-chip-label">City</InputLabel>
+                    <Select
+                      labelId="demo-multiple-chip-label"
+                      id="demo-multiple-chip"
+                      multiple
+                      value={personName}
+                      onChange={handleFilterByCityChange}
+                      input={
+                        <OutlinedInput id="select-multiple-chip" label="Chip" />
+                      }
+                      renderValue={(selected) => (
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexWrap: "wrap",
+                            gap: 0.5,
+                          }}
+                        >
+                          {selected.map((value) => (
+                            <Chip key={value} label={value} />
+                          ))}
+                        </Box>
+                      )}
+                      MenuProps={MenuProps}
+                    >
+                      {names.map((name) => (
+                        <MenuItem
+                          key={name}
+                          value={name}
+                          style={getStyles(name, personName, theme)}
+                        >
+                          {name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                  {/* End Filter by city form */}
                   <div className="p-4 mb-5 bg-white border border-gray-200 dark:border-gray-900 dark:bg-gray-900">
                     <h2 className="text-2xl font-bold dark:text-gray-400">
                       {" "}
-                      Categories
+                      Brand
                     </h2>
                     <div className="w-16 pb-2 mb-6 border-b border-rose-600 dark:border-gray-400"></div>
                     <ul>
@@ -234,7 +300,7 @@ export default function Books() {
                           className="flex items-center dark:text-gray-400 "
                         >
                           <input type="checkbox" className="w-4 h-4 mr-2" />
-                          <span className="text-lg">Biscuits</span>
+                          <span className="text-lg">Yamaha</span>
                         </label>
                       </li>
                       <li className="mb-4">
@@ -243,7 +309,7 @@ export default function Books() {
                           className="flex items-center dark:text-gray-400 "
                         >
                           <input type="checkbox" className="w-4 h-4 mr-2 " />
-                          <span className="text-lg">Fruits</span>
+                          <span className="text-lg">Wave</span>
                         </label>
                       </li>
                       <li className="mb-4">
@@ -252,7 +318,7 @@ export default function Books() {
                           className="flex items-center dark:text-gray-400"
                         >
                           <input type="checkbox" className="w-4 h-4 mr-2" />
-                          <span className="text-lg">Seafood</span>
+                          <span className="text-lg">Dream</span>
                         </label>
                       </li>
                       <li className="mb-4">
@@ -261,7 +327,7 @@ export default function Books() {
                           className="flex items-center dark:text-gray-400"
                         >
                           <input type="checkbox" className="w-4 h-4 mr-2" />
-                          <span className="text-lg">Vegetables</span>
+                          <span className="text-lg">Future</span>
                         </label>
                       </li>
                       <li className="mb-4">
@@ -270,9 +336,7 @@ export default function Books() {
                           className="flex items-center dark:text-gray-400"
                         >
                           <input type="checkbox" className="w-4 h-4 mr-2" />
-                          <span className="text-lg">
-                            Frozen Foods &amp; Staples
-                          </span>
+                          <span className="text-lg">Exciter</span>
                         </label>
                       </li>
                     </ul>
@@ -285,7 +349,7 @@ export default function Books() {
                   </div>
                   <div className="p-4 mb-5 bg-white border border-gray-200 dark:bg-gray-900 dark:border-gray-900">
                     <h2 className="text-2xl font-bold dark:text-gray-400">
-                      Product Status
+                      Type
                     </h2>
                     <div className="w-16 pb-2 mb-6 border-b border-rose-600 dark:border-gray-400"></div>
                     <ul>
@@ -296,7 +360,7 @@ export default function Books() {
                         >
                           <input type="checkbox" className="w-4 h-4 mr-2" />
                           <span className="text-lg dark:text-gray-400">
-                            In Stock
+                            Electric
                           </span>
                         </label>
                       </li>
@@ -307,7 +371,18 @@ export default function Books() {
                         >
                           <input type="checkbox" className="w-4 h-4 mr-2" />
                           <span className="text-lg dark:text-gray-400">
-                            On Sale
+                            Scooter
+                          </span>
+                        </label>
+                      </li>
+                      <li className="mb-4">
+                        <label
+                          htmlFor=""
+                          className="flex items-center dark:text-gray-300"
+                        >
+                          <input type="checkbox" className="w-4 h-4 mr-2" />
+                          <span className="text-lg dark:text-gray-400">
+                            Motorbike
                           </span>
                         </label>
                       </li>
@@ -474,51 +549,6 @@ export default function Books() {
                           </div>
                         </div> */}
                         <div className="flex">
-                          {/* Filter by city form */}
-                          <FormControl sx={{ m: 1, width: 200 }}>
-                            <InputLabel id="demo-multiple-chip-label">
-                              City
-                            </InputLabel>
-                            <Select
-                              labelId="demo-multiple-chip-label"
-                              id="demo-multiple-chip"
-                              multiple
-                              value={personName}
-                              onChange={handleFilterByCityChange}
-                              input={
-                                <OutlinedInput
-                                  id="select-multiple-chip"
-                                  label="Chip"
-                                />
-                              }
-                              renderValue={(selected) => (
-                                <Box
-                                  sx={{
-                                    display: "flex",
-                                    flexWrap: "wrap",
-                                    gap: 0.5,
-                                  }}
-                                >
-                                  {selected.map((value) => (
-                                    <Chip key={value} label={value} />
-                                  ))}
-                                </Box>
-                              )}
-                              MenuProps={MenuProps}
-                            >
-                              {names.map((name) => (
-                                <MenuItem
-                                  key={name}
-                                  value={name}
-                                  style={getStyles(name, personName, theme)}
-                                >
-                                  {name}
-                                </MenuItem>
-                              ))}
-                            </Select>
-                          </FormControl>
-                          {/* End Filter by city form */}
-
                           {/* Filter by price form */}
                           <FormControl sx={{ m: 1, minWidth: 80 }}>
                             <InputLabel id="demo-simple-select-autowidth-label">
