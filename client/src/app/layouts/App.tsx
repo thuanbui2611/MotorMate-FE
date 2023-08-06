@@ -14,6 +14,9 @@ import LoginPage from "../../features/login/LoginPage";
 import SignUpPage from "../../features/signup/SignUpPage";
 import About from "../../features/about/About";
 import Contact from "../../features/contact/Contact";
+import Checkout from "../../features/checkout/Checkout";
+import Payment from "../../features/checkout/Payment";
+import Bill from "../../features/checkout/Bill";
 
 function App() {
   const [showLoginForm, setShowLoginForm] = useState(false);
@@ -38,6 +41,9 @@ function App() {
       <Route path="/contact" component={Contact} />
       <Route path="/books" component={Books} />
       <Route path="/book-detail/:id" component={BookDetails} />
+      <Route path="/check-out/:id" component={Checkout} />
+      <Route path="/payment" component={Payment} />
+      <Route path="/bill" component={Bill} />
       <Route exact path="/my-cart" component={Cart} />
       {showLoginForm && <LoginFormPopUp onClose={handleLoginFormClose} />}
       <Route path="/login" component={LoginPage} />
