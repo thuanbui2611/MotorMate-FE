@@ -1,14 +1,25 @@
 import { useState } from "react";
 
 export default function Checkout() {
-  //Checkbox Payment Method
+  //Select option Payment Method
+  const [selectedPaymentOption, setSelectedPaymentOption] =
+    useState("cashOnDelivery");
 
-  const [selectedOption, setSelectedOption] = useState("cashOnDelivery");
-
-  const handleOptionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedOption(e.target.value);
+  const handlePaymentOptionChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setSelectedPaymentOption(e.target.value);
   };
-  //End checkbox Payment Method
+  //End of select option Payment Method
+
+  //Select option delivery
+  const [deliveryOption, setDeliveryOption] = useState("");
+  const handleDeliveryOptionChange = (
+    e: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    setDeliveryOption(e.target.value);
+  };
+  //End of select option delivery
   return (
     <>
       <section className="pt-12 pb-24 bg-blue-100 overflow-hidden">
@@ -164,22 +175,57 @@ export default function Checkout() {
                         />
                       </div>
                     </div>
-                    <div className="flex flex-wrap mb-6 items-center">
-                      <div className="w-full md:w-1/3 mb-2 md:mb-0 md:pr-10 md:text-right">
-                        <label className="text-lg  ">Delivery address:</label>
-                      </div>
-                      <div className="w-full md:w-2/3">
-                        <input
-                          className="w-full h-1/3 px-5 py-3 text-lg leading-9 bg-blue-50 border-2 border-blue-400 outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-xl"
-                          type="text"
-                        />
+                    <div className=" flex flex-col items-center">
+                      <div className="mb-6">
+                        <select
+                          id="DeliverOption"
+                          value={deliveryOption}
+                          onChange={handleDeliveryOptionChange}
+                          required
+                          className=" w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 "
+                        >
+                          <option selected>Choose your Delivery Option</option>
+                          <option value="selfPickup">Self Pick-up</option>
+                          <option value="standardShipping">
+                            Standard Shipping
+                          </option>
+                        </select>
                       </div>
                     </div>
+                    {deliveryOption === "standardShipping" && (
+                      <div className="flex flex-wrap mb-6 items-center">
+                        <div className="w-full md:w-1/3 mb-2 md:mb-0 md:pr-10 md:text-right">
+                          <label className="text-lg  ">Delivery address:</label>
+                        </div>
+                        <div className="w-full md:w-2/3">
+                          <input
+                            className="w-full h-1/3 px-5 py-3 text-lg leading-9 bg-blue-50 border-2 border-blue-400 outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-xl"
+                            type="text"
+                          />
+                        </div>
+                      </div>
+                    )}
+
+                    {deliveryOption === "selfPickup" && (
+                      <div className="flex flex-wrap mb-6 items-center">
+                        <div className="w-full md:w-1/3 mb-2 md:mb-0 md:pr-10 md:text-right">
+                          <label className="text-lg  ">Pick-up Address:</label>
+                        </div>
+                        <div className="w-full md:w-2/3">
+                          <input
+                            className="w-full h-1/3 px-5 py-3 text-lg leading-9 bg-blue-50 border-2 border-blue-400 outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-xl"
+                            type="text"
+                            value="Q12 HCM"
+                            disabled
+                          />
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
                 <div className=" border-b border-gray-200 border-opacity-30">
                   <div className="max-w-lg mx-auto mb-6">
-                    <div className="flex flex-wrap mb-6 items-center">
+                    {/* <div className="flex flex-wrap mb-6 items-center">
                       <div className="w-full md:w-1/3 mb-2 md:mb-0 md:pr-10 md:text-right">
                         <label className="text-lg  ">Country:</label>
                       </div>
@@ -211,7 +257,7 @@ export default function Checkout() {
                           type="text"
                         />
                       </div>
-                    </div>
+                    </div> */}
                     <div className="flex flex-wrap mb-6 items-center">
                       <div className="w-full md:w-1/3 mb-2 md:mb-0 md:pr-10 md:text-right">
                         <label className="text-lg">Payment method:</label>
@@ -223,8 +269,10 @@ export default function Checkout() {
                               className="relative appearance-none mr-3"
                               type="radio"
                               value="cashOnDelivery"
-                              checked={selectedOption === "cashOnDelivery"}
-                              onChange={handleOptionChange}
+                              checked={
+                                selectedPaymentOption === "cashOnDelivery"
+                              }
+                              onChange={handlePaymentOptionChange}
                             />
                             <img
                               style={{ width: "76px", height: "30px" }}
@@ -240,8 +288,8 @@ export default function Checkout() {
                               className="relative appearance-none mr-3"
                               type="radio"
                               value="visa"
-                              checked={selectedOption === "visa"}
-                              onChange={handleOptionChange}
+                              checked={selectedPaymentOption === "visa"}
+                              onChange={handlePaymentOptionChange}
                             />
                             <img
                               style={{ width: "58px", height: "40px" }}
@@ -258,8 +306,8 @@ export default function Checkout() {
                               className="relative appearance-none mr-3"
                               type="radio"
                               value="momo"
-                              checked={selectedOption === "momo"}
-                              onChange={handleOptionChange}
+                              checked={selectedPaymentOption === "momo"}
+                              onChange={handlePaymentOptionChange}
                             />
                             <img
                               className=" h-10 w-10"
@@ -349,7 +397,7 @@ export default function Checkout() {
                 <h2 className="mb-7 lg:mt-6 text-3xl font-heading font-medium">
                   Order summary
                 </h2>
-                <div className=" max-h-[20vw] scrollbar overflow-y-auto mb-5 border rounded">
+                <div className=" max-h-[20vw] scrollbar overflow-y-auto mb-5 border border-gray-200 rounded">
                   <div className="p-10 mb-8 bg-white rounded-md shadow sm:flex sm:items-center xl:py-5 xl:px-12">
                     <a href="#" className="mr-6 md:mr-12">
                       <img
@@ -507,7 +555,7 @@ export default function Checkout() {
                     <span>10,00</span>
                   </span>
                 </div>
-                <div className="flex items-center w-1/2 justify-between py-4 px-10 mb-14 leading-8 bg-white font-heading font-medium rounded-3xl">
+                <div className="flex items-center w-1/2 justify-between py-4 px-10 mb-10 leading-8 bg-white font-heading font-medium rounded-3xl">
                   <span>Total</span>
                   <span className="flex items-center text-xl text-blue-500">
                     <span className="mr-2 text-base">$</span>
@@ -515,16 +563,19 @@ export default function Checkout() {
                   </span>
                 </div>
                 <div className="flex">
-                  <h4 className="mb-4 text-xl font-heading font-medium mr-3">
+                  <h4
+                    className=" mb-4 text-xl font-heading font-medium mr-3"
+                    style={{ marginTop: "2px" }}
+                  >
                     Discount code
                   </h4>
                   <div className="relative mb-3 lg:mb-10">
                     <input
-                      className="flex-grow outline-none px-5 pr-36 py-4 w-1/2 h-1/2 leading-7 bg-white border-2 border-blue-500 rounded-3xl"
+                      className="flex-grow outline-none px-5 py-4 w-1/2 h-1/2 leading-7 bg-white border-2 border-blue-500 rounded mr-6"
                       type="text"
                     />
                     <a
-                      className=" w-auto xl:w-auto py-3 px-8 text-lg leading-7 text-white font-medium tracking-tighter font-heading text-center bg-blue-500 hover:bg-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-xl"
+                      className="w-auto py-3 px-8 text-lg leading-7 text-white font-medium tracking-tighter font-heading text-center bg-blue-500 hover:bg-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-xl"
                       href="#"
                     >
                       Apply

@@ -673,6 +673,7 @@ p {
 /* Customize scrollbar */
 .scrollbar::-webkit-scrollbar {
   width: 6px; /* Adjust the width as needed */
+  height: 6px;
 }
 
 .scrollbar::-webkit-scrollbar-thumb {

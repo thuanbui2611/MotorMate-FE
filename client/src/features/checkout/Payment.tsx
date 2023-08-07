@@ -7,7 +7,7 @@ export default function Payment() {
             <div className="flex flex-wrap items-center justify-center ">
               <div className="relative w-full px-4 mb-16 md:w-1/2 lg:w-1/4 lg:mb-0">
                 <div className="absolute hidden top-5 lg:block left-1/2 ">
-                  <span className="mb-3 border-b-2 border-r border-blue-600 w-72 md:block left-1/2 dark:border-blue-400 inset-px"></span>
+                  <span className="mb-3 border-b-2 border-r border-blue-600 w-72 md:block left-1/2 inset-px"></span>
                 </div>
                 <div className="relative text-center">
                   <span className="inline-flex items-center justify-center w-10 h-10 mb-8 text-lg text-gray-100 bg-blue-600 rounded-full shadow-md dark:bg-blue-400">
