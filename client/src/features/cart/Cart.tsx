@@ -272,11 +272,13 @@ export default function Cart() {
                   </h2>
                 </div>
                 <div className="hidden px-4 lg:block lg:w-2/12">
-                  <h2 className="font-bold text-gray-500 ml-3">Price</h2>
+                  <h2 className="font-bold text-gray-500 ml-3">
+                    License plates
+                  </h2>
                 </div>
 
                 <div className="w-auto px-4 md:w-1/6 lg:w-2/12 ">
-                  <h2 className="font-bold text-gray-500 ml-5 ">Quantity</h2>
+                  <h2 className="font-bold text-gray-500 ml-5 ">Price</h2>
                 </div>
 
                 <div className="w-auto px-4 text-right md:w-1/6 lg:w-2/12 ">
