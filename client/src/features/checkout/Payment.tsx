@@ -54,6 +54,7 @@ export default function Payment() {
           </div>
         </div>
       </section>
+      <a href="/bill"> Next</a>
     </>
   );
 }

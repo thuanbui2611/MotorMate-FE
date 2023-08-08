@@ -17,6 +17,7 @@ import Contact from "../../features/contact/Contact";
 import Checkout from "../../features/checkout/Checkout";
 import Payment from "../../features/checkout/Payment";
 import Bill from "../../features/checkout/Bill";
+import Chat from "../../features/chat/Chat";
 
 function App() {
   const [showLoginForm, setShowLoginForm] = useState(false);
@@ -48,6 +49,7 @@ function App() {
       {showLoginForm && <LoginFormPopUp onClose={handleLoginFormClose} />}
       <Route path="/login" component={LoginPage} />
       <Route path="/signup" component={SignUpPage} />
+      <Route path="/chat" component={Chat} />
       {!shouldHideHeaderFooter && <Footer />}
     </div>
   );

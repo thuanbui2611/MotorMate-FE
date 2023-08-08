@@ -9,6 +9,7 @@ module.exports = {
     extend: {
       colors: {
         "orange-based": "#F15D43",
+        "chat-blue": "#e3effd",
       },
     },
     theme: {
