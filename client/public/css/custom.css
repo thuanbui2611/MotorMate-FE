@@ -683,6 +683,10 @@ p {
 
 .scrollbar::-webkit-scrollbar-track {
   background-color: #edf2f7; /* Adjust the background color as needed */
+  height: 10px;
+}
+.scrollbar::-webkit-scrollbar-track-piece {
+  height: 100px; /* Adjust the height as needed */
 }
 /* End of custom scroll bar filter in product page */
 
@@ -737,3 +741,85 @@ p {
   }
 }
 /* End of search bar in products page */
+
+/* Chat button */
+.chatBtn {
+  width: 55px;
+  height: 55px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: none;
+  background-color: #ffe53b;
+  background-image: linear-gradient(147deg, #ffe53b, #ff2525, #ffe53b);
+  cursor: pointer;
+  padding-top: 3px;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.164);
+  position: relative;
+  background-size: 300%;
+  background-position: left;
+  transition-duration: 1s;
+}
+
+.tooltip {
+  position: absolute;
+  top: -40px;
+  opacity: 0;
+  background-color: rgb(255, 180, 82);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition-duration: 0.5s;
+  pointer-events: none;
+  letter-spacing: 0.5px;
+}
+
+.chatBtn:hover .tooltip {
+  opacity: 1;
+  transition-duration: 0.5s;
+}
+
+.chatBtn:hover {
+  background-position: right;
+  transition-duration: 1s;
+}
+/* End of chat button */
+
+/* Custom chat */
+.customChat {
+  background-color: #ffe53b;
+  background-image: linear-gradient(147deg, #ffe53b, #ff2525, #ffe53b);
+}
+/* End of custom chat */
+
+/* Animation open and close chat */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.5s ease-in;
+}
+
+.animate-fade-out {
+  animation: fade-out 0.5s ease-out;
+}
+/* End of animation open and close chat */
