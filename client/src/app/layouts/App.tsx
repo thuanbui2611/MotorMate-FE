@@ -26,7 +26,7 @@ function App() {
   return (
     <div className="flex flex-col min-h-screen relative ">
       {!shouldHideComponent && <Header />}
-      <Route exact path="/" component={HomePage} />
+      <Route exact path={["/", "/home"]} component={HomePage} />
       <Route exact path="/about" component={About} />
       <Route path="/contact" component={Contact} />
       <Route path="/books" component={Books} />

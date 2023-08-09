@@ -198,7 +198,7 @@ export default function Books() {
                 defaultValue={dayjs()}
                 value={startDate}
                 onChange={(newStartDate) => setStartDate(newStartDate)}
-                className="xl:w-[8.5vw] lg:w-[10vw] md:w-[12vw] sm:w-[10vw]"
+                className="xl:w-[10vw] lg:w-[10vw] md:w-[12vw] sm:w-[10vw]"
               />
             </div>
             <div>
@@ -206,7 +206,7 @@ export default function Books() {
                 label="End date"
                 value={endDate}
                 onChange={(newEndDate) => setEndDate(newEndDate)}
-                className="xl:w-[8.5vw] lg:w-[10vw] md:w-[12vw] sm:w-[10vw]"
+                className="xl:w-[10vw] lg:w-[10vw] md:w-[12vw] sm:w-[10vw]"
               />
             </div>
           </LocalizationProvider>
