@@ -271,7 +271,7 @@ export default function HomePage() {
           <div className="w-full py-8 mx-auto flex justify-center ">
             <h1 className=" bg-cyan-500 shadow-lg shadow-cyan-500/50 pb-2 text-center text-uppercase text-4xl font-extrabold leading-none tracking-tight md:text-5xl lg:text-6xl px-6">
               <span className="drop-shadow-lg text-white ">WELCOME TO </span>
-              <span className=" text-black drop-shadow-lg">MOTORMATE</span>
+              <span className=" text-black drop-shadow-lg">MOTORMATE AAA</span>
             </h1>
           </div>
 
