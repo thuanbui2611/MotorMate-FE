@@ -84,7 +84,7 @@ export default function TinyChat() {
               </div>
             </div>
           </div>
-          <div className="flex flex-row justify-between bg-white max-h-80">
+          <div className="flex flex-row justify-between bg-white max-h-80 ">
             <div className="flex flex-col w-2/3 border-r-2 overflow-y-auto max-h-80 scrollbar ">
               <div className="border-b-2 py-2 px-1 h-11 sticky top-0 bg-white">
                 <input
@@ -313,149 +313,89 @@ export default function TinyChat() {
 
             <div className="w-full flex flex-col justify-between flex-grow overflow-y-auto max-h-80 scrollbar ">
               <div className="flex flex-col mt-2 px-1">
-                {/* Start detail message, justify-end is sent, justify-start is recieve */}
-
+                {/* Start detail message */}
+                {/* Message sending */}
                 <div className="flex justify-end mb-1 ml-10">
-                  <div
-                    className="mr-1 py-2 px-2 bg-blue-500 rounded-bl-2xl rounded-tl-2xl rounded-tr-lg text-white text-xs"
-                    style={{ fontSize: "0.75rem" }}
-                  >
+                  <div className="mr-1 py-2 px-3 bg-blue-500 rounded-bl-2xl rounded-tl-2xl rounded-tr-lg text-white text-sm">
                     Welcome to group everyone!
                   </div>
                   <img
                     src="https://source.unsplash.com/otT2199XwI8/600x600"
-                    className="object-cover h-4 w-4 rounded-full"
+                    className="object-cover h-6 w-6 rounded-full"
                     alt=""
-                    style={{ width: "16px", height: "16px" }}
                   />
                 </div>
-
+                {/* Message recieving */}
+                {/* Message sending */}
+                <div className="flex justify-end mb-1 ml-10">
+                  <div className="mr-1 py-2 px-3 bg-blue-500 rounded-bl-2xl rounded-tl-2xl rounded-tr-lg text-white text-sm">
+                    Welcome to group everyone!
+                  </div>
+                  <img
+                    src="https://source.unsplash.com/otT2199XwI8/600x600"
+                    className="object-cover h-6 w-6 rounded-full"
+                    alt=""
+                  />
+                </div>
+                {/* Message recieving */}
                 <div className="flex justify-start mb-1 mr-10">
                   <img
                     src="https://source.unsplash.com/otT2199XwI8/600x600"
-                    className="object-cover h-4 w-4 rounded-full"
+                    className="object-cover h-6 w-6 rounded-full"
                     alt=""
-                    style={{ width: "16px", height: "16px" }}
                   />
-                  <div
-                    className="ml-1 py-2 px-2 bg-gray-200 rounded-br-2xl rounded-tr-2xl rounded-tl-lg text-black text-xs"
-                    style={{ fontSize: "0.75rem" }}
-                  >
+                  <div className="ml-1 py-2 px-3 bg-gray-200 rounded-br-2xl rounded-tr-2xl rounded-tl-lg text-black text-sm">
                     happy holiday guys! happy holiday guys!happy holiday
                     guys!happy holiday guys!happy holiday guys! happy holiday
                     guys! happy holiday guys! happy holiday guys!
                   </div>
                 </div>
-
+                {/* Message sending */}
                 <div className="flex justify-end mb-1 ml-10">
-                  <div>
-                    <div
-                      className="mr-1 py-2 px-2 bg-blue-500 rounded-bl-2xl rounded-tl-2xl rounded-tr-lg text-white text-xs"
-                      style={{ fontSize: "0.75rem" }}
-                    >
-                      Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                      Magnam, repudiandae.
-                    </div>
-                    <div
-                      className="mt-2 mr-1 py-2 px-2 bg-blue-500 rounded-bl-2xl rounded-tl-2xl rounded-tr-lg text-white text-xs"
-                      style={{ fontSize: "0.75rem" }}
-                    >
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Debitis, reiciendis!
-                    </div>
-                  </div>
-                  <img
-                    src="https://source.unsplash.com/otT2199XwI8/600x600"
-                    className="object-cover h-4 w-4 rounded-full"
-                    alt=""
-                    style={{ width: "16px", height: "16px" }}
-                  />
-                </div>
-
-                <div className="flex justify-start mb-1 mr-10">
-                  <img
-                    src="https://source.unsplash.com/otT2199XwI8/600x600"
-                    className="object-cover h-4 w-4 rounded-full"
-                    alt=""
-                    style={{ width: "16px", height: "16px" }}
-                  />
-                  <div
-                    className="ml-1 py-2 px-2 bg-gray-200 rounded-br-2xl rounded-tr-2xl rounded-tl-lg text-black text-xs"
-                    style={{ fontSize: "0.75rem" }}
-                  >
-                    happy holiday guys!
-                  </div>
-                </div>
-
-                <div className="flex justify-end mb-1 ml-10">
-                  <div
-                    className="mr-1 py-2 px-2 bg-blue-500 rounded-bl-2xl rounded-tl-2xl rounded-tr-lg text-white text-xs"
-                    style={{ fontSize: "0.75rem" }}
-                  >
+                  <div className="mr-1 py-2 px-3 bg-blue-500 rounded-bl-2xl rounded-tl-2xl rounded-tr-lg text-white text-sm">
                     Welcome to group everyone!
                   </div>
                   <img
                     src="https://source.unsplash.com/otT2199XwI8/600x600"
-                    className="object-cover h-4 w-4 rounded-full"
+                    className="object-cover h-6 w-6 rounded-full"
                     alt=""
-                    style={{ width: "16px", height: "16px" }}
                   />
                 </div>
-
+                {/* Message recieving */}
                 <div className="flex justify-start mb-1 mr-10">
                   <img
                     src="https://source.unsplash.com/otT2199XwI8/600x600"
-                    className="object-cover h-4 w-4 rounded-full"
+                    className="object-cover h-6 w-6 rounded-full"
                     alt=""
-                    style={{ width: "16px", height: "16px" }}
                   />
-                  <div
-                    className="ml-1 py-2 px-2 bg-gray-200 rounded-br-2xl rounded-tr-2xl rounded-tl-lg text-black text-xs"
-                    style={{ fontSize: "0.75rem" }}
-                  >
+                  <div className="ml-1 py-2 px-3 bg-gray-200 rounded-br-2xl rounded-tr-2xl rounded-tl-lg text-black text-sm">
                     happy holiday guys! happy holiday guys!happy holiday
                     guys!happy holiday guys!happy holiday guys! happy holiday
                     guys! happy holiday guys! happy holiday guys!
                   </div>
                 </div>
-
+                {/* Message sending */}
                 <div className="flex justify-end mb-1 ml-10">
-                  <div>
-                    <div
-                      className="mr-1 py-2 px-2 bg-blue-500 rounded-bl-2xl rounded-tl-2xl rounded-tr-lg text-white text-xs"
-                      style={{ fontSize: "0.75rem" }}
-                    >
-                      Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                      Magnam, repudiandae.
-                    </div>
-                    <div
-                      className="mt-2 mr-1 py-2 px-2 bg-blue-500 rounded-bl-2xl rounded-tl-2xl rounded-tr-lg text-white text-xs"
-                      style={{ fontSize: "0.75rem" }}
-                    >
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Debitis, reiciendis!
-                    </div>
+                  <div className="mr-1 py-2 px-3 bg-blue-500 rounded-bl-2xl rounded-tl-2xl rounded-tr-lg text-white text-sm">
+                    Welcome to group everyone!
                   </div>
                   <img
                     src="https://source.unsplash.com/otT2199XwI8/600x600"
-                    className="object-cover h-4 w-4 rounded-full"
+                    className="object-cover h-6 w-6 rounded-full"
                     alt=""
-                    style={{ width: "16px", height: "16px" }}
                   />
                 </div>
-
+                {/* Message recieving */}
                 <div className="flex justify-start mb-1 mr-10">
                   <img
                     src="https://source.unsplash.com/otT2199XwI8/600x600"
-                    className="object-cover h-4 w-4 rounded-full"
+                    className="object-cover h-6 w-6 rounded-full"
                     alt=""
-                    style={{ width: "16px", height: "16px" }}
                   />
-                  <div
-                    className="ml-1 py-2 px-2 bg-gray-200 rounded-br-2xl rounded-tr-2xl rounded-tl-lg text-black text-xs"
-                    style={{ fontSize: "0.75rem" }}
-                  >
-                    happy holiday guys!
+                  <div className="ml-1 py-2 px-3 bg-gray-200 rounded-br-2xl rounded-tr-2xl rounded-tl-lg text-black text-sm">
+                    happy holiday guys! happy holiday guys!happy holiday
+                    guys!happy holiday guys!happy holiday guys! happy holiday
+                    guys! happy holiday guys! happy holiday guys!
                   </div>
                 </div>
                 {/* End detail message */}

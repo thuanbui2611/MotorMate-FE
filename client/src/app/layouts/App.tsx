@@ -18,6 +18,9 @@ import Payment from "../../features/checkout/Payment";
 import Bill from "../../features/checkout/Bill";
 import Chat from "../../features/chat/Chat";
 import TinyChat from "../../features/chat/TinyChat";
+import AllOrders from "../../features/order/AllOrders";
+import MyProfile from "../../features/profile/MyProfile";
+import SettingProfile from "../../features/profile-settings/SettingProfile";
 
 function App() {
   const location = useLocation();
@@ -29,11 +32,14 @@ function App() {
       <Route exact path={["/", "/home"]} component={HomePage} />
       <Route exact path="/about" component={About} />
       <Route path="/contact" component={Contact} />
+      <Route path="/profile" component={MyProfile} />
       <Route path="/books" component={Books} />
       <Route path="/book-detail/:id" component={BookDetails} />
       <Route path="/check-out/:id" component={Checkout} />
       <Route path="/payment" component={Payment} />
       <Route path="/bill" component={Bill} />
+      <Route path="/your-orders" component={AllOrders} />
+      <Route path="/profile-setting" component={SettingProfile} />
       <Route exact path="/my-cart" component={Cart} />
       <Route path="/login" component={LoginPage} />
       <Route path="/signup" component={SignUpPage} />
