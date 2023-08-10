@@ -1,78 +1,35 @@
-import { useEffect } from "react";
+import { useState } from "react";
+import GoogleLogin from "react-google-login";
 
-declare global {
-  interface Window {
-    google: any;
-  }
-}
 export default function LoginGoogle() {
-  useEffect(() => {
-    const handleGoogleLoginSuccess = (response: any) => {
-      // Handle the response here
-      console.log(response);
+  console.log(process.env.REACT_APP_GOOGLE_CLIENT_ID as string);
+  // const [loginData, setLoginData] = useState(
+  //   localStorage.getItem("loginData")
+  //     ? JSON.parse(localStorage.getItem("loginData") as string)
+  //     : null
+  // );
+  const handleFailure = (result: any) => {
+    alert("Something error");
+  };
 
-      // Example: perform a POST request to send the data to your server
-      fetch("/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(response),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          // Handle the response from your server
-          console.log(data);
-        })
-        .catch((error) => {
-          // Handle any errors
-          console.error(error);
-        });
-    };
+  const handleLogin = (googleData: any) => {
+    console.log("handle login:" + googleData);
+  };
 
-    const loadGoogleSignInScript = () => {
-      const script = document.createElement("script");
-      script.src = "https://accounts.google.com/gsi/client";
-      script.async = true;
-      script.defer = true;
-      document.head.appendChild(script);
+  // const handleLogout = () => {
+  //   localStorage.removeItem("loginData");
+  //   setLoginData(null);
+  // };
 
-      script.onload = () => {
-        // Google Sign-In script loaded
-
-        window.google.accounts.id.initialize({
-          client_id:
-            "248508653252-6vk23s9roilcu60b7c8053i6qmqikk9q.apps.googleusercontent.com",
-          callback: handleGoogleLoginSuccess,
-        });
-      };
-
-      return () => {
-        // Cleanup function
-        document.head.removeChild(script);
-      };
-    };
-
-    loadGoogleSignInScript();
-  }, []);
   return (
     <>
-      <div className="">
-        <div
-          id="g_id_onload"
-          data-client_id="248508653252-6vk23s9roilcu60b7c8053i6qmqikk9q.apps.googleusercontent.com"
-          data-login_uri="http://localhost:3000/login"
-        ></div>
-        <div
-          className="g_id_signin"
-          data-type="standard"
-          data-size="large"
-          data-theme="outline"
-          data-text="sign_in_with"
-          data-shape="rectangular"
-          data-logo_alignment="left"
-        ></div>
-      </div>
+      <GoogleLogin
+        clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID as string}
+        buttonText="Login with Google"
+        onSuccess={handleLogin}
+        onFailure={handleFailure}
+        cookiePolicy={"single_host_origin"}
+      ></GoogleLogin>
     </>
   );
 }

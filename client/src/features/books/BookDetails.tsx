@@ -25,9 +25,9 @@ export default function BookDetails() {
           <g
             fill="none"
             stroke="currentColor"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="1"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="1"
           >
             <g transform="translate(9.5,19)">
               <circle
@@ -229,9 +229,9 @@ export default function BookDetails() {
                       <a className="text-gray-500">
                         <svg
                           fill="currentColor"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
                           className="w-5 h-5"
                           viewBox="0 0 24 24"
                         >
@@ -241,9 +241,9 @@ export default function BookDetails() {
                       <a className="text-gray-500">
                         <svg
                           fill="currentColor"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
                           className="w-5 h-5"
                           viewBox="0 0 24 24"
                         >
@@ -253,9 +253,9 @@ export default function BookDetails() {
                       <a className="text-gray-500">
                         <svg
                           fill="currentColor"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
                           className="w-5 h-5"
                           viewBox="0 0 24 24"
                         >
@@ -285,9 +285,9 @@ export default function BookDetails() {
                           <svg
                             fill="none"
                             stroke="currentColor"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
                             className="w-4 h-4"
                             viewBox="0 0 24 24"
                           >
@@ -311,9 +311,9 @@ export default function BookDetails() {
                     <button className="rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4">
                       <svg
                         fill="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
                         className="w-5 h-5"
                         viewBox="0 0 24 24"
                       >
@@ -355,20 +355,20 @@ export default function BookDetails() {
                     <path
                       d="M5 16.4754C11.7688 27.4499 21.2452 57.3224 5 89.0164"
                       stroke="currentColor"
-                      stroke-width="10"
-                      stroke-linecap="round"
+                      strokeWidth="10"
+                      strokeLinecap="round"
                     />
                     <path
                       d="M33.6761 112.104C44.6984 98.1239 74.2618 57.6776 83.4821 5"
                       stroke="currentColor"
-                      stroke-width="10"
-                      stroke-linecap="round"
+                      strokeWidth="10"
+                      strokeLinecap="round"
                     />
                     <path
                       d="M50.5525 130C68.2064 127.495 110.731 117.541 116 78.0874"
                       stroke="currentColor"
-                      stroke-width="10"
-                      stroke-linecap="round"
+                      strokeWidth="10"
+                      strokeLinecap="round"
                     />
                   </svg>
                 </div>
