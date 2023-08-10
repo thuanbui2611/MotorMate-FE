@@ -20,10 +20,10 @@ export default function BookSuggest() {
         {/* <!-- Title --> */}
         <div className="max-w-2xl text-center mx-auto mb-10 lg:mb-14">
           <h2 className="text-2xl font-bold md:text-4xl md:leading-tight dark:text-white">
-            Suggested books
+            Related
           </h2>
           <p className="mt-1 text-gray-600 dark:text-gray-400">
-            Browse our collection of Relevant Books
+            Browse our collection of Relevant Motor
           </p>
         </div>
         {/* <!-- End Title --> */}

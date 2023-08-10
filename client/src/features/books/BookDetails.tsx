@@ -33,12 +33,12 @@ export default function BookDetails() {
               <circle
                 className="loader_tire"
                 r="9"
-                stroke-dasharray="56.549 56.549"
+                strokeDasharray="56.549 56.549"
               ></circle>
               <g
                 className="loader_spokes-spin"
-                stroke-dasharray="31.416 31.416"
-                stroke-dashoffset="-23.562"
+                strokeDasharray="31.416 31.416"
+                strokeDashoffset="-23.562"
               >
                 <circle className="loader_spokes" r="5"></circle>
                 <circle
@@ -51,8 +51,8 @@ export default function BookDetails() {
             <g transform="translate(24,19)">
               <g
                 className="loader_pedals-spin"
-                stroke-dasharray="25.133 25.133"
-                stroke-dashoffset="-21.991"
+                strokeDasharray="25.133 25.133"
+                strokeDashoffset="-21.991"
                 transform="rotate(67.5,0,0)"
               >
                 <circle className="loader_pedals" r="4"></circle>
@@ -67,12 +67,12 @@ export default function BookDetails() {
               <circle
                 className="loader_tire"
                 r="9"
-                stroke-dasharray="56.549 56.549"
+                strokeDasharray="56.549 56.549"
               ></circle>
               <g
                 className="loader_spokes-spin"
-                stroke-dasharray="31.416 31.416"
-                stroke-dashoffset="-23.562"
+                strokeDasharray="31.416 31.416"
+                strokeDashoffset="-23.562"
               >
                 <circle className="loader_spokes" r="5"></circle>
                 <circle
@@ -85,22 +85,22 @@ export default function BookDetails() {
             <polyline
               className="loader_seat"
               points="14 3,18 3"
-              stroke-dasharray="5 5"
+              strokeDasharray="5 5"
             ></polyline>
             <polyline
               className="loader_body"
               points="16 3,24 19,9.5 19,18 8,34 7,24 19"
-              stroke-dasharray="79 79"
+              strokeDasharray="79 79"
             ></polyline>
             <path
               className="loader_handlebars"
               d="m30,2h6s1,0,1,1-1,1-1,1"
-              stroke-dasharray="10 10"
+              strokeDasharray="10 10"
             ></path>
             <polyline
               className="loader_front"
               points="32.5 2,38.5 19"
-              stroke-dasharray="19 19"
+              strokeDasharray="19 19"
             ></polyline>
           </g>
         </svg>
@@ -390,6 +390,64 @@ export default function BookDetails() {
           </div>
           {/* End Background Color */}
         </div>
+        <div className="flex bg-gray-100 mt-10">
+          <div className=" flex text-center items-center md:w-1/4 text-gray-500 ">
+            <div className="w-32 h-32 ml-2 mt-2 -mb-2 ">
+              <img
+                className="mx-auto w-28 h-28 rounded-full"
+                src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/jese-leos.png"
+                alt="Jese Avatar"
+              />
+            </div>
+
+            <div className="w-2/3 flex-col text-left">
+              <h3 className=" ml-3 mb-1 text-xl md:text-2xl font-bold tracking-tight text-gray-900">
+                <a href="#">Jese Leos</a>
+              </h3>
+              <button className="flex ml-3 mt-4 bg-orange-300 hover:bg-orange-400 text-black py-1 md:px-2 px-1 rounded-full">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="#ffffff"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="text-white w-5 h-5"
+                >
+                  <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                  <g
+                    id="SVGRepo_tracerCarrier"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  ></g>
+                  <g id="SVGRepo_iconCarrier">
+                    {" "}
+                    <path
+                      fill-rule="evenodd"
+                      clip-rule="evenodd"
+                      d="M12 3C7.85113 3 4 5.73396 4 10C4 11.5704 4.38842 12.7289 5.08252 13.6554C5.79003 14.5998 6.87746 15.3863 8.41627 16.0908L9.2326 16.4645L8.94868 17.3162C8.54129 18.5384 7.84997 19.6611 7.15156 20.5844C9.56467 19.8263 12.7167 18.6537 14.9453 17.1679C17.1551 15.6948 18.3969 14.5353 19.0991 13.455C19.7758 12.4139 20 11.371 20 10C20 5.73396 16.1489 3 12 3ZM2 10C2 4.26604 7.14887 1 12 1C16.8511 1 22 4.26604 22 10C22 11.629 21.7242 13.0861 20.7759 14.545C19.8531 15.9647 18.3449 17.3052 16.0547 18.8321C13.0781 20.8164 8.76589 22.2232 6.29772 22.9281C5.48665 23.1597 4.84055 22.6838 4.56243 22.1881C4.28848 21.6998 4.22087 20.9454 4.74413 20.3614C5.44439 19.5798 6.21203 18.5732 6.72616 17.4871C5.40034 16.7841 4.29326 15.9376 3.48189 14.8545C2.48785 13.5277 2 11.9296 2 10Z"
+                      fill="#0F0F0F"
+                    ></path>{" "}
+                    <path
+                      d="M9 10C9 10.8284 8.32843 11.5 7.5 11.5C6.67157 11.5 6 10.8284 6 10C6 9.17157 6.67157 8.5 7.5 8.5C8.32843 8.5 9 9.17157 9 10Z"
+                      fill="#0F0F0F"
+                    ></path>{" "}
+                    <path
+                      d="M13.4976 10C13.4976 10.8284 12.826 11.5 11.9976 11.5C11.1692 11.5 10.4976 10.8284 10.4976 10C10.4976 9.17157 11.1692 8.5 11.9976 8.5C12.826 8.5 13.4976 9.17157 13.4976 10Z"
+                      fill="#0F0F0F"
+                    ></path>{" "}
+                    <path
+                      d="M16.5 11.5C17.3284 11.5 18 10.8284 18 10C18 9.17157 17.3284 8.5 16.5 8.5C15.6716 8.5 15 9.17157 15 10C15 10.8284 15.6716 11.5 16.5 11.5Z"
+                      fill="#0F0F0F"
+                    ></path>{" "}
+                  </g>
+                </svg>
+                <p className="mx-2 text-sm"> Chat now</p>
+              </button>
+            </div>
+          </div>
+          <div>
+            <p> Detail: </p>
+          </div>
+        </div>
+
         <BookSuggest />
         <ReviewBook />
       </div>

@@ -823,3 +823,9 @@ p {
   animation: fade-out 0.5s ease-out;
 }
 /* End of animation open and close chat */
+
+/* Custom product */
+.customButton {
+  background-color: #ffe53b;
+  background-image: linear-gradient(147deg, #ffe53b, #ff2525, #ffe53b);
+}
