@@ -1,12 +1,12 @@
-import { GoogleLogin } from "@react-oauth/google";
-import { useState } from "react";
+import { GoogleLogin, CredentialResponse } from "@react-oauth/google";
 
 export default function LoginGoogle() {
   const handleError = () => {
     console.log("Login fail");
   };
-  const handleSuccess = (credentialResponse: any) => {
-    console.log(credentialResponse);
+  const handleSuccess = (response: CredentialResponse) => {
+    console.log("clientId:", response.clientId);
+    console.log("credential:", response.credential);
   };
   return (
     <GoogleLogin

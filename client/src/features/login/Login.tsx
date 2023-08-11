@@ -1,6 +1,16 @@
 import LoginGoogle from "./LoginGoogle";
 
-export default function LoginForm() {
+export default function Login() {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+
+    console.log({
+      email: data.get("email"),
+      password: data.get("password"),
+    });
+  };
+
   return (
     <>
       <div className="overflow-hidden">
@@ -43,7 +53,10 @@ export default function LoginForm() {
               </h1>
             </div>
 
-            <form className="form mx-auto max-w-2xl sm:flex sm:space-x-3 sm:flex-wrap p-3 bg-white border rounded-lg shadow-lg shadow-gray-100">
+            <form
+              className="form mx-auto max-w-2xl sm:flex sm:space-x-3 sm:flex-wrap p-3 bg-white border rounded-lg shadow-lg shadow-gray-100"
+              onSubmit={handleSubmit}
+            >
               <div className="flex-column md:ml-3">
                 <label>Email</label>
               </div>
@@ -62,6 +75,7 @@ export default function LoginForm() {
                   placeholder="Enter your Email"
                   className="input"
                   type="text"
+                  name="email"
                 />
               </div>
 
@@ -81,6 +95,7 @@ export default function LoginForm() {
                 <input
                   placeholder="Enter your Password"
                   className="input"
+                  name="password"
                   type="password"
                 />
               </div>

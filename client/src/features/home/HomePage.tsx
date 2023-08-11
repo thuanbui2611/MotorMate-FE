@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
 import { Book } from "../../app/models/book";
+import agent from "../../app/api/agent";
 
 export default function HomePage() {
   const [products, setProducts] = useState<Book[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("https://fakestoreapi.com/products")
-      .then((res) => res.json())
-      .then((data) => setProducts(data))
+    agent.Product.all()
+      .then((products) => setProducts(products))
+      .catch((error) => console.log(error))
       .finally(() => setLoading(false));
   });
   if (loading)

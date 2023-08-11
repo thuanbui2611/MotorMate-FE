@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import BookSuggest from "./BookSuggest";
 import ReviewBook from "./ReviewBook";
+import agent from "../../app/api/agent";
 
 export default function BookDetails() {
   const { id } = useParams<{ id: string }>();
@@ -11,10 +12,9 @@ export default function BookDetails() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios
-      .get(`https://fakestoreapi.com/products/${id}`)
-      .then((res) => setBook(res.data))
-      .catch((err) => console.log(err))
+    agent.Product.details(parseInt(id))
+      .then((product) => setBook(product))
+      .catch((error) => console.log(error))
       .finally(() => setLoading(false));
   }, [id]);
 

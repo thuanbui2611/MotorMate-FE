@@ -8,8 +8,6 @@ import Books from "../../features/books/Books";
 import "flowbite";
 import Footer from "./Footer";
 import Cart from "../../features/cart/Cart";
-import { useState } from "react";
-import LoginPage from "../../features/login/LoginPage";
 import SignUpPage from "../../features/signup/SignUpPage";
 import About from "../../features/about/About";
 import Contact from "../../features/contact/Contact";
@@ -21,6 +19,7 @@ import TinyChat from "../../features/chat/TinyChat";
 import AllOrders from "../../features/order/AllOrders";
 import MyProfile from "../../features/profile/MyProfile";
 import SettingProfile from "../../features/profile-settings/SettingProfile";
+import Login from "../../features/login/Login";
 
 function App() {
   const location = useLocation();
@@ -41,7 +40,7 @@ function App() {
       <Route path="/your-orders" component={AllOrders} />
       <Route path="/profile-setting" component={SettingProfile} />
       <Route exact path="/my-cart" component={Cart} />
-      <Route path="/login" component={LoginPage} />
+      <Route path="/login" component={Login} />
       <Route path="/signup" component={SignUpPage} />
       <Route path="/chat" component={Chat} />
       {!shouldHideComponent && <TinyChat />}
