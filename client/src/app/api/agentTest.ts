@@ -1,7 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 
-// axios.defaults.baseURL= 'https://motormate.azurewebsites.net/swagger/';
-axios.defaults.baseURL = "https://fakestoreapi.com/";
+// axios.defaults.baseURL = "https://motormate.azurewebsites.net/swagger/";
 const responseBody = (response: AxiosResponse) => response.data;
 
 const requests = {
@@ -11,17 +10,11 @@ const requests = {
   delete: (url: string) => axios.delete(url).then(responseBody),
 };
 
-const Product = {
-  all: () => requests.get("products"),
-  details: (id: number) => requests.get(`products/${id}`),
-};
-
 const Account = {
-  login: (values: any) => requests.post("auth/login", values),
+  loginGoogle: (values: any) => requests.post("api/auth/sso/google", values),
 };
 
 const agent = {
-  Product,
   Account,
 };
 

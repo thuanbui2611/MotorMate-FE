@@ -1,15 +1,39 @@
+import { useState } from "react";
 import LoginGoogle from "./LoginGoogle";
+import agent from "../../app/api/agent";
 
 export default function Login() {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
+  const [values, setValues] = useState({
+    username: "",
+    password: "",
+  });
 
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+  // const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  //   event.preventDefault();
+  //   const data = new FormData(event.currentTarget);
+
+  //   console.log({
+  //     email: data.get("email"),
+  //     password: data.get("password"),
+  //   });
+  // };
+
+  const handleSubmit = (event: any) => {
+    event.preventDefault();
+    console.log(values);
+    try {
+      agent.Account.login(values).then((res) => {
+        console.log("API Response:", res);
+      });
+    } catch (error) {
+      console.log("API Error:", error);
+    }
   };
+
+  function handleInputChange(event: any) {
+    const { name, value } = event.target;
+    setValues({ ...values, [name]: value });
+  }
 
   return (
     <>
@@ -75,7 +99,9 @@ export default function Login() {
                   placeholder="Enter your Email"
                   className="input"
                   type="text"
-                  name="email"
+                  name="username"
+                  onChange={handleInputChange}
+                  value={values.username}
                 />
               </div>
 
@@ -97,6 +123,8 @@ export default function Login() {
                   className="input"
                   name="password"
                   type="password"
+                  onChange={handleInputChange}
+                  value={values.password}
                 />
               </div>
 
