@@ -1,6 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 
-// axios.defaults.baseURL = "https://motormate.azurewebsites.net/swagger/";
+axios.defaults.baseURL = "https://motormate.azurewebsites.net/";
+axios.defaults.headers.post["Content-Type"] = "application/json";
 const responseBody = (response: AxiosResponse) => response.data;
 
 const requests = {
@@ -11,7 +12,8 @@ const requests = {
 };
 
 const Account = {
-  loginGoogle: (values: any) => requests.post("api/auth/sso/google", values),
+  loginGoogle: (values: { tokenCredential: string }) =>
+    requests.post("api/auth/sso/google", values),
 };
 
 const agent = {

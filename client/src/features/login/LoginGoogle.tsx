@@ -9,7 +9,9 @@ export default function LoginGoogle() {
     console.log("clientId:", response.clientId);
     console.log("credential:", response.credential);
     try {
-      const data = await agentTest.Account.loginGoogle(response.credential);
+      const data = await agentTest.Account.loginGoogle({
+        tokenCredential: response.credential as string,
+      });
       console.log("data:", data);
     } catch (error) {
       console.log("API Error:", error);
