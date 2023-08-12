@@ -10,7 +10,7 @@ export default function ProductCard({ product }: Props) {
       <div className="w-full px-3 mb-6 sm:w-1/2 md:w-1/3">
         <div className="border border-gray-300 ">
           <div className="relative bg-gray-200">
-            <a href={"/book-detail/" + product.id}>
+            <a href={"/product-detail/" + product.id}>
               <img
                 src={product.image}
                 alt=""
@@ -153,7 +153,7 @@ export default function ProductCard({ product }: Props) {
           </div>
           <div className="flex justify-between p-4 border-t border-gray-300 ">
             <a
-              href={"/book-detail" + product.id}
+              href={"/product-detail" + product.id}
               className="text-gray-500  hover:text-orange-500 "
             >
               <svg

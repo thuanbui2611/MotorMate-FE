@@ -18,7 +18,7 @@ export default function ProductHomepage({ product }: Props) {
         <div>
           <a
             className="group flex flex-col bg-white border shadow-sm rounded-xl hover:shadow-md transition"
-            href={"/book-detail/" + product.id}
+            href={"/product-detail/" + product.id}
           >
             <div className="relative aspect-w-16 aspect-h-9">
               <img

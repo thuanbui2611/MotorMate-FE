@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import agent from "../../app/api/agent";
 import ReviewProduct from "./ReviewProduct";
 import ProductSuggested from "./ProductSuggested";
+import Loading from "../../app/components/Loading";
 
 export default function ProductDetails() {
   const { id } = useParams<{ id: string }>();
@@ -17,94 +18,7 @@ export default function ProductDetails() {
       .finally(() => setLoading(false));
   }, [id]);
 
-  if (loading)
-    return (
-      <div>
-        <svg className="loader" viewBox="0 0 48 30" width="48px" height="30px">
-          <g
-            fill="none"
-            stroke="currentColor"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="1"
-          >
-            <g transform="translate(9.5,19)">
-              <circle
-                className="loader_tire"
-                r="9"
-                strokeDasharray="56.549 56.549"
-              ></circle>
-              <g
-                className="loader_spokes-spin"
-                strokeDasharray="31.416 31.416"
-                strokeDashoffset="-23.562"
-              >
-                <circle className="loader_spokes" r="5"></circle>
-                <circle
-                  className="loader_spokes"
-                  r="5"
-                  transform="rotate(180,0,0)"
-                ></circle>
-              </g>
-            </g>
-            <g transform="translate(24,19)">
-              <g
-                className="loader_pedals-spin"
-                strokeDasharray="25.133 25.133"
-                strokeDashoffset="-21.991"
-                transform="rotate(67.5,0,0)"
-              >
-                <circle className="loader_pedals" r="4"></circle>
-                <circle
-                  className="loader_pedals"
-                  r="4"
-                  transform="rotate(180,0,0)"
-                ></circle>
-              </g>
-            </g>
-            <g transform="translate(38.5,19)">
-              <circle
-                className="loader_tire"
-                r="9"
-                strokeDasharray="56.549 56.549"
-              ></circle>
-              <g
-                className="loader_spokes-spin"
-                strokeDasharray="31.416 31.416"
-                strokeDashoffset="-23.562"
-              >
-                <circle className="loader_spokes" r="5"></circle>
-                <circle
-                  className="loader_spokes"
-                  r="5"
-                  transform="rotate(180,0,0)"
-                ></circle>
-              </g>
-            </g>
-            <polyline
-              className="loader_seat"
-              points="14 3,18 3"
-              strokeDasharray="5 5"
-            ></polyline>
-            <polyline
-              className="loader_body"
-              points="16 3,24 19,9.5 19,18 8,34 7,24 19"
-              strokeDasharray="79 79"
-            ></polyline>
-            <path
-              className="loader_handlebars"
-              d="m30,2h6s1,0,1,1-1,1-1,1"
-              strokeDasharray="10 10"
-            ></path>
-            <polyline
-              className="loader_front"
-              points="32.5 2,38.5 19"
-              strokeDasharray="19 19"
-            ></polyline>
-          </g>
-        </svg>
-      </div>
-    );
+  if (loading) return <Loading />;
   if (!book) return <h3>Book not found</h3>;
   return (
     <>

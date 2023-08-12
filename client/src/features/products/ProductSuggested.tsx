@@ -49,7 +49,7 @@ export default function ProductSuggested() {
                 {/* <!-- Card --> */}
                 <a
                   className="group flex flex-col bg-white border shadow-sm rounded-xl hover:shadow-md transition dark:bg-slate-900 dark:border-gray-800"
-                  href={"/book-detail/" + product.id}
+                  href={"/product-detail/" + product.id}
                 >
                   <div className="aspect-w-16 aspect-h-9">
                     <img
@@ -87,7 +87,7 @@ export default function ProductSuggested() {
               </p>
               <a
                 className="inline-flex items-center gap-x-1.5 text-blue-600 decoration-2 hover:underline font-medium"
-                href="/books"
+                href="/products"
               >
                 Go here
                 <svg

@@ -18,8 +18,8 @@ import AllOrders from "../../features/order/AllOrders";
 import MyProfile from "../../features/profile/MyProfile";
 import SettingProfile from "../../features/profile-settings/SettingProfile";
 import Login from "../../features/login/Login";
-import ProductDetails from "../../features/books/ProductDetails";
-import Products from "../../features/books/Products";
+import ProductDetails from "../../features/products/ProductDetails";
+import Products from "../../features/products/Products";
 
 function App() {
   const location = useLocation();
@@ -33,7 +33,7 @@ function App() {
       <Route path="/contact" component={Contact} />
       <Route path="/profile" component={MyProfile} />
       <Route path="/products" component={Products} />
-      <Route path="/book-detail/:id" component={ProductDetails} />
+      <Route path="/product-detail/:id" component={ProductDetails} />
       <Route path="/check-out/:id" component={Checkout} />
       <Route path="/payment" component={Payment} />
       <Route path="/bill" component={Bill} />
