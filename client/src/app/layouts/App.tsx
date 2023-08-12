@@ -2,8 +2,6 @@ import { Route, useLocation } from "react-router-dom";
 import HomePage from "../../features/home/HomePage";
 import "./../../styles.css";
 import Header from "./Header";
-import BookDetails from "../../features/books/BookDetails";
-import Books from "../../features/books/Books";
 
 import "flowbite";
 import Footer from "./Footer";
@@ -20,6 +18,8 @@ import AllOrders from "../../features/order/AllOrders";
 import MyProfile from "../../features/profile/MyProfile";
 import SettingProfile from "../../features/profile-settings/SettingProfile";
 import Login from "../../features/login/Login";
+import ProductDetails from "../../features/books/ProductDetails";
+import Products from "../../features/books/Products";
 
 function App() {
   const location = useLocation();
@@ -32,8 +32,8 @@ function App() {
       <Route exact path="/about" component={About} />
       <Route path="/contact" component={Contact} />
       <Route path="/profile" component={MyProfile} />
-      <Route path="/books" component={Books} />
-      <Route path="/book-detail/:id" component={BookDetails} />
+      <Route path="/products" component={Products} />
+      <Route path="/book-detail/:id" component={ProductDetails} />
       <Route path="/check-out/:id" component={Checkout} />
       <Route path="/payment" component={Payment} />
       <Route path="/bill" component={Bill} />

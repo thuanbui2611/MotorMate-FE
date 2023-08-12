@@ -56,8 +56,8 @@
 
 .content h1 {
   margin-bottom: 10px;
-  font-size: 10vw;
-  -webkit-text-stroke: 3px #fff;
+  font-size: 12vw;
+  -webkit-text-stroke: 2px #fff;
   color: transparent;
   font-weight: 850;
   transition: 0.5s;
@@ -65,14 +65,14 @@
 
 .content h1:hover {
   color: white;
-  -webkit-text-stroke: 4px #000;
+  -webkit-text-stroke: 2px #000;
 }
 .content a {
   text-decoration: none;
   color: white;
   font-size: 3vw;
   border: 2px solid white;
-  padding: 2vw 8vw;
+  padding: 2vw 3vw;
   border-radius: 50px;
   margin-top: 3vw;
   transition: 0.5s;
@@ -102,7 +102,7 @@
   }
 
   .content h1 {
-    margin-bottom: 4rem;
+    margin-bottom: 1rem;
     font-size: 6vw;
   }
 
@@ -110,8 +110,7 @@
     display: inline;
     margin-top: 2rem;
     font-size: 1.5vw;
-    padding: 1vw 4vw;
-    margin-left: 2rem;
+    padding: 1vw 1vw;
   }
 }
 
@@ -120,16 +119,19 @@
   border-radius: 25px;
   border: 2px solid #f15d43;
   background-color: #f15d43;
-  width: 200px;
-  height: 140px;
-  position: absolute;
-  left: 43%;
-  top: 35%;
-  /* display: block;
-  width: 150px;
-  height: auto; */
+  width: 140px;
+  height: 98px;
 }
 
+@media (min-width: 768px) {
+  .loader {
+    border-radius: 25px;
+    border: 2px solid #f15d43;
+    background-color: #f15d43;
+    width: 180px;
+    height: 126px;
+  }
+}
 .loader_body,
 .loader_front,
 .loader_handlebars,

@@ -3,6 +3,7 @@ import { Product } from "../../app/models/product";
 import agent from "../../app/api/agent";
 import { Cart } from "../../app/models/cart";
 import ProductHomepage from "./ProductHomepage";
+import Loading from "../../app/components/Loading";
 
 export default function HomePage() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -16,94 +17,7 @@ export default function HomePage() {
   });
 
   function handleAddItem(cart: Cart) {}
-  if (loading)
-    return (
-      <div>
-        <svg className="loader" viewBox="0 0 48 30" width="48px" height="30px">
-          <g
-            fill="none"
-            stroke="currentColor"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="1"
-          >
-            <g transform="translate(9.5,19)">
-              <circle
-                className="loader_tire"
-                r="9"
-                strokeDasharray="56.549 56.549"
-              ></circle>
-              <g
-                className="loader_spokes-spin"
-                strokeDasharray="31.416 31.416"
-                strokeDashoffset="-23.562"
-              >
-                <circle className="loader_spokes" r="5"></circle>
-                <circle
-                  className="loader_spokes"
-                  r="5"
-                  transform="rotate(180,0,0)"
-                ></circle>
-              </g>
-            </g>
-            <g transform="translate(24,19)">
-              <g
-                className="loader_pedals-spin"
-                strokeDasharray="25.133 25.133"
-                strokeDashoffset="-21.991"
-                transform="rotate(67.5,0,0)"
-              >
-                <circle className="loader_pedals" r="4"></circle>
-                <circle
-                  className="loader_pedals"
-                  r="4"
-                  transform="rotate(180,0,0)"
-                ></circle>
-              </g>
-            </g>
-            <g transform="translate(38.5,19)">
-              <circle
-                className="loader_tire"
-                r="9"
-                strokeDasharray="56.549 56.549"
-              ></circle>
-              <g
-                className="loader_spokes-spin"
-                strokeDasharray="31.416 31.416"
-                strokeDashoffset="-23.562"
-              >
-                <circle className="loader_spokes" r="5"></circle>
-                <circle
-                  className="loader_spokes"
-                  r="5"
-                  transform="rotate(180,0,0)"
-                ></circle>
-              </g>
-            </g>
-            <polyline
-              className="loader_seat"
-              points="14 3,18 3"
-              strokeDasharray="5 5"
-            ></polyline>
-            <polyline
-              className="loader_body"
-              points="16 3,24 19,9.5 19,18 8,34 7,24 19"
-              strokeDasharray="79 79"
-            ></polyline>
-            <path
-              className="loader_handlebars"
-              d="m30,2h6s1,0,1,1-1,1-1,1"
-              strokeDasharray="10 10"
-            ></path>
-            <polyline
-              className="loader_front"
-              points="32.5 2,38.5 19"
-              strokeDasharray="19 19"
-            ></polyline>
-          </g>
-        </svg>
-      </div>
-    );
+  if (loading) return <Loading />;
   return (
     <>
       <div className="cover-page px-4 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16">
@@ -115,8 +29,19 @@ export default function HomePage() {
 
         <div className="content mb-36">
           <h1>MotorMate</h1>
-          <a href="#">Rent Motorcycles</a>
-          <a href="#">Become a Lessor</a>
+          <div className="flex items-center justify-between">
+            <a className="text-center w-1/2 md:w-full md:h-full" href="#">
+              <p className="text-sm font-normal md:text-xl md:inline-block w-32 md:w-full">
+                Rent Motorcycles
+              </p>
+            </a>
+            <div className="w-4 md:w-16"></div>
+            <a className="text-center w-1/2 md:w-full md:h-full" href="#">
+              <p className="text-sm font-normal md:text-xl md:inline-block">
+                Become a Lessor
+              </p>
+            </a>
+          </div>
         </div>
       </div>
       {/* <div className=" text-center max-w-[85rem] px-4 py-5 sm:px-6 lg:px-8 lg:py-14 mx-auto">
@@ -346,7 +271,7 @@ export default function HomePage() {
                           viewBox="0 0 16 16"
                         >
                           <path
-                            fill-rule="evenodd"
+                            fillRule="evenodd"
                             d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"
                           ></path>
                         </svg>

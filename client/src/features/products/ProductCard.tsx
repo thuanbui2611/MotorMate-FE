@@ -4,7 +4,7 @@ interface Props {
   product: Product;
 }
 
-export default function BookCard({ product }: Props) {
+export default function ProductCard({ product }: Props) {
   return (
     <>
       <div className="w-full px-3 mb-6 sm:w-1/2 md:w-1/3">

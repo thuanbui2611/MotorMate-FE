@@ -4,7 +4,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Pagination, Autoplay, Navigation } from "swiper";
 import "swiper/css";
 
-export default function BookSuggest() {
+export default function ProductSuggested() {
   const [productsSuggested, setproductsSuggested] = useState<Product[]>([]);
 
   useEffect(() => {

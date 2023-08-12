@@ -82,7 +82,7 @@ export default function Header(props: Props) {
           </li>
           <button
             type="button"
-            className="flex mr-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+            className="flex mr-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 "
             id="user-menu-button"
             aria-expanded="false"
             data-dropdown-toggle="user-dropdown"
@@ -97,14 +97,12 @@ export default function Header(props: Props) {
           </button>
           {/* Dropdown menu */}
           <div
-            className="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
+            className="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow "
             id="user-dropdown"
           >
             <div className="px-4 py-3">
-              <span className="block text-sm text-gray-900 dark:text-white">
-                Bonnie Green
-              </span>
-              <span className="block text-sm  text-gray-500 truncate dark:text-gray-400">
+              <span className="block text-sm text-gray-900">Bonnie Green</span>
+              <span className="block text-sm  text-gray-500 truncate">
                 name@flowbite.com
               </span>
             </div>
@@ -120,7 +118,7 @@ export default function Header(props: Props) {
               <li>
                 <a
                   href="/your-orders"
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                 >
                   Orders
                 </a>
@@ -128,7 +126,7 @@ export default function Header(props: Props) {
               <li>
                 <a
                   href="/profile-setting"
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                 >
                   Settings
                 </a>
@@ -136,7 +134,7 @@ export default function Header(props: Props) {
               <li>
                 <a
                   href="#"
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                 >
                   Sign out
                 </a>
@@ -146,7 +144,7 @@ export default function Header(props: Props) {
           <button
             data-collapse-toggle="mobile-menu-2"
             type="button"
-            className="inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+            className="inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
             aria-controls="mobile-menu-2"
             aria-expanded="false"
           >
@@ -190,7 +188,7 @@ export default function Header(props: Props) {
             </li>
             <li>
               <a
-                href="/books"
+                href="/products"
                 className="block py-2 pl-3 pr-4 text-black rounded font-bold shadow-md hover:bg-gray-100 md:hover:bg-transparent md:p-0 md:text-white md:hover:bg-orange-based md:px-4 md:py-2"
               >
                 Rent Motorcycles
