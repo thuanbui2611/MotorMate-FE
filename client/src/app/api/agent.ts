@@ -1,7 +1,10 @@
 import axios, { AxiosResponse } from "axios";
 
-// axios.defaults.baseURL= 'https://motormate.azurewebsites.net/swagger/';
+import { Cart } from "../../app/models/cart";
+
 axios.defaults.baseURL = "https://fakestoreapi.com/";
+axios.defaults.headers.post["Content-Type"] = "application/json";
+
 const responseBody = (response: AxiosResponse) => response.data;
 
 const requests = {
@@ -20,9 +23,15 @@ const Account = {
   login: (values: any) => requests.post("auth/login", values),
 };
 
+const Carts = {
+  getUserCart: (id: number) => requests.get(`carts/user/${id}`),
+  addProduct: (values: Cart) => requests.post("carts", values),
+};
+
 const agent = {
   Product,
   Account,
+  Carts,
 };
 
 export default agent;

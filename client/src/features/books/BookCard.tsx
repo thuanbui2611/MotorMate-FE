@@ -1,18 +1,18 @@
-import { Book } from "../../app/models/book";
+import { Product } from "../../app/models/product";
 
 interface Props {
-  book: Book;
+  product: Product;
 }
 
-export default function BookCard({ book }: Props) {
+export default function BookCard({ product }: Props) {
   return (
     <>
       <div className="w-full px-3 mb-6 sm:w-1/2 md:w-1/3">
         <div className="border border-gray-300 ">
           <div className="relative bg-gray-200">
-            <a href={"/book-detail/" + book.id}>
+            <a href={"/book-detail/" + product.id}>
               <img
-                src={book.image}
+                src={product.image}
                 alt=""
                 className="object-cover w-full h-56 mx-auto"
               />
@@ -67,12 +67,12 @@ export default function BookCard({ book }: Props) {
                 </g>
               </svg>
               <p className="mt-2 text-xs uppercase text-gray-600 dark:text-gray-400">
-                {book.category}
+                {product.category}
               </p>
             </div>
             <div className="flex items-center justify-between mb-2">
               <h3 className="text-xl font-medium  line-clamp-1">
-                {book.title}
+                {product.title}
               </h3>
             </div>
             <ul className="flex pb-1">
@@ -148,12 +148,12 @@ export default function BookCard({ book }: Props) {
               </li>
             </ul>
             <p className="text-lg">
-              <span className="text-green-600">${book.price} </span>
+              <span className="text-green-600">${product.price} </span>
             </p>
           </div>
           <div className="flex justify-between p-4 border-t border-gray-300 ">
             <a
-              href={"/book-detail" + book.id}
+              href={"/book-detail" + product.id}
               className="text-gray-500  hover:text-orange-500 "
             >
               <svg

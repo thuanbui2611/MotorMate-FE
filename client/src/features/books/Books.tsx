@@ -1,15 +1,12 @@
 import { useState, useEffect } from "react";
-import { Book } from "../../app/models/book";
+import { Product } from "../../app/models/product";
 import BookList from "./BookList";
 import * as React from "react";
 import { Theme, useTheme } from "@mui/material/styles";
-import Box from "@mui/material/Box";
-import OutlinedInput from "@mui/material/OutlinedInput";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import Chip from "@mui/material/Chip";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -51,11 +48,11 @@ function getStyles(name: string, personName: readonly string[], theme: Theme) {
 // End of Filter by city
 
 export default function Books() {
-  const [books, setBooks] = useState<Book[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
   useEffect(() => {
     fetch("https://fakestoreapi.com/products")
       .then((res) => res.json())
-      .then((data) => setBooks(data))
+      .then((data) => setProducts(data))
       .finally(() => setLoading(false));
   }, []);
   const [loading, setLoading] = useState(true);
@@ -186,7 +183,7 @@ export default function Books() {
         </svg>
       </div>
     );
-  if (!books) return <h3>Book not found</h3>;
+  if (!products) return <h3>Book not found</h3>;
   return (
     <>
       <div className="container my-12 mx-auto px-4 md:px-12">
@@ -544,7 +541,7 @@ export default function Books() {
                     </div>
                   </div>
                   <div className="flex flex-wrap items-center ">
-                    <BookList books={books} />
+                    <BookList products={products} />
                   </div>
                   <div className="flex justify-end mt-6">
                     <nav aria-label="page-navigation">

@@ -1,16 +1,16 @@
 import { useState, useEffect } from "react";
-import { Book } from "../../app/models/book";
+import { Product } from "../../app/models/product";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Pagination, Autoplay, Navigation } from "swiper";
 import "swiper/css";
 
 export default function BookSuggest() {
-  const [booksSuggested, setBooksSuggested] = useState<Book[]>([]);
+  const [productsSuggested, setproductsSuggested] = useState<Product[]>([]);
 
   useEffect(() => {
     fetch("https://fakestoreapi.com/products")
       .then((res) => res.json())
-      .then((data) => setBooksSuggested(data));
+      .then((data) => setproductsSuggested(data));
   }, []);
 
   return (
@@ -44,17 +44,17 @@ export default function BookSuggest() {
             }}
             modules={[FreeMode, Pagination, Autoplay, Navigation]}
           >
-            {booksSuggested.map((book, id) => (
+            {productsSuggested.map((product, id) => (
               <SwiperSlide>
                 {/* <!-- Card --> */}
                 <a
                   className="group flex flex-col bg-white border shadow-sm rounded-xl hover:shadow-md transition dark:bg-slate-900 dark:border-gray-800"
-                  href={"/book-detail/" + book.id}
+                  href={"/book-detail/" + product.id}
                 >
                   <div className="aspect-w-16 aspect-h-9">
                     <img
                       className="object-scale-down h-80 w-full rounded-t-xl"
-                      src={book.image}
+                      src={product.image}
                       alt="Image Book"
                     />
                   </div>
@@ -63,10 +63,10 @@ export default function BookSuggest() {
                     style={{ lineClamp: 2 }}
                   >
                     <p className="mt-2 text-xs uppercase text-gray-600 dark:text-gray-400">
-                      {book.category}
+                      {product.category}
                     </p>
                     <h3 className="mt-2 text-lg font-medium text-gray-800 group-hover:text-blue-600 dark:text-gray-300 dark:group-hover:text-white line-clamp-2 text-justify">
-                      {book.title}
+                      {product.title}
                     </h3>
                   </div>
                 </a>

@@ -1,9 +1,9 @@
-export interface Book {
+export interface Product {
   id: number;
   title: string;
   price: number;
-  description?: string;
   category?: string;
+  description?: string;
   image?: string;
   rating?: [rate: number, count: number];
 }

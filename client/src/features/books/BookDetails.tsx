@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Book } from "../../app/models/book";
+import { Product } from "../../app/models/product";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import BookSuggest from "./BookSuggest";
@@ -8,7 +8,7 @@ import agent from "../../app/api/agent";
 
 export default function BookDetails() {
   const { id } = useParams<{ id: string }>();
-  const [book, setBook] = useState<Book | null>(null);
+  const [book, setBook] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

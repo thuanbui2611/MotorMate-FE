@@ -1,15 +1,15 @@
-import { Book } from "../../app/models/book";
+import { Product } from "../../app/models/product";
 import BookCard from "./BookCard";
 
 interface Props {
-  books: Book[];
+  products: Product[];
 }
 
-export default function BookList({ books }: Props) {
+export default function BookList({ products }: Props) {
   return (
     <>
-      {books.map((book) => (
-        <BookCard key={book.id} book={book} />
+      {products.map((product) => (
+        <BookCard key={product.id} product={product} />
       ))}
     </>
   );
