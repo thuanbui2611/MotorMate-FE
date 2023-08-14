@@ -1,6 +1,25 @@
 import LoginGoogle from "../login/LoginGoogle";
+import { FieldValues, useForm } from "react-hook-form";
+import agentTest from "../../app/api/agentTest";
+import { Register } from "../../app/models/register";
+import Loading from "../../app/components/Loading";
+import { TextField } from "@mui/material";
 
 export default function SignUpPage() {
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitting, errors, isValid },
+  } = useForm({
+    mode: "all",
+  });
+
+  async function submitForm(data: FieldValues) {
+    await agentTest.Account.Register(data);
+  }
+  if (!isSubmitting) {
+    <Loading />;
+  }
   return (
     <>
       <div className="overflow-hidden">
@@ -43,9 +62,45 @@ export default function SignUpPage() {
               </h1>
             </div>
 
-            <form className="form mx-auto max-w-2xl sm:flex sm:space-x-3 sm:flex-wrap p-3 bg-white border rounded-lg shadow-lg shadow-gray-100">
+            <form
+              className="form mx-auto max-w-2xl sm:flex sm:space-x-3 sm:flex-wrap p-3 bg-white border rounded-lg shadow-lg shadow-gray-100"
+              onSubmit={handleSubmit(submitForm)}
+            >
               <div className="flex-column md:ml-3">
-                <label>Full name:</label>
+                <label>First name:</label>
+              </div>
+              <div className="inputForm ">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  viewBox="0 0 32 32"
+                  height="20"
+                >
+                  <g data-name="Layer 3" id="Layer_3">
+                    <path d="m30.853 13.87a15 15 0 0 0 -29.729 4.082 15.1 15.1 0 0 0 12.876 12.918 15.6 15.6 0 0 0 2.016.13 14.85 14.85 0 0 0 7.715-2.145 1 1 0 1 0 -1.031-1.711 13.007 13.007 0 1 1 5.458-6.529 2.149 2.149 0 0 1 -4.158-.759v-10.856a1 1 0 0 0 -2 0v1.726a8 8 0 1 0 .2 10.325 4.135 4.135 0 0 0 7.83.274 15.2 15.2 0 0 0 .823-7.455zm-14.853 8.13a6 6 0 1 1 6-6 6.006 6.006 0 0 1 -6 6z"></path>
+                  </g>
+                </svg>
+                <TextField
+                  variant="standard"
+                  size="medium"
+                  margin="normal"
+                  style={{
+                    width: "90%",
+                    paddingLeft: "10px",
+                    paddingTop: "5px",
+                  }}
+                  placeholder="Your first name"
+                  className="input"
+                  type="text"
+                  {...register("firstName", {
+                    required: "First name is required",
+                  })}
+                  error={!!errors.firstName}
+                  helperText={errors?.firstName?.message as string}
+                />
+              </div>
+              <div className="flex-column md:ml-3">
+                <label>Last name:</label>
               </div>
               <div className="inputForm">
                 <svg
@@ -59,9 +114,31 @@ export default function SignUpPage() {
                   </g>
                 </svg>
                 <input
-                  placeholder="Enter your full name"
+                  placeholder="Your last name"
                   className="input"
                   type="text"
+                  {...register("lastName")}
+                />
+              </div>
+              <div className="flex-column md:ml-3">
+                <label>Username:</label>
+              </div>
+              <div className="inputForm">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  viewBox="0 0 32 32"
+                  height="20"
+                >
+                  <g data-name="Layer 3" id="Layer_3">
+                    <path d="m30.853 13.87a15 15 0 0 0 -29.729 4.082 15.1 15.1 0 0 0 12.876 12.918 15.6 15.6 0 0 0 2.016.13 14.85 14.85 0 0 0 7.715-2.145 1 1 0 1 0 -1.031-1.711 13.007 13.007 0 1 1 5.458-6.529 2.149 2.149 0 0 1 -4.158-.759v-10.856a1 1 0 0 0 -2 0v1.726a8 8 0 1 0 .2 10.325 4.135 4.135 0 0 0 7.83.274 15.2 15.2 0 0 0 .823-7.455zm-14.853 8.13a6 6 0 1 1 6-6 6.006 6.006 0 0 1 -6 6z"></path>
+                  </g>
+                </svg>
+                <input
+                  placeholder="Your Username"
+                  className="input"
+                  type="text"
+                  {...register("userName")}
                 />
               </div>
               <div className="flex-column md:ml-3">
@@ -79,9 +156,10 @@ export default function SignUpPage() {
                   </g>
                 </svg>
                 <input
-                  placeholder="Enter your Email"
+                  placeholder="Your Email"
                   className="input"
                   type="text"
+                  {...register("email")}
                 />
               </div>
               <div className="flex-column">
@@ -98,13 +176,14 @@ export default function SignUpPage() {
                   <path d="m304 224c-8.832031 0-16-7.167969-16-16v-80c0-52.929688-43.070312-96-96-96s-96 43.070312-96 96v80c0 8.832031-7.167969 16-16 16s-16-7.167969-16-16v-80c0-70.59375 57.40625-128 128-128s128 57.40625 128 128v80c0 8.832031-7.167969 16-16 16zm0 0"></path>
                 </svg>
                 <input
-                  placeholder="Enter your Password"
+                  placeholder="Your Password"
                   className="input"
                   type="password"
+                  {...register("password")}
                 />
               </div>
               <div className="flex-column md:ml-3">
-                <label>Comfirm password:</label>
+                <label>Confirm password</label>
               </div>
               <div className="inputForm">
                 <svg
@@ -118,9 +197,10 @@ export default function SignUpPage() {
                   </g>
                 </svg>
                 <input
-                  placeholder="Enter your password"
+                  placeholder="Your Confirm Password"
                   className="input"
-                  type="text"
+                  type="password"
+                  {...register("passwordConfirm")}
                 />
               </div>
               <div className="flex-column md:ml-3">
@@ -138,15 +218,16 @@ export default function SignUpPage() {
                   </g>
                 </svg>
                 <input
-                  placeholder="Enter your phone number"
+                  placeholder="Your Phone Number"
                   className="input"
                   type="text"
+                  {...register("phoneNumber")}
                 />
               </div>
               <div className="flex-row">
                 <div>
-                  <input type="radio" className="md:mb-1" />
-                  <label> Remember me</label>
+                  <input type="checkbox" className="md:mb-1" required />
+                  <label> User agreement</label>
                 </div>
                 <span className="span md:mr-5">Forgot password?</span>
               </div>

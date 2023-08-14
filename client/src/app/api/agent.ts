@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 
-import { Cart } from "../../app/models/cart";
+import { Cart } from "../models/Cart";
 
 axios.defaults.baseURL = "https://fakestoreapi.com/";
 axios.defaults.headers.post["Content-Type"] = "application/json";

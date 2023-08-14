@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Product } from "../../app/models/product";
+import { Product } from "../../app/models/Product";
 import * as React from "react";
 import { Theme, useTheme } from "@mui/material/styles";
 import InputLabel from "@mui/material/InputLabel";

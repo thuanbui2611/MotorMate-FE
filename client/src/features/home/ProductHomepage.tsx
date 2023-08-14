@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Cart } from "../../app/models/cart";
-import { Product } from "../../app/models/product";
+import { Cart } from "../../app/models/Cart";
+import { Product } from "../../app/models/Product";
 interface Props {
   product: Product;
 }

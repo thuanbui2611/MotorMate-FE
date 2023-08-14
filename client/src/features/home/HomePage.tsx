@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { Product } from "../../app/models/product";
+import { Product } from "../../app/models/Product";
 import agent from "../../app/api/agent";
-import { Cart } from "../../app/models/cart";
+import { Cart } from "../../app/models/Cart";
 import ProductHomepage from "./ProductHomepage";
 import Loading from "../../app/components/Loading";
 

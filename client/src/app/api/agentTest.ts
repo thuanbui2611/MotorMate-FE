@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from "axios";
-
-// axios.defaults.baseURL = "https://motormate.azurewebsites.net/";
+import { Register } from "../../app/models/register";
+axios.defaults.baseURL = "https://motormate.azurewebsites.net/";
 axios.defaults.headers.post["Content-Type"] = "application/json";
 const responseBody = (response: AxiosResponse) => response.data;
 
@@ -12,8 +12,10 @@ const requests = {
 };
 
 const Account = {
+  login: (values: {}) => requests.post("api/auth/login", values),
   loginGoogle: (values: { tokenCredential: string }) =>
     requests.post("api/auth/sso/google", values),
+  Register: (values: {}) => requests.post("api/auth/sign-up", values),
 };
 
 const agent = {

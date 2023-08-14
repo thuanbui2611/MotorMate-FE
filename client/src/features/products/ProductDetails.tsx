@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Product } from "../../app/models/product";
+import { Product } from "../../app/models/Product";
 import { useParams } from "react-router-dom";
 import agent from "../../app/api/agent";
 import ReviewProduct from "./ReviewProduct";
