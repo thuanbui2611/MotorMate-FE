@@ -5,6 +5,7 @@ import agent from "../../app/api/agent";
 import ReviewProduct from "./ReviewProduct";
 import ProductSuggested from "./ProductSuggested";
 import Loading from "../../app/components/Loading";
+import NotFound from "../../app/errors/NotFound";
 
 export default function ProductDetails() {
   const { id } = useParams<{ id: string }>();
@@ -19,7 +20,7 @@ export default function ProductDetails() {
   }, [id]);
 
   if (loading) return <Loading />;
-  if (!book) return <h3>Book not found</h3>;
+  if (!book) return <NotFound />;
   return (
     <>
       {/* <!-- Features --> */}

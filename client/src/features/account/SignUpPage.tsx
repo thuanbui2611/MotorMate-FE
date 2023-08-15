@@ -1,4 +1,4 @@
-import LoginGoogle from "../login/LoginGoogle";
+import LoginGoogle from "./LoginGoogle";
 import { FieldValues, useForm } from "react-hook-form";
 import agentTest from "../../app/api/agentTest";
 import { TextField } from "@mui/material";
@@ -8,11 +8,10 @@ export default function SignUpPage() {
   const {
     register,
     handleSubmit,
-    formState: { isSubmitting, errors, isValid },
+    formState: { isSubmitting, errors },
   } = useForm({
     mode: "all",
   });
-
   async function submitForm(data: FieldValues) {
     await agentTest.Account.Register(data).catch((error) => console.log(error));
   }

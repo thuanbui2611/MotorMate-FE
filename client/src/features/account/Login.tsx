@@ -1,28 +1,29 @@
-import { useState } from "react";
 import LoginGoogle from "./LoginGoogle";
 import agent from "../../app/api/agent";
+import { FieldValues, useForm } from "react-hook-form";
+import agentTest from "../../app/api/agentTest";
+import { TextField } from "@mui/material";
+import { LoadingButton } from "@mui/lab";
+import { useHistory } from "react-router-dom";
+import { useAppDispatch } from "../../app/store/ConfigureStore";
+import { signInUser } from "./AccountSlice";
 
 export default function Login() {
-  const [values, setValues] = useState({
-    username: "",
-    password: "",
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitting, errors },
+  } = useForm({
+    mode: "all",
   });
 
-  const handleSubmit = (event: any) => {
-    event.preventDefault();
-    console.log(values);
-    try {
-      agent.Account.login(values).then((res) => {
-        console.log("API Response:", res);
-      });
-    } catch (error) {
-      console.log("API Error:", error);
-    }
-  };
+  const history = useHistory();
+  const dispatch = useAppDispatch();
 
-  function handleInputChange(event: any) {
-    const { name, value } = event.target;
-    setValues({ ...values, [name]: value });
+  async function submitForm(data: FieldValues) {
+    console.log(data);
+    await dispatch(signInUser(data));
+    // history.push("/");
   }
 
   return (
@@ -69,7 +70,7 @@ export default function Login() {
 
             <form
               className="form mx-auto max-w-2xl sm:flex sm:space-x-3 sm:flex-wrap p-3 bg-white border rounded-lg shadow-lg shadow-gray-100"
-              onSubmit={handleSubmit}
+              onSubmit={handleSubmit(submitForm)}
             >
               <div className="flex-column md:ml-3">
                 <label>Email</label>
@@ -85,13 +86,35 @@ export default function Login() {
                     <path d="m30.853 13.87a15 15 0 0 0 -29.729 4.082 15.1 15.1 0 0 0 12.876 12.918 15.6 15.6 0 0 0 2.016.13 14.85 14.85 0 0 0 7.715-2.145 1 1 0 1 0 -1.031-1.711 13.007 13.007 0 1 1 5.458-6.529 2.149 2.149 0 0 1 -4.158-.759v-10.856a1 1 0 0 0 -2 0v1.726a8 8 0 1 0 .2 10.325 4.135 4.135 0 0 0 7.83.274 15.2 15.2 0 0 0 .823-7.455zm-14.853 8.13a6 6 0 1 1 6-6 6.006 6.006 0 0 1 -6 6z"></path>
                   </g>
                 </svg>
-                <input
-                  placeholder="Enter your Email"
-                  className="input"
+                <TextField
                   type="text"
-                  name="username"
-                  onChange={handleInputChange}
-                  value={values.username}
+                  variant="outlined"
+                  size="small"
+                  margin="normal"
+                  sx={{
+                    width: "90%",
+                    paddingLeft: "10px",
+                    margin: "auto",
+                    "& .MuiInputBase-root": {
+                      height: "25px", // Adjusted height for mobile view
+                    },
+                    "@media (min-width: 1024px)": {
+                      "& .MuiInputBase-root": {
+                        height: "37px", // Adjusted height for computer view
+                      },
+                    },
+                  }}
+                  placeholder="Your email"
+                  className="input"
+                  {...register("email", {
+                    required: "Email is required",
+                    pattern: {
+                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                      message: "Invalid email address",
+                    },
+                  })}
+                  error={!!errors.email}
+                  helperText={errors?.email?.message as string}
                 />
               </div>
 
@@ -108,13 +131,31 @@ export default function Login() {
                   <path d="m336 512h-288c-26.453125 0-48-21.523438-48-48v-224c0-26.476562 21.546875-48 48-48h288c26.453125 0 48 21.523438 48 48v224c0 26.476562-21.546875 48-48 48zm-288-288c-8.8125 0-16 7.167969-16 16v224c0 8.832031 7.1875 16 16 16h288c8.8125 0 16-7.167969 16-16v-224c0-8.832031-7.1875-16-16-16zm0 0"></path>
                   <path d="m304 224c-8.832031 0-16-7.167969-16-16v-80c0-52.929688-43.070312-96-96-96s-96 43.070312-96 96v80c0 8.832031-7.167969 16-16 16s-16-7.167969-16-16v-80c0-70.59375 57.40625-128 128-128s128 57.40625 128 128v80c0 8.832031-7.167969 16-16 16zm0 0"></path>
                 </svg>
-                <input
-                  placeholder="Enter your Password"
-                  className="input"
-                  name="password"
+                <TextField
                   type="password"
-                  onChange={handleInputChange}
-                  value={values.password}
+                  variant="outlined"
+                  size="small"
+                  margin="normal"
+                  sx={{
+                    width: "90%",
+                    paddingLeft: "10px",
+                    margin: "auto",
+                    "& .MuiInputBase-root": {
+                      height: "25px", // Adjusted height for mobile view
+                    },
+                    "@media (min-width: 1024px)": {
+                      "& .MuiInputBase-root": {
+                        height: "37px", // Adjusted height for computer view
+                      },
+                    },
+                  }}
+                  placeholder="Your password"
+                  className="input"
+                  {...register("password", {
+                    required: "Password is required",
+                  })}
+                  error={!!errors.password}
+                  helperText={errors?.password?.message as string}
                 />
               </div>
 
@@ -126,7 +167,34 @@ export default function Login() {
                 <span className="span md:mr-5">Forgot password?</span>
               </div>
               <div className="text-left">
-                <button className="button-submit">Sign In</button>
+                <LoadingButton
+                  loading={isSubmitting}
+                  type="submit"
+                  className="button-submit"
+                  sx={{
+                    margin: "20px auto 10px auto",
+                    backgroundColor: "#151717",
+                    border: "none",
+                    color: "white",
+                    fontSize: "15px",
+                    fontWeight: 500,
+                    borderRadius: "10px",
+                    height: "40px",
+                    width: "80%",
+                    cursor: "pointer",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    "&:hover": {
+                      backgroundColor: "#3c3d3d",
+                    },
+                    "& .MuiCircularProgress-svg": {
+                      color: "white",
+                    },
+                  }}
+                >
+                  Sign In
+                </LoadingButton>
               </div>
               <p className="p">
                 Don't have an account?{" "}

@@ -1,12 +1,11 @@
-import { Route, useLocation } from "react-router-dom";
+import { Route, Switch, useLocation } from "react-router-dom";
 import HomePage from "../../features/home/HomePage";
 import "./../../styles.css";
 import Header from "./Header";
-
 import "flowbite";
 import Footer from "./Footer";
 import Cart from "../../features/cart/Cart";
-import SignUpPage from "../../features/signup/SignUpPage";
+import SignUpPage from "../../features/account/SignUpPage";
 import About from "../../features/about/About";
 import Contact from "../../features/contact/Contact";
 import Checkout from "../../features/checkout/Checkout";
@@ -17,9 +16,11 @@ import TinyChat from "../../features/chat/TinyChat";
 import AllOrders from "../../features/order/AllOrders";
 import MyProfile from "../../features/profile/MyProfile";
 import SettingProfile from "../../features/profile-settings/SettingProfile";
-import Login from "../../features/login/Login";
+import Login from "../../features/account/Login";
 import ProductDetails from "../../features/products/ProductDetails";
 import Products from "../../features/products/Products";
+import ServerErrors from "../errors/ServerErrors";
+import NotFound from "../errors/NotFound";
 
 function App() {
   const location = useLocation();
@@ -43,8 +44,10 @@ function App() {
       <Route path="/login" component={Login} />
       <Route path="/signup" component={SignUpPage} />
       <Route path="/chat" component={Chat} />
+      <Route path="/server-error" component={ServerErrors} />
       {!shouldHideComponent && <TinyChat />}
       {!shouldHideComponent && <Footer />}
+      {/* <Route component={NotFound} /> */}
     </div>
   );
 }

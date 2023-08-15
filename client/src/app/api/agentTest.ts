@@ -1,44 +1,43 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
+import { history } from "../..";
 
 axios.defaults.baseURL = "https://motormate.azurewebsites.net/";
 axios.defaults.headers.post["Content-Type"] = "application/json";
 const responseBody = (response: AxiosResponse) => response.data;
 
-axios.interceptors.request.use(
+axios.interceptors.response.use(
   (response) => {
     return response;
   },
+
   (error: AxiosError) => {
     const { data, status } = error.response!;
     switch (status) {
       case 400:
-      // if ((data as any).errors) {
-      //   const modalStateErrors = [];
-      //   for (const key in (data as any).errors) {
-      //     if ((data as any).errors[key]) {
-      //       modalStateErrors.push((data as any).errors[key]);
-      //     }
-      //   }
-      //   throw modalStateErrors.flat();
-      // }
-      // Test
-      // console.error("TEST ERRORR: " + (data as any).errors);
-      // toast.error((data as any).errors[0].description);
-      // break;
-
-      // case 401:
-      //   toast.error(data.title);
-      //   break;
-      // case 403:
-      //   toast.error(data.title);
-      //   break;
-      // case 404:
-      //   toast.error(data.title);
-      //   break;
-      // case 500:
-      //   toast.error(data.title);
-      //   break;
+        if ((data as any).errors) {
+          const modalStateErrors: string[] = [];
+          for (const key in (data as any).errors) {
+            if ((data as any).errors[key]) {
+              modalStateErrors.push((data as any).errors[key]);
+            }
+          }
+          toast.error((data as any).errors[0].description);
+          throw modalStateErrors.flat();
+        }
+        break;
+      case 401:
+        toast.error((data as any).title);
+        break;
+      case 403:
+        toast.error((data as any).title);
+        break;
+      case 404:
+        toast.error((data as any).title);
+        break;
+      case 500:
+        history.push("/server-error");
+        break;
       default:
         break;
     }
