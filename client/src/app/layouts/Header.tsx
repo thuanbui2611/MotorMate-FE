@@ -1,12 +1,19 @@
-import { useState } from "react";
-
+import { useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "../store/ConfigureStore";
+import jwt_decode from "jwt-decode";
+import {
+  fetchUserFromToken,
+  signOut,
+} from "../../features/account/AccountSlice";
 interface Props {}
 export default function Header(props: Props) {
+  const dispatch = useAppDispatch();
+  const user = useAppSelector((state) => state.account.user);
   return (
     <nav className="bg-black border-1 border-white shadow-white shadow-inner">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <a href="/" className="flex items-center">
-          <img src="/favicon.ico" className="h-8 mr-3" alt="MotoMate Logo" />
+          <img src="/favicon.ico" className="h-8 mr-3" alt="MotorMate Logo" />
           <span className=" text-white self-center text-2xl font-semibold whitespace-nowrap ">
             MotorMate
           </span>
@@ -62,85 +69,91 @@ export default function Header(props: Props) {
           </button>
         </form> */}
         <div className="flex items-center md:order-2">
-          {/* Test Login Form  */}
-          <a className="text-white" href="/login">
-            Login
-          </a>
-          {/* End Login Form */}
-          <li className="font-sans block lg:inline-block mr-4 pt-1 lg:mt-0 lg:ml-6 text-black hover:text-gray-700">
-            <a href="/my-cart" role="button" className="relative flex">
-              <svg
-                className="flex-1 w-8 h-8 fill-current text-white"
-                viewBox="0 0 24 24"
+          {user ? (
+            <>
+              <li className="font-sans block lg:inline-block mr-4 pt-1 lg:mt-0 lg:ml-6 text-black hover:text-gray-700">
+                <a href="/my-cart" role="button" className="relative flex">
+                  <svg
+                    className="flex-1 w-8 h-8 fill-current text-white"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M17,18C15.89,18 15,18.89 15,20A2,2 0 0,0 17,22A2,2 0 0,0 19,20C19,18.89 18.1,18 17,18M1,2V4H3L6.6,11.59L5.24,14.04C5.09,14.32 5,14.65 5,15A2,2 0 0,0 7,17H19V15H7.42A0.25,0.25 0 0,1 7.17,14.75C7.17,14.7 7.18,14.66 7.2,14.63L8.1,13H15.55C16.3,13 16.96,12.58 17.3,11.97L20.88,5.5C20.95,5.34 21,5.17 21,5A1,1 0 0,0 20,4H5.21L4.27,2M7,18C5.89,18 5,18.89 5,20A2,2 0 0,0 7,22A2,2 0 0,0 9,20C9,18.89 8.1,18 7,18Z" />
+                  </svg>
+                  <span className="absolute right-0 top-0 rounded-full bg-red-600 w-4 h-4 top right p-0 m-0 text-white font-mono text-sm  leading-tight text-center">
+                    5
+                  </span>
+                </a>
+              </li>
+              <button
+                type="button"
+                className="flex mr-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 "
+                id="user-menu-button"
+                aria-expanded="false"
+                data-dropdown-toggle="user-dropdown"
+                data-toggle="dropdown"
+                data-dropdown-placement="bottom"
               >
-                <path d="M17,18C15.89,18 15,18.89 15,20A2,2 0 0,0 17,22A2,2 0 0,0 19,20C19,18.89 18.1,18 17,18M1,2V4H3L6.6,11.59L5.24,14.04C5.09,14.32 5,14.65 5,15A2,2 0 0,0 7,17H19V15H7.42A0.25,0.25 0 0,1 7.17,14.75C7.17,14.7 7.18,14.66 7.2,14.63L8.1,13H15.55C16.3,13 16.96,12.58 17.3,11.97L20.88,5.5C20.95,5.34 21,5.17 21,5A1,1 0 0,0 20,4H5.21L4.27,2M7,18C5.89,18 5,18.89 5,20A2,2 0 0,0 7,22A2,2 0 0,0 9,20C9,18.89 8.1,18 7,18Z" />
-              </svg>
-              <span className="absolute right-0 top-0 rounded-full bg-red-600 w-4 h-4 top right p-0 m-0 text-white font-mono text-sm  leading-tight text-center">
-                5
-              </span>
-            </a>
-          </li>
-          <button
-            type="button"
-            className="flex mr-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 "
-            id="user-menu-button"
-            aria-expanded="false"
-            data-dropdown-toggle="user-dropdown"
-            data-dropdown-placement="bottom"
-          >
-            <span className="sr-only">Open user menu</span>
-            <img
-              className="w-8 h-8 rounded-full"
-              src="https://img.freepik.com/free-icon/user_318-563642.jpg?w=2000"
-              alt="user photo"
-            />
-          </button>
-          {/* Dropdown menu */}
-          <div
-            className="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow "
-            id="user-dropdown"
-          >
-            <div className="px-4 py-3">
-              <span className="block text-sm text-gray-900">Bonnie Green</span>
-              <span className="block text-sm  text-gray-500 truncate">
-                name@flowbite.com
-              </span>
-            </div>
-            <ul className="py-2" aria-labelledby="user-menu-button">
-              <li>
-                <a
-                  href="/profile"
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 "
-                >
-                  Profile
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/your-orders"
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                >
-                  Orders
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/profile-setting"
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                >
-                  Settings
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                >
-                  Sign out
-                </a>
-              </li>
-            </ul>
-          </div>
+                <img
+                  className="w-8 h-8 rounded-full"
+                  src="https://img.freepik.com/free-icon/user_318-563642.jpg?w=2000"
+                  alt="user photo"
+                />
+              </button>
+              <div
+                className="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow "
+                id="user-dropdown"
+              >
+                <div className="px-4 py-3">
+                  <span className="block text-sm text-gray-900 font-bold">
+                    {user?.name}
+                  </span>
+                  <span className="block text-sm  text-gray-500 truncate">
+                    {user?.role}
+                  </span>
+                </div>
+                <ul className="py-2" aria-labelledby="user-menu-button">
+                  <li>
+                    <a
+                      href="/profile"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 "
+                    >
+                      Profile
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="/your-orders"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                      Orders
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="/profile-setting"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                      Settings
+                    </a>
+                  </li>
+                  <li>
+                    <button
+                      onClick={() => dispatch(signOut())}
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                      Sign out
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            </>
+          ) : (
+            <>
+              <a className="text-white" href="/login">
+                Login
+              </a>
+            </>
+          )}
           <button
             data-collapse-toggle="mobile-menu-2"
             type="button"

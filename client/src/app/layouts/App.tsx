@@ -21,13 +21,40 @@ import ProductDetails from "../../features/products/ProductDetails";
 import Products from "../../features/products/Products";
 import ServerErrors from "../errors/ServerErrors";
 import NotFound from "../errors/NotFound";
+import { useAppDispatch, useAppSelector } from "../store/ConfigureStore";
+import { useEffect, useState } from "react";
+import { fetchUserFromToken } from "../../features/account/AccountSlice";
+import { ToastContainer } from "react-toastify";
+import Loading from "../components/Loading";
 
 function App() {
   const location = useLocation();
   const hiddenPaths = ["/login", "/signup"];
   const shouldHideComponent = hiddenPaths.includes(location.pathname);
+
+  const [loading, setLoading] = useState(true);
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(fetchUserFromToken()).finally(() => setLoading(false));
+  }, [dispatch]);
+
+  if (loading) {
+    <Loading />;
+  }
   return (
     <div className="flex flex-col min-h-screen relative ">
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
       {!shouldHideComponent && <Header />}
       <Route exact path={["/", "/home"]} component={HomePage} />
       <Route exact path="/about" component={About} />

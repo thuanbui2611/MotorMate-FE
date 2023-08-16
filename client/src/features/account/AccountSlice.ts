@@ -3,75 +3,110 @@ import { User, UserLogin } from "../../app/models/User";
 import { FieldValues } from "react-hook-form";
 import agentTest from "../../app/api/agentTest";
 import jwt_decode from "jwt-decode";
+import { toast } from "react-toastify";
+import { history } from "../..";
 
 interface AccountState {
   user: User | null;
-  userLogin: UserLogin | null;
+  userLoginToken: UserLogin | null;
 }
 
 const initialState: AccountState = {
   user: null,
-  userLogin: null,
+  userLoginToken: null,
 };
 
 export const signInUser = createAsyncThunk<UserLogin, FieldValues>(
   "account/signInUser",
-  async ({ data }, thunkAPI) => {
+  async (data, thunkAPI) => {
     try {
-      const user = await agentTest.Account.login(data);
-      debugger;
-      localStorage.setItem("userToken", user.token);
-      return user;
+      const userLoginToken = await agentTest.Account.login(data);
+      localStorage.setItem("userToken", userLoginToken.token);
+      return userLoginToken;
     } catch (error) {
       return thunkAPI.rejectWithValue({ error: (error as any).data });
     }
   }
 );
 
-export const currentUser = createAsyncThunk<any>(
-  "account/currentUser",
-  async (_, thunkAPI) => {
+export const fetchUserFromToken = createAsyncThunk<any>(
+  "account/fetchUserFromToken",
+  (_, { rejectWithValue }) => {
+    console.log("Fetching user from token");
     try {
-      const token = localStorage.getItem("userToken");
-      if (token) {
-        const decodedToken = jwt_decode(token) as any;
+      const userToken = localStorage.getItem("userToken");
+      if (userToken) {
+        const decodedToken = jwt_decode(userToken) as any;
         // Check expiration time of token
         if (decodedToken.exp * 1000 < Date.now()) {
           localStorage.removeItem("userToken");
-          return thunkAPI.rejectWithValue({ error: "Token expired" });
+          return rejectWithValue({ error: "Token expired" });
         }
-        return decodedToken;
+        const user: User = {
+          username:
+            decodedToken[
+              "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
+            ],
+          name: decodedToken[
+            "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"
+          ],
+          email:
+            decodedToken[
+              "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"
+            ],
+          role: decodedToken[
+            "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+          ],
+        };
+        return user;
       } else {
         // No valid token found in localStorage
-        return thunkAPI.rejectWithValue({ error: "No valid token found" });
+        // throw new Error("No user token found in localStorage");
+        return rejectWithValue({ error: "No valid token found" });
       }
     } catch (error) {
-      return thunkAPI.rejectWithValue({ error: (error as any).data });
+      return rejectWithValue({ error: (error as any).message });
     }
+  },
+  {
+    condition: () => {
+      if (!localStorage.getItem("userToken")) return false;
+    },
   }
 );
 
 export const accountSlice = createSlice({
   name: "account",
   initialState,
-  reducers: {},
+  reducers: {
+    signOut: (state) => {
+      state.userLoginToken = null;
+      localStorage.removeItem("userToken");
+      history.push("/");
+      window.location.reload();
+    },
+  },
   extraReducers: (builder) => {
-    builder.addMatcher(
-      isAnyOf(signInUser.fulfilled, currentUser.fulfilled),
-      (state, action) => {
-        if (action.payload) {
-          state.userLogin = action.payload;
-        } else {
-          state.userLogin = null;
-        }
-      }
-    );
+    builder.addCase(signInUser.fulfilled, (state, action) => {
+      state.userLoginToken = action.payload;
+    });
 
-    builder.addMatcher(
-      isAnyOf(signInUser.rejected, currentUser.rejected),
-      (state, action) => {
-        console.log(action.payload);
-      }
-    );
+    builder.addCase(signInUser.rejected, (state, action) => {
+      console.log("Action rejected, the payload:");
+      console.log(action.payload);
+    });
+
+    builder.addCase(fetchUserFromToken.fulfilled, (state, action) => {
+      state.user = action.payload;
+    });
+
+    builder.addCase(fetchUserFromToken.rejected, (state, action) => {
+      state.userLoginToken = null;
+      state.user = null;
+      localStorage.removeItem("userToken");
+      toast.error("Token expired, please sign in again!");
+    });
   },
 });
+
+export const { signOut } = accountSlice.actions;

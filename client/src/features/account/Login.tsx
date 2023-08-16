@@ -6,7 +6,8 @@ import { TextField } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { useHistory } from "react-router-dom";
 import { useAppDispatch } from "../../app/store/ConfigureStore";
-import { signInUser } from "./AccountSlice";
+import { fetchUserFromToken, signInUser } from "./AccountSlice";
+import { toast } from "react-toastify";
 
 export default function Login() {
   const {
@@ -21,9 +22,12 @@ export default function Login() {
   const dispatch = useAppDispatch();
 
   async function submitForm(data: FieldValues) {
-    console.log(data);
-    await dispatch(signInUser(data));
-    // history.push("/");
+    const signIn = await dispatch(signInUser(data));
+    if (signIn.meta.requestStatus === "fulfilled") {
+      history.push("/");
+      window.location.reload();
+      // toast.success("Login successfully");
+    }
   }
 
   return (

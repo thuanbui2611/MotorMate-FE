@@ -5,7 +5,6 @@ import App from "./app/layouts/App";
 import reportWebVitals from "./reportWebVitals";
 import { Router } from "react-router-dom";
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { createBrowserHistory } from "history";
 import { StoreProvider } from "./app/context/StoreContext";
@@ -20,18 +19,6 @@ export const history = createBrowserHistory();
 
 root.render(
   <React.StrictMode>
-    <ToastContainer
-      position="top-right"
-      autoClose={5000}
-      hideProgressBar={false}
-      newestOnTop={false}
-      closeOnClick
-      rtl={false}
-      pauseOnFocusLoss
-      draggable
-      pauseOnHover
-      theme="colored"
-    />
     <GoogleOAuthProvider
       clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID as string}
     >
