@@ -149,8 +149,11 @@ export default function Header(props: Props) {
             </>
           ) : (
             <>
-              <a className="text-white" href="/login">
-                Login
+              <a className="button-login" href="/login">
+                <span className="button_lg">
+                  <span className="button_sl"></span>
+                  <span className="button_text">Login</span>
+                </span>
               </a>
             </>
           )}

@@ -3,17 +3,20 @@ import { toast } from "react-toastify";
 import { history } from "../..";
 import { store } from "../store/ConfigureStore";
 
-axios.defaults.baseURL = "https://motormate.azurewebsites.net/";
-axios.defaults.headers.post["Content-Type"] = "application/json";
+// axios.defaults.baseURL = "https://motormate.azurewebsites.net/";
+const testApi = axios.create({
+  baseURL: "https://motormate.azurewebsites.net/",
+});
+testApi.defaults.headers.post["Content-Type"] = "application/json";
 const responseBody = (response: AxiosResponse) => response.data;
 
-axios.interceptors.request.use((config) => {
+testApi.interceptors.request.use((config) => {
   const userToken = store.getState().account.userLoginToken?.token;
   if (userToken) config.headers.Authorization = `Bearer ${userToken}`;
   return config;
 });
 
-axios.interceptors.response.use(
+testApi.interceptors.response.use(
   (response) => {
     return response;
   },
@@ -37,10 +40,13 @@ axios.interceptors.response.use(
         toast.error((data as any).title);
         break;
       case 403:
-        toast.error((data as any).title);
+        toast.error((data as any).message);
         break;
       case 404:
-        toast.error((data as any).title);
+        toast.error((data as any).message);
+        break;
+      case 409:
+        toast.error((data as any).message);
         break;
       case 500:
         history.push("/server-error");
@@ -53,10 +59,10 @@ axios.interceptors.response.use(
 );
 
 const requests = {
-  get: (url: string) => axios.get(url).then(responseBody),
-  post: (url: string, body: {}) => axios.post(url, body).then(responseBody),
-  put: (url: string, body: {}) => axios.put(url, body).then(responseBody),
-  delete: (url: string) => axios.delete(url).then(responseBody),
+  get: (url: string) => testApi.get(url).then(responseBody),
+  post: (url: string, body: {}) => testApi.post(url, body).then(responseBody),
+  put: (url: string, body: {}) => testApi.put(url, body).then(responseBody),
+  delete: (url: string) => testApi.delete(url).then(responseBody),
 };
 
 const Account = {

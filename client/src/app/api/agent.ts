@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from "axios";
 
 import { Cart } from "../models/Cart";
 
-// axios.defaults.baseURL = "https://fakestoreapi.com/";
+axios.defaults.baseURL = "https://fakestoreapi.com/";
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
 const responseBody = (response: AxiosResponse) => response.data;

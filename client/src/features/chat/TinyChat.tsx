@@ -37,7 +37,7 @@ export default function TinyChat() {
 
       {isFormVisible && (
         <div
-          className={`container mx-auto rounded-lg border-2 md:w-1/3 md:max-h-96 fixed bottom-0 right-0 2 z-50 py-1 bg-white
+          className={`container mx-auto rounded-lg border-2 md:w-1/3 md:max-h-96 md:max-w-lg fixed bottom-0 right-0 2 z-50 py-1 bg-white
         ${isFormClosing ? "animate-fade-out" : "animate-fade-in"}
           `}
         >

@@ -14,9 +14,7 @@ export default function HomePage() {
       .then((products) => setProducts(products))
       .catch((error) => console.log(error))
       .finally(() => setLoading(false));
-  });
-
-  function handleAddItem(cart: Cart) {}
+  }, []);
   if (loading) return <Loading />;
   return (
     <>
@@ -85,7 +83,7 @@ export default function HomePage() {
               <h3 className="text-2xl font-bold text-gray-800 ">
                 24/7 Support
               </h3>
-              <p className="mt-1 text-gray-600 dark:text-gray-400 mx-1 mb-3">
+              <p className="mt-1 text-gray-600  mx-1 mb-3">
                 Contact us 24 hours a day, 7 days a week
               </p>
             </div>
@@ -94,7 +92,7 @@ export default function HomePage() {
           <div className="flex flex-col items-center border-1 border-orange-based rounded-lg pt-2 pb-2 shadow-xl shadow-orange-based md:shadow-lg md:shadow-orange-based ">
             <div className="relative flex justify-center items-center w-12 h-12 bg-white rounded-xl mt-2 before:absolute before:-inset-px before:-z-[1] before:bg-gradient-to-br before:from-blue-600 before:via-transparent before:to-violet-600 before:rounded-xl">
               <svg
-                className="w-7 h-7 text-blue-600 dark:text-blue-500"
+                className="w-7 h-7 text-blue-600 "
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
                 height="16"
@@ -110,7 +108,7 @@ export default function HomePage() {
               <h3 className="text-2xl font-bold text-gray-800 ">
                 Motorcycle Reservation Anytime
               </h3>
-              <p className="mt-1 text-gray-600 dark:text-gray-400 mx-1 mb-3">
+              <p className="mt-1 text-gray-600  mx-1 mb-3">
                 Feel free to choose time and date for your reservation
               </p>
             </div>
@@ -134,7 +132,7 @@ export default function HomePage() {
               <h3 className="text-2xl font-bold text-gray-800 ">
                 Lots Of Pickup Locations
               </h3>
-              <p className="mt-1 text-gray-600 dark:text-gray-400 mx-1 mb-3">
+              <p className="mt-1 text-gray-600  mx-1 mb-3">
                 Every component and plugin is well documented
               </p>
             </div>
@@ -143,7 +141,7 @@ export default function HomePage() {
           <div className="flex flex-col items-center border-1 border-orange-based rounded-lg pt-2 pb-2 shadow-xl shadow-orange-based md:shadow-lg md:shadow-orange-based ">
             <div className="relative flex justify-center items-center w-12 h-12 bg-white rounded-xl mt-2 before:absolute before:-inset-px before:-z-[1] before:bg-gradient-to-br before:from-blue-600 before:via-transparent before:to-violet-600 before:rounded-xl">
               <svg
-                className="w-7 h-7 text-blue-600 dark:text-blue-500"
+                className="w-7 h-7 text-blue-600 "
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
                 height="16"
@@ -158,7 +156,7 @@ export default function HomePage() {
               <h3 className="text-2xl font-bold text-gray-800 ">
                 24/7 Support
               </h3>
-              <p className="mt-1 text-gray-600 dark:text-gray-400 mx-1 mb-3">
+              <p className="mt-1 text-gray-600  mx-1 mb-3">
                 Contact us 24 hours a day, 7 days a week
               </p>
             </div>
@@ -170,13 +168,13 @@ export default function HomePage() {
         <h1 className="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl">
           We invest in the world’s potential
         </h1>
-        <p className="mb-6 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 xl:px-48 dark:text-gray-400">
+        <p className="mb-6 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 xl:px-48 ">
           Here at Flowbite we focus on markets where technology, innovation, and
           capital can unlock long-term value and drive economic growth.
         </p>
         <a
           href="#"
-          className="inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900"
+          className="inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 "
         >
           Learn more
           <svg
@@ -231,28 +229,24 @@ export default function HomePage() {
             <div className="flex justify-center">
               <hr className="w-1/4 pb-3"></hr>
             </div>
-            <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">
+            <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 ">
               Choose your Motorcycle
             </h2>
-            <p className="font-light text-gray-500 lg:mb-16 sm:text-xl dark:text-gray-400">
+            <p className="font-light text-gray-500 lg:mb-16 sm:text-xl ">
               Explore the whole collection of open-source web components and
               elements built with the utility classes from Tailwind
             </p>
           </div>
           {/* List product */}
-          <div className="grid gap-8 mb-6 lg:mb-8 md:grid-cols-4">
-            {products.slice(0, 8).map((product) => (
-              <ProductHomepage key={product.id} product={product} />
-            ))}
-          </div>
+          <ProductHomepage products={products} />
           {/* End list product */}
 
           {/* Other list product */}
-          {/* <section className="flex items-center py-20 bg-gray-100 lg:h-screen dark:bg-gray-800">
+          {/* <section className="flex items-center py-20 bg-gray-100 lg:h-screen">
             <div className="px-4 mx-auto max-w-7xl">
               <div className="grid grid-cols-1 gap-4 lg:gap-6 sm:gap-4 sm:grid-cols-2 lg:grid-cols-4">
                 {products.slice(0, 8).map((product) => (
-                  <div className="relative overflow-hidden bg-white shadow rounded-xl dark:bg-gray-700">
+                  <div className="relative overflow-hidden bg-white shadow rounded-xl">
                     <div className="relative overflow-hidden">
                       <div className="mb-5 overflow-hidden">
                         <img
@@ -301,7 +295,7 @@ export default function HomePage() {
           <div className="text-center">
             <a
               href="/products"
-              className="inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900"
+              className="inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 "
             >
               See more
               <svg
@@ -321,119 +315,19 @@ export default function HomePage() {
         </div>
       </section>
 
-      <div className=" px-4 py-10 sm:px-6 lg:px-8 lg:py-0 mx-auto">
-        {/* <div className="max-w-2xl mx-auto">
-          <div className="grid gap-12">
-            <div className="flex justify-center">
-              <hr className="w-1/4"></hr>
-            </div>
-            <div>
-              <h2 className="text-3xl text-gray-800 font-bold lg:text-4xl dark:text-white">
-                Procedures for renting a motorbike
-              </h2>
-              <p className="mt-3 text-gray-800 dark:text-gray-400">
-                For as long as there have been cities, the public square has
-                been a fundamental part of the urban landscape - an open,
-                approachable space to meet and engage with friends and
-                neighbours. Space aims to capture this spirit of bringing people
-                together in an exciting, welcoming environment.
-              </p>
-            </div>
-
-            <div className="space-y-6 lg:space-y-10">
-              <div className="flex">
-                <svg
-                  className="flex-shrink-0 mt-2 h-6 w-6 text-gray-800 dark:text-white"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  fill="currentColor"
-                  viewBox="0 0 16 16"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M14.763.075A.5.5 0 0 1 15 .5v15a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5V14h-1v1.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V10a.5.5 0 0 1 .342-.474L6 7.64V4.5a.5.5 0 0 1 .276-.447l8-4a.5.5 0 0 1 .487.022zM6 8.694 1 10.36V15h5V8.694zM7 15h2v-1.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5V15h2V1.309l-7 3.5V15z"
-                  />
-                  <path d="M2 11h1v1H2v-1zm2 0h1v1H4v-1zm-2 2h1v1H2v-1zm2 0h1v1H4v-1zm4-4h1v1H8V9zm2 0h1v1h-1V9zm-2 2h1v1H8v-1zm2 0h1v1h-1v-1zm2-2h1v1h-1V9zm0 2h1v1h-1v-1zM8 7h1v1H8V7zm2 0h1v1h-1V7zm2 0h1v1h-1V7zM8 5h1v1H8V5zm2 0h1v1h-1V5zm2 0h1v1h-1V5zm0-2h1v1h-1V3z" />
-                </svg>
-                <div className="ml-5 sm:ml-8">
-                  <h3 className="text-base sm:text-lg font-semibold text-gray-800 dark:text-gray-200">
-                    High quality Co-Living spaces
-                  </h3>
-                  <p className="mt-1 text-gray-600 dark:text-gray-400">
-                    Our fully furnished spaces are designed and purpose-built
-                    with Co-Living in mind, featuring high-end finishes and
-                    amenities that go far beyond traditional apartment
-                    buildings.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex">
-                <svg
-                  className="flex-shrink-0 mt-2 h-6 w-6 text-gray-800 dark:text-white"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  fill="currentColor"
-                  viewBox="0 0 16 16"
-                >
-                  <path d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1h8zm-7.978-1A.261.261 0 0 1 7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002a.274.274 0 0 1-.014.002H7.022zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM6.936 9.28a5.88 5.88 0 0 0-1.23-.247A7.35 7.35 0 0 0 5 9c-4 0-5 3-5 4 0 .667.333 1 1 1h4.216A2.238 2.238 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816zM4.92 10A5.493 5.493 0 0 0 4 13H1c0-.26.164-1.03.76-1.724.545-.636 1.492-1.256 3.16-1.275zM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0zm3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4z" />
-                </svg>
-                <div className="ml-5 sm:ml-8">
-                  <h3 className="text-base sm:text-lg font-semibold text-gray-800 dark:text-gray-200">
-                    Fostering vibrant communities
-                  </h3>
-                  <p className="mt-1 text-gray-600 dark:text-gray-400">
-                    Our passion is bringing people together. Beyond creating
-                    beautiful spaces, we provide shared experiences.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex">
-                <svg
-                  className="flex-shrink-0 mt-2 h-6 w-6 text-gray-800 dark:text-white"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  fill="currentColor"
-                  viewBox="0 0 16 16"
-                >
-                  <path d="M8.864.046C7.908-.193 7.02.53 6.956 1.466c-.072 1.051-.23 2.016-.428 2.59-.125.36-.479 1.013-1.04 1.639-.557.623-1.282 1.178-2.131 1.41C2.685 7.288 2 7.87 2 8.72v4.001c0 .845.682 1.464 1.448 1.545 1.07.114 1.564.415 2.068.723l.048.03c.272.165.578.348.97.484.397.136.861.217 1.466.217h3.5c.937 0 1.599-.477 1.934-1.064a1.86 1.86 0 0 0 .254-.912c0-.152-.023-.312-.077-.464.201-.263.38-.578.488-.901.11-.33.172-.762.004-1.149.069-.13.12-.269.159-.403.077-.27.113-.568.113-.857 0-.288-.036-.585-.113-.856a2.144 2.144 0 0 0-.138-.362 1.9 1.9 0 0 0 .234-1.734c-.206-.592-.682-1.1-1.2-1.272-.847-.282-1.803-.276-2.516-.211a9.84 9.84 0 0 0-.443.05 9.365 9.365 0 0 0-.062-4.509A1.38 1.38 0 0 0 9.125.111L8.864.046zM11.5 14.721H8c-.51 0-.863-.069-1.14-.164-.281-.097-.506-.228-.776-.393l-.04-.024c-.555-.339-1.198-.731-2.49-.868-.333-.036-.554-.29-.554-.55V8.72c0-.254.226-.543.62-.65 1.095-.3 1.977-.996 2.614-1.708.635-.71 1.064-1.475 1.238-1.978.243-.7.407-1.768.482-2.85.025-.362.36-.594.667-.518l.262.066c.16.04.258.143.288.255a8.34 8.34 0 0 1-.145 4.725.5.5 0 0 0 .595.644l.003-.001.014-.003.058-.014a8.908 8.908 0 0 1 1.036-.157c.663-.06 1.457-.054 2.11.164.175.058.45.3.57.65.107.308.087.67-.266 1.022l-.353.353.353.354c.043.043.105.141.154.315.048.167.075.37.075.581 0 .212-.027.414-.075.582-.05.174-.111.272-.154.315l-.353.353.353.354c.047.047.109.177.005.488a2.224 2.224 0 0 1-.505.805l-.353.353.353.354c.006.005.041.05.041.17a.866.866 0 0 1-.121.416c-.165.288-.503.56-1.066.56z" />
-                </svg>
-                <div className="ml-5 sm:ml-8">
-                  <h3 className="text-base sm:text-lg font-semibold text-gray-800 dark:text-gray-200">
-                    Simple and all-inclusive
-                  </h3>
-                  <p className="mt-1 text-gray-600 dark:text-gray-400">
-                    We worry about the details so that our residents don't have
-                    to. From our online application process to simple,
-                    all-inclusive billing we aim to make the living experience
-                    as effortless as possible.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div> */}
-        <section
-          className="items-center py-8 bg-gray-100 lg:h-screen font-poppins md:pr-12"
-          style={{ height: "auto" }}
-        >
-          <div className="block justify-center max-w-6xl px-4 py-4 mx-auto lg:py-8 md:px-6">
+      <div className="flex-col md:flex md:flex-row px-4 pt-10 sm:px-6 lg:px-8 lg:py-0 mx-auto">
+        <section className="items-center pt-8 bg-gray-100 lg:h-screen font-poppins md:pr-10 border max-h-fit">
+          <div className="block justify-center max-w-2xl px-4 py-4 mx-auto lg:py-8 md:px-6">
             <div className="max-w-xl mx-auto">
               <div className="text-center ">
                 <div className="relative flex flex-col items-center">
-                  <div className="absolute hidden md:block -top-14 -left-[4.5rem] text-[120px] text-gray-400 font-bold opacity-10">
-                    PROCEDURES
+                  <div className="absolute hidden md:block left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-[100px] text-gray-400 font-bold opacity-10">
+                    RENTING
                   </div>
-                  <h1 className="text-5xl font-bold leading-tight dark:text-white">
-                    {" "}
-                    Procedures for renting{" "}
-                    <span className="text-blue-500">motorcycles</span>{" "}
+                  <h1 className="text-5xl font-bold leading-tight text-blue-500">
+                    Renting motorcycles
                   </h1>
-                  <div className="flex w-24 mt-1 mb-10 overflow-hidden rounded">
+                  <div className="flex w-20 mt-1 mb-10 overflow-hidden rounded">
                     <div className="flex-1 h-2 bg-blue-200"></div>
                     <div className="flex-1 h-2 bg-blue-400"></div>
                     <div className="flex-1 h-2 bg-blue-600"></div>
@@ -447,8 +341,8 @@ export default function HomePage() {
             </div>
             <div className="w-full mx-auto lg:max-w-3xl">
               <div className="relative flex justify-between">
-                <div className="hidden w-24 py-3 md:block ">
-                  <h2 className=" text-xl font-bold text-gray-700 text-right">
+                <div className="hidden w-16 py-3 md:block ">
+                  <h2 className="text-lg font-bold text-gray-700 text-right">
                     Step 1
                   </h2>
                 </div>
@@ -457,15 +351,15 @@ export default function HomePage() {
                     Step 1
                   </h2>
                 </div>
-                <div className="flex flex-col items-center w-10 mr-4 md:w-24">
+                <div className="flex flex-col items-center w-10 mr-4 md:w-16">
                   <div>
-                    <div className="flex items-center justify-center w-10 h-10 border border-blue-500 rounded-full dark:border-blue-400">
+                    <div className="flex items-center justify-center w-10 h-10 border border-blue-500 rounded-full ">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="16"
                         height="16"
                         fill="currentColor"
-                        className="w-4 h-4 text-blue-500 dark:text-blue-400 bi bi-building"
+                        className="w-4 h-4 text-blue-500   bi bi-building"
                         viewBox="0 0 16 16"
                       >
                         <path
@@ -478,15 +372,15 @@ export default function HomePage() {
                   </div>
                   <div className="w-px h-full bg-blue-300"></div>
                 </div>
-                <div className="relative flex-1 mb-16 bg-white rounded shadow md:mb-8 dark:bg-gray-900">
+                <div className="relative flex-1 mb-16 bg-white rounded shadow md:mb-8 ">
                   <div className="absolute inline-block w-4 overflow-hidden -translate-y-1/2 top-7 -left-4">
-                    <div className="h-10 origin-top-right transform -rotate-45 bg-white dark:bg-gray-900 drop-shadow-lg"></div>
+                    <div className="h-10 origin-top-right transform -rotate-45 bg-white  drop-shadow-lg"></div>
                   </div>
-                  <div className="relative z-20 p-6">
-                    <p className="mb-2 text-xl font-bold text-gray-600 dark:text-gray-400">
+                  <div className="relative z-20 p-4">
+                    <p className="mb-2 text-lg font-bold text-black ">
                       Find your "motor mate"
                     </p>
-                    <p className="text-gray-700 font-medium">
+                    <p className="text-gray-700 text-base font-medium">
                       Make sure you have selected the vehicle in the right
                       location!
                     </p>
@@ -494,25 +388,25 @@ export default function HomePage() {
                 </div>
               </div>
               <div className="relative flex justify-between">
-                <div className="hidden w-24 py-3 md:block">
-                  <h2 className=" text-xl font-bold text-gray-700  text-right">
+                <div className="hidden w-16 py-3 md:block ">
+                  <h2 className="text-lg font-bold text-gray-700 text-right">
                     Step 2
                   </h2>
                 </div>
                 <div className="absolute inline-block w-24 py-3 left-16 -top-12 md:hidden ">
-                  <h2 className="text-base font-medium text-gray-700 dark:text-gray-400">
+                  <h2 className="text-base font-medium text-gray-700 ">
                     Step 2
                   </h2>
                 </div>
-                <div className="flex flex-col items-center w-10 mr-4 md:w-24">
+                <div className="flex flex-col items-center w-10 mr-4 md:w-16">
                   <div>
-                    <div className="flex items-center justify-center w-10 h-10 border border-blue-500 rounded-full dark:border-blue-400">
+                    <div className="flex items-center justify-center w-10 h-10 border border-blue-500 rounded-full ">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="16"
                         height="16"
                         fill="currentColor"
-                        className="w-4 h-4 text-blue-500 dark:text-blue-400 bi bi-globe"
+                        className="w-4 h-4 text-blue-500   bi bi-globe"
                         viewBox="0 0 16 16"
                       >
                         <path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm7.5-6.923c-.67.204-1.335.82-1.887 1.855A7.97 7.97 0 0 0 5.145 4H7.5V1.077zM4.09 4a9.267 9.267 0 0 1 .64-1.539 6.7 6.7 0 0 1 .597-.933A7.025 7.025 0 0 0 2.255 4H4.09zm-.582 3.5c.03-.877.138-1.718.312-2.5H1.674a6.958 6.958 0 0 0-.656 2.5h2.49zM4.847 5a12.5 12.5 0 0 0-.338 2.5H7.5V5H4.847zM8.5 5v2.5h2.99a12.495 12.495 0 0 0-.337-2.5H8.5zM4.51 8.5a12.5 12.5 0 0 0 .337 2.5H7.5V8.5H4.51zm3.99 0V11h2.653c.187-.765.306-1.608.338-2.5H8.5zM5.145 12c.138.386.295.744.468 1.068.552 1.035 1.218 1.65 1.887 1.855V12H5.145zm.182 2.472a6.696 6.696 0 0 1-.597-.933A9.268 9.268 0 0 1 4.09 12H2.255a7.024 7.024 0 0 0 3.072 2.472zM3.82 11a13.652 13.652 0 0 1-.312-2.5h-2.49c.062.89.291 1.733.656 2.5H3.82zm6.853 3.472A7.024 7.024 0 0 0 13.745 12H11.91a9.27 9.27 0 0 1-.64 1.539 6.688 6.688 0 0 1-.597.933zM8.5 12v2.923c.67-.204 1.335-.82 1.887-1.855.173-.324.33-.682.468-1.068H8.5zm3.68-1h2.146c.365-.767.594-1.61.656-2.5h-2.49a13.65 13.65 0 0 1-.312 2.5zm2.802-3.5a6.959 6.959 0 0 0-.656-2.5H12.18c.174.782.282 1.623.312 2.5h2.49zM11.27 2.461c.247.464.462.98.64 1.539h1.835a7.024 7.024 0 0 0-3.072-2.472c.218.284.418.598.597.933zM10.855 4a7.966 7.966 0 0 0-.468-1.068C9.835 1.897 9.17 1.282 8.5 1.077V4h2.355z"></path>
@@ -521,15 +415,15 @@ export default function HomePage() {
                   </div>
                   <div className="w-px h-full bg-blue-300"></div>
                 </div>
-                <div className="relative flex-1 mb-16 bg-white rounded shadow md:mb-8 dark:bg-gray-900">
+                <div className="relative flex-1 mb-16 bg-white rounded shadow md:mb-8 ">
                   <div className="absolute inline-block w-4 overflow-hidden -translate-y-1/2 top-7 -left-4">
-                    <div className="h-10 origin-top-right transform -rotate-45 bg-white dark:bg-gray-900 drop-shadow-lg"></div>
+                    <div className="h-10 origin-top-right transform -rotate-45 bg-white  drop-shadow-lg"></div>
                   </div>
                   <div className="relative z-20 p-6">
-                    <p className="mb-2 text-xl font-bold text-gray-600 ">
+                    <p className="mb-2 text-lg font-bold text-black">
                       Fill and check your information
                     </p>
-                    <p className="text-gray-700 dark:text-gray-500">
+                    <p className="text-gray-700 text-base font-medium">
                       Choose the number of days you want to rent and fill
                       neccessary information.
                     </p>
@@ -537,8 +431,8 @@ export default function HomePage() {
                 </div>
               </div>
               <div className="relative flex justify-between">
-                <div className="hidden w-24 py-3 md:block ">
-                  <h2 className=" text-xl font-bold text-gray-700 text-right">
+                <div className="hidden w-16 py-3 md:block ">
+                  <h2 className="text-lg font-bold text-gray-700 text-right">
                     Step 3
                   </h2>
                 </div>
@@ -547,15 +441,15 @@ export default function HomePage() {
                     Step 3
                   </h2>
                 </div>
-                <div className="flex flex-col items-center w-10 mr-4 md:w-24">
+                <div className="flex flex-col items-center w-10 mr-4 md:w-16">
                   <div>
-                    <div className="flex items-center justify-center w-10 h-10 border border-blue-500 rounded-full dark:border-blue-400">
+                    <div className="flex items-center justify-center w-10 h-10 border border-blue-500 rounded-full ">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="16"
                         height="16"
                         fill="currentColor"
-                        className="w-4 h-4 text-blue-500 dark:text-blue-400 bi bi-code-slash"
+                        className="w-4 h-4 text-blue-500   bi bi-code-slash"
                         viewBox="0 0 16 16"
                       >
                         <path d="M10.478 1.647a.5.5 0 1 0-.956-.294l-4 13a.5.5 0 0 0 .956.294l4-13zM4.854 4.146a.5.5 0 0 1 0 .708L1.707 8l3.147 3.146a.5.5 0 0 1-.708.708l-3.5-3.5a.5.5 0 0 1 0-.708l3.5-3.5a.5.5 0 0 1 .708 0zm6.292 0a.5.5 0 0 0 0 .708L14.293 8l-3.147 3.146a.5.5 0 0 0 .708.708l3.5-3.5a.5.5 0 0 0 0-.708l-3.5-3.5a.5.5 0 0 0-.708 0z"></path>
@@ -564,15 +458,171 @@ export default function HomePage() {
                   </div>
                   <div className="w-px h-full bg-blue-300"></div>
                 </div>
-                <div className="relative flex-1 mb-16 bg-white rounded shadow md:mb-8 dark:bg-gray-900">
+                <div className="relative flex-1 mb-16 bg-white rounded shadow md:mb-8 ">
                   <div className="absolute inline-block w-4 overflow-hidden -translate-y-1/2 top-7 -left-4">
-                    <div className="h-10 origin-top-right transform -rotate-45 bg-white dark:bg-gray-900 drop-shadow-lg"></div>
+                    <div className="h-10 origin-top-right transform -rotate-45 bg-white  drop-shadow-lg"></div>
                   </div>
                   <div className="relative z-20 p-6">
-                    <p className="mb-2 text-xl font-bold text-gray-600 dark:text-gray-400">
-                      Payment
+                    <p className="mb-2 text-lg font-bold text-black">Payment</p>
+                    <p className="text-gray-700 text-base font-medium">
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                      veniam libero facilis minus reprehenderit.
                     </p>
-                    <p className="text-gray-700 dark:text-gray-500">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section className="items-center py-8 bg-gray-100 lg:h-screen font-poppins md:pr-10 border max-h-fit">
+          <div className="block justify-center max-w-2xl px-4 py-4 mx-auto lg:py-8 md:px-6">
+            <div className="max-w-xl mx-auto">
+              <div className="text-center ">
+                <div className="relative flex flex-col items-center">
+                  <div className="absolute hidden md:block left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-[100px] text-gray-400 font-bold opacity-10">
+                    Lessor
+                  </div>
+                  <h1 className="text-5xl font-bold leading-tight text-blue-500">
+                    Lessor
+                  </h1>
+                  <div className="flex w-20 mt-1 mb-10 overflow-hidden rounded">
+                    <div className="flex-1 h-2 bg-blue-200"></div>
+                    <div className="flex-1 h-2 bg-blue-400"></div>
+                    <div className="flex-1 h-2 bg-blue-600"></div>
+                  </div>
+                </div>
+                <p className="mb-16 text-base text-center text-gray-500">
+                  Make sure that you have a valid motorcycle license and a valid
+                  ID card.
+                </p>
+              </div>
+            </div>
+            <div className="w-full mx-auto lg:max-w-3xl">
+              <div className="relative flex justify-between">
+                <div className="hidden w-16 py-3 md:block ">
+                  <h2 className="text-lg font-bold text-gray-700 text-right">
+                    Step 1
+                  </h2>
+                </div>
+                <div className="absolute inline-block w-24 py-3 left-16 -top-12 md:hidden">
+                  <h2 className="text-base font-medium text-gray-700">
+                    Step 1
+                  </h2>
+                </div>
+                <div className="flex flex-col items-center w-10 mr-4 md:w-16">
+                  <div>
+                    <div className="flex items-center justify-center w-10 h-10 border border-blue-500 rounded-full ">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        fill="currentColor"
+                        className="w-4 h-4 text-blue-500   bi bi-building"
+                        viewBox="0 0 16 16"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M14.763.075A.5.5 0 0 1 15 .5v15a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5V14h-1v1.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V10a.5.5 0 0 1 .342-.474L6 7.64V4.5a.5.5 0 0 1 .276-.447l8-4a.5.5 0 0 1 .487.022zM6 8.694 1 10.36V15h5V8.694zM7 15h2v-1.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5V15h2V1.309l-7 3.5V15z"
+                        ></path>
+                        <path d="M2 11h1v1H2v-1zm2 0h1v1H4v-1zm-2 2h1v1H2v-1zm2 0h1v1H4v-1zm4-4h1v1H8V9zm2 0h1v1h-1V9zm-2 2h1v1H8v-1zm2 0h1v1h-1v-1zm2-2h1v1h-1V9zm0 2h1v1h-1v-1zM8 7h1v1H8V7zm2 0h1v1h-1V7zm2 0h1v1h-1V7zM8 5h1v1H8V5zm2 0h1v1h-1V5zm2 0h1v1h-1V5zm0-2h1v1h-1V3z"></path>
+                      </svg>
+                    </div>
+                  </div>
+                  <div className="w-px h-full bg-blue-300"></div>
+                </div>
+                <div className="relative flex-1 mb-16 bg-white rounded shadow md:mb-8 ">
+                  <div className="absolute inline-block w-4 overflow-hidden -translate-y-1/2 top-7 -left-4">
+                    <div className="h-10 origin-top-right transform -rotate-45 bg-white  drop-shadow-lg"></div>
+                  </div>
+                  <div className="relative z-20 p-4">
+                    <p className="mb-2 text-lg font-bold text-black ">
+                      Register
+                    </p>
+                    <p className="text-gray-700 text-base font-medium">
+                      Register your motorcycle on our website and wait for the
+                      approval.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="relative flex justify-between">
+                <div className="hidden w-16 py-3 md:block ">
+                  <h2 className="text-lg font-bold text-gray-700 text-right">
+                    Step 2
+                  </h2>
+                </div>
+                <div className="absolute inline-block w-24 py-3 left-16 -top-12 md:hidden ">
+                  <h2 className="text-base font-medium text-gray-700 ">
+                    Step 2
+                  </h2>
+                </div>
+                <div className="flex flex-col items-center w-10 mr-4 md:w-16">
+                  <div>
+                    <div className="flex items-center justify-center w-10 h-10 border border-blue-500 rounded-full ">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        fill="currentColor"
+                        className="w-4 h-4 text-blue-500 bi bi-globe"
+                        viewBox="0 0 16 16"
+                      >
+                        <path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm7.5-6.923c-.67.204-1.335.82-1.887 1.855A7.97 7.97 0 0 0 5.145 4H7.5V1.077zM4.09 4a9.267 9.267 0 0 1 .64-1.539 6.7 6.7 0 0 1 .597-.933A7.025 7.025 0 0 0 2.255 4H4.09zm-.582 3.5c.03-.877.138-1.718.312-2.5H1.674a6.958 6.958 0 0 0-.656 2.5h2.49zM4.847 5a12.5 12.5 0 0 0-.338 2.5H7.5V5H4.847zM8.5 5v2.5h2.99a12.495 12.495 0 0 0-.337-2.5H8.5zM4.51 8.5a12.5 12.5 0 0 0 .337 2.5H7.5V8.5H4.51zm3.99 0V11h2.653c.187-.765.306-1.608.338-2.5H8.5zM5.145 12c.138.386.295.744.468 1.068.552 1.035 1.218 1.65 1.887 1.855V12H5.145zm.182 2.472a6.696 6.696 0 0 1-.597-.933A9.268 9.268 0 0 1 4.09 12H2.255a7.024 7.024 0 0 0 3.072 2.472zM3.82 11a13.652 13.652 0 0 1-.312-2.5h-2.49c.062.89.291 1.733.656 2.5H3.82zm6.853 3.472A7.024 7.024 0 0 0 13.745 12H11.91a9.27 9.27 0 0 1-.64 1.539 6.688 6.688 0 0 1-.597.933zM8.5 12v2.923c.67-.204 1.335-.82 1.887-1.855.173-.324.33-.682.468-1.068H8.5zm3.68-1h2.146c.365-.767.594-1.61.656-2.5h-2.49a13.65 13.65 0 0 1-.312 2.5zm2.802-3.5a6.959 6.959 0 0 0-.656-2.5H12.18c.174.782.282 1.623.312 2.5h2.49zM11.27 2.461c.247.464.462.98.64 1.539h1.835a7.024 7.024 0 0 0-3.072-2.472c.218.284.418.598.597.933zM10.855 4a7.966 7.966 0 0 0-.468-1.068C9.835 1.897 9.17 1.282 8.5 1.077V4h2.355z"></path>
+                      </svg>
+                    </div>
+                  </div>
+                  <div className="w-px h-full bg-blue-300"></div>
+                </div>
+                <div className="relative flex-1 mb-16 bg-white rounded shadow md:mb-8 ">
+                  <div className="absolute inline-block w-4 overflow-hidden -translate-y-1/2 top-7 -left-4">
+                    <div className="h-10 origin-top-right transform -rotate-45 bg-white  drop-shadow-lg"></div>
+                  </div>
+                  <div className="relative z-20 p-6">
+                    <p className="mb-2 text-lg font-bold text-black">
+                      Fill and check your information
+                    </p>
+                    <p className="text-gray-700 text-base font-medium">
+                      Choose the number of days you want to rent and fill
+                      neccessary information.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="relative flex justify-between">
+                <div className="hidden w-16 py-3 md:block ">
+                  <h2 className="text-lg font-bold text-gray-700 text-right">
+                    Step 3
+                  </h2>
+                </div>
+                <div className="absolute inline-block w-24 py-3 left-16 -top-12 md:hidden ">
+                  <h2 className="text-base font-medium text-gray-700 ">
+                    Step 3
+                  </h2>
+                </div>
+                <div className="flex flex-col items-center w-10 mr-4 md:w-16">
+                  <div>
+                    <div className="flex items-center justify-center w-10 h-10 border border-blue-500 rounded-full ">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        fill="currentColor"
+                        className="w-4 h-4 text-blue-500   bi bi-code-slash"
+                        viewBox="0 0 16 16"
+                      >
+                        <path d="M10.478 1.647a.5.5 0 1 0-.956-.294l-4 13a.5.5 0 0 0 .956.294l4-13zM4.854 4.146a.5.5 0 0 1 0 .708L1.707 8l3.147 3.146a.5.5 0 0 1-.708.708l-3.5-3.5a.5.5 0 0 1 0-.708l3.5-3.5a.5.5 0 0 1 .708 0zm6.292 0a.5.5 0 0 0 0 .708L14.293 8l-3.147 3.146a.5.5 0 0 0 .708.708l3.5-3.5a.5.5 0 0 0 0-.708l-3.5-3.5a.5.5 0 0 0-.708 0z"></path>
+                      </svg>
+                    </div>
+                  </div>
+                  <div className="w-px h-full bg-blue-300"></div>
+                </div>
+                <div className="relative flex-1 mb-16 bg-white rounded shadow md:mb-8 ">
+                  <div className="absolute inline-block w-4 overflow-hidden -translate-y-1/2 top-7 -left-4">
+                    <div className="h-10 origin-top-right transform -rotate-45 bg-white  drop-shadow-lg"></div>
+                  </div>
+                  <div className="relative z-20 p-6">
+                    <p className="mb-2 text-lg font-bold text-black">Payment</p>
+                    <p className="text-gray-700 text-base font-medium">
                       Lorem ipsum dolor sit amet consectetur adipisicing elit.
                       veniam libero facilis minus reprehenderit.
                     </p>
@@ -585,37 +635,34 @@ export default function HomePage() {
       </div>
 
       {/* Our team */}
-      <section className="bg-white dark:bg-gray-900">
+      <section className="bg-white ">
         <div className="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-10 lg:px-6">
           <div className="flex justify-center">
             <hr className="w-1/4"></hr>
           </div>
           <div className="mx-auto mb-8 max-w-screen-sm lg:mb-16">
-            <h2 className=" my-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">
+            <h2 className=" my-4 text-4xl tracking-tight font-extrabold text-gray-900 ">
               Our team
             </h2>
-            <p className="font-light text-gray-500 sm:text-xl dark:text-gray-400">
+            <p className="font-light text-gray-500 sm:text-xl ">
               Explore the whole collection of open-source web components and
               elements built with the utility classes from Tailwind
             </p>
           </div>
           <div className="grid gap-8 lg:gap-16 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-            <div className="text-center text-gray-500 dark:text-gray-400">
+            <div className="text-center text-gray-500 ">
               <img
                 className="mx-auto mb-4 w-36 h-36 rounded-full"
                 src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/bonnie-green.png"
                 alt="Bonnie Avatar"
               />
-              <h3 className="mb-1 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+              <h3 className="mb-1 text-2xl font-bold tracking-tight text-gray-900 ">
                 <a href="#">Bonnie Green</a>
               </h3>
               <p>CEO/Co-founder</p>
               <ul className="flex justify-center mt-4 space-x-4">
                 <li>
-                  <a
-                    href="#"
-                    className="text-[#39569c] hover:text-gray-900 dark:hover:text-white"
-                  >
+                  <a href="#" className="text-[#39569c] hover:text-gray-900 ">
                     <svg
                       className="w-6 h-6"
                       fill="currentColor"
@@ -631,10 +678,7 @@ export default function HomePage() {
                   </a>
                 </li>
                 <li>
-                  <a
-                    href="#"
-                    className="text-[#00acee] hover:text-gray-900 dark:hover:text-white"
-                  >
+                  <a href="#" className="text-[#00acee] hover:text-gray-900 ">
                     <svg
                       className="w-6 h-6"
                       fill="currentColor"
@@ -646,10 +690,7 @@ export default function HomePage() {
                   </a>
                 </li>
                 <li>
-                  <a
-                    href="#"
-                    className="text-gray-900 hover:text-gray-900 dark:hover:text-white dark:text-gray-300"
-                  >
+                  <a href="#" className="text-gray-900 hover:text-gray-900  ">
                     <svg
                       className="w-6 h-6"
                       fill="currentColor"
@@ -665,10 +706,7 @@ export default function HomePage() {
                   </a>
                 </li>
                 <li>
-                  <a
-                    href="#"
-                    className="text-[#ea4c89] hover:text-gray-900 dark:hover:text-white"
-                  >
+                  <a href="#" className="text-[#ea4c89] hover:text-gray-900 ">
                     <svg
                       className="w-6 h-6"
                       fill="currentColor"
@@ -685,22 +723,19 @@ export default function HomePage() {
                 </li>
               </ul>
             </div>
-            <div className="text-center text-gray-500 dark:text-gray-400">
+            <div className="text-center text-gray-500 ">
               <img
                 className="mx-auto mb-4 w-36 h-36 rounded-full"
                 src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/helene-engels.png"
                 alt="Helene Avatar"
               />
-              <h3 className="mb-1 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+              <h3 className="mb-1 text-2xl font-bold tracking-tight text-gray-900 ">
                 <a href="#">Helene Engels</a>
               </h3>
               <p>CTO/Co-founder</p>
               <ul className="flex justify-center mt-4 space-x-4">
                 <li>
-                  <a
-                    href="#"
-                    className="text-[#39569c] hover:text-gray-900 dark:hover:text-white"
-                  >
+                  <a href="#" className="text-[#39569c] hover:text-gray-900 ">
                     <svg
                       className="w-6 h-6"
                       fill="currentColor"
@@ -716,10 +751,7 @@ export default function HomePage() {
                   </a>
                 </li>
                 <li>
-                  <a
-                    href="#"
-                    className="text-[#00acee] hover:text-gray-900 dark:hover:text-white"
-                  >
+                  <a href="#" className="text-[#00acee] hover:text-gray-900 ">
                     <svg
                       className="w-6 h-6"
                       fill="currentColor"
@@ -731,10 +763,7 @@ export default function HomePage() {
                   </a>
                 </li>
                 <li>
-                  <a
-                    href="#"
-                    className="text-gray-900 hover:text-gray-900 dark:hover:text-white dark:text-gray-300"
-                  >
+                  <a href="#" className="text-gray-900 hover:text-gray-900  ">
                     <svg
                       className="w-6 h-6"
                       fill="currentColor"
@@ -750,10 +779,7 @@ export default function HomePage() {
                   </a>
                 </li>
                 <li>
-                  <a
-                    href="#"
-                    className="text-[#ea4c89] hover:text-gray-900 dark:hover:text-white"
-                  >
+                  <a href="#" className="text-[#ea4c89] hover:text-gray-900 ">
                     <svg
                       className="w-6 h-6"
                       fill="currentColor"
@@ -770,22 +796,19 @@ export default function HomePage() {
                 </li>
               </ul>
             </div>
-            <div className="text-center text-gray-500 dark:text-gray-400">
+            <div className="text-center text-gray-500 ">
               <img
                 className="mx-auto mb-4 w-36 h-36 rounded-full"
                 src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/jese-leos.png"
                 alt="Jese Avatar"
               />
-              <h3 className="mb-1 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+              <h3 className="mb-1 text-2xl font-bold tracking-tight text-gray-900 ">
                 <a href="#">Jese Leos</a>
               </h3>
               <p>SEO & Marketing</p>
               <ul className="flex justify-center mt-4 space-x-4">
                 <li>
-                  <a
-                    href="#"
-                    className="text-[#39569c] hover:text-gray-900 dark:hover:text-white"
-                  >
+                  <a href="#" className="text-[#39569c] hover:text-gray-900 ">
                     <svg
                       className="w-6 h-6"
                       fill="currentColor"
@@ -801,10 +824,7 @@ export default function HomePage() {
                   </a>
                 </li>
                 <li>
-                  <a
-                    href="#"
-                    className="text-[#00acee] hover:text-gray-900 dark:hover:text-white"
-                  >
+                  <a href="#" className="text-[#00acee] hover:text-gray-900 ">
                     <svg
                       className="w-6 h-6"
                       fill="currentColor"
@@ -816,10 +836,7 @@ export default function HomePage() {
                   </a>
                 </li>
                 <li>
-                  <a
-                    href="#"
-                    className="text-gray-900 hover:text-gray-900 dark:hover:text-white dark:text-gray-300"
-                  >
+                  <a href="#" className="text-gray-900 hover:text-gray-900  ">
                     <svg
                       className="w-6 h-6"
                       fill="currentColor"
@@ -835,10 +852,7 @@ export default function HomePage() {
                   </a>
                 </li>
                 <li>
-                  <a
-                    href="#"
-                    className="text-[#ea4c89] hover:text-gray-900 dark:hover:text-white"
-                  >
+                  <a href="#" className="text-[#ea4c89] hover:text-gray-900 ">
                     <svg
                       className="w-6 h-6"
                       fill="currentColor"
@@ -855,22 +869,19 @@ export default function HomePage() {
                 </li>
               </ul>
             </div>
-            <div className="text-center text-gray-500 dark:text-gray-400">
+            <div className="text-center text-gray-500 ">
               <img
                 className="mx-auto mb-4 w-36 h-36 rounded-full"
                 src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/joseph-mcfall.png"
                 alt="Joseph Avatar"
               />
-              <h3 className="mb-1 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+              <h3 className="mb-1 text-2xl font-bold tracking-tight text-gray-900 ">
                 <a href="#">Joseph Mcfall</a>
               </h3>
               <p>Sales</p>
               <ul className="flex justify-center mt-4 space-x-4">
                 <li>
-                  <a
-                    href="#"
-                    className="text-[#39569c] hover:text-gray-900 dark:hover:text-white"
-                  >
+                  <a href="#" className="text-[#39569c] hover:text-gray-900 ">
                     <svg
                       className="w-6 h-6"
                       fill="currentColor"
@@ -886,10 +897,7 @@ export default function HomePage() {
                   </a>
                 </li>
                 <li>
-                  <a
-                    href="#"
-                    className="text-[#00acee] hover:text-gray-900 dark:hover:text-white"
-                  >
+                  <a href="#" className="text-[#00acee] hover:text-gray-900 ">
                     <svg
                       className="w-6 h-6"
                       fill="currentColor"
@@ -901,10 +909,7 @@ export default function HomePage() {
                   </a>
                 </li>
                 <li>
-                  <a
-                    href="#"
-                    className="text-gray-900 hover:text-gray-900 dark:hover:text-white dark:text-gray-300"
-                  >
+                  <a href="#" className="text-gray-900 hover:text-gray-900  ">
                     <svg
                       className="w-6 h-6"
                       fill="currentColor"
@@ -920,10 +925,7 @@ export default function HomePage() {
                   </a>
                 </li>
                 <li>
-                  <a
-                    href="#"
-                    className="text-[#ea4c89] hover:text-gray-900 dark:hover:text-white"
-                  >
+                  <a href="#" className="text-[#ea4c89] hover:text-gray-900 ">
                     <svg
                       className="w-6 h-6"
                       fill="currentColor"
@@ -940,22 +942,19 @@ export default function HomePage() {
                 </li>
               </ul>
             </div>
-            <div className="text-center text-gray-500 dark:text-gray-400">
+            <div className="text-center text-gray-500 ">
               <img
                 className="mx-auto mb-4 w-36 h-36 rounded-full"
                 src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/sofia-mcguire.png"
                 alt="Sofia Avatar"
               />
-              <h3 className="mb-1 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+              <h3 className="mb-1 text-2xl font-bold tracking-tight text-gray-900 ">
                 <a href="#">Lana Byrd</a>
               </h3>
               <p>Web Designer</p>
               <ul className="flex justify-center mt-4 space-x-4">
                 <li>
-                  <a
-                    href="#"
-                    className="text-[#39569c] hover:text-gray-900 dark:hover:text-white"
-                  >
+                  <a href="#" className="text-[#39569c] hover:text-gray-900 ">
                     <svg
                       className="w-6 h-6"
                       fill="currentColor"
@@ -971,10 +970,7 @@ export default function HomePage() {
                   </a>
                 </li>
                 <li>
-                  <a
-                    href="#"
-                    className="text-[#00acee] hover:text-gray-900 dark:hover:text-white"
-                  >
+                  <a href="#" className="text-[#00acee] hover:text-gray-900 ">
                     <svg
                       className="w-6 h-6"
                       fill="currentColor"
@@ -986,10 +982,7 @@ export default function HomePage() {
                   </a>
                 </li>
                 <li>
-                  <a
-                    href="#"
-                    className="text-gray-900 hover:text-gray-900 dark:hover:text-white dark:text-gray-300"
-                  >
+                  <a href="#" className="text-gray-900 hover:text-gray-900  ">
                     <svg
                       className="w-6 h-6"
                       fill="currentColor"
@@ -1005,10 +998,7 @@ export default function HomePage() {
                   </a>
                 </li>
                 <li>
-                  <a
-                    href="#"
-                    className="text-[#ea4c89] hover:text-gray-900 dark:hover:text-white"
-                  >
+                  <a href="#" className="text-[#ea4c89] hover:text-gray-900 ">
                     <svg
                       className="w-6 h-6"
                       fill="currentColor"
@@ -1025,22 +1015,19 @@ export default function HomePage() {
                 </li>
               </ul>
             </div>
-            <div className="text-center text-gray-500 dark:text-gray-400">
+            <div className="text-center text-gray-500 ">
               <img
                 className="mx-auto mb-4 w-36 h-36 rounded-full"
                 src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/thomas-lean.png"
                 alt="Leslie Avatar"
               />
-              <h3 className="mb-1 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+              <h3 className="mb-1 text-2xl font-bold tracking-tight text-gray-900 ">
                 <a href="#">Leslie Livingston</a>
               </h3>
               <p>Graphic Designer</p>
               <ul className="flex justify-center mt-4 space-x-4">
                 <li>
-                  <a
-                    href="#"
-                    className="text-[#39569c] hover:text-gray-900 dark:hover:text-white"
-                  >
+                  <a href="#" className="text-[#39569c] hover:text-gray-900 ">
                     <svg
                       className="w-6 h-6"
                       fill="currentColor"
@@ -1056,10 +1043,7 @@ export default function HomePage() {
                   </a>
                 </li>
                 <li>
-                  <a
-                    href="#"
-                    className="text-[#00acee] hover:text-gray-900 dark:hover:text-white"
-                  >
+                  <a href="#" className="text-[#00acee] hover:text-gray-900 ">
                     <svg
                       className="w-6 h-6"
                       fill="currentColor"
@@ -1071,10 +1055,7 @@ export default function HomePage() {
                   </a>
                 </li>
                 <li>
-                  <a
-                    href="#"
-                    className="text-gray-900 hover:text-gray-900 dark:hover:text-white dark:text-gray-300"
-                  >
+                  <a href="#" className="text-gray-900 hover:text-gray-900  ">
                     <svg
                       className="w-6 h-6"
                       fill="currentColor"
@@ -1090,10 +1071,7 @@ export default function HomePage() {
                   </a>
                 </li>
                 <li>
-                  <a
-                    href="#"
-                    className="text-[#ea4c89] hover:text-gray-900 dark:hover:text-white"
-                  >
+                  <a href="#" className="text-[#ea4c89] hover:text-gray-900 ">
                     <svg
                       className="w-6 h-6"
                       fill="currentColor"
@@ -1110,22 +1088,19 @@ export default function HomePage() {
                 </li>
               </ul>
             </div>
-            <div className="text-center text-gray-500 dark:text-gray-400">
+            <div className="text-center text-gray-500 ">
               <img
                 className="mx-auto mb-4 w-36 h-36 rounded-full"
                 src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/michael-gouch.png"
                 alt="Michael Avatar"
               />
-              <h3 className="mb-1 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+              <h3 className="mb-1 text-2xl font-bold tracking-tight text-gray-900 ">
                 <a href="#">Michael Gough</a>
               </h3>
               <p>React Developer</p>
               <ul className="flex justify-center mt-4 space-x-4">
                 <li>
-                  <a
-                    href="#"
-                    className="text-[#39569c] hover:text-gray-900 dark:hover:text-white"
-                  >
+                  <a href="#" className="text-[#39569c] hover:text-gray-900 ">
                     <svg
                       className="w-6 h-6"
                       fill="currentColor"
@@ -1141,10 +1116,7 @@ export default function HomePage() {
                   </a>
                 </li>
                 <li>
-                  <a
-                    href="#"
-                    className="text-[#00acee] hover:text-gray-900 dark:hover:text-white"
-                  >
+                  <a href="#" className="text-[#00acee] hover:text-gray-900 ">
                     <svg
                       className="w-6 h-6"
                       fill="currentColor"
@@ -1156,10 +1128,7 @@ export default function HomePage() {
                   </a>
                 </li>
                 <li>
-                  <a
-                    href="#"
-                    className="text-gray-900 hover:text-gray-900 dark:hover:text-white dark:text-gray-300"
-                  >
+                  <a href="#" className="text-gray-900 hover:text-gray-900  ">
                     <svg
                       className="w-6 h-6"
                       fill="currentColor"
@@ -1175,10 +1144,7 @@ export default function HomePage() {
                   </a>
                 </li>
                 <li>
-                  <a
-                    href="#"
-                    className="text-[#ea4c89] hover:text-gray-900 dark:hover:text-white"
-                  >
+                  <a href="#" className="text-[#ea4c89] hover:text-gray-900 ">
                     <svg
                       className="w-6 h-6"
                       fill="currentColor"
@@ -1195,22 +1161,19 @@ export default function HomePage() {
                 </li>
               </ul>
             </div>
-            <div className="text-center text-gray-500 dark:text-gray-400">
+            <div className="text-center text-gray-500 ">
               <img
                 className="mx-auto mb-4 w-36 h-36 rounded-full"
                 src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/neil-sims.png"
                 alt="Neil Avatar"
               />
-              <h3 className="mb-1 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+              <h3 className="mb-1 text-2xl font-bold tracking-tight text-gray-900 ">
                 <a href="#">Neil Sims</a>
               </h3>
               <p>Vue.js Developer</p>
               <ul className="flex justify-center mt-4 space-x-4">
                 <li>
-                  <a
-                    href="#"
-                    className="text-[#39569c] hover:text-gray-900 dark:hover:text-white"
-                  >
+                  <a href="#" className="text-[#39569c] hover:text-gray-900 ">
                     <svg
                       className="w-6 h-6"
                       fill="currentColor"
@@ -1226,10 +1189,7 @@ export default function HomePage() {
                   </a>
                 </li>
                 <li>
-                  <a
-                    href="#"
-                    className="text-[#00acee] hover:text-gray-900 dark:hover:text-white"
-                  >
+                  <a href="#" className="text-[#00acee] hover:text-gray-900 ">
                     <svg
                       className="w-6 h-6"
                       fill="currentColor"
@@ -1241,10 +1201,7 @@ export default function HomePage() {
                   </a>
                 </li>
                 <li>
-                  <a
-                    href="#"
-                    className="text-gray-900 hover:text-gray-900 dark:hover:text-white dark:text-gray-300"
-                  >
+                  <a href="#" className="text-gray-900 hover:text-gray-900  ">
                     <svg
                       className="w-6 h-6"
                       fill="currentColor"
@@ -1260,10 +1217,7 @@ export default function HomePage() {
                   </a>
                 </li>
                 <li>
-                  <a
-                    href="#"
-                    className="text-[#ea4c89] hover:text-gray-900 dark:hover:text-white"
-                  >
+                  <a href="#" className="text-[#ea4c89] hover:text-gray-900 ">
                     <svg
                       className="w-6 h-6"
                       fill="currentColor"

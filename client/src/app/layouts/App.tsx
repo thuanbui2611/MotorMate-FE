@@ -42,7 +42,7 @@ function App() {
     <Loading />;
   }
   return (
-    <div className="flex flex-col min-h-screen relative ">
+    <div className="flex flex-col min-h-screen relative overflow-auto">
       <ToastContainer
         position="top-right"
         autoClose={5000}

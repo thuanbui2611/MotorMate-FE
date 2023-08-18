@@ -45,7 +45,7 @@ export default function ProductSuggested() {
             modules={[FreeMode, Pagination, Autoplay, Navigation]}
           >
             {productsSuggested.map((product, id) => (
-              <SwiperSlide>
+              <SwiperSlide key={id}>
                 {/* <!-- Card --> */}
                 <a
                   className="group flex flex-col bg-white border shadow-sm rounded-xl hover:shadow-md transition dark:bg-slate-900 dark:border-gray-800"
