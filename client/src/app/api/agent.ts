@@ -1,7 +1,5 @@
 import axios, { AxiosResponse } from "axios";
 
-import { Cart } from "../models/Cart";
-
 axios.defaults.baseURL = "https://fakestoreapi.com/";
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
@@ -25,7 +23,7 @@ const Account = {
 
 const Carts = {
   getUserCart: (id: number) => requests.get(`carts/user/${id}`),
-  addProduct: (values: Cart) => requests.post("carts", values),
+  // addProduct: (values: Cart) => requests.post("carts", values),
 };
 
 const agent = {
