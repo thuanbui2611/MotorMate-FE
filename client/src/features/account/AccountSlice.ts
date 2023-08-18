@@ -29,6 +29,21 @@ export const signInUser = createAsyncThunk<UserLogin, FieldValues>(
   }
 );
 
+export const signInByGoogle = createAsyncThunk<UserLogin, string>(
+  "account/signInByGoogle",
+  async (tokenCredential, thunkAPI) => {
+    try {
+      const userLoginToken = await agentTest.Account.loginGoogle({
+        tokenCredential,
+      });
+      localStorage.setItem("userToken", userLoginToken.token);
+      return userLoginToken;
+    } catch (error) {
+      return thunkAPI.rejectWithValue({ error: (error as any).data });
+    }
+  }
+);
+
 export const fetchUserFromToken = createAsyncThunk<any>(
   "account/fetchUserFromToken",
   (_, { rejectWithValue }) => {
@@ -87,15 +102,6 @@ export const accountSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(signInUser.fulfilled, (state, action) => {
-      state.userLoginToken = action.payload;
-    });
-
-    builder.addCase(signInUser.rejected, (state, action) => {
-      console.log("Action rejected, the payload:");
-      console.log(action.payload);
-    });
-
     builder.addCase(fetchUserFromToken.fulfilled, (state, action) => {
       state.user = action.payload;
     });
@@ -106,6 +112,20 @@ export const accountSlice = createSlice({
       localStorage.removeItem("userToken");
       toast.error("Token expired, please sign in again!");
     });
+    builder.addMatcher(
+      isAnyOf(signInUser.fulfilled, signInByGoogle.fulfilled),
+      (state, action) => {
+        state.userLoginToken = action.payload;
+      }
+    );
+
+    builder.addMatcher(
+      isAnyOf(signInUser.rejected, signInByGoogle.rejected),
+      (state, action) => {
+        console.log("SignIn rejected, the payload:");
+        console.log(action.payload);
+      }
+    );
   },
 });
 

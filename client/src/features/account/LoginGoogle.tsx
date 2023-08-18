@@ -1,20 +1,25 @@
 import { GoogleLogin, CredentialResponse } from "@react-oauth/google";
 import agentTest from "../../app/api/agentTest";
+import { useHistory } from "react-router-dom";
+import { useAppDispatch } from "../../app/store/ConfigureStore";
+import { signInByGoogle } from "./AccountSlice";
 
 export default function LoginGoogle() {
+  const history = useHistory();
+  const dispatch = useAppDispatch();
+
   const handleError = () => {
     console.log("Login fail");
   };
   const handleSuccess = async (response: CredentialResponse) => {
-    console.log("clientId:", response.clientId);
-    console.log("credential:", response.credential);
     try {
-      const data = await agentTest.Account.loginGoogle({
-        tokenCredential: response.credential as string,
-      });
-      console.log("data:", data);
+      const data = await dispatch(
+        signInByGoogle(response.credential as string)
+      );
+      history.push("/");
+      window.location.reload();
     } catch (error) {
-      console.log("API Error:", error);
+      console.log("Error:", error);
     }
   };
 

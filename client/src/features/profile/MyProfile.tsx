@@ -7,6 +7,7 @@ import { FreeMode, Pagination, Autoplay, Navigation } from "swiper";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
+import Loading from "../../app/components/Loading";
 
 export default function MyProfile() {
   const [loading, setLoading] = useState(true);
@@ -17,7 +18,7 @@ export default function MyProfile() {
       .catch((error) => console.log(error))
       .finally(() => setLoading(false));
   }, []);
-
+  if (loading) return <Loading />;
   return (
     <>
       <HeaderProfile />
@@ -155,11 +156,11 @@ export default function MyProfile() {
                       swiper.pagination.render();
                       swiper.pagination.update();
                     }}
-                    // autoplay={{
-                    //   delay: 3000,
-                    //   disableOnInteraction: false,
-                    // }}
-                    // freeMode={true}
+                    autoplay={{
+                      delay: 3000,
+                      disableOnInteraction: false,
+                    }}
+                    freeMode={true}
                     navigation={true}
                     modules={[FreeMode, Pagination, Autoplay, Navigation]}
                     breakpoints={{

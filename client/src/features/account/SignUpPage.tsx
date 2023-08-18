@@ -3,8 +3,11 @@ import { FieldValues, useForm } from "react-hook-form";
 import agentTest from "../../app/api/agentTest";
 import { TextField } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
+import { useHistory } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export default function SignUpPage() {
+  const history = useHistory();
   const {
     register,
     handleSubmit,
@@ -12,8 +15,15 @@ export default function SignUpPage() {
   } = useForm({
     mode: "all",
   });
+
   async function submitForm(data: FieldValues) {
-    await agentTest.Account.Register(data).catch((error) => console.log(error));
+    try {
+      await agentTest.Account.Register(data);
+      history.push("/login");
+      toast.success("Sign up successfully");
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (

@@ -11,7 +11,7 @@ export default function Footer() {
                 href="#"
                 aria-label="Brand"
               >
-                Brand
+                MOTORMATE
               </a>
             </div>
             {/* <!-- End Col --> */}

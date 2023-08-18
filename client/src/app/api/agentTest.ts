@@ -72,8 +72,8 @@ const Account = {
   Register: (values: {}) => requests.post("api/auth/sign-up", values),
 };
 
-const agent = {
+const agentTest = {
   Account,
 };
 
-export default agent;
+export default agentTest;

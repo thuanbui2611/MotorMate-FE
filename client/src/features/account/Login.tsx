@@ -1,15 +1,16 @@
 import LoginGoogle from "./LoginGoogle";
-import agent from "../../app/api/agent";
 import { FieldValues, useForm } from "react-hook-form";
-import agentTest from "../../app/api/agentTest";
 import { TextField } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { useHistory } from "react-router-dom";
-import { useAppDispatch } from "../../app/store/ConfigureStore";
-import { fetchUserFromToken, signInUser } from "./AccountSlice";
-import { toast } from "react-toastify";
+import { useAppDispatch, useAppSelector } from "../../app/store/ConfigureStore";
+import { signInUser } from "./AccountSlice";
 
 export default function Login() {
+  const user = useAppSelector((state) => state.account.user);
+  if (user) {
+    window.location.href = "/";
+  }
   const {
     register,
     handleSubmit,

@@ -315,6 +315,18 @@ export default function HomePage() {
         </div>
       </section>
 
+      <div className="flex justify-center">
+        <hr className="w-1/4"></hr>
+      </div>
+      <div className="mx-auto mb-8 text-center">
+        <h2 className=" my-4 text-4xl tracking-tight font-extrabold text-gray-900 ">
+          Procedures
+        </h2>
+        <p className="font-light text-gray-500 sm:text-xl ">
+          Explore the whole collection of open-source web components and
+          elements built with the utility classes from Tailwind
+        </p>
+      </div>
       <div className="flex-col md:flex md:flex-row px-4 pt-10 sm:px-6 lg:px-8 lg:py-0 mx-auto">
         <section className="items-center pt-8 bg-gray-100 lg:h-screen font-poppins md:pr-10 border max-h-fit">
           <div className="block justify-center max-w-2xl px-4 py-4 mx-auto lg:py-8 md:px-6">
