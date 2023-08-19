@@ -127,7 +127,7 @@ export default function Footer() {
           <div className="mt-5 sm:mt-12 grid gap-y-2 sm:gap-y-0 sm:flex sm:justify-between sm:items-center">
             <div className="flex justify-between items-center">
               <p className="text-sm text-gray-400">
-                © 2023 IReadHub. All rights reserved.
+                © 2023 MotorMate. All rights reserved.
               </p>
             </div>
             {/* <!-- End Col --> */}

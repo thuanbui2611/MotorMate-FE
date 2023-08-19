@@ -1,4 +1,5 @@
 import { useState } from "react";
+import SelectCityVN from "../../app/components/SelectCityVN";
 
 export default function Checkout() {
   //Select option Payment Method
@@ -184,7 +185,9 @@ export default function Checkout() {
                           required
                           className=" w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 "
                         >
-                          <option selected>Choose your Delivery Option</option>
+                          <option defaultValue="">
+                            Choose your Delivery Option
+                          </option>
                           <option value="selfPickup">Self Pick-up</option>
                           <option value="standardShipping">
                             Standard Shipping
@@ -193,17 +196,22 @@ export default function Checkout() {
                       </div>
                     </div>
                     {deliveryOption === "standardShipping" && (
-                      <div className="flex flex-wrap mb-6 items-center">
-                        <div className="w-full md:w-1/3 mb-2 md:mb-0 md:pr-10 md:text-right">
-                          <label className="text-lg  ">Delivery address:</label>
+                      <>
+                        <SelectCityVN />
+                        <div className="flex flex-wrap mb-6 items-center">
+                          <div className="w-full md:w-1/3 mb-2 md:mb-0 md:pr-10 md:text-right">
+                            <label className="text-lg  ">
+                              Delivery address:
+                            </label>
+                          </div>
+                          <div className="w-full md:w-2/3">
+                            <input
+                              className="w-full h-1/3 px-5 py-3 text-lg leading-9 bg-blue-50 border-2 border-blue-400 outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-xl"
+                              type="text"
+                            />
+                          </div>
                         </div>
-                        <div className="w-full md:w-2/3">
-                          <input
-                            className="w-full h-1/3 px-5 py-3 text-lg leading-9 bg-blue-50 border-2 border-blue-400 outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-xl"
-                            type="text"
-                          />
-                        </div>
-                      </div>
+                      </>
                     )}
 
                     {deliveryOption === "selfPickup" && (
