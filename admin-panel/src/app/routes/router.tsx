@@ -10,7 +10,10 @@ import Settings from "../pages/Settings";
 import Tables from "../pages/Tables";
 import Alerts from "../pages/UiElements/Alerts";
 import Buttons from "../pages/UiElements/Buttons";
-import ECommerce from "../pages/Dashboard/ECommerce";
+import Brand from "../pages/brand";
+import Transactions from "../pages/transactions";
+import Dashboard from "../pages/Dashboard/Dashboard";
+import Products from "../pages/products";
 
 export const router = createBrowserRouter([
   {
@@ -20,9 +23,11 @@ export const router = createBrowserRouter([
       {
         element: <DefaultLayout />,
         children: [
-          { path: "", element: <ECommerce /> },
-          { path: "home", element: <ECommerce /> },
-          { path: "calender", element: <Calendar /> },
+          { path: "", element: <Dashboard /> },
+          { path: "dashboard", element: <Dashboard /> },
+          { path: "products", element: <Products /> },
+          { path: "brand", element: <Brand /> },
+          { path: "transactions", element: <Transactions /> },
           { path: "profile", element: <Profile /> },
           { path: "forms/form-elements", element: <FormElements /> },
           { path: "forms/form-layout", element: <FormLayout /> },
