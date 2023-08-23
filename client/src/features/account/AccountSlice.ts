@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, isAnyOf } from "@reduxjs/toolkit";
-import { User, UserLogin } from "../../app/models/User";
+import { User } from "../../app/models/User";
 import { FieldValues } from "react-hook-form";
 import agentTest from "../../app/api/agentTest";
 import jwt_decode from "jwt-decode";
@@ -8,84 +8,57 @@ import { history } from "../..";
 
 interface AccountState {
   user: User | null;
-  userLoginToken: UserLogin | null;
 }
 
 const initialState: AccountState = {
   user: null,
-  userLoginToken: null,
 };
 
-export const signInUser = createAsyncThunk<UserLogin, FieldValues>(
+export const signInUser = createAsyncThunk<User, FieldValues>(
   "account/signInUser",
   async (data, thunkAPI) => {
     try {
-      const userLoginToken = await agentTest.Account.login(data);
-      localStorage.setItem("userToken", userLoginToken.token);
-      return userLoginToken;
+      const userLogin = await agentTest.Account.login(data);
+      localStorage.setItem("user", JSON.stringify(userLogin));
+      return userLogin.token;
     } catch (error) {
       return thunkAPI.rejectWithValue({ error: (error as any).data });
     }
   }
 );
 
-export const signInByGoogle = createAsyncThunk<UserLogin, string>(
+export const signInByGoogle = createAsyncThunk<User, string>(
   "account/signInByGoogle",
   async (tokenCredential, thunkAPI) => {
     try {
-      const userLoginToken = await agentTest.Account.loginGoogle({
+      const userLogin = await agentTest.Account.loginGoogle({
         tokenCredential,
       });
-      localStorage.setItem("userToken", userLoginToken.token);
-      return userLoginToken;
+      localStorage.setItem("user", JSON.stringify(userLogin));
+      return userLogin.token;
     } catch (error) {
       return thunkAPI.rejectWithValue({ error: (error as any).data });
     }
   }
 );
 
-export const fetchUserFromToken = createAsyncThunk<any>(
+export const fetchUserFromToken = createAsyncThunk<User>(
   "account/fetchUserFromToken",
-  (_, { rejectWithValue }) => {
-    console.log("Fetching user from token");
+  async (_, thunkAPI) => {
+    thunkAPI.dispatch(setUser(JSON.parse(localStorage.getItem("user")!)));
     try {
-      const userToken = localStorage.getItem("userToken");
-      if (userToken) {
-        const decodedToken = jwt_decode(userToken) as any;
-        // Check expiration time of token
-        if (decodedToken.exp * 1000 < Date.now()) {
-          localStorage.removeItem("userToken");
-          return rejectWithValue({ error: "Token expired" });
-        }
-        const user: User = {
-          username:
-            decodedToken[
-              "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
-            ],
-          name: decodedToken[
-            "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"
-          ],
-          email:
-            decodedToken[
-              "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"
-            ],
-          role: decodedToken[
-            "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
-          ],
-        };
-        return user;
-      } else {
-        // No valid token found in localStorage
-        // throw new Error("No user token found in localStorage");
-        return rejectWithValue({ error: "No valid token found" });
-      }
+      const userLogin = localStorage.getItem("user");
+      const user = JSON.parse(userLogin!);
+      localStorage.setItem("user", JSON.stringify(user));
+      return user.token;
     } catch (error) {
-      return rejectWithValue({ error: (error as any).message });
+      debugger;
+      return thunkAPI.rejectWithValue(error);
     }
   },
   {
     condition: () => {
-      if (!localStorage.getItem("userToken")) return false;
+      if (!localStorage.getItem("user")) return false;
     },
   }
 );
@@ -95,30 +68,43 @@ export const accountSlice = createSlice({
   initialState,
   reducers: {
     signOut: (state) => {
-      state.userLoginToken = null;
-      localStorage.removeItem("userToken");
-      history.push("/");
-      window.location.reload();
+      state.user = null;
+      localStorage.removeItem("user");
+      toast.success("Log out success!");
+    },
+    setUser: (state, action) => {
+      try {
+        const userToken = action.payload.token.toString();
+        const decodedToken = jwt_decode(userToken) as any;
+        if (decodedToken.exp * 1000 < Date.now()) {
+          localStorage.removeItem("user");
+          throw new Error("Token expired!");
+        }
+        state.user = setDataUserFromToken(decodedToken, userToken);
+      } catch (error) {
+        throw new Error("No valid token found, please login again!");
+      }
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchUserFromToken.fulfilled, (state, action) => {
-      state.user = action.payload;
+    builder.addCase(fetchUserFromToken.rejected, (state, action) => {
+      state.user = null;
+      localStorage.removeItem("user");
+      toast.error(action.error.message);
     });
 
-    builder.addCase(fetchUserFromToken.rejected, (state, action) => {
-      state.userLoginToken = null;
-      state.user = null;
-      localStorage.removeItem("userToken");
-      toast.error("Token expired, please sign in again!");
-    });
     builder.addMatcher(
-      isAnyOf(signInUser.fulfilled, signInByGoogle.fulfilled),
+      isAnyOf(
+        signInUser.fulfilled,
+        signInByGoogle.fulfilled,
+        fetchUserFromToken.fulfilled
+      ),
       (state, action) => {
-        state.userLoginToken = action.payload;
+        let userToken = action.payload.toString();
+        const decodedToken = jwt_decode(userToken) as any;
+        state.user = setDataUserFromToken(decodedToken, userToken);
       }
     );
-
     builder.addMatcher(
       isAnyOf(signInUser.rejected, signInByGoogle.rejected),
       (state, action) => {
@@ -129,4 +115,25 @@ export const accountSlice = createSlice({
   },
 });
 
-export const { signOut } = accountSlice.actions;
+function setDataUserFromToken(decodedToken: any, userToken: string) {
+  const user = {
+    username:
+      decodedToken[
+        "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
+      ],
+    name: decodedToken[
+      "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"
+    ],
+    email:
+      decodedToken[
+        "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"
+      ],
+    role: decodedToken[
+      "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+    ],
+    token: userToken,
+  };
+  return user;
+}
+
+export const { signOut, setUser } = accountSlice.actions;

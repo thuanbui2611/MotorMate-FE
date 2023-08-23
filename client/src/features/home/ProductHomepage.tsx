@@ -3,8 +3,6 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Pagination, Autoplay, Navigation } from "swiper";
 import "swiper/css";
 import "swiper/css/pagination";
-import "swiper/css/navigation";
-
 interface Props {
   products: Product[];
 }
@@ -12,8 +10,6 @@ export default function ProductHomepage({ products }: Props) {
   return (
     <>
       <Swiper
-        slidesPerView={3}
-        spaceBetween={30}
         loop={true}
         pagination={{
           clickable: true,
@@ -26,23 +22,25 @@ export default function ProductHomepage({ products }: Props) {
           delay: 3000,
           disableOnInteraction: false,
         }}
-        freeMode={true}
         navigation={true}
         modules={[FreeMode, Pagination, Autoplay, Navigation]}
         breakpoints={{
-          // when window width is >= 320px
           0: {
             slidesPerView: 1,
-            spaceBetween: 10,
+            spaceBetween: 0,
           },
-          // when window width is >= 480px
-          480: {
+
+          500: {
             slidesPerView: 2,
-            spaceBetween: 20,
+            spaceBetween: 30,
           },
-          // when window width is >= 640px
-          640: {
+
+          780: {
             slidesPerView: 3,
+            spaceBetween: 30,
+          },
+          1050: {
+            slidesPerView: 4,
             spaceBetween: 30,
           },
         }}
@@ -50,7 +48,7 @@ export default function ProductHomepage({ products }: Props) {
         <div className="mb-6 lg:mb-8">
           {products.slice(0, 8).map((product, id) => (
             <SwiperSlide key={id}>
-              <div className="items-center sm:flex max-w-lg mb-8 ">
+              <div className="items-center mx-auto sm:flex max-w-xs mb-8">
                 <div>
                   <a
                     className="group flex flex-col bg-white border shadow-sm rounded-xl hover:shadow-md transition"

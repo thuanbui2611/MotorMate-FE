@@ -3,6 +3,7 @@ import { Product } from "../../app/models/Product";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Pagination, Autoplay, Navigation } from "swiper";
 import "swiper/css";
+import ProductHomepage from "../home/ProductHomepage";
 
 export default function ProductSuggested() {
   const [productsSuggested, setproductsSuggested] = useState<Product[]>([]);
@@ -30,7 +31,8 @@ export default function ProductSuggested() {
 
         {/* <!-- Grid --> */}
         <div className=" mb-10 lg:mb-14">
-          <Swiper
+          <ProductHomepage products={productsSuggested} />
+          {/* <Swiper
             slidesPerView={3}
             spaceBetween={30}
             navigation={true}
@@ -46,7 +48,6 @@ export default function ProductSuggested() {
           >
             {productsSuggested.map((product, id) => (
               <SwiperSlide key={id}>
-                {/* <!-- Card --> */}
                 <a
                   className="group flex flex-col bg-white border shadow-sm rounded-xl hover:shadow-md transition dark:bg-slate-900 dark:border-gray-800"
                   href={"/product-detail/" + product.id}
@@ -70,10 +71,9 @@ export default function ProductSuggested() {
                     </h3>
                   </div>
                 </a>
-                {/* <!-- End Card --> */}
               </SwiperSlide>
             ))}
-          </Swiper>
+          </Swiper> */}
         </div>
 
         {/* <!-- End Grid --> */}
@@ -83,7 +83,7 @@ export default function ProductSuggested() {
           <div className="inline-block bg-white border shadow-sm rounded-full dark:bg-slate-900 dark:border-gray-800">
             <div className="py-3 px-4 flex items-center gap-x-2">
               <p className="text-gray-600 dark:text-gray-400">
-                Want to read more?
+                Want to see more?
               </p>
               <a
                 className="inline-flex items-center gap-x-1.5 text-blue-600 decoration-2 hover:underline font-medium"

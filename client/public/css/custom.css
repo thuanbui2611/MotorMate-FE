@@ -1071,6 +1071,54 @@ p {
 
 /* End of Login button  */
 
-/* Homepage Product */
+/* Homepage Ads */
+.homepage-welcome {
+  width: 75%;
+  text-align: left;
+}
+.ads-homepage-left {
+  position: absolute;
+  left: 0;
+  width: 11%;
+}
 
-/* End of Homepage Product */
+.ads-homepage-right {
+  width: 11%;
+  right: 0;
+  position: absolute;
+}
+
+@media (max-width: 767px) {
+  .ads-homepage-left {
+    width: 18%;
+  }
+
+  .ads-homepage-right {
+    width: 18%;
+  }
+  .homepage-welcome {
+    width: 62%;
+  }
+}
+/* End of Homepage Ads */
+
+/* Product detail ads */
+.ads-productDetail-left {
+  position: absolute;
+  left: 0;
+  width: 11%;
+}
+.ads-productDetail-right {
+  position: absolute;
+  right: 0;
+  width: 11%;
+}
+@media (max-width: 1025px) {
+  .ads-productDetail-left {
+    width: 15%;
+  }
+  .ads-productDetail-right {
+    width: 15%;
+  }
+}
+/* End of prodcut detail ads */

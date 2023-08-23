@@ -11,7 +11,7 @@ testApi.defaults.headers.post["Content-Type"] = "application/json";
 const responseBody = (response: AxiosResponse) => response.data;
 
 testApi.interceptors.request.use((config) => {
-  const userToken = store.getState().account.userLoginToken?.token;
+  const userToken = store.getState().account.user?.token;
   if (userToken) config.headers.Authorization = `Bearer ${userToken}`;
   return config;
 });

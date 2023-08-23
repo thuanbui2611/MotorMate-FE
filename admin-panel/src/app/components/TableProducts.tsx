@@ -1,4 +1,4 @@
-export default function TableBrand() {
+export default function TableProducts() {
   return (
     <>
       <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
@@ -7,7 +7,7 @@ export default function TableBrand() {
             <thead>
               <tr className=" bg-gray-2 text-left dark:bg-meta-4  font-bold">
                 <th className="min-w-[220px] py-4 px-4 text-black dark:text-white xl:pl-11">
-                  Brand Name
+                  Product Name
                 </th>
                 <th className="min-w-[150px] py-4 px-4 text-black dark:text-white">
                   Owner

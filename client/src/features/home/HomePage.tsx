@@ -203,8 +203,57 @@ export default function HomePage() {
             </h1>
           </div>
 
-          <div className="flex justify-center  pb-40">
-            <div className="w-3/4 text-left">
+          <div className="flex justify-center pb-40">
+            {/* Ads */}
+            <>
+              <div className="ads-homepage-left">
+                <img
+                  className="w-full mb-4"
+                  src="https://www.1019rock.ca/wp-content/uploads/sites/24/2021/02/ROCK-Ad.jpg"
+                  alt="Left Advertisement"
+                />
+                <img
+                  className="w-full mb-4"
+                  src="https://cdn.shortpixel.ai/spai/q_lossy+w_949+to_webp+ret_img/mailfloss.com/storage/2019/08/gif7-Teasewithagif_a3efec178f7855a98595d16764b099cf.gif"
+                  alt="Left Advertisement"
+                />
+                <img
+                  className="w-full mb-4"
+                  src="https://mailbakery.s3.amazonaws.com/wp-content/uploads/2015/06/26160320/neiman_marcus.gif"
+                  alt="Left Advertisement"
+                />
+                <img
+                  className="w-full mb-4"
+                  src="https://blog.hubspot.com/hs-fs/hubfs/email-marketing-examples-starbucks.gif?width=400&height=530&name=email-marketing-examples-starbucks.gif"
+                  alt="Left Advertisement"
+                />
+                <img
+                  className="w-full mb-4"
+                  src="https://storage.pixteller.com/designs/designs-videos/2086929-5fe0bd38247fa/thumb.gif"
+                  alt="Left Advertisement"
+                />
+              </div>
+              <div className="ads-homepage-right">
+                <img
+                  className="w-full mb-4"
+                  src="https://mailbakery.s3.amazonaws.com/wp-content/uploads/2015/06/26160324/kohls.gif"
+                  alt="Left Advertisement"
+                />
+                <img
+                  className="w-full mb-4"
+                  src="https://i.pinimg.com/originals/2b/13/92/2b1392f3215cd433fb7530e3959a38c7.gif"
+                  alt="Left Advertisement"
+                />
+                <img
+                  className="w-full mb-4"
+                  src="https://storage.pixteller.com/designs/designs-videos/2086947-5fe0b6b06a62d/thumb.gif"
+                  alt="Left Advertisement"
+                />
+              </div>
+            </>
+            {/* End ads */}
+
+            <div className="homepage-welcome">
               <img className="w-full mb-4" src="/image/image1.png" alt="" />
               <p className="leading-loose">
                 Justo et eos et ut takimata sed sadipscing dolore lorem, et
@@ -327,8 +376,8 @@ export default function HomePage() {
           elements built with the utility classes from Tailwind
         </p>
       </div>
-      <div className="flex-col md:flex md:flex-row px-4 pt-10 sm:px-6 lg:px-8 lg:py-0 mx-auto">
-        <section className="items-center pt-8 bg-gray-100 lg:h-screen font-poppins md:pr-10 border max-h-fit">
+      <div className="flex-col lg:flex lg:flex-row px-4 pt-10 sm:px-6 lg:px-8 lg:py-0 mx-auto">
+        <section className="items-center pt-8 bg-gray-100 lg:h-screen font-poppins md:pr-10 border max-h-fit lg:mr-4 mb-4">
           <div className="block justify-center max-w-2xl px-4 py-4 mx-auto lg:py-8 md:px-6">
             <div className="max-w-xl mx-auto">
               <div className="text-center ">

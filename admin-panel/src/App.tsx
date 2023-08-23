@@ -4,7 +4,7 @@ import { Outlet } from "react-router-dom";
 import Loader from "./app/components/Loader";
 
 function App() {
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     setTimeout(() => setLoading(false), 500);
   }, []);

@@ -5,11 +5,15 @@ import { LoadingButton } from "@mui/lab";
 import { useHistory } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/store/ConfigureStore";
 import { signInUser } from "./AccountSlice";
+import { toast } from "react-toastify";
+import Loading from "../../app/components/Loading";
+import { useState } from "react";
 
 export default function Login() {
   const user = useAppSelector((state) => state.account.user);
+  const history = useHistory();
   if (user) {
-    window.location.href = "/";
+    history.goBack();
   }
   const {
     register,
@@ -19,16 +23,9 @@ export default function Login() {
     mode: "all",
   });
 
-  const history = useHistory();
   const dispatch = useAppDispatch();
-
   async function submitForm(data: FieldValues) {
     const signIn = await dispatch(signInUser(data));
-    if (signIn.meta.requestStatus === "fulfilled") {
-      history.push("/");
-      window.location.reload();
-      // toast.success("Login successfully");
-    }
   }
 
   return (
