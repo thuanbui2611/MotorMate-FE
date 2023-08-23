@@ -1,4 +1,4 @@
-import Breadcrumb from "../components/Breadcrumb";
+import Breadcrumb from "../app/components/Breadcrumb";
 
 const Profile = () => {
   return (
@@ -8,7 +8,7 @@ const Profile = () => {
       <div className="overflow-hidden rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <div className="relative z-20 h-35 md:h-65">
           <img
-            src={require("../assets/images/cover/cover-01.png")}
+            src={require("../app/assets/images/cover/cover-01.png")}
             alt="profile cover"
             className="h-full w-full rounded-tl-sm rounded-tr-sm object-cover object-center"
           />
@@ -49,7 +49,7 @@ const Profile = () => {
           <div className="relative z-30 mx-auto -mt-22 h-30 w-full max-w-30 rounded-full bg-white/20 p-1 backdrop-blur sm:h-44 sm:max-w-44 sm:p-3">
             <div className="relative drop-shadow-2">
               <img
-                src={require("../assets/images/user/user-06.png")}
+                src={require("../app/assets/images/user/user-06.png")}
                 alt="profile"
               />
               <label

@@ -1,4 +1,4 @@
-import Breadcrumb from "../components/Breadcrumb";
+import Breadcrumb from "../app/components/Breadcrumb";
 
 const Settings = () => {
   // const [modalOpen, setModalOpen] = useState(false);

@@ -1,13 +1,13 @@
-import CardFour from "../../components/CardFour";
-import CardOne from "../../components/CardOne";
-import CardThree from "../../components/CardThree";
-import CardTwo from "../../components/CardTwo";
-import ChartOne from "../../components/ChartOne";
-import ChartThree from "../../components/ChartThree";
-import ChartTwo from "../../components/ChartTwo";
-import ChatCard from "../../components/ChatCard";
-import MapOne from "../../components/MapOne";
-import TableOne from "../../components/TableOne";
+import CardFour from "../../app/components/CardFour";
+import CardOne from "../../app/components/CardOne";
+import CardThree from "../../app/components/CardThree";
+import CardTwo from "../../app/components/CardTwo";
+import ChartOne from "../../app/components/ChartOne";
+import ChartThree from "../../app/components/ChartThree";
+import ChartTwo from "../../app/components/ChartTwo";
+import ChatCard from "../../app/components/ChatCard";
+import MapOne from "../../app/components/MapOne";
+import TableOne from "../../app/components/TableOne";
 
 const Dashboard = () => {
   return (

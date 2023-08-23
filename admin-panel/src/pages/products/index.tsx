@@ -1,5 +1,5 @@
-import Breadcrumb from "../../components/Breadcrumb";
-import TableBrand from "../../components/TableProducts";
+import Breadcrumb from "../../app/components/Breadcrumb";
+import TableBrand from "../../app/components/TableProducts";
 
 export default function Products() {
   return (

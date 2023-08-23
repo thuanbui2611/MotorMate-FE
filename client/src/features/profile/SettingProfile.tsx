@@ -1,4 +1,4 @@
-import HeaderProfile from "../profile/HeaderProfile";
+import HeaderProfile from "./HeaderProfile";
 
 export default function SettingProfile() {
   return (

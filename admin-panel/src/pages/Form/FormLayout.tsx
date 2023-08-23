@@ -1,4 +1,4 @@
-import Breadcrumb from '../../components/Breadcrumb';
+import Breadcrumb from "../../app/components/Breadcrumb";
 
 const FormLayout = () => {
   return (

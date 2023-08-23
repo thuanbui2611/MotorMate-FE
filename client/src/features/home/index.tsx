@@ -203,7 +203,7 @@ export default function HomePage() {
             </h1>
           </div>
 
-          <div className="flex justify-center pb-40">
+          <div className="flex justify-center pb-10">
             {/* Ads */}
             <>
               <div className="ads-homepage-left">
@@ -255,7 +255,7 @@ export default function HomePage() {
 
             <div className="homepage-welcome">
               <img className="w-full mb-4" src="/image/image1.png" alt="" />
-              <p className="leading-loose">
+              <p className="leading-loose md:text-base text-sm">
                 Justo et eos et ut takimata sed sadipscing dolore lorem, et
                 elitr labore labore voluptua no rebum sed, stet voluptua amet
                 sed elitr ea dolor dolores no clita. Dolores diam magna clita ea

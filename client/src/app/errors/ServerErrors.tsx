@@ -17,8 +17,7 @@ export default function ServerErrors() {
         </div>
       )}
       <div>
-        <a href="/home"> Go Back To Homepage</a>
-        {/* <button onClick={() => history.push('/products')}>Go back</button> */}
+        <button onClick={() => history.goBack()}>Go back</button>
       </div>
     </>
   );

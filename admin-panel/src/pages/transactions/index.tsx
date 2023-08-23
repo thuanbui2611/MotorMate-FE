@@ -1,4 +1,4 @@
-import TableTransaction from "../../components/TableTransaction";
+import TableTransaction from "../../app/components/TableTransaction";
 
 export default function Transactions() {
   return (
