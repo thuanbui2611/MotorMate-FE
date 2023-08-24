@@ -284,7 +284,7 @@ export default function Checkout() {
                             />
                             <img
                               style={{ width: "76px", height: "30px" }}
-                              src="/image/CashOnDelivery_Logo.png"
+                              src={require("../../app/assets/images/icon/CashOnDelivery_icon.png")}
                             />
 
                             <span className="ml-2 text-sm text-black leading-3 font-bold">
@@ -301,7 +301,7 @@ export default function Checkout() {
                             />
                             <img
                               style={{ width: "58px", height: "40px" }}
-                              src="/image/Visa_logo.png"
+                              src={require("../../app/assets/images/icon/Visa_icon.png")}
                             />
 
                             <span className="ml-2 text-sm text-black leading-3 font-bold">
@@ -319,7 +319,7 @@ export default function Checkout() {
                             />
                             <img
                               className=" h-10 w-10"
-                              src="/image/MoMo_Logo.png"
+                              src={require("../../app/assets/images/icon/MoMo_icon.png")}
                             />
 
                             <span className="ml-2 text-sm text-black leading-3">

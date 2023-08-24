@@ -16,7 +16,7 @@ export default function Cart() {
                   <img
                     alt="Placeholder"
                     className="block rounded-full h-8 w-8"
-                    src="/image/coverPage5.jpg"
+                    src={require("../../app/assets/images/coverPage5.jpg")}
                   />
                   <a href="" className="ml-2 text-sm font-bold">
                     Shop name
@@ -323,7 +323,7 @@ export default function Cart() {
                   <img
                     alt="Placeholder"
                     className="block rounded-full h-8 w-8"
-                    src="/image/coverPage5.jpg"
+                    src={require("../../app/assets/images/coverPage5.jpg")}
                   />
                   <a href="" className="ml-2 text-sm font-bold">
                     Shop name
@@ -440,7 +440,7 @@ export default function Cart() {
                   <img
                     alt="Placeholder"
                     className="block rounded-full h-8 w-8"
-                    src="/image/coverPage5.jpg"
+                    src={require("../../app/assets/images/coverPage5.jpg")}
                   />
                   <a href="" className="ml-2 text-sm font-bold">
                     Shop name

@@ -1,7 +1,7 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
-import { history } from "../..";
 import { store } from "../store/ConfigureStore";
+import { useNavigate } from "react-router-dom";
 
 // axios.defaults.baseURL = "https://motormate.azurewebsites.net/";
 const testApi = axios.create({
@@ -23,6 +23,7 @@ testApi.interceptors.response.use(
 
   (error: AxiosError) => {
     const { data, status } = error.response!;
+    const navigate = useNavigate();
     switch (status) {
       case 400:
         if ((data as any).errors) {
@@ -49,7 +50,9 @@ testApi.interceptors.response.use(
         toast.error((data as any).message);
         break;
       case 500:
-        history.push("/server-error");
+        navigate("/server-error", {
+          state: { error: data },
+        });
         break;
       default:
         break;

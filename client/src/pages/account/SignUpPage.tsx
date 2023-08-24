@@ -1,13 +1,13 @@
-import LoginGoogle from "./LoginGoogle";
+import LoginGoogle from "../../app/components/LoginGoogle";
 import { FieldValues, useForm } from "react-hook-form";
 import agentTest from "../../app/api/agentTest";
 import { TextField } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
-import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 export default function SignUpPage() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -19,7 +19,7 @@ export default function SignUpPage() {
   async function submitForm(data: FieldValues) {
     try {
       await agentTest.Account.Register(data);
-      history.push("/login");
+      navigate("/login");
       toast.success("Sign up successfully");
     } catch (error) {
       console.log(error);

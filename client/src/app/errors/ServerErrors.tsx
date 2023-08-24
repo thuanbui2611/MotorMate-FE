@@ -1,8 +1,8 @@
-import { useHistory, useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export default function ServerErrors() {
-  const history = useHistory();
-  const { state } = useLocation<any>();
+  const navigate = useNavigate();
+  const { state } = useLocation();
   return (
     <>
       {state?.error ? (
@@ -17,7 +17,7 @@ export default function ServerErrors() {
         </div>
       )}
       <div>
-        <button onClick={() => history.goBack()}>Go back</button>
+        <button onClick={() => navigate(-1)}>Go back</button>
       </div>
     </>
   );

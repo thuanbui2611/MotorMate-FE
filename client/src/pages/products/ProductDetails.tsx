@@ -13,7 +13,7 @@ export default function ProductDetails() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    agent.Product.details(parseInt(id))
+    agent.Product.details(parseInt(id as string))
       .then((product) => setBook(product))
       .catch((error) => console.log(error))
       .finally(() => setLoading(false));
@@ -304,61 +304,119 @@ export default function ProductDetails() {
           </div>
           {/* End Background Color */}
         </div>
-        <div className="flex bg-gray-100 mt-10">
-          <div className=" flex text-center items-center md:w-1/4 text-gray-500 ">
-            <div className="w-32 h-32 ml-2 mt-2 -mb-2 ">
+        <div className="flex bg-gray-100 mt-10 w-fit ">
+          <div className="flex text-center items-center text-gray-500 md:pr-2 ">
+            <div className="flex justify-center items-center w-20 h-20 pl-2 md:w-32 md:h-32">
               <img
-                className="mx-auto w-28 h-28 rounded-full"
+                className="mx-auto my-auto rounded-full"
                 src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/jese-leos.png"
                 alt="Jese Avatar"
               />
             </div>
 
-            <div className="w-2/3 flex-col text-left">
-              <h3 className=" ml-3 mb-1 text-xl md:text-2xl font-bold tracking-tight text-gray-900">
-                <a href="#">Jese Leos</a>
-              </h3>
-              <button className="flex ml-3 mt-4 bg-orange-300 hover:bg-orange-400 text-black py-1 md:px-2 px-1 rounded-full">
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="#ffffff"
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="text-white w-5 h-5"
-                >
-                  <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                  <g
-                    id="SVGRepo_tracerCarrier"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  ></g>
-                  <g id="SVGRepo_iconCarrier">
-                    {" "}
-                    <path
-                      fillRule="evenodd"
-                      clip-rule="evenodd"
-                      d="M12 3C7.85113 3 4 5.73396 4 10C4 11.5704 4.38842 12.7289 5.08252 13.6554C5.79003 14.5998 6.87746 15.3863 8.41627 16.0908L9.2326 16.4645L8.94868 17.3162C8.54129 18.5384 7.84997 19.6611 7.15156 20.5844C9.56467 19.8263 12.7167 18.6537 14.9453 17.1679C17.1551 15.6948 18.3969 14.5353 19.0991 13.455C19.7758 12.4139 20 11.371 20 10C20 5.73396 16.1489 3 12 3ZM2 10C2 4.26604 7.14887 1 12 1C16.8511 1 22 4.26604 22 10C22 11.629 21.7242 13.0861 20.7759 14.545C19.8531 15.9647 18.3449 17.3052 16.0547 18.8321C13.0781 20.8164 8.76589 22.2232 6.29772 22.9281C5.48665 23.1597 4.84055 22.6838 4.56243 22.1881C4.28848 21.6998 4.22087 20.9454 4.74413 20.3614C5.44439 19.5798 6.21203 18.5732 6.72616 17.4871C5.40034 16.7841 4.29326 15.9376 3.48189 14.8545C2.48785 13.5277 2 11.9296 2 10Z"
-                      fill="#0F0F0F"
-                    ></path>{" "}
-                    <path
-                      d="M9 10C9 10.8284 8.32843 11.5 7.5 11.5C6.67157 11.5 6 10.8284 6 10C6 9.17157 6.67157 8.5 7.5 8.5C8.32843 8.5 9 9.17157 9 10Z"
-                      fill="#0F0F0F"
-                    ></path>{" "}
-                    <path
-                      d="M13.4976 10C13.4976 10.8284 12.826 11.5 11.9976 11.5C11.1692 11.5 10.4976 10.8284 10.4976 10C10.4976 9.17157 11.1692 8.5 11.9976 8.5C12.826 8.5 13.4976 9.17157 13.4976 10Z"
-                      fill="#0F0F0F"
-                    ></path>{" "}
-                    <path
-                      d="M16.5 11.5C17.3284 11.5 18 10.8284 18 10C18 9.17157 17.3284 8.5 16.5 8.5C15.6716 8.5 15 9.17157 15 10C15 10.8284 15.6716 11.5 16.5 11.5Z"
-                      fill="#0F0F0F"
-                    ></path>{" "}
-                  </g>
-                </svg>
-                <p className="mx-2 text-sm"> Chat now</p>
-              </button>
+            <div className=" w-3/4 flex flex-col text-left">
+              <div>
+                <h3 className="ml-3 mb-1 text-base font-medium md:text-2xl md:font-bold tracking-tight text-gray-900">
+                  <a href="#">Jese Leos</a>
+                </h3>
+              </div>
+
+              <div className="flex">
+                <button className="flex ml-3 md:mt-4 bg-orange-200 hover:bg-orange-400 text-black py-1 px-1 rounded-full">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="#ffffff"
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="text-white w-4 h-4 md:w-6 md:h-6"
+                  >
+                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                    <g
+                      id="SVGRepo_tracerCarrier"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    ></g>
+                    <g id="SVGRepo_iconCarrier">
+                      <path
+                        fillRule="evenodd"
+                        clip-rule="evenodd"
+                        d="M12 3C7.85113 3 4 5.73396 4 10C4 11.5704 4.38842 12.7289 5.08252 13.6554C5.79003 14.5998 6.87746 15.3863 8.41627 16.0908L9.2326 16.4645L8.94868 17.3162C8.54129 18.5384 7.84997 19.6611 7.15156 20.5844C9.56467 19.8263 12.7167 18.6537 14.9453 17.1679C17.1551 15.6948 18.3969 14.5353 19.0991 13.455C19.7758 12.4139 20 11.371 20 10C20 5.73396 16.1489 3 12 3ZM2 10C2 4.26604 7.14887 1 12 1C16.8511 1 22 4.26604 22 10C22 11.629 21.7242 13.0861 20.7759 14.545C19.8531 15.9647 18.3449 17.3052 16.0547 18.8321C13.0781 20.8164 8.76589 22.2232 6.29772 22.9281C5.48665 23.1597 4.84055 22.6838 4.56243 22.1881C4.28848 21.6998 4.22087 20.9454 4.74413 20.3614C5.44439 19.5798 6.21203 18.5732 6.72616 17.4871C5.40034 16.7841 4.29326 15.9376 3.48189 14.8545C2.48785 13.5277 2 11.9296 2 10Z"
+                        fill="#0F0F0F"
+                      ></path>
+                      <path
+                        d="M9 10C9 10.8284 8.32843 11.5 7.5 11.5C6.67157 11.5 6 10.8284 6 10C6 9.17157 6.67157 8.5 7.5 8.5C8.32843 8.5 9 9.17157 9 10Z"
+                        fill="#0F0F0F"
+                      ></path>
+                      <path
+                        d="M13.4976 10C13.4976 10.8284 12.826 11.5 11.9976 11.5C11.1692 11.5 10.4976 10.8284 10.4976 10C10.4976 9.17157 11.1692 8.5 11.9976 8.5C12.826 8.5 13.4976 9.17157 13.4976 10Z"
+                        fill="#0F0F0F"
+                      ></path>
+                      <path
+                        d="M16.5 11.5C17.3284 11.5 18 10.8284 18 10C18 9.17157 17.3284 8.5 16.5 8.5C15.6716 8.5 15 9.17157 15 10C15 10.8284 15.6716 11.5 16.5 11.5Z"
+                        fill="#0F0F0F"
+                      ></path>
+                    </g>
+                  </svg>
+                </button>
+                <button className="flex ml-1 md:ml-2 md:mt-4 bg-orange-200 hover:bg-orange-400 text-black py-1 px-1 rounded-full">
+                  <svg
+                    className="w-4 h-4 md:w-6 md:h-6"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                    <g
+                      id="SVGRepo_tracerCarrier"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    ></g>
+                    <g id="SVGRepo_iconCarrier">
+                      <path
+                        d="M9.5 21.5V18.5C9.5 17.5654 9.5 17.0981 9.70096 16.75C9.83261 16.522 10.022 16.3326 10.25 16.201C10.5981 16 11.0654 16 12 16C12.9346 16 13.4019 16 13.75 16.201C13.978 16.3326 14.1674 16.522 14.299 16.75C14.5 17.0981 14.5 17.5654 14.5 18.5V21.5"
+                        stroke="#000000"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                      ></path>
+                      <path
+                        d="M21 22H9M3 22H5.5"
+                        stroke="#000000"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                      ></path>
+                      <path
+                        d="M19 22V15"
+                        stroke="#000000"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                      ></path>
+                      <path
+                        d="M5 22V15"
+                        stroke="#000000"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                      ></path>
+                      <path
+                        d="M11.9999 2H7.47214C6.26932 2 5.66791 2 5.18461 2.2987C4.7013 2.5974 4.43234 3.13531 3.89443 4.21114L2.49081 7.75929C2.16652 8.57905 1.88279 9.54525 2.42867 10.2375C2.79489 10.7019 3.36257 11 3.99991 11C5.10448 11 5.99991 10.1046 5.99991 9C5.99991 10.1046 6.89534 11 7.99991 11C9.10448 11 9.99991 10.1046 9.99991 9C9.99991 10.1046 10.8953 11 11.9999 11C13.1045 11 13.9999 10.1046 13.9999 9C13.9999 10.1046 14.8953 11 15.9999 11C17.1045 11 17.9999 10.1046 17.9999 9C17.9999 10.1046 18.8953 11 19.9999 11C20.6373 11 21.205 10.7019 21.5712 10.2375C22.1171 9.54525 21.8334 8.57905 21.5091 7.75929L20.1055 4.21114C19.5676 3.13531 19.2986 2.5974 18.8153 2.2987C18.332 2 17.7306 2 16.5278 2H16"
+                        stroke="#000000"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      ></path>
+                    </g>
+                  </svg>
+                </button>
+              </div>
             </div>
           </div>
-          <div>
-            <p> Detail: </p>
+          <div className="md:w-2/3 grid grid-cols-1 gap-1 items-center pr-2 border-l-2">
+            <div className="font-medium text-xs md:text-base ml-2 md:ml-3">
+              Product:
+              <span className="ml-1 text-orange-based ">2</span>
+            </div>
+            <div className="font-medium text-xs md:text-base ml-2 md:ml-3">
+              Member since:
+              <span className="ml-1 text-orange-based ">24-08-2023</span>
+            </div>
           </div>
         </div>
 

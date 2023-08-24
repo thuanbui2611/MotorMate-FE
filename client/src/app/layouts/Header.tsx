@@ -1,10 +1,7 @@
-import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../store/ConfigureStore";
-import jwt_decode from "jwt-decode";
-import {
-  fetchUserFromToken,
-  signOut,
-} from "../../features/account/AccountSlice";
+
+import { signOut } from "../../pages/account/AccountSlice";
+import { Link, NavLink } from "react-router-dom";
 interface Props {}
 export default function Header(props: Props) {
   const dispatch = useAppDispatch();
@@ -12,12 +9,12 @@ export default function Header(props: Props) {
   return (
     <nav className="bg-black border-1 border-white shadow-white shadow-inner">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-        <a href="/" className="flex items-center">
+        <Link to="/" className="flex items-center">
           <img src="/favicon.ico" className="h-8 mr-3" alt="MotorMate Logo" />
           <span className=" text-white self-center text-2xl font-semibold whitespace-nowrap ">
             MotorMate
           </span>
-        </a>
+        </Link>
         {/* Search */}
         {/* <form className="flex items-center">
           <label htmlFor="simple-search" className="sr-only">
@@ -185,38 +182,38 @@ export default function Header(props: Props) {
         >
           <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-white md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-transparent ">
             <li>
-              <a
-                href="/"
+              <Link
+                to="/"
                 className="block py-2 pl-3 pr-4 text-black rounded font-bold shadow-md hover:bg-gray-100 md:hover:bg-transparent md:p-0 md:text-white md:hover:bg-orange-based md:px-4 md:py-2"
                 aria-current="page"
               >
                 Home
-              </a>
+              </Link>
             </li>
             <li>
-              <a
-                href="/about"
+              <Link
+                to="/about"
                 className="block py-2 pl-3 pr-4 text-black rounded font-bold shadow-md hover:bg-gray-100 md:hover:bg-transparent md:p-0 md:text-white md:hover:bg-orange-based md:px-4 md:py-2"
               >
                 About
-              </a>
+              </Link>
             </li>
             <li>
-              <a
-                href="/products"
+              <Link
+                to="/products"
                 className="block py-2 pl-3 pr-4 text-black rounded font-bold shadow-md hover:bg-gray-100 md:hover:bg-transparent md:p-0 md:text-white md:hover:bg-orange-based md:px-4 md:py-2"
               >
                 Rent Motorcycles
-              </a>
+              </Link>
             </li>
 
             <li>
-              <a
-                href="/contact"
+              <Link
+                to="/contact"
                 className="block py-2 pl-3 pr-4 text-black rounded font-bold shadow-md hover:bg-gray-100 md:hover:bg-transparent md:p-0 md:text-white md:hover:bg-orange-based md:px-4 md:py-2"
               >
                 Contact
-              </a>
+              </Link>
             </li>
           </ul>
         </div>

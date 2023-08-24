@@ -4,6 +4,7 @@ import agent from "../../app/api/agent";
 import { Cart } from "../../app/models/Cart";
 import ProductHomepage from "./ProductHomepage";
 import Loading from "../../app/components/Loading";
+import AdsHomepage from "../../app/components/AdsHomepage";
 
 export default function HomePage() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -21,7 +22,7 @@ export default function HomePage() {
       <div className="cover-page px-4 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16">
         <img
           className="cover-img"
-          src="/image/coverpage-00.jpg"
+          src={require("../../app/assets/images/coverpage-00.jpg")}
           alt="Cover website"
         />
 
@@ -205,56 +206,15 @@ export default function HomePage() {
 
           <div className="flex justify-center pb-10">
             {/* Ads */}
-            <>
-              <div className="ads-homepage-left">
-                <img
-                  className="w-full mb-4"
-                  src="https://www.1019rock.ca/wp-content/uploads/sites/24/2021/02/ROCK-Ad.jpg"
-                  alt="Left Advertisement"
-                />
-                <img
-                  className="w-full mb-4"
-                  src="https://cdn.shortpixel.ai/spai/q_lossy+w_949+to_webp+ret_img/mailfloss.com/storage/2019/08/gif7-Teasewithagif_a3efec178f7855a98595d16764b099cf.gif"
-                  alt="Left Advertisement"
-                />
-                <img
-                  className="w-full mb-4"
-                  src="https://mailbakery.s3.amazonaws.com/wp-content/uploads/2015/06/26160320/neiman_marcus.gif"
-                  alt="Left Advertisement"
-                />
-                <img
-                  className="w-full mb-4"
-                  src="https://blog.hubspot.com/hs-fs/hubfs/email-marketing-examples-starbucks.gif?width=400&height=530&name=email-marketing-examples-starbucks.gif"
-                  alt="Left Advertisement"
-                />
-                <img
-                  className="w-full mb-4"
-                  src="https://storage.pixteller.com/designs/designs-videos/2086929-5fe0bd38247fa/thumb.gif"
-                  alt="Left Advertisement"
-                />
-              </div>
-              <div className="ads-homepage-right">
-                <img
-                  className="w-full mb-4"
-                  src="https://mailbakery.s3.amazonaws.com/wp-content/uploads/2015/06/26160324/kohls.gif"
-                  alt="Left Advertisement"
-                />
-                <img
-                  className="w-full mb-4"
-                  src="https://i.pinimg.com/originals/2b/13/92/2b1392f3215cd433fb7530e3959a38c7.gif"
-                  alt="Left Advertisement"
-                />
-                <img
-                  className="w-full mb-4"
-                  src="https://storage.pixteller.com/designs/designs-videos/2086947-5fe0b6b06a62d/thumb.gif"
-                  alt="Left Advertisement"
-                />
-              </div>
-            </>
+            <AdsHomepage />
             {/* End ads */}
 
             <div className="homepage-welcome">
-              <img className="w-full mb-4" src="/image/image1.png" alt="" />
+              <img
+                className="w-full mb-4"
+                src={require("../../app/assets/images/image1.png")}
+                alt=""
+              />
               <p className="leading-loose md:text-base text-sm">
                 Justo et eos et ut takimata sed sadipscing dolore lorem, et
                 elitr labore labore voluptua no rebum sed, stet voluptua amet

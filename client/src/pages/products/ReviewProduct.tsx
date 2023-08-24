@@ -1,43 +1,10 @@
+import AdsReviewProduct from "../../app/components/AdsReviewProduct";
+
 export default function ReviewProduct() {
   return (
     <>
       {/* Ads */}
-      <>
-        <div className="ads-productDetail-left">
-          <img
-            className="w-full mb-4"
-            src="https://mailbakery.s3.amazonaws.com/wp-content/uploads/2015/06/26160320/neiman_marcus.gif"
-            alt="Left Advertisement"
-          />
-          <img
-            className="w-full mb-4"
-            src="https://blog.hubspot.com/hs-fs/hubfs/email-marketing-examples-starbucks.gif?width=400&height=530&name=email-marketing-examples-starbucks.gif"
-            alt="Left Advertisement"
-          />
-          <img
-            className="w-full mb-4"
-            src="https://storage.pixteller.com/designs/designs-videos/2086929-5fe0bd38247fa/thumb.gif"
-            alt="Left Advertisement"
-          />
-        </div>
-        <div className="ads-productDetail-right">
-          <img
-            className="w-full mb-4"
-            src="https://www.1019rock.ca/wp-content/uploads/sites/24/2021/02/ROCK-Ad.jpg"
-            alt="Left Advertisement"
-          />
-          <img
-            className="w-full mb-4"
-            src="https://cdn.shortpixel.ai/spai/q_lossy+w_949+to_webp+ret_img/mailfloss.com/storage/2019/08/gif7-Teasewithagif_a3efec178f7855a98595d16764b099cf.gif"
-            alt="Left Advertisement"
-          />
-          <img
-            className="w-full mb-4"
-            src="https://mailbakery.s3.amazonaws.com/wp-content/uploads/2015/06/26160320/neiman_marcus.gif"
-            alt="Left Advertisement"
-          />
-        </div>
-      </>
+      <AdsReviewProduct />
 
       {/* End Ads */}
       <div className="py-12 px-4 md:px-6 2xl:px-0 2xl:container 2xl:mx-auto flex justify-center items-center">

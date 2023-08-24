@@ -1,34 +1,42 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
-import App from "./app/layouts/App";
 import reportWebVitals from "./reportWebVitals";
-import { Router } from "react-router-dom";
+import { RouterProvider } from "react-router-dom";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import "react-toastify/dist/ReactToastify.css";
-import { createBrowserHistory } from "history";
 import { StoreProvider } from "./app/context/StoreContext";
 import { store } from "./app/store/ConfigureStore";
 import { Provider } from "react-redux";
+import { router } from "./app/routes/router";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 
-export const history = createBrowserHistory();
-
 root.render(
+  // <React.StrictMode>
+  //   <GoogleOAuthProvider
+  //     clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID as string}
+  //   >
+  //     <Router history={history}>
+  //       <StoreProvider>
+  //         <Provider store={store}>
+  //           <App />
+  //         </Provider>
+  //       </StoreProvider>
+  //     </Router>
+  //   </GoogleOAuthProvider>
+  // </React.StrictMode>
   <React.StrictMode>
     <GoogleOAuthProvider
       clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID as string}
     >
-      <Router history={history}>
+      <Provider store={store}>
         <StoreProvider>
-          <Provider store={store}>
-            <App />
-          </Provider>
+          <RouterProvider router={router} />
         </StoreProvider>
-      </Router>
+      </Provider>
     </GoogleOAuthProvider>
   </React.StrictMode>
 );

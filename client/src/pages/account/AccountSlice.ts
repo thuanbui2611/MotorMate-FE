@@ -4,7 +4,6 @@ import { FieldValues } from "react-hook-form";
 import agentTest from "../../app/api/agentTest";
 import jwt_decode from "jwt-decode";
 import { toast } from "react-toastify";
-import { history } from "../..";
 
 interface AccountState {
   user: User | null;

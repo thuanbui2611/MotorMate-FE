@@ -1,19 +1,19 @@
-import LoginGoogle from "./LoginGoogle";
+import LoginGoogle from "../../app/components/LoginGoogle";
 import { FieldValues, useForm } from "react-hook-form";
 import { TextField } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
-import { useHistory } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/store/ConfigureStore";
 import { signInUser } from "./AccountSlice";
 import { toast } from "react-toastify";
 import Loading from "../../app/components/Loading";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   const user = useAppSelector((state) => state.account.user);
-  const history = useHistory();
+  const navigate = useNavigate();
   if (user) {
-    history.goBack();
+    navigate(-1);
   }
   const {
     register,
@@ -161,7 +161,7 @@ export default function Login() {
                 />
               </div>
 
-              <div className="flex-row">
+              <div className="flex-row-login">
                 <div>
                   <input type="radio" className="md:mb-1" />
                   <label> Remember me</label>

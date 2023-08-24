@@ -1,14 +1,11 @@
 import { GoogleLogin, CredentialResponse } from "@react-oauth/google";
-import agentTest from "../../app/api/agentTest";
-import { useHistory } from "react-router-dom";
-import { useAppDispatch } from "../../app/store/ConfigureStore";
-import { signInByGoogle } from "./AccountSlice";
+import { useAppDispatch } from "../store/ConfigureStore";
+import { signInByGoogle } from "../../pages/account/AccountSlice";
 import { useState } from "react";
-import Loading from "../../app/components/Loading";
+import Loading from "./Loading";
 
 export default function LoginGoogle() {
   const [loading, setLoading] = useState(false);
-  const history = useHistory();
   const dispatch = useAppDispatch();
 
   const handleError = () => {
@@ -17,9 +14,7 @@ export default function LoginGoogle() {
   const handleSuccess = async (response: CredentialResponse) => {
     setLoading(true);
     try {
-      const data = await dispatch(
-        signInByGoogle(response.credential as string)
-      );
+      await dispatch(signInByGoogle(response.credential as string));
     } catch (error) {
       console.log("Error:", error);
     }
