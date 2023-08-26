@@ -1,8 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
+import { BrandSlice } from "../../pages/brand/BrandSlice";
 
 export const store = configureStore({
-  reducer: {},
+  reducer: {
+    brand: BrandSlice.reducer,
+  },
 });
 
 export type RootState = ReturnType<typeof store.getState>;
