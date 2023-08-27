@@ -1,24 +1,48 @@
 import { useEffect, useState } from "react";
 import Breadcrumb from "../../app/components/Breadcrumb";
 import { useAppDispatch, useAppSelector } from "../../app/store/ConfigureStore";
-import { brandSelectors, getBrandsAsync } from "./BrandSlice";
+import { brandSelectors, deleteBrandAsync, getBrandsAsync } from "./BrandSlice";
 import Loader from "../../app/components/Loader";
 import Pagination from "../../app/components/Pagination";
 import BrandForm from "./BrandForm";
 import { Brand } from "../../app/models/Brand";
+import ConfirmDeleteDialog from "../../app/components/ConfirmDeleteDialog";
 
 export default function BrandPage() {
+  const [actionName, setActionName] = useState(String);
   const [openEditForm, setOpenEditForm] = useState(false);
-  const [selectedBrand, setSelectedBrand] = useState<Brand | null>(null);
-
-  const handleOpenEditForm = (brand: Brand) => {
-    setOpenEditForm((cur) => !cur);
-    setSelectedBrand(brand);
-  };
-  const handleOpenCreateForm = () => setOpenEditForm((cur) => !cur);
+  const [selectedBrand, setSelectedBrand] = useState<Brand | undefined>(
+    undefined
+  );
+  const [confirmDeleteDiaglog, setConfirmDeleteDiaglog] = useState(false);
+  const [brandDeleted, setBrandDeleted] = useState<Brand>({} as Brand);
   const brands = useAppSelector(brandSelectors.selectAll);
   const brandLoaded = useAppSelector((state) => state.brand.brandLoaded);
   const dispatch = useAppDispatch();
+
+  const handleSelectBrand = (actionName: string, brand?: Brand) => {
+    setOpenEditForm((cur) => !cur);
+    if (brand) {
+      setSelectedBrand(brand);
+    }
+    setActionName(actionName);
+  };
+
+  const cancelEditForm = () => {
+    setOpenEditForm((cur) => !cur);
+    setSelectedBrand(undefined);
+  };
+
+  async function handleDeleteBrand(id: string) {
+    console.log("Reach delete in index");
+    await dispatch(deleteBrandAsync(id));
+  }
+  const openConfirmDeleteDiaglog = (brand: Brand) => {
+    setConfirmDeleteDiaglog((cur) => !cur);
+    setBrandDeleted(brand);
+    console.log("Reach open confirm delete dialog, brand: ", brand);
+  };
+  const cancelConfirmDeleteDiaglog = () => setConfirmDeleteDiaglog(false);
 
   useEffect(() => {
     if (!brandLoaded) {
@@ -32,6 +56,54 @@ export default function BrandPage() {
     <>
       <Breadcrumb pageName="Brand" />
       <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
+        <div className="flex justify-end">
+          <button
+            onClick={() => handleSelectBrand("Add a new brand")}
+            type="button"
+            className="flex items-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+          >
+            <svg
+              className="h-5 w-5 mr-2"
+              viewBox="0 0 21.00 21.00"
+              version="1.1"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlnsXlink="http://www.w3.org/1999/xlink"
+              fill="#ffffff"
+              stroke="#ffffff"
+            >
+              <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+              <g
+                id="SVGRepo_tracerCarrier"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              ></g>
+              <g id="SVGRepo_iconCarrier">
+                <title>plus_circle [#ffffff]</title>
+                <desc>Created with Sketch.</desc> <defs> </defs>
+                <g
+                  id="Page-1"
+                  strokeWidth="0.00021000000000000004"
+                  fill="none"
+                  fillRule="evenodd"
+                >
+                  <g
+                    id="Dribbble-Light-Preview"
+                    transform="translate(-419.000000, -520.000000)"
+                    fill="#ffffff"
+                  >
+                    <g id="icons" transform="translate(56.000000, 160.000000)">
+                      <path
+                        d="M374.55,369 L377.7,369 L377.7,371 L374.55,371 L374.55,374 L372.45,374 L372.45,371 L369.3,371 L369.3,369 L372.45,369 L372.45,366 L374.55,366 L374.55,369 Z M373.5,378 C368.86845,378 365.1,374.411 365.1,370 C365.1,365.589 368.86845,362 373.5,362 C378.13155,362 381.9,365.589 381.9,370 C381.9,374.411 378.13155,378 373.5,378 L373.5,378 Z M373.5,360 C367.70085,360 363,364.477 363,370 C363,375.523 367.70085,380 373.5,380 C379.29915,380 384,375.523 384,370 C384,364.477 379.29915,360 373.5,360 L373.5,360 Z"
+                        id="plus_circle-[#ffffff]"
+                      ></path>
+                    </g>
+                  </g>
+                </g>
+              </g>
+            </svg>
+            <span>Add new brand</span>
+          </button>
+        </div>
         <div className="max-w-full overflow-x-auto">
           <table className="w-full table-auto">
             <thead>
@@ -68,28 +140,63 @@ export default function BrandPage() {
                   <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                     <div className="flex items-center space-x-3.5">
                       <button
-                        className="hover:text-primary"
-                        onClick={() => handleOpenEditForm(brand)}
+                        className="hover:text-primary hover:bg-primary/30 rounded-full "
+                        onClick={() => handleSelectBrand("Edit brand", brand)}
                       >
                         <svg
-                          className="fill-current"
-                          width="18"
-                          height="18"
-                          viewBox="0 0 18 18"
-                          fill="none"
+                          width="18px"
+                          height="18px"
+                          viewBox="0 -0.5 21 21"
+                          version="1.1"
                           xmlns="http://www.w3.org/2000/svg"
+                          xmlnsXlink="http://www.w3.org/1999/xlink"
+                          fill="none"
                         >
-                          <path
-                            d="M8.99981 14.8219C3.43106 14.8219 0.674805 9.50624 0.562305 9.28124C0.47793 9.11249 0.47793 8.88749 0.562305 8.71874C0.674805 8.49374 3.43106 3.20624 8.99981 3.20624C14.5686 3.20624 17.3248 8.49374 17.4373 8.71874C17.5217 8.88749 17.5217 9.11249 17.4373 9.28124C17.3248 9.50624 14.5686 14.8219 8.99981 14.8219ZM1.85605 8.99999C2.4748 10.0406 4.89356 13.5562 8.99981 13.5562C13.1061 13.5562 15.5248 10.0406 16.1436 8.99999C15.5248 7.95936 13.1061 4.44374 8.99981 4.44374C4.89356 4.44374 2.4748 7.95936 1.85605 8.99999Z"
-                            fill=""
-                          />
-                          <path
-                            d="M9 11.3906C7.67812 11.3906 6.60938 10.3219 6.60938 9C6.60938 7.67813 7.67812 6.60938 9 6.60938C10.3219 6.60938 11.3906 7.67813 11.3906 9C11.3906 10.3219 10.3219 11.3906 9 11.3906ZM9 7.875C8.38125 7.875 7.875 8.38125 7.875 9C7.875 9.61875 8.38125 10.125 9 10.125C9.61875 10.125 10.125 9.61875 10.125 9C10.125 8.38125 9.61875 7.875 9 7.875Z"
-                            fill=""
-                          />
+                          <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                          <g
+                            id="SVGRepo_tracerCarrier"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          ></g>
+                          <g id="SVGRepo_iconCarrier">
+                            {" "}
+                            <title>edit [#1483]</title>{" "}
+                            <desc>Created with Sketch.</desc> <defs> </defs>{" "}
+                            <g
+                              id="Page-1"
+                              stroke="none"
+                              strokeWidth="1"
+                              fill="none"
+                              fillRule="evenodd"
+                            >
+                              {" "}
+                              <g
+                                id="Dribbble-Light-Preview"
+                                transform="translate(-339.000000, -360.000000)"
+                                fill="#000000"
+                              >
+                                {" "}
+                                <g
+                                  id="icons"
+                                  transform="translate(56.000000, 160.000000)"
+                                >
+                                  {" "}
+                                  <path
+                                    d="M283,220 L303.616532,220 L303.616532,218.042095 L283,218.042095 L283,220 Z M290.215786,213.147332 L290.215786,210.51395 L296.094591,205.344102 L298.146966,207.493882 L292.903151,213.147332 L290.215786,213.147332 Z M299.244797,202.64513 L301.059052,204.363191 L299.645788,205.787567 L297.756283,203.993147 L299.244797,202.64513 Z M304,204.64513 L299.132437,200 L288.154133,209.687714 L288.154133,215.105237 L293.78657,215.105237 L304,204.64513 Z"
+                                    id="edit-[#1483]"
+                                  >
+                                    {" "}
+                                  </path>{" "}
+                                </g>{" "}
+                              </g>{" "}
+                            </g>{" "}
+                          </g>
                         </svg>
                       </button>
-                      <button className="hover:text-primary">
+                      <button
+                        className="hover:text-red-600 hover:bg-red-600/30 rounded-full p-1"
+                        onClick={() => openConfirmDeleteDiaglog(brand)}
+                      >
                         <svg
                           className="fill-current"
                           width="18"
@@ -116,25 +223,6 @@ export default function BrandPage() {
                           />
                         </svg>
                       </button>
-                      <button className="hover:text-primary">
-                        <svg
-                          className="fill-current"
-                          width="18"
-                          height="18"
-                          viewBox="0 0 18 18"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M16.8754 11.6719C16.5379 11.6719 16.2285 11.9531 16.2285 12.3187V14.8219C16.2285 15.075 16.0316 15.2719 15.7785 15.2719H2.22227C1.96914 15.2719 1.77227 15.075 1.77227 14.8219V12.3187C1.77227 11.9812 1.49102 11.6719 1.12539 11.6719C0.759766 11.6719 0.478516 11.9531 0.478516 12.3187V14.8219C0.478516 15.7781 1.23789 16.5375 2.19414 16.5375H15.7785C16.7348 16.5375 17.4941 15.7781 17.4941 14.8219V12.3187C17.5223 11.9531 17.2129 11.6719 16.8754 11.6719Z"
-                            fill=""
-                          />
-                          <path
-                            d="M8.55074 12.3469C8.66324 12.4594 8.83199 12.5156 9.00074 12.5156C9.16949 12.5156 9.31012 12.4594 9.45074 12.3469L13.4726 8.43752C13.7257 8.1844 13.7257 7.79065 13.5007 7.53752C13.2476 7.2844 12.8539 7.2844 12.6007 7.5094L9.64762 10.4063V2.1094C9.64762 1.7719 9.36637 1.46252 9.00074 1.46252C8.66324 1.46252 8.35387 1.74377 8.35387 2.1094V10.4063L5.40074 7.53752C5.14762 7.2844 4.75387 7.31252 4.50074 7.53752C4.24762 7.79065 4.27574 8.1844 4.50074 8.43752L8.55074 12.3469Z"
-                            fill=""
-                          />
-                        </svg>
-                      </button>
                     </div>
                   </td>
                 </tr>
@@ -147,7 +235,19 @@ export default function BrandPage() {
         </div>
       </div>
       {openEditForm && (
-        <BrandForm brand={selectedBrand} onClose={handleOpenCreateForm} />
+        <BrandForm
+          brand={selectedBrand}
+          cancelEdit={cancelEditForm}
+          actionName={actionName}
+        />
+      )}
+
+      {confirmDeleteDiaglog && (
+        <ConfirmDeleteDialog
+          objectName={brandDeleted.name}
+          actionDelete={() => handleDeleteBrand(brandDeleted.id)}
+          cancelDelete={cancelConfirmDeleteDiaglog}
+        />
       )}
     </>
   );

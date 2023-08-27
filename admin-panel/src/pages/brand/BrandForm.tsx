@@ -6,72 +6,93 @@ import {
   CardBody,
   CardFooter,
   Typography,
-  Input,
-  Checkbox,
 } from "@material-tailwind/react";
 import { Brand } from "../../app/models/Brand";
 import { useForm, FieldValues } from "react-hook-form";
 import { useAppDispatch } from "../../app/store/ConfigureStore";
-
+import AppTextInput from "../../app/components/AppTextInput";
+import { useEffect } from "react";
+import { addBrandAsync, updateBrandAsync } from "./BrandSlice";
+import { toast } from "react-toastify";
+import { LoadingButton } from "@mui/lab";
 interface Props {
-  brand: Brand | null;
-  onClose: () => void;
+  brand?: Brand | undefined;
+  cancelEdit: () => void;
+  actionName: string;
 }
 
-export default function BrandForm(props: Props) {
+export default function BrandForm({ brand, cancelEdit, actionName }: Props) {
   const {
-    register,
+    control,
+    reset,
     handleSubmit,
     formState: { isSubmitting, errors },
   } = useForm({
     mode: "all",
   });
 
+  useEffect(() => {
+    if (brand) reset(brand);
+  }, [brand, reset]);
+
   const dispatch = useAppDispatch();
-  async function submitForm(data: FieldValues) {}
+  async function submitForm(data: FieldValues) {
+    try {
+      console.log("Reach submit form");
+      if (brand) {
+        console.log("Reach update brand");
+        await dispatch(updateBrandAsync(data));
+      } else {
+        console.log("Reach add brand");
+        await dispatch(addBrandAsync(data));
+      }
+      cancelEdit();
+    } catch (error: any) {
+      toast.error("Error: " + error.message);
+    }
+  }
   return (
     <>
       <Dialog
         size="xs"
         open={true}
-        handler={props.onClose}
+        handler={cancelEdit}
         className="bg-transparent shadow-none"
       >
         <Card className="mx-auto w-full max-w-[24rem]">
-          <CardHeader
-            variant="gradient"
-            color="blue"
-            className="mb-4 grid h-28 place-items-center"
-          >
-            <Typography variant="h3" color="white">
-              Sign In
+          <CardHeader className="text-center">
+            <Typography
+              variant="h3"
+              className="text-center py-4 bg-orange-500 text-white rounded-sm dark:bg-boxdark dark:text-white"
+            >
+              {actionName}
             </Typography>
           </CardHeader>
-          <CardBody className="flex flex-col gap-4">
-            <Input label="Email" size="lg" crossOrigin={undefined} />
-            <Input label="Password" size="lg" crossOrigin={undefined} />
-            <div className="-ml-2.5">
-              <Checkbox label="Remember Me" crossOrigin={undefined} />
-            </div>
-          </CardBody>
-          <CardFooter className="pt-0">
-            <Button variant="gradient" onClick={props.onClose} fullWidth>
-              Sign In
-            </Button>
-            <Typography variant="small" className="mt-6 flex justify-center">
-              Don&apos;t have an account?
-              <Typography
-                as="a"
-                href="#signup"
-                variant="small"
-                color="blue"
-                className="ml-1 font-bold"
-                onClick={props.onClose}
+          <form onSubmit={handleSubmit(submitForm)}>
+            <CardBody className="flex flex-col gap-4">
+              <AppTextInput control={control} name="name" label="Brand name" />
+              <AppTextInput control={control} name="logo" label="Logo brand" />
+            </CardBody>
+            <CardFooter className="pt-0 flex flex-row justify-between gap-10">
+              <LoadingButton
+                className="bg-gradient-to-tr from-light-blue-600 to-light-blue-400 text-white shadow-md shadow-light-blue-500/20 hover:shadow-lg hover:shadow-light-blue-500/40 active:opacity-[0.85]"
+                loading={isSubmitting}
+                type="submit"
+                variant="contained"
+                color="success"
               >
-                Sign up
-              </Typography>
-            </Typography>
-          </CardFooter>
+                <span className=" font-bold">Confirm</span>
+              </LoadingButton>
+              <Button
+                variant="gradient"
+                color="red"
+                size="lg"
+                onClick={cancelEdit}
+              >
+                Cancel
+              </Button>
+            </CardFooter>
+          </form>
         </Card>
       </Dialog>
     </>

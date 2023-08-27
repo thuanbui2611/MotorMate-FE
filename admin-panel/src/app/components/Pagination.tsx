@@ -27,7 +27,7 @@ export default function Pagination() {
   };
 
   return (
-    <div className="flex flex-wrap sm:flex-nowrap justify-center items-center gap-4 ">
+    <div className="flex flex-wrap sm:flex-nowrap justify-center items-center gap-4 pt-2">
       <Button
         variant="text"
         className="flex items-center gap-2"

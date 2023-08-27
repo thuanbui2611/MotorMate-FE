@@ -7,6 +7,7 @@ import { Brand, BrandParams } from "../../app/models/Brand";
 import { FieldValues } from "react-hook-form";
 import agent from "../../app/api/agent";
 import { RootState } from "../../app/store/ConfigureStore";
+import { toast } from "react-toastify";
 
 interface BrandState {
   brand: Brand | null;
@@ -37,6 +38,46 @@ export const getBrandsAsync = createAsyncThunk<
   }
 });
 
+export const addBrandAsync = createAsyncThunk<Brand, FieldValues>(
+  "brand/addBrandAsync",
+  async (data, ThunkAPI) => {
+    try {
+      const response = await agent.Brand.create(data);
+      return response;
+    } catch (error: any) {
+      return ThunkAPI.rejectWithValue({ error: error.data });
+    }
+  }
+);
+
+export const updateBrandAsync = createAsyncThunk<Brand, FieldValues>(
+  "brand/updateBrandAsync",
+  async (data, ThunkAPI) => {
+    try {
+      console.log("Updating brand...", data);
+      const response = await agent.Brand.update(data);
+      return response;
+    } catch (error: any) {
+      return ThunkAPI.rejectWithValue({ error: error.data });
+    }
+  }
+);
+
+export const deleteBrandAsync = createAsyncThunk(
+  "brand/deleteBrandAsync",
+  async (id: string) => {
+    try {
+      console.log("Reach deleting... Id:", id);
+      await agent.Brand.delete(id);
+      toast.success("Delete brand successfully!");
+      return id;
+    } catch (error: any) {
+      toast.error(error.data.message);
+      throw error;
+    }
+  }
+);
+
 function initParams() {
   return {
     pageNumber: 1,
@@ -59,6 +100,9 @@ export const BrandSlice = createSlice({
     resetBrandParams: (state) => {
       state.brandParams = initParams();
     },
+    setBrand: (state, action) => {
+      brandsAdapter.upsertOne(state, action.payload);
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getBrandsAsync.pending, (state, action) => {});
@@ -68,6 +112,20 @@ export const BrandSlice = createSlice({
     });
     builder.addCase(getBrandsAsync.rejected, (state, action) => {
       console.log(action);
+    });
+
+    builder.addCase(addBrandAsync.fulfilled, (state, action) => {
+      toast.success("Add brand successfully!");
+      brandsAdapter.addOne(state, action.payload);
+    });
+
+    builder.addCase(updateBrandAsync.fulfilled, (state, action) => {
+      toast.success("Update brand successfully!");
+      brandsAdapter.upsertOne(state, action.payload);
+    });
+
+    builder.addCase(deleteBrandAsync.fulfilled, (state, action) => {
+      brandsAdapter.removeOne(state, action.payload);
     });
   },
 });
