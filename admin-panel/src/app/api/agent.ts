@@ -74,7 +74,7 @@ const requests = {
   get: (url: string, params?: URLSearchParams) =>
     axios.get(url, { params }).then(responseBody),
   post: (url: string, body: {}) => axios.post(url, body).then(responseBody),
-  put: (url: string, body: {}) => axios.put(url, body).then(responseBody),
+  patch: (url: string, body: {}) => axios.patch(url, body).then(responseBody),
   delete: (url: string) => axios.delete(url).then(responseBody),
 };
 
@@ -89,7 +89,7 @@ const Brand = {
   list: (params: URLSearchParams) => requests.get("api/brand", params),
   details: (id: string) => requests.get(`api/brand/${id}`),
   create: (values: {}) => requests.post("api/brand", values),
-  update: (values: {}) => requests.put("api/brand", values),
+  update: (id: string, values: {}) => requests.patch(`api/brand/${id}`, values),
   delete: (id: string) => requests.delete(`api/brand/${id}`),
 };
 

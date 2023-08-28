@@ -55,7 +55,7 @@ export const updateBrandAsync = createAsyncThunk<Brand, FieldValues>(
   async (data, ThunkAPI) => {
     try {
       console.log("Updating brand...", data);
-      const response = await agent.Brand.update(data);
+      const response = await agent.Brand.update(data.id, data);
       return response;
     } catch (error: any) {
       return ThunkAPI.rejectWithValue({ error: error.data });
@@ -105,14 +105,20 @@ export const BrandSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(getBrandsAsync.pending, (state, action) => {});
-    builder.addCase(getBrandsAsync.fulfilled, (state, action) => {
-      brandsAdapter.setAll(state, action.payload);
-      state.brandLoaded = false;
-    });
-    builder.addCase(getBrandsAsync.rejected, (state, action) => {
-      console.log(action);
-    });
+    builder
+      .addCase(getBrandsAsync.pending, (state) => {
+        if (state.brandLoaded === false) {
+          state.brandLoaded = true;
+        }
+      })
+      .addCase(getBrandsAsync.fulfilled, (state, action) => {
+        brandsAdapter.setAll(state, action.payload);
+        state.brandLoaded = false;
+      })
+      .addCase(getBrandsAsync.rejected, (state, action) => {
+        console.log("Get brand rejected: ", action);
+        state.brandLoaded = false;
+      });
 
     builder.addCase(addBrandAsync.fulfilled, (state, action) => {
       toast.success("Add brand successfully!");

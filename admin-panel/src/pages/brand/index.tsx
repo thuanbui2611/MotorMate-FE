@@ -11,9 +11,7 @@ import ConfirmDeleteDialog from "../../app/components/ConfirmDeleteDialog";
 export default function BrandPage() {
   const [actionName, setActionName] = useState(String);
   const [openEditForm, setOpenEditForm] = useState(false);
-  const [selectedBrand, setSelectedBrand] = useState<Brand | undefined>(
-    undefined
-  );
+  const [selectedBrand, setSelectedBrand] = useState<Brand | null>(null);
   const [confirmDeleteDiaglog, setConfirmDeleteDiaglog] = useState(false);
   const [brandDeleted, setBrandDeleted] = useState<Brand>({} as Brand);
   const brands = useAppSelector(brandSelectors.selectAll);
@@ -30,17 +28,15 @@ export default function BrandPage() {
 
   const cancelEditForm = () => {
     setOpenEditForm((cur) => !cur);
-    setSelectedBrand(undefined);
+    setSelectedBrand(null);
   };
 
   async function handleDeleteBrand(id: string) {
-    console.log("Reach delete in index");
     await dispatch(deleteBrandAsync(id));
   }
   const openConfirmDeleteDiaglog = (brand: Brand) => {
     setConfirmDeleteDiaglog((cur) => !cur);
     setBrandDeleted(brand);
-    console.log("Reach open confirm delete dialog, brand: ", brand);
   };
   const cancelConfirmDeleteDiaglog = () => setConfirmDeleteDiaglog(false);
 
@@ -48,7 +44,7 @@ export default function BrandPage() {
     if (!brandLoaded) {
       dispatch(getBrandsAsync());
     }
-  }, [brandLoaded, dispatch]);
+  }, [dispatch]);
 
   return brandLoaded ? (
     <Loader />
@@ -124,8 +120,14 @@ export default function BrandPage() {
             <tbody>
               {brands.map((brand) => (
                 <tr key={brand.id}>
-                  <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
-                    <h5 className="font-medium text-black dark:text-white">
+                  <td className="flex items-center border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
+                    <div className="h-12 w-12 rounded-md">
+                      <img
+                        src="https://res.cloudinary.com/dmwvl1lok/image/upload/v1693227028/motormate/a7fpceccdmnrkkykz8tb.png"
+                        alt="logo"
+                      />
+                    </div>
+                    <h5 className="ml-4 font-medium text-black dark:text-white">
                       {brand.name}
                     </h5>
                   </td>

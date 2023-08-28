@@ -55,10 +55,15 @@ export default function ConfirmDeleteDialog({
             className="transition-all rounded-lg bg-gradient-to-tr from-green-600 to-green-400 shadow-md shadow-green-500/20 hover:shadow-lg hover:shadow-green-500/40 active:opacity-[0.85]"
             loading={isSubmitting}
             onClick={() => onDelete()}
+            variant="contained"
           >
-            {!isSubmitting && (
-              <span className="font-bold text-xs text-white ">Confirm</span>
-            )}
+            <span
+              className={`font-bold text-xs ${
+                isSubmitting ? "text-transparent" : "text-white"
+              }`}
+            >
+              Confirm
+            </span>
           </LoadingButton>
         </DialogFooter>
       </Dialog>
