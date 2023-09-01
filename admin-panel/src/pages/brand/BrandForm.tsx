@@ -37,6 +37,7 @@ export default function BrandForm({ brand, cancelEdit, actionName }: Props) {
     name: string;
     url: string;
   } | null>(null);
+  const [deleteCurrentImage, setDeleteCurrentImage] = useState<boolean>(false);
 
   useEffect(() => {
     if (brand) reset(brand);
@@ -50,6 +51,7 @@ export default function BrandForm({ brand, cancelEdit, actionName }: Props) {
       name: e.target.files[0].name,
       url: URL.createObjectURL(e.target.files[0]),
     });
+    setDeleteCurrentImage(false);
   };
 
   async function submitForm(data: FieldValues) {
@@ -67,9 +69,13 @@ export default function BrandForm({ brand, cancelEdit, actionName }: Props) {
           formData.publicId = getImage.publicId;
         }
       }
+      if (deleteCurrentImage) {
+        formData.imageUrl = undefined;
+        formData.publicId = undefined;
+      }
       console.log("Form data:", formData);
       if (brand) {
-        if (imageUploaded) {
+        if (imageUploaded || deleteCurrentImage) {
           await deleteImage(brand.image.publicId);
         }
         await dispatch(updateBrandAsync(formData));
@@ -177,12 +183,16 @@ export default function BrandForm({ brand, cancelEdit, actionName }: Props) {
                 </div>
               )}
 
-              {brand?.image && !imageReview && (
+              {brand?.image && !deleteCurrentImage && !imageReview && (
                 <div className="mb-5 rounded-md bg-[#F5F7FB] py-4 px-8">
                   <div className="flex items-center justify-between">
-                    <div
+                    <span className="truncate pr-3 text-base font-medium text-[#07074D]"></span>
+                    <button
                       className="text-[#07074D]"
-                      onClick={() => setImageReview(null)}
+                      onClick={() => {
+                        setImageUploaded(null);
+                        setDeleteCurrentImage(true);
+                      }}
                     >
                       <svg
                         width="10"
@@ -204,12 +214,13 @@ export default function BrandForm({ brand, cancelEdit, actionName }: Props) {
                           fill="currentColor"
                         />
                       </svg>
-                    </div>
+                    </button>
                   </div>
+
                   <img
                     className="pt-3"
-                    src={brand.image.image as string}
-                    alt="Logo brand"
+                    src={brand.image.image}
+                    alt="Logo brand preview"
                   />
                 </div>
               )}
