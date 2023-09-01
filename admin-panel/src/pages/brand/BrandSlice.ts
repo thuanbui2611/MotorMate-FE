@@ -85,7 +85,7 @@ export const deleteBrandAsync = createAsyncThunk(
 function initParams() {
   return {
     pageNumber: 1,
-    pageSize: 100,
+    pageSize: 5,
   };
 }
 
