@@ -24,10 +24,8 @@ axios.interceptors.response.use(
         response.data,
         JSON.parse(pagination)
       );
-      console.log("pagination res :", response);
       return response;
     }
-    console.log("Do not touch pagination");
     return response;
   },
   (error: AxiosError) => {
@@ -87,6 +85,7 @@ const Account = {
 
 const Brand = {
   list: (params: URLSearchParams) => requests.get("api/brand", params),
+  listTest: (params: URLSearchParams) => requests.get("api/brand", params),
   details: (id: string) => requests.get(`api/brand/${id}`),
   create: (values: {}) => requests.post("api/brand", values),
   update: (id: string, values: {}) => requests.patch(`api/brand/${id}`, values),

@@ -8,11 +8,14 @@ import { FieldValues } from "react-hook-form";
 import agent from "../../app/api/agent";
 import { RootState } from "../../app/store/ConfigureStore";
 import { toast } from "react-toastify";
+import { MetaData } from "../../app/models/Pagination";
+import { act } from "@testing-library/react";
 
 interface BrandState {
   brand: Brand | null;
   brandLoaded: boolean;
   brandParams: BrandParams;
+  metaData: MetaData | null;
 }
 
 const brandsAdapter = createEntityAdapter<Brand>();
@@ -32,7 +35,8 @@ export const getBrandsAsync = createAsyncThunk<
   const params = getAxiosParams(ThunkAPI.getState().brand.brandParams);
   try {
     const response = await agent.Brand.list(params);
-    return response;
+    ThunkAPI.dispatch(setMetaData(response.metaData));
+    return response.items;
   } catch (error: any) {
     return ThunkAPI.rejectWithValue({ error: error.data });
   }
@@ -81,7 +85,7 @@ export const deleteBrandAsync = createAsyncThunk(
 function initParams() {
   return {
     pageNumber: 1,
-    pageSize: 10,
+    pageSize: 100,
   };
 }
 
@@ -91,29 +95,36 @@ export const BrandSlice = createSlice({
     brand: null,
     brandLoaded: false,
     brandParams: initParams(),
+    metaData: null,
   }),
   reducers: {
     setBrandParams: (state, action) => {
-      state.brandLoaded = false;
       state.brandParams = { ...state.brandParams, ...action.payload };
     },
+
     resetBrandParams: (state) => {
       state.brandParams = initParams();
     },
-    setBrand: (state, action) => {
-      brandsAdapter.upsertOne(state, action.payload);
+    // setBrand: (state, action) => {
+    //   brandsAdapter.upsertOne(state, action.payload);
+    // },
+    setMetaData: (state, action) => {
+      state.metaData = action.payload;
+    },
+
+    setPageNumber: (state, action) => {
+      state.brandLoaded = false;
+      state.brandParams = { ...state.brandParams, ...action.payload };
     },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getBrandsAsync.pending, (state) => {
-        if (state.brandLoaded === false) {
-          state.brandLoaded = true;
-        }
-      })
       .addCase(getBrandsAsync.fulfilled, (state, action) => {
         brandsAdapter.setAll(state, action.payload);
         state.brandLoaded = false;
+      })
+      .addCase(getBrandsAsync.pending, (state, action) => {
+        state.brandLoaded = true;
       })
       .addCase(getBrandsAsync.rejected, (state, action) => {
         console.log("Get brand rejected: ", action);
@@ -140,4 +151,5 @@ export const brandSelectors = brandsAdapter.getSelectors(
   (state: RootState) => state.brand
 );
 
-export const { setBrandParams, resetBrandParams } = BrandSlice.actions;
+export const { setBrandParams, resetBrandParams, setMetaData, setPageNumber } =
+  BrandSlice.actions;

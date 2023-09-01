@@ -16,7 +16,7 @@ import { addBrandAsync, updateBrandAsync } from "./BrandSlice";
 import { toast } from "react-toastify";
 import { LoadingButton } from "@mui/lab";
 import "./style.css";
-import { uploadImageToCloudinary } from "../../app/utils/CloudinaryUpload";
+import { uploadImage } from "../../app/utils/Cloudinary";
 interface Props {
   brand: Brand | null;
   cancelEdit: () => void;
@@ -54,24 +54,29 @@ export default function BrandForm({ brand, cancelEdit, actionName }: Props) {
       url: URL.createObjectURL(e.target.files[0]),
     });
     setLogoBrand(null);
-    console.log(e.target.files[0]);
   };
 
   async function submitForm(data: FieldValues) {
     try {
-      let getImageURL;
+      let getImage;
       if (imageUploaded) {
-        getImageURL = await uploadImageToCloudinary(imageUploaded as any);
+        getImage = await uploadImage(imageUploaded as any);
       }
       //Modify form data request to server
       const formData = {
         name: data.name,
-        logo: getImageURL,
+        logo: getImage?.url,
+        //publicId: getImage?.public_id,
       };
-      if (brand) {
-        await dispatch(updateBrandAsync(formData));
+      if (getImage) {
+        if (brand) {
+          await dispatch(updateBrandAsync(formData));
+        } else {
+          await dispatch(addBrandAsync(formData));
+        }
       } else {
-        await dispatch(addBrandAsync(formData));
+        toast.error("Error: " + "Something wrong when upload image!");
+        return new Error("Something wrong when upload image!");
       }
       cancelEdit();
     } catch (error: any) {

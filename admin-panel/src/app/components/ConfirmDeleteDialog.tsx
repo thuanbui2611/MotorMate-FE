@@ -20,7 +20,6 @@ export default function ConfirmDeleteDialog({
 }: Props) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const onDelete = async () => {
-    console.log("Reach delete in dialog");
     setIsSubmitting(true);
     await actionDelete();
     cancelDelete();

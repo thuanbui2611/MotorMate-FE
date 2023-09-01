@@ -9,7 +9,6 @@ function App() {
   useEffect(() => {
     setTimeout(() => setLoading(false), 50);
   }, []);
-
   return loading ? (
     <Loader />
   ) : (
