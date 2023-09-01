@@ -29,7 +29,30 @@ export default function BrandPage() {
   const [selectedFiles, setSelectedFiles] = useState<FileList | null>(null);
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
-    setSelectedFiles(files);
+    setSelectedFiles((prevFiles) => {
+      if (prevFiles) {
+        // Convert the FileList to an array
+        const prevFilesArray = Array.from(prevFiles);
+        // Convert the new files to an array
+        const newFilesArray = Array.from(files || []);
+        // Concatenate the previous and new files arrays
+        const combinedFilesArray = [...prevFilesArray, ...newFilesArray];
+        // Convert the combined files array back to a FileList
+        const combinedFilesList = createFileList(combinedFilesArray);
+        return combinedFilesList;
+      }
+      // If there were no previous files, simply use the new FileList
+      return files;
+    });
+    console.log("Selected file:", selectedFiles);
+  };
+
+  const createFileList = (files: File[]) => {
+    const dataTransfer = new DataTransfer();
+    files.forEach((file) => {
+      dataTransfer.items.add(file);
+    });
+    return dataTransfer.files;
   };
 
   const handleSubmit = async () => {
@@ -70,10 +93,9 @@ export default function BrandPage() {
   };
 
   async function handleDeleteBrand(brandDeleted: Brand) {
-    // if (brandDeleted.logo) add public id
-    // {
-    //   await deleteImage(brandDeleted.logo);
-    // }
+    if (brandDeleted.image.publicId) {
+      await deleteImage(brandDeleted.image.publicId);
+    }
     await dispatch(deleteBrandAsync(brandDeleted.id));
   }
   const openConfirmDeleteDiaglog = (brand: Brand) => {
@@ -152,7 +174,7 @@ export default function BrandPage() {
             </div> */}
             {/* End of test upload multiple images */}
             {/* Test delete multiple images */}
-            <button onClick={handleDeleteImages}>Delete images</button>
+            {/* <button onClick={handleDeleteImages}>Delete images</button> */}
             {/* End of test delete multiple images */}
           </div>
           <div className="max-w-full overflow-x-auto">
@@ -184,7 +206,8 @@ export default function BrandPage() {
                       <tr key={brand.id}>
                         <td className="flex items-center border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
                           <div className="h-12 w-12 rounded-md">
-                            <img src={brand.logo} alt="logo" />
+                            <img src={brand.image.image} alt="logo" />
+                            {/* <video src={brand.logo} autoPlay muted loop></video> */}
                           </div>
                           <h5 className="ml-4 font-medium text-black dark:text-white">
                             {brand.name}
@@ -223,7 +246,7 @@ export default function BrandPage() {
                                 ></g>
                                 <g id="SVGRepo_iconCarrier">
                                   <title>edit [#1483]</title>
-                                  <desc>Created with Sketch.</desc>{" "}
+                                  <desc>Created with Sketch.</desc>
                                   <defs> </defs>
                                   <g
                                     id="Page-1"

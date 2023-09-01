@@ -16,7 +16,7 @@ import { addBrandAsync, updateBrandAsync } from "./BrandSlice";
 import { toast } from "react-toastify";
 import { LoadingButton } from "@mui/lab";
 import "./style.css";
-import { uploadImage } from "../../app/utils/Cloudinary";
+import { deleteImage, uploadImage } from "../../app/utils/Cloudinary";
 interface Props {
   brand: Brand | null;
   cancelEdit: () => void;
@@ -37,7 +37,6 @@ export default function BrandForm({ brand, cancelEdit, actionName }: Props) {
     name: string;
     url: string;
   } | null>(null);
-  const [logoBrand, setLogoBrand] = useState<string | null>(null);
 
   useEffect(() => {
     if (brand) reset(brand);
@@ -45,39 +44,39 @@ export default function BrandForm({ brand, cancelEdit, actionName }: Props) {
 
   const dispatch = useAppDispatch();
 
-  if (brand?.logo) setLogoBrand(brand.logo);
-
   const handleImageChange = (e: any) => {
     setImageUploaded(e.target.files[0]);
     setImageReview({
       name: e.target.files[0].name,
       url: URL.createObjectURL(e.target.files[0]),
     });
-    setLogoBrand(null);
   };
 
   async function submitForm(data: FieldValues) {
     try {
-      let getImage;
-      if (imageUploaded) {
-        getImage = await uploadImage(imageUploaded as any);
-      }
-      //Modify form data request to server
       const formData = {
+        id: brand?.id,
         name: data.name,
-        logo: getImage?.url,
-        //publicId: getImage?.public_id,
+        imageUrl: brand?.image.image,
+        publicId: brand?.image.publicId,
       };
-      if (getImage) {
-        if (brand) {
-          await dispatch(updateBrandAsync(formData));
-        } else {
-          await dispatch(addBrandAsync(formData));
+      if (imageUploaded) {
+        let getImage = await uploadImage(imageUploaded as any);
+        if (getImage) {
+          formData.imageUrl = getImage.url;
+          formData.publicId = getImage.publicId;
         }
-      } else {
-        toast.error("Error: " + "Something wrong when upload image!");
-        return new Error("Something wrong when upload image!");
       }
+      console.log("Form data:", formData);
+      if (brand) {
+        if (imageUploaded) {
+          await deleteImage(brand.image.publicId);
+        }
+        await dispatch(updateBrandAsync(formData));
+      } else {
+        await dispatch(addBrandAsync(formData));
+      }
+      setImageReview(null);
       cancelEdit();
     } catch (error: any) {
       toast.error("Error: " + error.message);
@@ -86,7 +85,6 @@ export default function BrandForm({ brand, cancelEdit, actionName }: Props) {
 
   const onClose = () => {
     setImageReview(null);
-    setLogoBrand(null);
     cancelEdit();
   };
   return (
@@ -178,7 +176,8 @@ export default function BrandForm({ brand, cancelEdit, actionName }: Props) {
                   />
                 </div>
               )}
-              {logoBrand && (
+
+              {brand?.image && !imageReview && (
                 <div className="mb-5 rounded-md bg-[#F5F7FB] py-4 px-8">
                   <div className="flex items-center justify-between">
                     <div
@@ -207,10 +206,9 @@ export default function BrandForm({ brand, cancelEdit, actionName }: Props) {
                       </svg>
                     </div>
                   </div>
-
                   <img
                     className="pt-3"
-                    src={logoBrand as string}
+                    src={brand.image.image as string}
                     alt="Logo brand"
                   />
                 </div>

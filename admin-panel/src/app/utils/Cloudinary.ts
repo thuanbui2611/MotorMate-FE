@@ -1,19 +1,20 @@
 import { toast } from "react-toastify";
 import CryptoJS from "crypto-js";
 
+interface ResponseCloudinary {
+  url: string;
+  publicId: string;
+}
+
 const apiSecret = process.env.REACT_APP_CLOUDINARY_API_SECRET;
 const apiKey = process.env.REACT_APP_CLOUDINARY_API_KEY;
 const cloudName = process.env.REACT_APP_CLOUDINARY_NAME;
 const uploadPreset = process.env.REACT_APP_CLOUDINARY_UPLOADPRESET;
 
-export async function uploadImage(image: File) {
+export async function uploadImage(
+  image: File
+): Promise<ResponseCloudinary | null> {
   try {
-    // if (
-    //   image &&
-    //   (image.type === "image/png" ||
-    //     image.type === "image/jpg" ||
-    //     image.type === "image/jpeg")
-    // ) {
     const formData = new FormData();
     formData.append("file", image);
     formData.append("cloud_name", cloudName as string);
@@ -44,9 +45,12 @@ export async function uploadImage(image: File) {
     return null;
   }
 }
-export async function uploadImages(files: FileList) {
+
+export async function uploadImages(
+  files: FileList
+): Promise<ResponseCloudinary[] | null> {
   try {
-    const results = [];
+    const results: ResponseCloudinary[] = [];
     for (let i = 0; i < files.length; i++) {
       const formData = new FormData();
       formData.append("file", files[i]);
@@ -73,11 +77,12 @@ export async function uploadImages(files: FileList) {
     return results;
   } catch (error) {
     console.error("Error uploading images:", error);
+    return null;
   }
 }
 
 export async function deleteImage(publicId: string) {
-  console.log("Start delete: ");
+  console.log("Start delete image: ");
   if (!publicId) return console.log("No public id");
   try {
     const timestamp = new Date().getTime();
@@ -111,9 +116,11 @@ export async function deleteImage(publicId: string) {
   }
 }
 
+//error CORS
 export async function deleteImages(publicIds: string[]) {
   try {
     const timestamp = new Date().getTime();
+    const corsUrl = "https://cors-anywhere.herokuapp.com/";
     const signature = CryptoJS.SHA1(
       `public_ids=${publicIds.join(",")}&timestamp=${timestamp}${apiSecret}`
     ).toString();
@@ -121,7 +128,8 @@ export async function deleteImages(publicIds: string[]) {
     console.log("timestamp: ", timestamp);
     console.log("signature: ", signature);
     const response = await fetch(
-      `https://api.cloudinary.com/v1_1/${cloudName}/resources/image/destroy`,
+      corsUrl +
+        `https://api.cloudinary.com/v1_1/${cloudName}/resources/image/destroy`,
       {
         method: "POST",
         headers: {
