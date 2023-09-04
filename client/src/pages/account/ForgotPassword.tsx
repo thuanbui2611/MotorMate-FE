@@ -33,10 +33,10 @@ export default function ForgotPassword() {
           <div className="flex">
             <a
               href="/"
-              className="flex items-center bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded"
+              className="flex items-center h-7 w-fit sm:h-9 bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded"
             >
               <svg
-                className="-ml-2 h-6 w-6"
+                className="-ml-2 h-4 w-4 sm:h-5 sm:w-5"
                 fill="#F15D43"
                 version="1.1"
                 id="Capa_1"
@@ -88,7 +88,7 @@ export default function ForgotPassword() {
                 </svg>
                 <TextField
                   type="email"
-                  variant="outlined"
+                  variant="standard"
                   size="small"
                   margin="normal"
                   sx={{
