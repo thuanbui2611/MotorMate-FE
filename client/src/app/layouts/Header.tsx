@@ -7,11 +7,15 @@ export default function Header(props: Props) {
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.account.user);
   return (
-    <nav className="bg-black border-1 border-white shadow-white shadow-inner">
+    <nav className="bg-black border-1 border-white shadow-black shadow-inner ">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <Link to="/" className="flex items-center">
-          <img src="/favicon.ico" className="h-8 mr-3" alt="MotorMate Logo" />
-          <span className=" text-white self-center text-2xl font-semibold whitespace-nowrap ">
+          <img
+            src="/favicon.ico"
+            className="relative h-10 rounded-full border-2 border-white"
+            alt="MotorMate Logo"
+          />
+          <span className=" text-white self-center text-2xl whitespace-nowrap font-bold pl-4 pr-2 -ml-3 bg-orange-based rounded-md ">
             MotorMate
           </span>
         </Link>

@@ -1,7 +1,6 @@
-import { createBrowserRouter } from "react-router-dom";
+import { Navigate, createBrowserRouter } from "react-router-dom";
 import App from "../../App";
 import DefaultLayout from "../layout/DefaulLayout";
-import Calendar from "../../pages/Calendar";
 import Chart from "../../pages/Chart";
 import FormElements from "../../pages/Form/FormElements";
 import FormLayout from "../../pages/Form/FormLayout";
@@ -35,14 +34,15 @@ export const router = createBrowserRouter([
           { path: "tables", element: <Tables /> },
           { path: "settings", element: <Settings /> },
           { path: "chart", element: <Chart /> },
-
           { path: "ui/alerts", element: <Alerts /> },
           { path: "ui/buttons", element: <Buttons /> },
           { path: "ui/buttons", element: <Buttons /> },
-          { path: "login", element: <SignIn /> },
         ],
       },
-      {},
+
+      { path: "login", element: <SignIn /> },
+      // { path: 'not-found', element: <NotFound /> },
+      { path: "*", element: <Navigate replace to="/not-found" /> },
     ],
   },
 ]);

@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import { Navigate, createBrowserRouter } from "react-router-dom";
 import App from "../../App";
 import DefaultLayout from "../layouts/DefaultLayout";
 import HomePage from "../../pages/home";
@@ -19,6 +19,7 @@ import SignUpPage from "../../pages/account/SignUpPage";
 import Orders from "../../pages/order";
 import ForgotPassword from "../../pages/account/ForgotPassword";
 import ChangePassword from "../../pages/account/ChangePassword";
+import NotFound from "../errors/NotFound";
 
 export const router = createBrowserRouter([
   {
@@ -40,14 +41,17 @@ export const router = createBrowserRouter([
           { path: "my-orders", element: <Orders /> },
           { path: "profile-setting", element: <SettingProfile /> },
           { path: "my-cart", element: <Cart /> },
-          { path: "login", element: <Login /> },
-          { path: "sign-up", element: <SignUpPage /> },
-          { path: "forgot-password", element: <ForgotPassword /> },
-          { path: "forgot-password/:resetCode", element: <ChangePassword /> },
+
           { path: "chat", element: <Chat /> },
           { path: "server-error", element: <ServerErrors /> },
         ],
       },
+      { path: "login", element: <Login /> },
+      { path: "sign-up", element: <SignUpPage /> },
+      { path: "forgot-password", element: <ForgotPassword /> },
+      { path: "forgot-password/:resetCode", element: <ChangePassword /> },
+      { path: "not-found", element: <NotFound /> },
+      { path: "*", element: <Navigate replace to="/not-found" /> },
     ],
   },
 ]);

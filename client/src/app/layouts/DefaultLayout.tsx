@@ -9,10 +9,10 @@ export default function DefaultLayout() {
   const shouldHideComponent = hiddenPaths.includes(location.pathname);
   return (
     <div className="flex flex-col min-h-screen relative overflow-auto">
-      {!shouldHideComponent && <Header />}
+      <Header />
       <Outlet />
-      {!shouldHideComponent && <TinyChat />}
-      {!shouldHideComponent && <Footer />}
+      <TinyChat />
+      <Footer />
     </div>
   );
 }
