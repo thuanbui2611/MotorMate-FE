@@ -5,10 +5,13 @@ import { Cart } from "../../app/models/Cart";
 import ProductHomepage from "./ProductHomepage";
 import Loading from "../../app/components/Loading";
 import AdsHomepage from "../../app/components/AdsHomepage";
+import { useAppDispatch } from "../../app/store/ConfigureStore";
+import { getUserDetails } from "../account/AccountSlice";
 
 export default function HomePage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     agent.Product.all()

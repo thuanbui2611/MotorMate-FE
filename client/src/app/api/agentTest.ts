@@ -22,8 +22,10 @@ testApi.interceptors.response.use(
   },
 
   (error: AxiosError) => {
+    console.log("Catch intercepter");
     const { data, status } = error.response!;
-    const navigate = useNavigate();
+    console.log(data);
+    console.log("Status:", status);
     switch (status) {
       case 400:
         if ((data as any).errors) {
@@ -38,21 +40,24 @@ testApi.interceptors.response.use(
         }
         break;
       case 401:
+        console.log("catch 401");
         toast.error((data as any).title);
         break;
       case 403:
         toast.error((data as any).message);
         break;
       case 404:
+        console.log("catch 404");
         toast.error((data as any).message);
         break;
       case 409:
         toast.error((data as any).message);
         break;
       case 500:
-        navigate("/server-error", {
-          state: { error: data },
-        });
+        // navigate("/server-error", {
+        //   state: { error: data },
+        // });
+        console.log("Catch error 500");
         break;
       default:
         break;
@@ -69,10 +74,15 @@ const requests = {
 };
 
 const Account = {
+  userDetail: () => requests.get("api/user/details"),
   login: (values: {}) => requests.post("api/auth/login", values),
   loginGoogle: (values: { tokenCredential: string }) =>
     requests.post("api/auth/sso/google", values),
   Register: (values: {}) => requests.post("api/auth/sign-up", values),
+  ForgotPassword: (values: any) =>
+    requests.post("api/auth/change/password", values),
+  ChangePassword: (values: any, resetCode: string) =>
+    requests.post(`api/auth/change/password/${resetCode}`, values),
 };
 
 const agentTest = {

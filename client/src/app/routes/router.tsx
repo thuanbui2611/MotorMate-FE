@@ -17,6 +17,8 @@ import ServerErrors from "../errors/ServerErrors";
 import Contact from "../../pages/contact";
 import SignUpPage from "../../pages/account/SignUpPage";
 import Orders from "../../pages/order";
+import ForgotPassword from "../../pages/account/ForgotPassword";
+import ChangePassword from "../../pages/account/ChangePassword";
 
 export const router = createBrowserRouter([
   {
@@ -40,6 +42,8 @@ export const router = createBrowserRouter([
           { path: "my-cart", element: <Cart /> },
           { path: "login", element: <Login /> },
           { path: "sign-up", element: <SignUpPage /> },
+          { path: "forgot-password", element: <ForgotPassword /> },
+          { path: "forgot-password/:resetCode", element: <ChangePassword /> },
           { path: "chat", element: <Chat /> },
           { path: "server-error", element: <ServerErrors /> },
         ],

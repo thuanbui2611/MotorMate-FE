@@ -12,9 +12,7 @@ function App() {
   const [loading, setLoading] = useState(true);
   const user = useAppSelector((state) => state.account.user);
   const dispatch = useAppDispatch();
-  console.log("App .tsx");
   useEffect(() => {
-    console.log("App trigger use Effect");
     dispatch(fetchUserFromToken()).finally(() => setLoading(false));
   }, [dispatch, user?.token]);
 

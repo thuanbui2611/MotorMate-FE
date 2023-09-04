@@ -14,6 +14,7 @@ import Brand from "../../pages/brand";
 import Transactions from "../../pages/transactions";
 import Dashboard from "../../pages/Dashboard/Dashboard";
 import Products from "../../pages/products";
+import SignIn from "../../pages/account/SignIn";
 
 export const router = createBrowserRouter([
   {
@@ -34,8 +35,11 @@ export const router = createBrowserRouter([
           { path: "tables", element: <Tables /> },
           { path: "settings", element: <Settings /> },
           { path: "chart", element: <Chart /> },
+
           { path: "ui/alerts", element: <Alerts /> },
           { path: "ui/buttons", element: <Buttons /> },
+          { path: "ui/buttons", element: <Buttons /> },
+          { path: "login", element: <SignIn /> },
         ],
       },
       {},

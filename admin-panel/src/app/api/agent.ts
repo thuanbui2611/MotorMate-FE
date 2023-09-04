@@ -18,6 +18,7 @@ const responseBody = (response: AxiosResponse) => response.data;
 
 axios.interceptors.response.use(
   async (response) => {
+    console.log("Interceptors cacth response", response);
     const pagination = response.headers["x-pagination"];
     if (pagination) {
       response.data = new PaginatedResponse(
@@ -57,6 +58,8 @@ axios.interceptors.response.use(
         toast.error((data as any).message);
         break;
       case 500:
+        console.log("Catch 500");
+        toast.error((data as any).message);
         navigate("/server-error", {
           state: { error: data },
         });

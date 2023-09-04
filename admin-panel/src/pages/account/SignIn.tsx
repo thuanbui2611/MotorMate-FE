@@ -1,23 +1,38 @@
+import { FieldValues, useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
+import { signInUser } from "./AccountSlice";
+import { useAppDispatch } from "../../app/store/ConfigureStore";
+import { TextField } from "@mui/material";
+import { LoadingButton } from "@mui/lab";
 
 const SignIn = () => {
+  const dispatch = useAppDispatch();
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitting, errors },
+  } = useForm({
+    mode: "all",
+  });
+
+  async function submitForm(data: FieldValues) {
+    const signIn = await dispatch(signInUser(data));
+  }
   return (
     <>
-      <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+      <div className="rounded-sm border border-stroke bg-white shadow-default pt-20">
         <div className="flex flex-wrap items-center">
-          <div className="hidden w-full xl:block xl:w-1/2">
-            <div className="py-17.5 px-26 text-center">
-              <Link className="mb-5.5 inline-block" to="/">
+          <div className="w-full xl:block xl:w-1/2">
+            <div className=" py-5 px-2 md:py-15 md:px-24 text-center ">
+              <Link className="flex mb-5.5 items-center justify-center" to="/">
                 <img
-                  className="hidden dark:block"
-                  src="../../images/logo/logo.svg"
-                  alt="Logo"
+                  className=" h-14"
+                  src="/favicon.ico"
+                  alt="MotorMate Logo"
                 />
-                <img
-                  className="dark:hidden"
-                  src="../../images/logo/logo-dark.svg"
-                  alt="Logo"
-                />
+                <p className=" ml-4 text-black font-bold text-4xl">
+                  Admin Panel
+                </p>
               </Link>
 
               <p className="2xl:px-20">
@@ -27,8 +42,9 @@ const SignIn = () => {
 
               <span className="mt-15 inline-block">
                 <svg
-                  width="350"
-                  height="350"
+                  className="m-w-full h-auto min-w-[220px] min-h-[220px]"
+                  width="100%"
+                  height="100%"
                   viewBox="0 0 350 350"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
@@ -150,23 +166,32 @@ const SignIn = () => {
             </div>
           </div>
 
-          <div className="w-full border-stroke dark:border-strokedark xl:w-1/2 xl:border-l-2">
+          <div className="w-full border-stroke xl:w-1/2 xl:border-l-2">
             <div className="w-full p-4 sm:p-12.5 xl:p-17.5">
               <span className="mb-1.5 block font-medium">Start for free</span>
-              <h2 className="mb-9 text-2xl font-bold text-black dark:text-white sm:text-title-xl2">
+              <h2 className="mb-9 text-2xl font-bold text-black sm:text-title-xl2">
                 Sign In to TailAdmin
               </h2>
 
-              <form>
+              <form onSubmit={handleSubmit(submitForm)}>
                 <div className="mb-4">
-                  <label className="mb-2.5 block font-medium text-black dark:text-white">
+                  <label className="mb-2.5 block font-medium text-black">
                     Email
                   </label>
                   <div className="relative">
-                    <input
+                    <TextField
                       type="email"
                       placeholder="Enter your email"
-                      className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                      className="w-full rounded-lg border border-stroke bg-transparent py-4 pr-10 outline-none focus:border-primary focus-visible:shadow-none"
+                      {...register("email", {
+                        required: "Email is required",
+                        pattern: {
+                          value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                          message: "Invalid email address",
+                        },
+                      })}
+                      error={!!errors.email}
+                      helperText={errors?.email?.message as string}
                     />
 
                     <span className="absolute right-4 top-4">
@@ -190,16 +215,21 @@ const SignIn = () => {
                 </div>
 
                 <div className="mb-6">
-                  <label className="mb-2.5 block font-medium text-black dark:text-white">
-                    Re-type Password
+                  <label className="mb-2.5 block font-medium text-black">
+                    Password
                   </label>
                   <div className="relative">
-                    <input
+                    <TextField
                       type="password"
-                      placeholder="6+ Characters, 1 Capital letter"
-                      className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                      variant="outlined"
+                      className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none"
+                      placeholder="Your password"
+                      {...register("password", {
+                        required: "Password is required",
+                      })}
+                      error={!!errors.password}
+                      helperText={errors?.password?.message as string}
                     />
-
                     <span className="absolute right-4 top-4">
                       <svg
                         className="fill-current"
@@ -225,14 +255,30 @@ const SignIn = () => {
                 </div>
 
                 <div className="mb-5">
-                  <input
+                  <LoadingButton
+                    loading={isSubmitting}
                     type="submit"
-                    value="Sign In"
-                    className="w-full cursor-pointer rounded-lg border border-primary bg-primary p-4 text-white transition hover:bg-opacity-90"
-                  />
+                    sx={{
+                      width: "100%",
+                      cursor: "pointer",
+                      borderRadius: "lg",
+                      border: (theme) =>
+                        `1px solid ${theme.palette.primary.main}`,
+                      backgroundColor: (theme) => theme.palette.primary.main,
+                      padding: 2,
+                      color: "white",
+                      transition: "hover",
+                      "&:hover": {
+                        backgroundColor: (theme) => theme.palette.primary.main,
+                        opacity: 0.9,
+                      },
+                    }}
+                  >
+                    Sign In
+                  </LoadingButton>
                 </div>
 
-                <button className="flex w-full items-center justify-center gap-3.5 rounded-lg border border-stroke bg-gray p-4 hover:bg-opacity-50 dark:border-strokedark dark:bg-meta-4 dark:hover:bg-opacity-50">
+                <button className="flex w-full items-center justify-center gap-3.5 rounded-lg border border-stroke bg-gray p-4 hover:bg-opacity-50">
                   <span>
                     <svg
                       width="20"

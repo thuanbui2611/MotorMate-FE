@@ -10,7 +10,8 @@ export default function Login() {
   const user = useAppSelector((state) => state.account.user);
   const navigate = useNavigate();
   if (user) {
-    navigate(-1);
+    console.log("User is logged in");
+    navigate("/");
   }
   const {
     register,
@@ -22,7 +23,7 @@ export default function Login() {
 
   const dispatch = useAppDispatch();
   async function submitForm(data: FieldValues) {
-    const signIn = await dispatch(signInUser(data));
+    await dispatch(signInUser(data));
   }
 
   return (
@@ -160,10 +161,12 @@ export default function Login() {
 
               <div className="flex-row-login">
                 <div>
-                  <input type="radio" className="md:mb-1" />
-                  <label> Remember me</label>
+                  <input type="checkbox" className="md:mb-1" />
+                  <label>Remember me</label>
                 </div>
-                <span className="span md:mr-5">Forgot password?</span>
+                <a href="/forgot-password" className="span md:mr-5">
+                  Forgot password?
+                </a>
               </div>
               <div className="text-left">
                 <LoadingButton
@@ -196,8 +199,8 @@ export default function Login() {
                 </LoadingButton>
               </div>
               <p className="p">
-                Don't have an account?{" "}
-                <a className="span" href="/signup">
+                Don't have an account?
+                <a className="span" href="/sign-up">
                   Sign Up
                 </a>
               </p>

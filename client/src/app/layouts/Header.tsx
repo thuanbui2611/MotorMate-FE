@@ -119,7 +119,7 @@ export default function Header(props: Props) {
                   </li>
                   <li>
                     <a
-                      href="/your-orders"
+                      href="/my-orders"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     >
                       Orders
