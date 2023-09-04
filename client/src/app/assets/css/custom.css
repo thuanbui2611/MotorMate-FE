@@ -563,7 +563,7 @@ p {
 .inputForm {
   border: 1.5px solid #ecedec;
   border-radius: 10px;
-  height: 30px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -581,7 +581,8 @@ p {
 }
 
 .inputForm .input {
-  margin-top: -8px; /* Adjust the margin value as needed */
+  margin-top: -5px;
+  padding: 4px 0 0 10px;
 }
 
 .input:focus {
@@ -667,14 +668,14 @@ p {
       Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   }
   .inputForm {
-    min-width: 400px;
+    min-width: 390px;
     height: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
   }
   .inputForm .input {
-    margin-top: -5px;
+    margin-top: 0px;
   }
   .button-submit {
     width: 400px;

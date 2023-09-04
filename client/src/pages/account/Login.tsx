@@ -33,10 +33,10 @@ export default function Login() {
           <div className="flex">
             <a
               href="/"
-              className="flex items-center bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded"
+              className="flex items-center h-7 w-fit sm:h-9 bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded"
             >
               <svg
-                className="-ml-2 h-6 w-6"
+                className="-ml-2 h-4 w-4 sm:h-5 sm:w-5"
                 fill="#F15D43"
                 version="1.1"
                 id="Capa_1"
@@ -59,28 +59,27 @@ export default function Login() {
           </div>
           <div className="relative mx-auto max-w-4xl grid space-y-5 sm:space-y-10">
             <div className="text-center">
-              <p className="text-xs font-semibold text-gray-500 tracking-wide uppercase mb-3 dark:text-gray-200">
+              <p className="text-xs font-semibold text-gray-500 tracking-wide uppercase mb-1 ">
                 MOTORMATE
               </p>
-              <h1 className="text-3xl text-blue-800  font-bold sm:text-5xl lg:text-6xl lg:leading-tight">
+              <h1 className="text-5xl text-blue-800 font-bold sm:text-5xl lg:text-6xl lg:leading-tight">
                 Login to <br />
                 <span className="text-orange-based"> MotorMate</span>
               </h1>
             </div>
 
             <form
-              className="form mx-auto max-w-2xl sm:flex sm:space-x-3 sm:flex-wrap p-3 bg-white border rounded-lg shadow-lg shadow-gray-100"
+              className="form mx-auto max-w-2xl sm:flex sm:flex-wrap p-3 bg-white border rounded-lg shadow-lg shadow-gray-100"
               onSubmit={handleSubmit(submitForm)}
             >
-              <div className="flex-column md:ml-3">
+              <div className="flex-column">
                 <label>Email</label>
               </div>
               <div className="inputForm">
                 <svg
+                  className=" w-4 h-4  md:w-5 md:h-5"
                   xmlns="http://www.w3.org/2000/svg"
-                  width="20"
                   viewBox="0 0 32 32"
-                  height="20"
                 >
                   <g data-name="Layer 3" id="Layer_3">
                     <path d="m30.853 13.87a15 15 0 0 0 -29.729 4.082 15.1 15.1 0 0 0 12.876 12.918 15.6 15.6 0 0 0 2.016.13 14.85 14.85 0 0 0 7.715-2.145 1 1 0 1 0 -1.031-1.711 13.007 13.007 0 1 1 5.458-6.529 2.149 2.149 0 0 1 -4.158-.759v-10.856a1 1 0 0 0 -2 0v1.726a8 8 0 1 0 .2 10.325 4.135 4.135 0 0 0 7.83.274 15.2 15.2 0 0 0 .823-7.455zm-14.853 8.13a6 6 0 1 1 6-6 6.006 6.006 0 0 1 -6 6z"></path>
@@ -88,7 +87,7 @@ export default function Login() {
                 </svg>
                 <TextField
                   type="text"
-                  variant="outlined"
+                  variant="standard"
                   size="small"
                   margin="normal"
                   sx={{
@@ -123,17 +122,16 @@ export default function Login() {
               </div>
               <div className="inputForm">
                 <svg
+                  className=" w-4 h-4 md:w-5 md:h-5"
                   xmlns="http://www.w3.org/2000/svg"
-                  width="20"
                   viewBox="-64 0 512 512"
-                  height="20"
                 >
                   <path d="m336 512h-288c-26.453125 0-48-21.523438-48-48v-224c0-26.476562 21.546875-48 48-48h288c26.453125 0 48 21.523438 48 48v224c0 26.476562-21.546875 48-48 48zm-288-288c-8.8125 0-16 7.167969-16 16v224c0 8.832031 7.1875 16 16 16h288c8.8125 0 16-7.167969 16-16v-224c0-8.832031-7.1875-16-16-16zm0 0"></path>
                   <path d="m304 224c-8.832031 0-16-7.167969-16-16v-80c0-52.929688-43.070312-96-96-96s-96 43.070312-96 96v80c0 8.832031-7.167969 16-16 16s-16-7.167969-16-16v-80c0-70.59375 57.40625-128 128-128s128 57.40625 128 128v80c0 8.832031-7.167969 16-16 16zm0 0"></path>
                 </svg>
                 <TextField
-                  type="password"
-                  variant="outlined"
+                  type="text"
+                  variant="standard"
                   size="small"
                   margin="normal"
                   sx={{
@@ -159,10 +157,10 @@ export default function Login() {
                 />
               </div>
 
-              <div className="flex-row-login">
-                <div>
-                  <input type="checkbox" className="md:mb-1" />
-                  <label>Remember me</label>
+              <div className="flex-row-login ">
+                <div className="flex justify-center items-center">
+                  <input type="checkbox" />
+                  <label className="ml-1">Remember me</label>
                 </div>
                 <a href="/forgot-password" className="span md:mr-5">
                   Forgot password?

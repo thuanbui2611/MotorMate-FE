@@ -36,10 +36,10 @@ export default function ChangePassword() {
           <div className="flex">
             <a
               href="/"
-              className="flex items-center bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded"
+              className="flex items-center h-7 w-fit sm:h-9 bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded"
             >
               <svg
-                className="-ml-2 h-6 w-6"
+                className="-ml-2 h-4 w-4 sm:h-5 sm:w-5"
                 fill="#F15D43"
                 version="1.1"
                 id="Capa_1"
@@ -62,10 +62,10 @@ export default function ChangePassword() {
           </div>
           <div className="relative mx-auto max-w-4xl grid space-y-5 sm:space-y-10">
             <div className="text-center">
-              <p className="text-xs font-semibold text-gray-500 tracking-wide uppercase mb-3 dark:text-gray-200">
+              <p className="text-xs font-semibold text-gray-500 tracking-wide uppercase mb-1  ">
                 MOTORMATE
               </p>
-              <h1 className="text-3xl text-blue-800 font-bold sm:text-5xl lg:text-6xl lg:leading-tight">
+              <h1 className="text-5xl text-blue-800 font-bold sm:text-5xl lg:text-6xl lg:leading-tight">
                 Change password <br />
               </h1>
             </div>
@@ -79,17 +79,16 @@ export default function ChangePassword() {
               </div>
               <div className="inputForm">
                 <svg
+                  className=" w-4 h-4 md:w-5 md:h-5"
                   xmlns="http://www.w3.org/2000/svg"
-                  width="20"
                   viewBox="-64 0 512 512"
-                  height="20"
                 >
                   <path d="m336 512h-288c-26.453125 0-48-21.523438-48-48v-224c0-26.476562 21.546875-48 48-48h288c26.453125 0 48 21.523438 48 48v224c0 26.476562-21.546875 48-48 48zm-288-288c-8.8125 0-16 7.167969-16 16v224c0 8.832031 7.1875 16 16 16h288c8.8125 0 16-7.167969 16-16v-224c0-8.832031-7.1875-16-16-16zm0 0"></path>
                   <path d="m304 224c-8.832031 0-16-7.167969-16-16v-80c0-52.929688-43.070312-96-96-96s-96 43.070312-96 96v80c0 8.832031-7.167969 16-16 16s-16-7.167969-16-16v-80c0-70.59375 57.40625-128 128-128s128 57.40625 128 128v80c0 8.832031-7.167969 16-16 16zm0 0"></path>
                 </svg>
                 <TextField
                   type="password"
-                  variant="outlined"
+                  variant="standard"
                   size="small"
                   margin="normal"
                   sx={{
@@ -119,17 +118,16 @@ export default function ChangePassword() {
               </div>
               <div className="inputForm">
                 <svg
+                  className=" w-4 h-4 md:w-5 md:h-5"
                   xmlns="http://www.w3.org/2000/svg"
-                  width="20"
                   viewBox="-64 0 512 512"
-                  height="20"
                 >
                   <path d="m336 512h-288c-26.453125 0-48-21.523438-48-48v-224c0-26.476562 21.546875-48 48-48h288c26.453125 0 48 21.523438 48 48v224c0 26.476562-21.546875 48-48 48zm-288-288c-8.8125 0-16 7.167969-16 16v224c0 8.832031 7.1875 16 16 16h288c8.8125 0 16-7.167969 16-16v-224c0-8.832031-7.1875-16-16-16zm0 0"></path>
                   <path d="m304 224c-8.832031 0-16-7.167969-16-16v-80c0-52.929688-43.070312-96-96-96s-96 43.070312-96 96v80c0 8.832031-7.167969 16-16 16s-16-7.167969-16-16v-80c0-70.59375 57.40625-128 128-128s128 57.40625 128 128v80c0 8.832031-7.167969 16-16 16zm0 0"></path>
                 </svg>
                 <TextField
                   type="password"
-                  variant="outlined"
+                  variant="standard"
                   size="small"
                   margin="normal"
                   sx={{

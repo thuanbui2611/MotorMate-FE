@@ -33,10 +33,10 @@ export default function SignUpPage() {
           <div className="flex">
             <a
               href="/"
-              className="flex items-center bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded"
+              className="flex items-center h-7 w-fit sm:h-9 bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded"
             >
               <svg
-                className="-ml-2 h-6 w-6"
+                className="-ml-2 h-4 w-4 sm:h-5 sm:w-5"
                 fill="#F15D43"
                 version="1.1"
                 id="Capa_1"
@@ -59,7 +59,7 @@ export default function SignUpPage() {
           </div>
           <div className="relative mx-auto max-w-4xl grid space-y-5 sm:space-y-10">
             <div className="text-center">
-              <p className="text-xs font-semibold text-gray-500 tracking-wide uppercase mb-3 dark:text-gray-200">
+              <p className="text-xs font-semibold text-gray-500 tracking-wide uppercase mb-1 ">
                 MOTORMATE
               </p>
               <h1 className="text-3xl text-blue-800 font-bold sm:text-5xl lg:text-6xl lg:leading-tight">
@@ -106,7 +106,7 @@ export default function SignUpPage() {
                 </svg>
                 <TextField
                   type="text"
-                  variant="outlined"
+                  variant="standard"
                   size="small"
                   margin="normal"
                   sx={{
@@ -165,7 +165,7 @@ export default function SignUpPage() {
                 </svg>
                 <TextField
                   type="text"
-                  variant="outlined"
+                  variant="standard"
                   size="small"
                   margin="normal"
                   sx={{
@@ -224,7 +224,7 @@ export default function SignUpPage() {
                 </svg>
                 <TextField
                   type="text"
-                  variant="outlined"
+                  variant="standard"
                   size="small"
                   margin="normal"
                   sx={{
@@ -269,7 +269,7 @@ export default function SignUpPage() {
                 </svg>
                 <TextField
                   type="email"
-                  variant="outlined"
+                  variant="standard"
                   size="small"
                   margin="normal"
                   sx={{
@@ -313,7 +313,7 @@ export default function SignUpPage() {
                 </svg>
                 <TextField
                   type="password"
-                  variant="outlined"
+                  variant="standard"
                   size="small"
                   margin="normal"
                   sx={{
@@ -353,7 +353,7 @@ export default function SignUpPage() {
                 </svg>
                 <TextField
                   type="password"
-                  variant="outlined"
+                  variant="standard"
                   size="small"
                   margin="normal"
                   sx={{
@@ -407,7 +407,7 @@ export default function SignUpPage() {
                 </svg>
                 <TextField
                   type="tel"
-                  variant="outlined"
+                  variant="standard"
                   size="small"
                   margin="normal"
                   sx={{
@@ -436,10 +436,10 @@ export default function SignUpPage() {
                   helperText={errors?.phoneNumber?.message as string}
                 />
               </div>
-              <div className="flex-row">
-                <div>
-                  <input type="checkbox" className="md:mb-1" required />
-                  <label className="ml-1"> Accept our policy</label>
+              <div className="flex-row-login ">
+                <div className="flex items-center justify-center">
+                  <input type="checkbox" required />
+                  <label className="ml-1">Accept our policy</label>
                 </div>
                 <span className="span md:mr-5">Forgot password?</span>
               </div>
