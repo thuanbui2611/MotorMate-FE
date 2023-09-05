@@ -86,11 +86,11 @@ export default function NotFound() {
             >
               <style>{`
     .st0{fill:#fff}
-    .st1{fill:#b5dfea}
-    .st2{opacity:.55;fill:#90cedd}
-    .st3{fill:#d7f0f9}
-    .st4{fill:#0582c1}
-    .st5{fill:#79c9e8}
+    .st1{fill:#F15D43}
+    .st2{opacity:.55;fill:#db4c32}
+    .st3{fill:#ffdad4}
+    .st4{fill:#c43016}
+    .st5{fill:#ed452b}
     .st6{fill:#ffbf4d}
     .st7{fill:#00668e}
     .st8{fill:#05556d}

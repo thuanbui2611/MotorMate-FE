@@ -340,7 +340,7 @@ export default function HomePage() {
         </p>
       </div>
       <div className="flex-col lg:flex lg:flex-row px-4 pt-10 sm:px-6 lg:px-8 lg:py-0 mx-auto">
-        <section className="items-center pt-8 bg-gray-100 lg:h-screen font-poppins md:pr-10 border max-h-fit lg:mr-4 mb-4">
+        <section className="items-center pt-8 bg-gray-100  font-poppins md:pr-10 border max-h-fit lg:mr-4 mb-4">
           <div className="block justify-center max-w-2xl px-4 py-4 mx-auto lg:py-8 md:px-6">
             <div className="max-w-xl mx-auto">
               <div className="text-center ">
@@ -498,7 +498,7 @@ export default function HomePage() {
             </div>
           </div>
         </section>
-        <section className="items-center py-8 bg-gray-100 lg:h-screen font-poppins md:pr-10 border max-h-fit">
+        <section className="items-center py-8 bg-gray-100 font-poppins md:pr-10 border max-h-fit">
           <div className="block justify-center max-w-2xl px-4 py-4 mx-auto lg:py-8 md:px-6">
             <div className="max-w-xl mx-auto">
               <div className="text-center ">

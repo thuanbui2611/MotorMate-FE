@@ -9,14 +9,14 @@ export default function Header(props: Props) {
   return (
     <nav className="bg-black border-1 border-white shadow-black shadow-inner ">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-        <Link to="/" className="flex items-center">
+        <Link to="/" className="flex items-center justify-center">
           <img
             src="/favicon.ico"
             className="relative h-10 rounded-full border-2 border-white"
             alt="MotorMate Logo"
           />
-          <span className=" text-white self-center text-2xl whitespace-nowrap font-bold pl-4 pr-2 -ml-3 bg-orange-based rounded-md ">
-            MotorMate
+          <span className="flex items-center justify-center text-white self-center whitespace-nowrap font-bold pl-4 pr-2 -ml-3 bg-orange-based rounded-md ">
+            <span className="flex  justify-center" style={{fontSize: "1.125rem", paddingBottom: "1px"}}>MotorMate</span>
           </span>
         </Link>
         {/* Search */}
