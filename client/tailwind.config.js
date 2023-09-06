@@ -8,8 +8,9 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        "orange-based": "#F15D43",
+        "orange-based": "#FF7E06",
         "chat-blue": "#e3effd",
+        "color-header": "#1d1d1d",
       },
     },
     theme: {

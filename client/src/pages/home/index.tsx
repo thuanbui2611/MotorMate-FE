@@ -23,26 +23,30 @@ export default function HomePage() {
   return (
     <>
       <div className="cover-page px-4 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16">
-        <img
-          className="cover-img"
-          src={require("../../app/assets/images/coverpage-00.jpg")}
-          alt="Cover website"
-        />
-
-        <div className="content mb-36">
-          <h1>MotorMate</h1>
-          <div className="flex items-center justify-between">
-            <a className="text-center w-1/2 md:w-full md:h-full" href="#">
-              <p className="text-sm font-normal md:text-xl md:inline-block w-32 md:w-full">
-                Rent Motorcycles
-              </p>
-            </a>
-            <div className="w-4 md:w-16"></div>
-            <a className="text-center w-1/2 md:w-full md:h-full" href="#">
-              <p className="text-sm font-normal md:text-xl md:inline-block">
-                Become a Lessor
-              </p>
-            </a>
+        <div className="relative w-full flex justify-left items-center ">
+          <img
+            className="cover-img"
+            src={require("../../app/assets/images/cover/Background.png")}
+            alt="Cover website"
+          />
+          <div className="content">
+            <h1>MotorMate</h1>
+            <h2>A self-ride motorcycle rental platform.</h2>
+            <div className="button-content">
+              <a
+                className="text-center align-center flex justify-center items-center w-fit h-fit md:w-fit md:h-full"
+                href="#"
+              >
+                <p>Rent Motorcycles</p>
+              </a>
+              <a
+                className="text-center w-fit h-fit md:w-fit md:h-full"
+                href="#"
+              >
+                <p>Become a Lessor</p>
+              </a>
+              <div className="spacing-button"></div>
+            </div>
           </div>
         </div>
       </div>
