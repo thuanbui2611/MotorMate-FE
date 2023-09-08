@@ -7,6 +7,7 @@ import Loading from "../../app/components/Loading";
 import AdsHomepage from "../../app/components/AdsHomepage";
 import { useAppDispatch } from "../../app/store/ConfigureStore";
 import { getUserDetails } from "../account/AccountSlice";
+import { Link } from "react-router-dom";
 
 export default function HomePage() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -23,7 +24,7 @@ export default function HomePage() {
   return (
     <>
       <div className="cover-page px-4 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16">
-        <div className="relative w-full flex justify-left items-center ">
+        <div className="relative w-full flex shrink-0 justify-center items-center ">
           <img
             className="cover-img"
             src={require("../../app/assets/images/cover/Background.png")}
@@ -33,12 +34,12 @@ export default function HomePage() {
             <h1>MotorMate</h1>
             <h2>A self-ride motorcycle rental platform.</h2>
             <div className="button-content">
-              <a
+              <Link
+                to="/products"
                 className="text-center align-center flex justify-center items-center w-fit h-fit md:w-fit md:h-full"
-                href="#"
               >
                 <p>Rent Motorcycles</p>
-              </a>
+              </Link>
               <a
                 className="text-center w-fit h-fit md:w-fit md:h-full"
                 href="#"
@@ -240,7 +241,7 @@ export default function HomePage() {
       </div>
       {/* Choose your motorcycle */}
       <section className=" bg-white">
-        <div className="py-8 px-4 mx-auto max-w-screen-xl lg:py-10 lg:px-6 ">
+        <div className="py-8  mx-auto w-full px-0 md:px-4 md:max-w-screen-xl lg:py-10 lg:px-6 ">
           <div className="mx-auto max-w-screen-sm text-center mb-8 lg:mb-16">
             <div className="flex justify-center">
               <hr className="w-1/4 pb-3"></hr>

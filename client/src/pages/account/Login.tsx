@@ -4,15 +4,19 @@ import { TextField } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { useAppDispatch, useAppSelector } from "../../app/store/ConfigureStore";
 import { signInUser } from "./AccountSlice";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useRef } from "react";
+import { toast } from "react-toastify";
 
 export default function Login() {
   const user = useAppSelector((state) => state.account.user);
   const navigate = useNavigate();
-  if (user) {
-    console.log("User is logged in");
-    navigate("/");
-  }
+  useEffect(() => {
+    if (user) {
+      toast.error("You are already logged in");
+      navigate("/");
+    }
+  }, [navigate]);
   const {
     register,
     handleSubmit,
@@ -23,7 +27,11 @@ export default function Login() {
 
   const dispatch = useAppDispatch();
   async function submitForm(data: FieldValues) {
-    await dispatch(signInUser(data));
+    const result = await dispatch(signInUser(data));
+    if (result.meta.requestStatus === "fulfilled") {
+      toast.success("Login successfully");
+      navigate("/");
+    }
   }
 
   return (
@@ -130,7 +138,7 @@ export default function Login() {
                   <path d="m304 224c-8.832031 0-16-7.167969-16-16v-80c0-52.929688-43.070312-96-96-96s-96 43.070312-96 96v80c0 8.832031-7.167969 16-16 16s-16-7.167969-16-16v-80c0-70.59375 57.40625-128 128-128s128 57.40625 128 128v80c0 8.832031-7.167969 16-16 16zm0 0"></path>
                 </svg>
                 <TextField
-                  type="text"
+                  type="password"
                   variant="standard"
                   size="small"
                   margin="normal"

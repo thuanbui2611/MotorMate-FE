@@ -2,17 +2,34 @@ import { useAppDispatch, useAppSelector } from "../store/ConfigureStore";
 
 import { signOut } from "../../pages/account/AccountSlice";
 import { Link, NavLink, useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 interface Props {}
 export default function Header(props: Props) {
   const location = useLocation();
-  const [isSelected, setIsSelected] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.account.user);
+
+  useEffect(() => {
+    const handleResize = () => {
+      // Check if the window width exceeds the mobile threshold (e.g., 768px)
+      if (window.innerWidth >= 768) {
+        setIsMobileMenuOpen(false); // Reset the mobile menu state to false
+      }
+    };
+    // Add a resize event listener to monitor window width changes
+    window.addEventListener("resize", handleResize);
+    // Clean up the event listener when the component unmounts
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   return (
     <nav className=" bg-color-header border-1 border-white shadow-black shadow-inner ">
-      <div className="w-full flex flex-wrap items-center justify-between mx-auto p-4">
+      <div className=" max-w-screen-2xl flex flex-wrap items-center justify-between mx-auto p-4">
         <Link to="/" className="flex items-center justify-center">
           {/* <img
             src={require("../assets/images/logo/logo-MotorMate.svg")}
@@ -20,7 +37,7 @@ export default function Header(props: Props) {
             alt="MotorMate Logo"
           /> */}
           <svg
-            className="h-8 md:h-10"
+            className="h-5 md:h-10"
             xmlns="http://www.w3.org/2000/svg"
             xmlnsXlink="http://www.w3.org/1999/xlink"
             zoomAndPan="magnify"
@@ -185,10 +202,16 @@ export default function Header(props: Props) {
                 </a>
               </li>
               <button
+                onClick={() => {
+                  setIsUserMenuOpen(!isUserMenuOpen);
+                  setIsMobileMenuOpen(false);
+                }}
                 type="button"
-                className="flex mr-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 "
+                className={` ${
+                  isUserMenuOpen ? "focus:ring-2 focus:ring-orange-based" : ""
+                } flex mr-3 text-sm bg-gray-800 rounded-full md:mr-0`}
                 id="user-menu-button"
-                aria-expanded="false"
+                aria-expanded={isUserMenuOpen ? "true" : "false"}
                 data-dropdown-toggle="user-dropdown"
                 data-toggle="dropdown"
                 data-dropdown-placement="bottom"
@@ -200,7 +223,9 @@ export default function Header(props: Props) {
                 />
               </button>
               <div
-                className="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow "
+                className={`${
+                  isUserMenuOpen ? "" : "hidden"
+                } absolute z-50 my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow`}
                 id="user-dropdown"
               >
                 <div className="px-4 py-3">
@@ -258,14 +283,22 @@ export default function Header(props: Props) {
             </>
           )}
           <button
+            onClick={() => {
+              setIsMobileMenuOpen(!isMobileMenuOpen);
+              setIsUserMenuOpen(false);
+            }}
             data-collapse-toggle="mobile-menu-2"
             type="button"
-            className="inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
+            className={` ${
+              isMobileMenuOpen
+                ? "hover:bg-gray-50 focus:outline-none focus:ring-1 focus:ring-gray-100"
+                : ""
+            } inline-flex items-center p-1 ml-1 text-sm text-gray-500 rounded-md md:hidden `}
             aria-controls="mobile-menu-2"
-            aria-expanded="false"
+            aria-expanded={isMobileMenuOpen ? "true" : "false"}
           >
             <svg
-              className="w-6 h-6"
+              className="w-4 h-4"
               aria-hidden="true"
               fill="currentColor"
               viewBox="0 0 20 20"
@@ -280,10 +313,13 @@ export default function Header(props: Props) {
           </button>
         </div>
         <div
-          className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1 "
+          // className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1 "
+          className={` items-center justify-between w-full md:flex md:w-auto md:order-1 ${
+            isMobileMenuOpen ? "list-menu mr-4" : "hidden"
+          }`}
           id="mobile-menu-2"
         >
-          <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-white md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-transparent ">
+          <ul className="flex flex-col p-1 md:p-0 mt-4 border border-gray-100 rounded-lg bg-white md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-transparent ">
             <li>
               <Link
                 to="/"
@@ -291,7 +327,7 @@ export default function Header(props: Props) {
                   location.pathname === "/"
                     ? "md:text-orange-based"
                     : "md:text-white"
-                } block header-items py-2 pl-3 pr-4 text-black rounded font-bold shadow-md hover:bg-gray-100 md:hover:bg-transparent md:p-0  md:hover:text-orange-based md:px-4 md:py-2`}
+                } block header-items py-2 pl-3 pr-4 text-black rounded-md hover:bg-orange-based md:hover:bg-transparent md:p-0  md:hover:text-orange-based md:px-4 md:py-2`}
                 aria-current="page"
               >
                 Home
@@ -304,7 +340,7 @@ export default function Header(props: Props) {
                   location.pathname === "/about"
                     ? "md:text-orange-based"
                     : "md:text-white"
-                } block header-items py-2 pl-3 pr-4 text-black rounded font-bold shadow-md hover:bg-gray-100 md:hover:bg-transparent md:p-0 md:text-white md:hover:text-orange-based md:px-4 md:py-2`}
+                } block header-items py-2 pl-3 pr-4 text-black rounded-md hover:bg-orange-based md:hover:bg-transparent md:p-0  md:hover:text-orange-based md:px-4 md:py-2`}
               >
                 About
               </Link>
@@ -316,7 +352,7 @@ export default function Header(props: Props) {
                   location.pathname === "/products"
                     ? "md:text-orange-based"
                     : "md:text-white"
-                } block header-items py-2 pl-3 pr-4 text-black rounded font-bold shadow-md hover:bg-gray-100 md:hover:bg-transparent md:p-0 md:text-white md:hover:text-orange-based md:px-4 md:py-2`}
+                } block header-items py-2 pl-3 pr-4 text-black rounded-md hover:bg-orange-based md:hover:bg-transparent md:p-0  md:hover:text-orange-based md:px-4 md:py-2`}
               >
                 Rent Motorcycles
               </Link>
@@ -329,7 +365,7 @@ export default function Header(props: Props) {
                   location.pathname === "/contact"
                     ? "md:text-orange-based"
                     : "md:text-white"
-                } block header-items py-2 pl-3 pr-4 text-black rounded font-bold shadow-md hover:bg-gray-100 md:hover:bg-transparent md:p-0 md:text-white md:hover:text-orange-based md:px-4 md:py-2`}
+                } block header-items py-2 pl-3 pr-4 text-black rounded-md hover:bg-orange-based md:hover:bg-transparent md:p-0  md:hover:text-orange-based md:px-4 md:py-2`}
               >
                 Contact
               </Link>

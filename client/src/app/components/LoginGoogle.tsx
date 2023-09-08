@@ -3,10 +3,13 @@ import { useAppDispatch } from "../store/ConfigureStore";
 import { signInByGoogle } from "../../pages/account/AccountSlice";
 import { useState } from "react";
 import Loading from "./Loading";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 export default function LoginGoogle() {
   const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const handleError = () => {
     console.log("Login fail");
@@ -14,7 +17,13 @@ export default function LoginGoogle() {
   const handleSuccess = async (response: CredentialResponse) => {
     setLoading(true);
     try {
-      await dispatch(signInByGoogle(response.credential as string));
+      const result = await dispatch(
+        signInByGoogle(response.credential as string)
+      );
+      if (result.meta.requestStatus === "fulfilled") {
+        toast.success("Login successfully");
+        navigate("/");
+      }
     } catch (error) {
       console.log("Error:", error);
     }

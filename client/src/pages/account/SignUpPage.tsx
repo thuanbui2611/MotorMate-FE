@@ -10,6 +10,7 @@ export default function SignUpPage() {
   const navigate = useNavigate();
   const {
     register,
+    watch,
     handleSubmit,
     formState: { isSubmitting, errors },
   } = useForm({
@@ -373,6 +374,11 @@ export default function SignUpPage() {
                   className="input"
                   {...register("passwordConfirm", {
                     required: "Confirm Password is required",
+                    validate: (value) => {
+                      if (watch("password") != value) {
+                        return "Your password do not match";
+                      }
+                    },
                   })}
                   error={!!errors.passwordConfirm}
                   helperText={errors?.passwordConfirm?.message as string}
