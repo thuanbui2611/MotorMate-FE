@@ -5,6 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import agentTest from "../../app/api/agentTest";
 import LoginGoogle from "../../app/components/LoginGoogle";
+import { Link } from "react-router-dom";
 
 export default function ChangePassword() {
   const navigate = useNavigate();
@@ -34,31 +35,26 @@ export default function ChangePassword() {
       <div className="overflow-hidden">
         <div className="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8 py-10">
           <div className="flex">
-            <a
-              href="/"
-              className="flex items-center h-7 w-fit sm:h-9 bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded"
+            <Link
+              to="/"
+              className="flex items-center justify-center h-7 w-fit sm:h-9 text-orange-based font-bold hover:brightness-75 "
             >
               <svg
-                className="-ml-2 h-4 w-4 sm:h-5 sm:w-5"
-                fill="#F15D43"
-                version="1.1"
-                id="Capa_1"
                 xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 26.676 26.676"
-                stroke="white"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="currentColor"
+                className="w-4 h-4 md:w-5 md:h-5 text-orange-based stroke-orange-based stroke-2 "
               >
-                <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-                <g
-                  id="SVGRepo_tracerCarrier"
+                <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                ></g>
-                <g id="SVGRepo_iconCarrier">
-                  <path d="M26.105,21.891c-0.229,0-0.439-0.131-0.529-0.346l0,0c-0.066-0.156-1.716-3.857-7.885-4.59 c-1.285-0.156-2.824-0.236-4.693-0.25v4.613c0,0.213-0.115,0.406-0.304,0.508c-0.188,0.098-0.413,0.084-0.588-0.033L0.254,13.815 C0.094,13.708,0,13.528,0,13.339c0-0.191,0.094-0.365,0.254-0.477l11.857-7.979c0.175-0.121,0.398-0.129,0.588-0.029 c0.19,0.102,0.303,0.295,0.303,0.502v4.293c2.578,0.336,13.674,2.33,13.674,11.674c0,0.271-0.191,0.508-0.459,0.562 C26.18,21.891,26.141,21.891,26.105,21.891z"></path>
-                </g>
+                  d="M15.75 19.5L8.25 12l7.5-7.5"
+                />
               </svg>
-              <p className="text-xs ml-1 sm:ml-2">Back to home</p>
-            </a>
+              Back
+            </Link>
           </div>
           <div className="relative mx-auto max-w-4xl grid space-y-5 sm:space-y-10">
             <div className="text-center">
