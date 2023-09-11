@@ -14,6 +14,7 @@ import Transactions from "../../pages/transactions";
 import Dashboard from "../../pages/Dashboard/Dashboard";
 import Products from "../../pages/products";
 import SignIn from "../../pages/account/SignIn";
+import Collection from "../../pages/collection";
 
 export const router = createBrowserRouter([
   {
@@ -26,6 +27,7 @@ export const router = createBrowserRouter([
           { path: "", element: <Dashboard /> },
           { path: "dashboard", element: <Dashboard /> },
           { path: "products", element: <Products /> },
+          { path: "collections", element: <Collection /> },
           { path: "brand", element: <Brand /> },
           { path: "transactions", element: <Transactions /> },
           { path: "profile", element: <Profile /> },

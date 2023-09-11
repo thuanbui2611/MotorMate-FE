@@ -54,7 +54,7 @@ export default function Pagination({ metaData, onPageChange, loading }: Props) {
           <LoaderButton />
         ) : (
           <>
-            <ArrowLeftIcon strokeWidth={2} className="h-4 w-4" /> Previous
+            <ArrowLeftIcon strokeWidth={2} className="h-4 w-4" />
           </>
         )}
       </Button>
@@ -75,7 +75,6 @@ export default function Pagination({ metaData, onPageChange, loading }: Props) {
           <LoaderButton />
         ) : (
           <>
-            <span>Next</span>
             <ArrowRightIcon strokeWidth={2} className="h-4 w-4" />
           </>
         )}

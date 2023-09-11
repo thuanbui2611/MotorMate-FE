@@ -1,125 +1,73 @@
-import { useEffect, useState, ChangeEvent } from "react";
+import { useEffect, useState } from "react";
 import Breadcrumb from "../../app/components/Breadcrumb";
+import { Collection } from "../../app/models/Collection";
+import Pagination from "../../app/components/Pagination";
+import ConfirmDeleteDialog from "../../app/components/ConfirmDeleteDialog";
 import { useAppDispatch, useAppSelector } from "../../app/store/ConfigureStore";
 import {
-  brandSelectors,
-  deleteBrandAsync,
-  getBrandsAsync,
-  setBrandParams,
-  setPageNumber,
-} from "./BrandSlice";
+  collectionSelectors,
+  deleteCollectionAsync,
+  getCollectionsAsync,
+  setCollectionParams,
+} from "./CollectionSlice";
 import Loader from "../../app/components/Loader";
-import Pagination from "../../app/components/Pagination";
-import BrandForm from "./BrandForm";
-import { Brand } from "../../app/models/Brand";
-import ConfirmDeleteDialog from "../../app/components/ConfirmDeleteDialog";
-import {
-  deleteImage,
-  deleteImages,
-  uploadImages,
-} from "../../app/utils/Cloudinary";
+import CollectionForm from "./CollectionForm";
 
-export default function BrandPage() {
+export default function CollectionPage() {
   const [actionName, setActionName] = useState(String);
   const [openEditForm, setOpenEditForm] = useState(false);
-  const [selectedBrand, setSelectedBrand] = useState<Brand | null>(null);
+  const [selectedCollection, setSelectedCollecton] =
+    useState<Collection | null>(null);
   const [confirmDeleteDiaglog, setConfirmDeleteDiaglog] = useState(false);
-  const [brandDeleted, setBrandDeleted] = useState<Brand>({} as Brand);
-  //Test upload multiple images
-  const [selectedFiles, setSelectedFiles] = useState<FileList | null>(null);
-  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-    setSelectedFiles((prevFiles) => {
-      if (prevFiles) {
-        // Convert the FileList to an array
-        const prevFilesArray = Array.from(prevFiles);
-        // Convert the new files to an array
-        const newFilesArray = Array.from(files || []);
-        // Concatenate the previous and new files arrays
-        const combinedFilesArray = [...prevFilesArray, ...newFilesArray];
-        // Convert the combined files array back to a FileList
-        const combinedFilesList = createFileList(combinedFilesArray);
-        return combinedFilesList;
-      }
-      // If there were no previous files, simply use the new FileList
-      return files;
-    });
-    console.log("Selected file:", selectedFiles);
-  };
+  const [brandDeleted, setCollectionDeleted] = useState<Collection>(
+    {} as Collection
+  );
 
-  const createFileList = (files: File[]) => {
-    const dataTransfer = new DataTransfer();
-    files.forEach((file) => {
-      dataTransfer.items.add(file);
-    });
-    return dataTransfer.files;
-  };
-
-  const handleSubmit = async () => {
-    const result = await uploadImages(selectedFiles!);
-    console.log("Result upload images:", result);
-    setSelectedFiles(null);
-  };
-  // End of test upload multiple images
-
-  // Test delete multiple images
-  const handleDeleteImages = async () => {
-    const listIdImage = [
-      "motormate/fzyiybjcpt5yxqdxwr6h",
-      "motormate/lgko1duvtq4qesxywakp",
-      "motormate/zkv4xffinpt79gzvzkvz",
-    ];
-    const result = await deleteImages(listIdImage);
-    console.log("Result upload images:", result);
-    setSelectedFiles(null);
-  };
-  // End of test delete multiple images
-  const brands = useAppSelector(brandSelectors.selectAll);
-  const { brandLoaded, metaData, brandParams } = useAppSelector(
-    (state) => state.brand
+  const collections = useAppSelector(collectionSelectors.selectAll);
+  const { collectionLoaded, metaData, collectionParams } = useAppSelector(
+    (state) => state.collection
   );
   const dispatch = useAppDispatch();
-  const handleSelectBrand = (actionName: string, brand?: Brand) => {
+  const handleSelectCollection = (
+    actionName: string,
+    collection?: Collection
+  ) => {
     setOpenEditForm((cur) => !cur);
-    if (brand) {
-      setSelectedBrand(brand);
+    if (collection) {
+      setSelectedCollecton(collection);
     }
     setActionName(actionName);
   };
 
   const cancelEditForm = () => {
     setOpenEditForm((cur) => !cur);
-    setSelectedBrand(null);
+    setSelectedCollecton(null);
   };
 
-  async function handleDeleteBrand(brandDeleted: Brand) {
-    if (brandDeleted.image.publicId) {
-      await deleteImage(brandDeleted.image.publicId);
-    }
-    await dispatch(deleteBrandAsync(brandDeleted.id));
+  async function handleDeleteBrand(collectionDeleted: Collection) {
+    await dispatch(deleteCollectionAsync(collectionDeleted.id));
   }
-  const openConfirmDeleteDiaglog = (brand: Brand) => {
+  const openConfirmDeleteDiaglog = (collection: Collection) => {
     setConfirmDeleteDiaglog((cur) => !cur);
-    setBrandDeleted(brand);
+    setCollectionDeleted(collection);
   };
   const cancelConfirmDeleteDiaglog = () => setConfirmDeleteDiaglog(false);
 
   useEffect(() => {
-    if (!brandLoaded) {
-      dispatch(getBrandsAsync());
+    if (!collectionLoaded) {
+      dispatch(getCollectionsAsync());
     }
-  }, [dispatch, brandParams]);
-
+  }, [dispatch, collectionParams]);
   if (!metaData) {
     return <Loader />;
   } else
     return (
       <>
-        <Breadcrumb pageName="Brand" />
+        <Breadcrumb pageName="Collection" />
         <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
           <div className="flex justify-end">
             <button
-              onClick={() => handleSelectBrand("Add a new brand")}
+              onClick={() => handleSelectCollection("Add a new collection")}
               type="button"
               className="flex items-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
             >
@@ -182,7 +130,7 @@ export default function BrandPage() {
               <thead>
                 <tr className=" bg-gray-2 text-left dark:bg-meta-4  font-bold">
                   <th className="min-w-[220px] py-4 px-4 text-black dark:text-white xl:pl-11">
-                    Brand Name
+                    Collection Name
                   </th>
                   <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
                     Profit
@@ -194,7 +142,7 @@ export default function BrandPage() {
                 </tr>
               </thead>
               <tbody>
-                {brandLoaded ? (
+                {collectionLoaded ? (
                   <tr>
                     <td colSpan={4} className="text-center">
                       <Loader className="h-70 " />
@@ -202,15 +150,11 @@ export default function BrandPage() {
                   </tr>
                 ) : (
                   <>
-                    {brands.map((brand) => (
-                      <tr key={brand.id}>
+                    {collections.map((collection) => (
+                      <tr key={collection.id}>
                         <td className="flex items-center border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
-                          <div className="h-12 w-12 rounded-md">
-                            <img src={brand.image.image} alt="logo" />
-                            {/* <video src={brand.logo} autoPlay muted loop></video> */}
-                          </div>
-                          <h5 className="ml-4 font-medium text-black dark:text-white">
-                            {brand.name}
+                          <h5 className="font-medium text-black dark:text-white">
+                            {collection.name}
                           </h5>
                         </td>
                         <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
@@ -224,12 +168,16 @@ export default function BrandPage() {
                         <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                           <div className="flex items-center space-x-3.5">
                             <button
-                              className="hover:text-primary hover:bg-primary/30 rounded-full "
+                              className="  hover:text-primary hover:bg-primary/30 rounded-full "
                               onClick={() =>
-                                handleSelectBrand("Edit brand", brand)
+                                handleSelectCollection(
+                                  "Edit Collection",
+                                  collection
+                                )
                               }
                             >
                               <svg
+                                className="fill-current"
                                 width="18px"
                                 height="18px"
                                 viewBox="0 -0.5 21 21"
@@ -248,13 +196,7 @@ export default function BrandPage() {
                                   <title>edit [#1483]</title>
                                   <desc>Created with Sketch.</desc>
                                   <defs> </defs>
-                                  <g
-                                    id="Page-1"
-                                    stroke="none"
-                                    strokeWidth="1"
-                                    fill="none"
-                                    fillRule="evenodd"
-                                  >
+                                  <g id="Page-1" fill="none" fillRule="evenodd">
                                     <g
                                       id="Dribbble-Light-Preview"
                                       transform="translate(-339.000000, -360.000000)"
@@ -266,7 +208,6 @@ export default function BrandPage() {
                                       >
                                         <path
                                           d="M283,220 L303.616532,220 L303.616532,218.042095 L283,218.042095 L283,220 Z M290.215786,213.147332 L290.215786,210.51395 L296.094591,205.344102 L298.146966,207.493882 L292.903151,213.147332 L290.215786,213.147332 Z M299.244797,202.64513 L301.059052,204.363191 L299.645788,205.787567 L297.756283,203.993147 L299.244797,202.64513 Z M304,204.64513 L299.132437,200 L288.154133,209.687714 L288.154133,215.105237 L293.78657,215.105237 L304,204.64513 Z"
-                                          id="edit-[#1483]"
                                           className="fill-current"
                                         ></path>
                                       </g>
@@ -277,7 +218,9 @@ export default function BrandPage() {
                             </button>
                             <button
                               className="hover:text-red-600 hover:bg-red-600/30 rounded-full p-1"
-                              onClick={() => openConfirmDeleteDiaglog(brand)}
+                              onClick={() =>
+                                openConfirmDeleteDiaglog(collection)
+                              }
                             >
                               <svg
                                 className="fill-current"
@@ -318,15 +261,15 @@ export default function BrandPage() {
             <Pagination
               metaData={metaData}
               onPageChange={(page: number) => {
-                dispatch(setBrandParams({ pageNumber: page }));
+                dispatch(setCollectionParams({ pageNumber: page }));
               }}
-              loading={brandLoaded}
+              loading={collectionLoaded}
             />
           </div>
         </div>
         {openEditForm && (
-          <BrandForm
-            brand={selectedBrand}
+          <CollectionForm
+            collection={selectedCollection}
             cancelEdit={cancelEditForm}
             actionName={actionName}
           />

@@ -9,7 +9,6 @@ import agent from "../../app/api/agent";
 import { RootState } from "../../app/store/ConfigureStore";
 import { toast } from "react-toastify";
 import { MetaData } from "../../app/models/Pagination";
-import { act } from "@testing-library/react";
 
 interface BrandState {
   brand: Brand | null;

@@ -10,15 +10,15 @@ axios.defaults.baseURL = "https://motormate.azurewebsites.net/";
 // });
 axios.defaults.headers.post["Content-Type"] = "application/json";
 const responseBody = (response: AxiosResponse) => response.data;
-// axios.interceptors.request.use((config) => {
-//   const userToken = store.getState().account.user?.token;
-//   if (userToken) config.headers.Authorization = `Bearer ${userToken}`;
-//   return config;
-// });
+axios.interceptors.request.use((config) => {
+  const userToken = store.getState().account.user?.token;
+  console.log("get user token from user state", userToken);
+  if (userToken) config.headers.Authorization = `Bearer ${userToken}`;
+  return config;
+});
 
 axios.interceptors.response.use(
   async (response) => {
-    console.log("Interceptors cacth response", response);
     const pagination = response.headers["x-pagination"];
     if (pagination) {
       response.data = new PaginatedResponse(
@@ -31,7 +31,7 @@ axios.interceptors.response.use(
   },
   (error: AxiosError) => {
     const { data, status } = error.response!;
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
     switch (status) {
       case 400:
         if ((data as any).errors) {
@@ -60,9 +60,9 @@ axios.interceptors.response.use(
       case 500:
         console.log("Catch 500");
         toast.error((data as any).message);
-        navigate("/server-error", {
-          state: { error: data },
-        });
+        // navigate("/server-error", {
+        //   state: { error: data },
+        // });
         break;
       default:
         break;
@@ -80,6 +80,7 @@ const requests = {
 };
 
 const Account = {
+  userDetail: () => requests.get("api/user/details"),
   login: (values: {}) => requests.post("api/auth/login", values),
   loginGoogle: (values: { tokenCredential: string }) =>
     requests.post("api/auth/sso/google", values),
@@ -88,16 +89,26 @@ const Account = {
 
 const Brand = {
   list: (params: URLSearchParams) => requests.get("api/brand", params),
-  listTest: (params: URLSearchParams) => requests.get("api/brand", params),
+  // listTest: (params: URLSearchParams) => requests.get("api/brand", params),
   details: (id: string) => requests.get(`api/brand/${id}`),
   create: (values: {}) => requests.post("api/brand", values),
   update: (id: string, values: {}) => requests.patch(`api/brand/${id}`, values),
   delete: (id: string) => requests.delete(`api/brand/${id}`),
 };
 
+const Collection = {
+  list: (params: URLSearchParams) => requests.get("api/collection", params),
+  details: (id: string) => requests.get(`api/collection/${id}`),
+  create: (values: {}) => requests.post("api/collection", values),
+  update: (id: string, values: {}) =>
+    requests.patch(`api/collection/${id}`, values),
+  delete: (id: string) => requests.delete(`api/collection/${id}`),
+};
+
 const agent = {
   Account,
   Brand,
+  Collection,
 };
 
 export default agent;

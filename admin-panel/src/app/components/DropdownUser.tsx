@@ -1,11 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import { useAppSelector } from "../store/ConfigureStore";
 
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const trigger = useRef<any>(null);
   const dropdown = useRef<any>(null);
+
+  const user = useAppSelector((state) => state.account.user);
 
   // close on click outside
   useEffect(() => {
@@ -42,10 +45,12 @@ const DropdownUser = () => {
         to="#"
       >
         <span className="hidden text-right lg:block">
-          <span className="block text-sm font-medium text-black dark:text-white">
-            Thomas Anree
+          <span className="block text-sm font-medium text-black dark:text-white line-clamp-1">
+            {user ? user.name : "Not login"}
           </span>
-          <span className="block text-xs">UX Designer</span>
+          <span className="block text-xs">
+            {user ? user.role : "Not login"}
+          </span>
         </span>
 
         <span className="h-12 w-12 rounded-full">

@@ -1,11 +1,13 @@
 import { FieldValues, useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { signInUser } from "./AccountSlice";
 import { useAppDispatch } from "../../app/store/ConfigureStore";
 import { TextField } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
+import { toast } from "react-toastify";
 
 const SignIn = () => {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const {
     register,
@@ -17,6 +19,10 @@ const SignIn = () => {
 
   async function submitForm(data: FieldValues) {
     const signIn = await dispatch(signInUser(data));
+    if (signIn.meta.requestStatus === "fulfilled") {
+      navigate("/dashboard");
+      toast.success("Login Successful");
+    }
   }
   return (
     <>
@@ -168,9 +174,11 @@ const SignIn = () => {
 
           <div className="w-full border-stroke xl:w-1/2 xl:border-l-2">
             <div className="w-full p-4 sm:p-12.5 xl:p-17.5">
-              <span className="mb-1.5 block font-medium">Start for free</span>
+              <span className="mb-1.5 block font-medium">
+                For admin and staff
+              </span>
               <h2 className="mb-9 text-2xl font-bold text-black sm:text-title-xl2">
-                Sign In to TailAdmin
+                Sign In to Motormate Admin
               </h2>
 
               <form onSubmit={handleSubmit(submitForm)}>

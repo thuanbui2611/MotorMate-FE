@@ -3,12 +3,16 @@ import { ToastContainer } from "react-toastify";
 import { Outlet } from "react-router-dom";
 import Loader from "./app/components/Loader";
 import "react-toastify/dist/ReactToastify.css";
+import { useAppDispatch, useAppSelector } from "./app/store/ConfigureStore";
+import { fetchUserFromToken } from "./pages/account/AccountSlice";
 
 function App() {
   const [loading, setLoading] = useState(true);
+  const user = useAppSelector((state) => state.account.user);
+  const dispatch = useAppDispatch();
   useEffect(() => {
-    setTimeout(() => setLoading(false), 50);
-  }, []);
+    dispatch(fetchUserFromToken()).finally(() => setLoading(false));
+  }, [dispatch, user?.token]);
   return loading ? (
     <Loader />
   ) : (

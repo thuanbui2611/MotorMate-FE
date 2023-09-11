@@ -1,5 +1,6 @@
 import { useState } from "react";
 import SelectCityVN from "../../app/components/SelectCityVN";
+import ProcessingBar from "../../app/components/ProcessingBar";
 
 export default function Checkout() {
   //Select option Payment Method
@@ -23,7 +24,7 @@ export default function Checkout() {
   //End of select option delivery
   return (
     <>
-      <section className="pt-12 pb-24 bg-blue-100 overflow-hidden">
+      <section className="pt-12 pb-24 bg-gray-100 overflow-hidden">
         <div className="container px-4 mx-auto">
           {/* <ul className="flex flex-wrap items-center mb-10 xl:mb-0">
             <li className="mr-6">
@@ -76,73 +77,7 @@ export default function Checkout() {
             </li>
           </ul> */}
 
-          <div className="justify-center flex-1 max-w-6xl py-5 mx-auto bg-white rounded-2xl">
-            {/* <div className="flex flex-wrap justify-center px-20 pb-12 mb-16 text-left border-b border-gray-200 dark:border-gray-700 lg:justify-between ">
-                <div className="px-4 mb-6 lg:mb-0">
-                  <h2 className="mb-1 text-lg font-semibold tracking-wide dark:text-gray-300">
-                    Your order has been Shipped
-                  </h2>
-                  <p className="text-sm text-gray-500    ">
-                    by DHFL on 10th feb, 2022
-                  </p>
-                </div>
-                <div className="px-4">
-                  <button className="w-full px-4 py-2 text-blue-500 border border-blue-500 rounded-full md:w-auto hover:text-gray-100 hover:bg-blue-600 dark:border-gray-700 dark:hover:bg-gray-700 dark:text-gray-300">
-                    Tracking details
-                  </button>
-                </div>
-              </div> */}
-            <div className="flex flex-wrap items-center justify-center ">
-              <div className="relative w-full px-4 mb-16 md:w-1/2 lg:w-1/4 lg:mb-0">
-                <div className="absolute hidden top-5 lg:block left-1/2 ">
-                  <span className="mb-3 border-b-2 border-r border-gray-300 w-72 md:block left-1/2 inset-px"></span>
-                </div>
-
-                {/* <div className="relative text-center">
-                  <span className="inline-flex items-center justify-center w-10 h-10 mb-8 text-lg text-gray-100 bg-blue-600 rounded-full shadow-md dark:bg-blue-400">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="currentColor"
-                      className="w-6 h-6 bi bi-check-lg"
-                      viewBox="0 0 16 16"
-                    >
-                      <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z" />
-                    </svg>
-                  </span>
-                  <h2 className="text-lg font-medium     ">
-                    Order information
-                  </h2>
-                </div> */}
-                <div className="relative text-center">
-                  <span className="inline-flex items-center justify-center w-10 h-10 mb-8 text-lg text-white bg-blue-600 rounded-full shadow-md">
-                    1
-                  </span>
-                  <h2 className="text-lg font-medium">Order information</h2>
-                </div>
-              </div>
-              <div className="relative w-full px-4 mb-16 md:w-1/2 lg:w-1/4 lg:mb-0">
-                <div className="absolute hidden top-5 lg:block left-1/2">
-                  <span className="mb-3 border-b-2 border-r border-gray-300 w-72 md:block left-1/2 inset-px"></span>
-                </div>
-                <div className="relative text-center">
-                  <span className="inline-flex items-center justify-center w-10 h-10 mb-8 text-lg text-black bg-gray-200 rounded-full shadow-md">
-                    2
-                  </span>
-                  <h2 className="text-lg font-medium    ">Payment</h2>
-                </div>
-              </div>
-              <div className="relative w-full px-4 mb-16 md:w-1/2 lg:w-1/4 md:mb-0">
-                <div className="relative text-center">
-                  <span className="inline-flex items-center justify-center w-10 h-10 mb-8 text-lg text-black bg-gray-200 rounded-full shadow-md ">
-                    3
-                  </span>
-                  <h2 className="text-lg font-medium    ">Done</h2>
-                </div>
-              </div>
-            </div>
-          </div>
+          <ProcessingBar processing="checkout" />
 
           {/* <div className="pb-9 mb-7 text-center border-b border-black border-opacity-5">
             <h2 className=" text-7xl xl:text-10xl leading-normal font-heading font-medium text-center">

@@ -1,16 +1,18 @@
+import ProcessingBar from "../../app/components/ProcessingBar";
+
 export default function Payment() {
   return (
     <>
-      <section className="pt-12 pb-24 bg-blue-100 overflow-hidden">
+      <section className="pt-12 pb-24 bg-gray-100 overflow-hidden">
         <div className="container px-4 mx-auto">
-          <div className="justify-center flex-1 max-w-6xl py-5 mx-auto bg-white rounded-2xl">
+          {/* <div className="justify-center flex-1 max-w-6xl py-5 mx-auto bg-white rounded-2xl">
             <div className="flex flex-wrap items-center justify-center ">
               <div className="relative w-full px-4 mb-16 md:w-1/2 lg:w-1/4 lg:mb-0">
                 <div className="absolute hidden top-5 lg:block left-1/2 ">
                   <span className="mb-3 border-b-2 border-r border-blue-600 w-72 md:block left-1/2 inset-px"></span>
                 </div>
                 <div className="relative text-center">
-                  <span className="inline-flex items-center justify-center w-10 h-10 mb-8 text-lg text-gray-100 bg-blue-600 rounded-full shadow-md dark:bg-blue-400">
+                  <span className="inline-flex items-center justify-center w-10 h-10 mb-8 text-lg text-white bg-blue-600 rounded-full shadow-md dark:bg-blue-400">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="16"
@@ -51,7 +53,8 @@ export default function Payment() {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
+          <ProcessingBar processing="payment" />
         </div>
       </section>
       <a href="/bill"> Next</a>

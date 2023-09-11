@@ -62,6 +62,23 @@ export const fetchUserFromToken = createAsyncThunk<User>(
   }
 );
 
+// export const getUserDetails = createAsyncThunk<User>(
+//   "account/getUserDetails",
+//   async (_, thunkAPI) => {
+//     try {
+//       const user = await agent.Account.userDetail();
+//       return user;
+//     } catch (error) {
+//       return thunkAPI.rejectWithValue({ error: (error as any).data });
+//     }
+//   },
+//   {
+//     condition: () => {
+//       if (!localStorage.getItem("user")) return false;
+//     },
+//   }
+// );
+
 export const AccountSlice = createSlice({
   name: "account",
   initialState,
