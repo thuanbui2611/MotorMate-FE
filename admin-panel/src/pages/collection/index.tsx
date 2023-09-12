@@ -113,7 +113,7 @@ export default function CollectionPage() {
                   </g>
                 </g>
               </svg>
-              <span>Add new brand</span>
+              <span>Add new collection</span>
             </button>
             {/* Test upload multiple images */}
             {/* <div>

@@ -57,6 +57,7 @@ export default function ModelVehiclePage()
       dispatch(getModelVehiclesAsync());
     }
   }, [dispatch, modelVehicleParams]);
+  console.log("Data:", modelVehicles)
   if (!metaData) {
     return <Loader />;
   } else
@@ -148,28 +149,27 @@ export default function ModelVehiclePage()
                   <>
                     {modelVehicles.map((modelVehicle) => (
                       <tr key={modelVehicle.id}>
-                        <td className="flex flex-col items-center border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
+                        <td className="flex flex-col items-start border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
                           <h5 className="font-medium text-black dark:text-white">
                             {modelVehicle.name}
                           </h5>
                           <p className="text-sm">{modelVehicle.colors[0].color}</p>
                         </td>
-                        <td className="flex items-center border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
+                        <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                           <h5 className="font-medium text-black dark:text-white">
                             {modelVehicle.collection.name}
                           </h5>
                         </td>
-                        <td className="flex items-center border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
+                        <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                           <h5 className="font-medium text-black dark:text-white">
                             {modelVehicle.capacity}
                           </h5>
                         </td>
-                        <td className="flex items-center border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
+                        <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                           <h5 className="font-medium text-black dark:text-white">
                             {modelVehicle.year}
                           </h5>
-                        </td>
-                        
+                        </td>                   
                         <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                           <p className="inline-flex rounded-full bg-success bg-opacity-10 py-1 px-3 text-sm font-medium text-success">
                             Enable

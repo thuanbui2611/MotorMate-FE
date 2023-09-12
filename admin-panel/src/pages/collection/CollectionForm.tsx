@@ -15,6 +15,8 @@ import { useAppDispatch } from "../../app/store/ConfigureStore";
 import { addCollectionAsync, updateCollectionAsync } from "./CollectionSlice";
 import { toast } from "react-toastify";
 import { LoadingButton } from "@mui/lab";
+import Autocomplete from '@mui/material/Autocomplete';
+import agent from "../../app/api/agent";
 
 interface Props {
   collection: Collection | null;
@@ -41,6 +43,7 @@ export default function CollectionForm({
   }, [collection, reset]);
 
   const dispatch = useAppDispatch();
+  const brands = agent.Brand.all();
 
   async function submitForm(data: FieldValues) {
     try {
@@ -88,6 +91,13 @@ export default function CollectionForm({
                 label="Collection name"
               />
               <AppTextInput control={control} name="brandId" label="Brand id" />
+              {/* <Autocomplete
+      disablePortal
+      id="combo-box-demo"
+      options={brands}
+      sx={{ width: 300 }}
+      renderInput={(params) => <AppTextInput {...params} label="Movie" />}
+    /> */}
             </CardBody>
             <CardFooter className="pt-0 flex flex-row justify-between gap-10">
               <LoadingButton

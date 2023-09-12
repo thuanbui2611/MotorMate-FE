@@ -88,6 +88,7 @@ const Account = {
 };
 
 const Brand = {
+  all: () => requests.get("api/brand/all"),
   list: (params: URLSearchParams) => requests.get("api/brand", params),
   details: (id: string) => requests.get(`api/brand/${id}`),
   create: (values: {}) => requests.post("api/brand", values),

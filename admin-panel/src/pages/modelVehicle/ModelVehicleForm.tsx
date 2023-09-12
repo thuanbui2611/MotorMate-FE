@@ -86,9 +86,12 @@ import { addModelVehicleAsync, updateModelVehicleAsync } from "./ModelVehicleSli
                 <AppTextInput
                   control={control}
                   name="name"
-                  label="Collection name"
+                  label="Model name"
                 />
-                <AppTextInput control={control} name="brandId" label="Brand id" />
+                <AppTextInput control={control} name="year" label="Year release" />
+                <AppTextInput control={control} name="capacity" label="Capacity" />
+                <AppTextInput control={control} name="collectionId" label="Collection id" />
+                <AppTextInput control={control} name="colorIds[0]" label="Color id" />
               </CardBody>
               <CardFooter className="pt-0 flex flex-row justify-between gap-10">
                 <LoadingButton
