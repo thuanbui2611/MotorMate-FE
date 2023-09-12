@@ -89,7 +89,6 @@ const Account = {
 
 const Brand = {
   list: (params: URLSearchParams) => requests.get("api/brand", params),
-  // listTest: (params: URLSearchParams) => requests.get("api/brand", params),
   details: (id: string) => requests.get(`api/brand/${id}`),
   create: (values: {}) => requests.post("api/brand", values),
   update: (id: string, values: {}) => requests.patch(`api/brand/${id}`, values),
@@ -105,10 +104,20 @@ const Collection = {
   delete: (id: string) => requests.delete(`api/collection/${id}`),
 };
 
+const ModelVehicle = {
+  list: (params: URLSearchParams) => requests.get("api/model", params),
+  details: (id: string) => requests.get(`api/model/${id}`),
+  create: (values: {}) => requests.post("api/model", values),
+  update: (id: string, values: {}) =>
+    requests.patch(`api/model/${id}`, values),
+  delete: (id: string) => requests.delete(`api/model/${id}`),
+}
+
 const agent = {
   Account,
   Brand,
   Collection,
+  ModelVehicle
 };
 
 export default agent;

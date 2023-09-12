@@ -15,6 +15,7 @@ import Dashboard from "../../pages/Dashboard/Dashboard";
 import Products from "../../pages/products";
 import SignIn from "../../pages/account/SignIn";
 import Collection from "../../pages/collection";
+import ModelVehicle from "../../pages/modelVehicle"
 
 export const router = createBrowserRouter([
   {
@@ -30,6 +31,7 @@ export const router = createBrowserRouter([
           { path: "collections", element: <Collection /> },
           { path: "brand", element: <Brand /> },
           { path: "transactions", element: <Transactions /> },
+          { path: "model-vehicles", element: <ModelVehicle /> },
           { path: "profile", element: <Profile /> },
           { path: "forms/form-elements", element: <FormElements /> },
           { path: "forms/form-layout", element: <FormLayout /> },

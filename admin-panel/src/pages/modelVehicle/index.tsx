@@ -1,73 +1,72 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
+import { Collection } from "typescript";
 import Breadcrumb from "../../app/components/Breadcrumb";
-import { Collection } from "../../app/models/Collection";
-import Pagination from "../../app/components/Pagination";
 import ConfirmDeleteDialog from "../../app/components/ConfirmDeleteDialog";
-import { useAppDispatch, useAppSelector } from "../../app/store/ConfigureStore";
-import {
-  collectionSelectors,
-  deleteCollectionAsync,
-  getCollectionsAsync,
-  setCollectionParams,
-} from "./CollectionSlice";
 import Loader from "../../app/components/Loader";
-import CollectionForm from "./CollectionForm";
+import { useAppSelector, useAppDispatch } from "../../app/store/ConfigureStore";
+import CollectionForm from "../collection/CollectionForm";
+import { collectionSelectors, deleteCollectionAsync, getCollectionsAsync, setCollectionParams } from "../collection/CollectionSlice";
+import { ModelVehicle } from "../../app/models/ModelVehicle";
+import { deleteModelVehicleAsync, getModelVehiclesAsync, modelVehicleSelectors } from "./ModelVehicleSlice";
+import ModelVehicleForm from "./ModelVehicleForm";
+import Pagination from "../../app/components/Pagination";
 
-export default function CollectionPage() {
+export default function ModelVehiclePage()
+{
   const [actionName, setActionName] = useState(String);
   const [openEditForm, setOpenEditForm] = useState(false);
-  const [selectedCollection, setSelectedCollection] =
-    useState<Collection | null>(null);
+  const [selectedModelVehicle, setSelectedModelVehicle] =
+    useState<ModelVehicle | null>(null);
   const [confirmDeleteDiaglog, setConfirmDeleteDiaglog] = useState(false);
-  const [brandDeleted, setCollectionDeleted] = useState<Collection>(
-    {} as Collection
+  const [modelVehicleDeleted, setModelVehicleDeleted] = useState<ModelVehicle>(
+    {} as ModelVehicle
   );
 
-  const collections = useAppSelector(collectionSelectors.selectAll);
-  const { collectionLoaded, metaData, collectionParams } = useAppSelector(
-    (state) => state.collection
+  const modelVehicles = useAppSelector(modelVehicleSelectors.selectAll);
+  const { modelVehicleLoaded, metaData, modelVehicleParams } = useAppSelector(
+    (state) => state.modelVehicle
   );
   const dispatch = useAppDispatch();
-  const handleSelectCollection = (
+  const handleSelectModelVehicle = (
     actionName: string,
-    collection?: Collection
+    modelVehicle?: ModelVehicle
   ) => {
     setOpenEditForm((cur) => !cur);
-    if (collection) {
-      setSelectedCollection(collection);
+    if (modelVehicle) {
+      setSelectedModelVehicle(modelVehicle);
     }
     setActionName(actionName);
   };
 
   const cancelEditForm = () => {
     setOpenEditForm((cur) => !cur);
-    setSelectedCollection(null);
+    setSelectedModelVehicle(null);
   };
 
-  async function handleDeleteBrand(collectionDeleted: Collection) {
-    await dispatch(deleteCollectionAsync(collectionDeleted.id));
+  async function handleDeleteModelVehicle(modelVehicleDeleted: ModelVehicle) {
+    await dispatch(deleteModelVehicleAsync(modelVehicleDeleted.id));
   }
-  const openConfirmDeleteDiaglog = (collection: Collection) => {
+  const openConfirmDeleteDiaglog = (modelVehicle: ModelVehicle) => {
     setConfirmDeleteDiaglog((cur) => !cur);
-    setCollectionDeleted(collection);
+    setModelVehicleDeleted(modelVehicle);
   };
   const cancelConfirmDeleteDiaglog = () => setConfirmDeleteDiaglog(false);
 
   useEffect(() => {
-    if (!collectionLoaded) {
-      dispatch(getCollectionsAsync());
+    if (!modelVehicleLoaded) {
+      dispatch(getModelVehiclesAsync());
     }
-  }, [dispatch, collectionParams]);
+  }, [dispatch, modelVehicleParams]);
   if (!metaData) {
     return <Loader />;
   } else
     return (
       <>
-        <Breadcrumb pageName="Collection" />
+        <Breadcrumb pageName="Model Vehicle" />
         <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
           <div className="flex justify-end">
             <button
-              onClick={() => handleSelectCollection("Add a new collection")}
+              onClick={() => handleSelectModelVehicle("Add a new model for vehicle")}
               type="button"
               className="flex items-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
             >
@@ -113,27 +112,24 @@ export default function CollectionPage() {
                   </g>
                 </g>
               </svg>
-              <span>Add new brand</span>
+              <span>Add new model for vehicle</span>
             </button>
-            {/* Test upload multiple images */}
-            {/* <div>
-              <input type="file" onChange={handleFileChange} multiple />
-              <button onClick={handleSubmit}>Submit</button>
-            </div> */}
-            {/* End of test upload multiple images */}
-            {/* Test delete multiple images */}
-            {/* <button onClick={handleDeleteImages}>Delete images</button> */}
-            {/* End of test delete multiple images */}
           </div>
           <div className="max-w-full overflow-x-auto">
             <table className="w-full table-auto">
               <thead>
                 <tr className=" bg-gray-2 text-left dark:bg-meta-4  font-bold">
                   <th className="min-w-[220px] py-4 px-4 text-black dark:text-white xl:pl-11">
-                    Collection Name
+                    Model Name
                   </th>
                   <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
-                    Profit
+                    Collection name
+                  </th>
+                  <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
+                    Capacity
+                  </th>
+                  <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
+                    Year
                   </th>
                   <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
                     Status
@@ -142,7 +138,7 @@ export default function CollectionPage() {
                 </tr>
               </thead>
               <tbody>
-                {collectionLoaded ? (
+                {modelVehicleLoaded ? (
                   <tr>
                     <td colSpan={4} className="text-center">
                       <Loader className="h-70 " />
@@ -150,16 +146,30 @@ export default function CollectionPage() {
                   </tr>
                 ) : (
                   <>
-                    {collections.map((collection) => (
-                      <tr key={collection.id}>
+                    {modelVehicles.map((modelVehicle) => (
+                      <tr key={modelVehicle.id}>
+                        <td className="flex flex-col items-center border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
+                          <h5 className="font-medium text-black dark:text-white">
+                            {modelVehicle.name}
+                          </h5>
+                          <p className="text-sm">{modelVehicle.colors[0].color}</p>
+                        </td>
                         <td className="flex items-center border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
                           <h5 className="font-medium text-black dark:text-white">
-                            {collection.name}
+                            {modelVehicle.collection.name}
                           </h5>
                         </td>
-                        <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                          <p className="text-meta-3 ">10.000</p>
+                        <td className="flex items-center border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
+                          <h5 className="font-medium text-black dark:text-white">
+                            {modelVehicle.capacity}
+                          </h5>
                         </td>
+                        <td className="flex items-center border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
+                          <h5 className="font-medium text-black dark:text-white">
+                            {modelVehicle.year}
+                          </h5>
+                        </td>
+                        
                         <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                           <p className="inline-flex rounded-full bg-success bg-opacity-10 py-1 px-3 text-sm font-medium text-success">
                             Enable
@@ -170,9 +180,9 @@ export default function CollectionPage() {
                             <button
                               className="  hover:text-primary hover:bg-primary/30 rounded-full "
                               onClick={() =>
-                                handleSelectCollection(
-                                  "Edit Collection",
-                                  collection
+                                handleSelectModelVehicle(
+                                  "Edit Model of Vehicle",
+                                  modelVehicle
                                 )
                               }
                             >
@@ -219,7 +229,7 @@ export default function CollectionPage() {
                             <button
                               className="hover:text-red-600 hover:bg-red-600/30 rounded-full p-1"
                               onClick={() =>
-                                openConfirmDeleteDiaglog(collection)
+                                openConfirmDeleteDiaglog(modelVehicle)
                               }
                             >
                               <svg
@@ -263,13 +273,13 @@ export default function CollectionPage() {
               onPageChange={(page: number) => {
                 dispatch(setCollectionParams({ pageNumber: page }));
               }}
-              loading={collectionLoaded}
+              loading={modelVehicleLoaded}
             />
           </div>
         </div>
         {openEditForm && (
-          <CollectionForm
-            collection={selectedCollection}
+          <ModelVehicleForm
+            modelVehicle={selectedModelVehicle}
             cancelEdit={cancelEditForm}
             actionName={actionName}
           />
@@ -277,8 +287,8 @@ export default function CollectionPage() {
 
         {confirmDeleteDiaglog && (
           <ConfirmDeleteDialog
-            objectName={brandDeleted.name}
-            actionDelete={() => handleDeleteBrand(brandDeleted)}
+            objectName={modelVehicleDeleted.name}
+            actionDelete={() => handleDeleteModelVehicle(modelVehicleDeleted)}
             cancelDelete={cancelConfirmDeleteDiaglog}
           />
         )}
