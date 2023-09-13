@@ -6,6 +6,8 @@ interface Props extends UseControllerProps {
   multiline?: boolean;
   rows?: number;
   type?: string;
+  error?: boolean;
+  helperText?: string;
 }
 
 export default function AppTextInput(props: Props) {
@@ -20,8 +22,8 @@ export default function AppTextInput(props: Props) {
       type={props.type}
       fullWidth
       variant="outlined"
-      error={!!fieldState.error}
-      helperText={fieldState.error?.message}
+      error={props.error || !!fieldState.error}
+      helperText={props.error ? props.helperText : fieldState.error?.message}
     />
   );
 }

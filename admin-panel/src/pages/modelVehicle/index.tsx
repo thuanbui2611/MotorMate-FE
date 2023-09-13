@@ -5,14 +5,22 @@ import ConfirmDeleteDialog from "../../app/components/ConfirmDeleteDialog";
 import Loader from "../../app/components/Loader";
 import { useAppSelector, useAppDispatch } from "../../app/store/ConfigureStore";
 import CollectionForm from "../collection/CollectionForm";
-import { collectionSelectors, deleteCollectionAsync, getCollectionsAsync, setCollectionParams } from "../collection/CollectionSlice";
+import {
+  collectionSelectors,
+  deleteCollectionAsync,
+  getCollectionsAsync,
+  setCollectionParams,
+} from "../collection/CollectionSlice";
 import { ModelVehicle } from "../../app/models/ModelVehicle";
-import { deleteModelVehicleAsync, getModelVehiclesAsync, modelVehicleSelectors } from "./ModelVehicleSlice";
+import {
+  deleteModelVehicleAsync,
+  getModelVehiclesAsync,
+  modelVehicleSelectors,
+} from "./ModelVehicleSlice";
 import ModelVehicleForm from "./ModelVehicleForm";
 import Pagination from "../../app/components/Pagination";
 
-export default function ModelVehiclePage()
-{
+export default function ModelVehiclePage() {
   const [actionName, setActionName] = useState(String);
   const [openEditForm, setOpenEditForm] = useState(false);
   const [selectedModelVehicle, setSelectedModelVehicle] =
@@ -57,7 +65,6 @@ export default function ModelVehiclePage()
       dispatch(getModelVehiclesAsync());
     }
   }, [dispatch, modelVehicleParams]);
-  console.log("Data:", modelVehicles)
   if (!metaData) {
     return <Loader />;
   } else
@@ -67,7 +74,9 @@ export default function ModelVehiclePage()
         <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
           <div className="flex justify-end">
             <button
-              onClick={() => handleSelectModelVehicle("Add a new model for vehicle")}
+              onClick={() =>
+                handleSelectModelVehicle("Add a new model for vehicle")
+              }
               type="button"
               className="flex items-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
             >
@@ -113,7 +122,7 @@ export default function ModelVehiclePage()
                   </g>
                 </g>
               </svg>
-              <span>Add new model for vehicle</span>
+              <span>Add new model vehicle</span>
             </button>
           </div>
           <div className="max-w-full overflow-x-auto">
@@ -123,16 +132,16 @@ export default function ModelVehiclePage()
                   <th className="min-w-[220px] py-4 px-4 text-black dark:text-white xl:pl-11">
                     Model Name
                   </th>
-                  <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
+                  <th className="min-w-[220px] py-4 px-4 text-black dark:text-white">
                     Collection name
                   </th>
-                  <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
+                  <th className="min-w-[50px] text-center py-4 px-4 text-black dark:text-white">
                     Capacity
                   </th>
-                  <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
+                  <th className="min-w-[100px] py-4 px-4 text-black dark:text-white">
                     Year
                   </th>
-                  <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
+                  <th className="min-w-[100px] text-center py-4 px-4 text-black dark:text-white">
                     Status
                   </th>
                   <th className="py-4 px-4"></th>
@@ -149,18 +158,20 @@ export default function ModelVehiclePage()
                   <>
                     {modelVehicles.map((modelVehicle) => (
                       <tr key={modelVehicle.id}>
-                        <td className="flex flex-col items-start border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
+                        <td className="flex flex-col items-start border-b border-[#eee] py-4 px-4 xl:pl-11 dark:border-strokedark">
                           <h5 className="font-medium text-black dark:text-white">
                             {modelVehicle.name}
                           </h5>
-                          <p className="text-sm">{modelVehicle.colors[0].color}</p>
+                          <p className="text-sm">
+                            {modelVehicle.colors[0].color}
+                          </p>
                         </td>
                         <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                           <h5 className="font-medium text-black dark:text-white">
                             {modelVehicle.collection.name}
                           </h5>
                         </td>
-                        <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                        <td className="border-b text-center border-[#eee] py-5 px-4 dark:border-strokedark">
                           <h5 className="font-medium text-black dark:text-white">
                             {modelVehicle.capacity}
                           </h5>
@@ -169,8 +180,8 @@ export default function ModelVehiclePage()
                           <h5 className="font-medium text-black dark:text-white">
                             {modelVehicle.year}
                           </h5>
-                        </td>                   
-                        <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                        </td>
+                        <td className="border-b border-[#eee] text-center py-5 px-4 dark:border-strokedark">
                           <p className="inline-flex rounded-full bg-success bg-opacity-10 py-1 px-3 text-sm font-medium text-success">
                             Enable
                           </p>

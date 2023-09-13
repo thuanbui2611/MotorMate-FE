@@ -48,6 +48,7 @@ export const addCollectionAsync = createAsyncThunk<Collection, FieldValues>(
   async (data, ThunkAPI) => {
     try {
       const response = await agent.Collection.create(data);
+      response.brand = data.brand;
       return response;
     } catch (error: any) {
       return ThunkAPI.rejectWithValue({ error: error.data });
@@ -61,6 +62,7 @@ export const updateCollectionAsync = createAsyncThunk<Collection, FieldValues>(
     try {
       console.log("Updating collection...", data);
       const response = await agent.Collection.update(data.id, data);
+      response.brand = data.brand;
       return response;
     } catch (error: any) {
       return ThunkAPI.rejectWithValue({ error: error.data });

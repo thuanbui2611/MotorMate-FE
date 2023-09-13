@@ -133,6 +133,9 @@ export default function CollectionPage() {
                     Collection Name
                   </th>
                   <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
+                    Brand
+                  </th>
+                  <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
                     Profit
                   </th>
                   <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
@@ -152,9 +155,14 @@ export default function CollectionPage() {
                   <>
                     {collections.map((collection) => (
                       <tr key={collection.id}>
-                        <td className="flex items-center border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
+                        <td className="flex items-center border-b border-[#eee] py-4 px-4 dark:border-strokedark xl:pl-11">
                           <h5 className="font-medium text-black dark:text-white">
                             {collection.name}
+                          </h5>
+                        </td>
+                        <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                          <h5 className="font-medium text-black dark:text-white">
+                            {collection.brand.name}
                           </h5>
                         </td>
                         <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">

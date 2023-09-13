@@ -34,16 +34,18 @@ axios.interceptors.response.use(
     // const navigate = useNavigate();
     switch (status) {
       case 400:
-        if ((data as any).errors) {
-          const modalStateErrors: string[] = [];
-          for (const key in (data as any).errors) {
-            if ((data as any).errors[key]) {
-              modalStateErrors.push((data as any).errors[key]);
-            }
-          }
-          toast.error((data as any).errors[0].description);
-          throw modalStateErrors.flat();
-        }
+        // if ((data as any).errors) {
+        //   const modalStateErrors: string[] = [];
+        //   for (const key in (data as any).errors) {
+        //     if ((data as any).errors[key]) {
+        //       modalStateErrors.push((data as any).errors[key]);
+        //     }
+        //   }
+        //   toast.error((data as any).errors[0].description);
+        //   throw modalStateErrors.flat();
+        // }
+        console.log(data);
+        toast.error((data as any).message);
         break;
       case 401:
         toast.error((data as any).title);
@@ -97,6 +99,7 @@ const Brand = {
 };
 
 const Collection = {
+  all: () => requests.get("api/collection/all"),
   list: (params: URLSearchParams) => requests.get("api/collection", params),
   details: (id: string) => requests.get(`api/collection/${id}`),
   create: (values: {}) => requests.post("api/collection", values),
@@ -109,16 +112,24 @@ const ModelVehicle = {
   list: (params: URLSearchParams) => requests.get("api/model", params),
   details: (id: string) => requests.get(`api/model/${id}`),
   create: (values: {}) => requests.post("api/model", values),
-  update: (id: string, values: {}) =>
-    requests.patch(`api/model/${id}`, values),
+  update: (id: string, values: {}) => requests.patch(`api/model/${id}`, values),
   delete: (id: string) => requests.delete(`api/model/${id}`),
-}
+};
+
+const Color = {
+  all: () => requests.get("api/color/all"),
+  details: (id: string) => requests.get(`api/color/${id}`),
+  create: (values: {}) => requests.post("api/color", values),
+  update: (id: string, values: {}) => requests.patch(`api/color/${id}`, values),
+  delete: (id: string) => requests.delete(`api/color/${id}`),
+};
 
 const agent = {
   Account,
   Brand,
   Collection,
-  ModelVehicle
+  ModelVehicle,
+  Color,
 };
 
 export default agent;

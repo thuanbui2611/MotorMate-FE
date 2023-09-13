@@ -10,13 +10,15 @@ import {
 import AppTextInput from "../../app/components/AppTextInput";
 import { FieldValues, useForm } from "react-hook-form";
 import { Collection } from "../../app/models/Collection";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAppDispatch } from "../../app/store/ConfigureStore";
 import { addCollectionAsync, updateCollectionAsync } from "./CollectionSlice";
 import { toast } from "react-toastify";
 import { LoadingButton } from "@mui/lab";
-import Autocomplete from '@mui/material/Autocomplete';
+import Autocomplete from "@mui/material/Autocomplete";
 import agent from "../../app/api/agent";
+import { TextField } from "@mui/material";
+import { Brand } from "../../app/models/Brand";
 
 interface Props {
   collection: Collection | null;
@@ -31,6 +33,8 @@ export default function CollectionForm({
 }: Props) {
   const {
     control,
+    register,
+    setValue,
     reset,
     handleSubmit,
     formState: { isSubmitting, errors },
@@ -38,12 +42,32 @@ export default function CollectionForm({
     mode: "all",
   });
 
+  const [brands, setBrands] = useState<Brand[]>([]);
+  const [defaultBrand, setDefaultBrand] = useState<Brand | null>(null);
   useEffect(() => {
-    if (collection) reset(collection);
-  }, [collection, reset]);
+    const fetchBrands = async () => {
+      try {
+        const response = await agent.Brand.all();
+        setBrands(response);
+      } catch (error) {
+        console.error("Error fetching brands:", error);
+      }
+    };
+    fetchBrands();
+  }, []);
+
+  useEffect(() => {
+    if (collection) {
+      reset(collection);
+      const defaultBrand = brands.find(
+        (brand) => brand.id === collection.brand.id
+      );
+      setDefaultBrand(defaultBrand || null);
+      setValue("brandId", collection.brand.id);
+    }
+  }, [collection, reset, setValue, brands]);
 
   const dispatch = useAppDispatch();
-  const brands = agent.Brand.all();
 
   async function submitForm(data: FieldValues) {
     try {
@@ -51,7 +75,9 @@ export default function CollectionForm({
         id: collection?.id,
         name: data.name,
         brandId: data.brandId,
+        brand: brands.find((brand) => brand.id === data.brandId),
       };
+      console.log("Form data:", formData);
       if (collection) {
         await dispatch(updateCollectionAsync(formData));
       } else {
@@ -87,17 +113,39 @@ export default function CollectionForm({
             <CardBody className="flex flex-col gap-4 overflow-y-auto max-h-[600px]">
               <AppTextInput
                 control={control}
-                name="name"
                 label="Collection name"
+                {...register("name", {
+                  required: "Collection name is required",
+                  pattern: {
+                    value:
+                      /^(?!.*[<>])(?!.*<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>)(?!.*\b(xss|XSS)\b).*$/i, // restrict SQL injection, XXL, XSS, and disallow the characters !@#$%^*:
+                    message: "Invalid collection name",
+                  },
+                })}
               />
-              <AppTextInput control={control} name="brandId" label="Brand id" />
-              {/* <Autocomplete
-      disablePortal
-      id="combo-box-demo"
-      options={brands}
-      sx={{ width: 300 }}
-      renderInput={(params) => <AppTextInput {...params} label="Movie" />}
-    /> */}
+              <Autocomplete
+                disablePortal
+                value={defaultBrand}
+                options={brands}
+                getOptionLabel={(option) => option.name}
+                onChange={(event, newValue) => {
+                  const brandId = newValue?.id;
+                  setValue("brandId", brandId, { shouldValidate: true });
+                  setDefaultBrand(newValue);
+                }}
+                renderInput={(params) => (
+                  <AppTextInput
+                    {...params}
+                    control={control}
+                    label="Brand"
+                    {...register("brandId", {
+                      required: "Brand is required",
+                    })}
+                    error={!!errors.brandId}
+                    helperText={errors?.brandId?.message as string}
+                  />
+                )}
+              />
             </CardBody>
             <CardFooter className="pt-0 flex flex-row justify-between gap-10">
               <LoadingButton
