@@ -249,7 +249,7 @@ export default function HomePage() {
             <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 ">
               Choose your Motorcycle
             </h2>
-            <p className="font-light text-gray-500 lg:mb-16 sm:text-xl ">
+            <p className="font-light text-gray-500 lg:mb-8 sm:text-xl ">
               Explore the whole collection of open-source web components and
               elements built with the utility classes from Tailwind
             </p>
@@ -353,7 +353,7 @@ export default function HomePage() {
                   <div className="absolute hidden md:block left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-[100px] text-gray-400 font-bold opacity-10">
                     RENTING
                   </div>
-                  <h1 className="text-5xl font-bold leading-tight text-blue-500">
+                  <h1 className=" text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-blue-500">
                     Renting motorcycles
                   </h1>
                   <div className="flex w-20 mt-1 mb-10 overflow-hidden rounded">
@@ -362,7 +362,7 @@ export default function HomePage() {
                     <div className="flex-1 h-2 bg-blue-600"></div>
                   </div>
                 </div>
-                <p className="mb-16 text-base text-center text-gray-500">
+                <p className="mb-16 text-sm lg:text-base text-center text-gray-500">
                   Make sure that you have a valid motorcycle license and a valid
                   ID card.
                 </p>
@@ -376,9 +376,7 @@ export default function HomePage() {
                   </h2>
                 </div>
                 <div className="absolute inline-block w-24 py-3 left-16 -top-12 md:hidden">
-                  <h2 className="text-base font-medium text-gray-700">
-                    Step 1
-                  </h2>
+                  <h2 className="text-base font-bold text-gray-700">Step 1</h2>
                 </div>
                 <div className="flex flex-col items-center w-10 mr-4 md:w-16">
                   <div>
@@ -406,10 +404,10 @@ export default function HomePage() {
                     <div className="h-10 origin-top-right transform -rotate-45 bg-white  drop-shadow-lg"></div>
                   </div>
                   <div className="relative z-20 p-4">
-                    <p className="mb-2 text-lg font-bold text-black ">
-                      Find your "motor mate"
+                    <p className="mb-2 text-base lg:text-lg font-bold text-black ">
+                      Find your "Motormate"
                     </p>
-                    <p className="text-gray-700 text-base font-medium">
+                    <p className="text-gray-700 text-sm lg:text-base font-medium">
                       Make sure you have selected the vehicle in the right
                       location!
                     </p>
@@ -423,13 +421,11 @@ export default function HomePage() {
                   </h2>
                 </div>
                 <div className="absolute inline-block w-24 py-3 left-16 -top-12 md:hidden ">
-                  <h2 className="text-base font-medium text-gray-700 ">
-                    Step 2
-                  </h2>
+                  <h2 className="text-base font-bold text-gray-700 ">Step 2</h2>
                 </div>
                 <div className="flex flex-col items-center w-10 mr-4 md:w-16">
                   <div>
-                    <div className="flex items-center justify-center w-10 h-10 border border-blue-500 rounded-full ">
+                    <div className="flex items-center justify-center w-10 h-10 border border-blue-500 rounded-full">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="16"
@@ -449,10 +445,10 @@ export default function HomePage() {
                     <div className="h-10 origin-top-right transform -rotate-45 bg-white  drop-shadow-lg"></div>
                   </div>
                   <div className="relative z-20 p-6">
-                    <p className="mb-2 text-lg font-bold text-black">
+                    <p className="mb-2 text-base lg:text-lg font-bold text-black">
                       Fill and check your information
                     </p>
-                    <p className="text-gray-700 text-base font-medium">
+                    <p className="text-gray-700 text-sm lg:text-base font-medium">
                       Choose the number of days you want to rent and fill
                       neccessary information.
                     </p>
@@ -466,9 +462,7 @@ export default function HomePage() {
                   </h2>
                 </div>
                 <div className="absolute inline-block w-24 py-3 left-16 -top-12 md:hidden ">
-                  <h2 className="text-base font-medium text-gray-700 ">
-                    Step 3
-                  </h2>
+                  <h2 className="text-base font-bold text-gray-700 ">Step 3</h2>
                 </div>
                 <div className="flex flex-col items-center w-10 mr-4 md:w-16">
                   <div>
@@ -492,8 +486,10 @@ export default function HomePage() {
                     <div className="h-10 origin-top-right transform -rotate-45 bg-white  drop-shadow-lg"></div>
                   </div>
                   <div className="relative z-20 p-6">
-                    <p className="mb-2 text-lg font-bold text-black">Payment</p>
-                    <p className="text-gray-700 text-base font-medium">
+                    <p className="mb-2 text-base lg:text-lg font-bold text-black">
+                      Payment
+                    </p>
+                    <p className="text-gray-700 text-sm lg:text-base font-medium">
                       Lorem ipsum dolor sit amet consectetur adipisicing elit.
                       veniam libero facilis minus reprehenderit.
                     </p>
@@ -564,10 +560,10 @@ export default function HomePage() {
                     <div className="h-10 origin-top-right transform -rotate-45 bg-white  drop-shadow-lg"></div>
                   </div>
                   <div className="relative z-20 p-4">
-                    <p className="mb-2 text-lg font-bold text-black ">
+                    <p className="mb-2 text-base lg:text-lg font-bold text-black ">
                       Register
                     </p>
-                    <p className="text-gray-700 text-base font-medium">
+                    <p className="text-gray-700 text-sm lg:text-base font-medium">
                       Register your motorcycle on our website and wait for the
                       approval.
                     </p>
@@ -581,9 +577,7 @@ export default function HomePage() {
                   </h2>
                 </div>
                 <div className="absolute inline-block w-24 py-3 left-16 -top-12 md:hidden ">
-                  <h2 className="text-base font-medium text-gray-700 ">
-                    Step 2
-                  </h2>
+                  <h2 className="text-base font-bold text-gray-700 ">Step 2</h2>
                 </div>
                 <div className="flex flex-col items-center w-10 mr-4 md:w-16">
                   <div>
@@ -607,10 +601,10 @@ export default function HomePage() {
                     <div className="h-10 origin-top-right transform -rotate-45 bg-white  drop-shadow-lg"></div>
                   </div>
                   <div className="relative z-20 p-6">
-                    <p className="mb-2 text-lg font-bold text-black">
+                    <p className="mb-2 text-base lg:text-lg font-bold text-black">
                       Fill and check your information
                     </p>
-                    <p className="text-gray-700 text-base font-medium">
+                    <p className="text-gray-700 text-sm lg:text-base font-medium">
                       Choose the number of days you want to rent and fill
                       neccessary information.
                     </p>
@@ -624,9 +618,7 @@ export default function HomePage() {
                   </h2>
                 </div>
                 <div className="absolute inline-block w-24 py-3 left-16 -top-12 md:hidden ">
-                  <h2 className="text-base font-medium text-gray-700 ">
-                    Step 3
-                  </h2>
+                  <h2 className="text-base font-bold text-gray-700 ">Step 3</h2>
                 </div>
                 <div className="flex flex-col items-center w-10 mr-4 md:w-16">
                   <div>
@@ -650,8 +642,10 @@ export default function HomePage() {
                     <div className="h-10 origin-top-right transform -rotate-45 bg-white  drop-shadow-lg"></div>
                   </div>
                   <div className="relative z-20 p-6">
-                    <p className="mb-2 text-lg font-bold text-black">Payment</p>
-                    <p className="text-gray-700 text-base font-medium">
+                    <p className="mb-2 text-base lg:text-lg font-bold text-black">
+                      Payment
+                    </p>
+                    <p className="text-gray-700 text-sm lg:text-base font-medium">
                       Lorem ipsum dolor sit amet consectetur adipisicing elit.
                       veniam libero facilis minus reprehenderit.
                     </p>

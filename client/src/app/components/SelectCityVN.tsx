@@ -1,20 +1,22 @@
 import { useEffect, useState } from "react";
 import { City, District, Ward } from "../models/Address";
+import { Autocomplete, TextField } from "@mui/material";
+import { set } from "react-hook-form";
 
 export default function SelectCityVN() {
   const [cities, setCities] = useState<City[]>([]);
-  const [selectedCity, setSelectedCity] = useState<string>("");
-  const [selectedDistrict, setSelectedDistrict] = useState<string>("");
+  const [selectedCity, setSelectedCity] = useState<City | null>(null);
+  const [selectedDistrict, setSelectedDistrict] = useState<District | null>(
+    null
+  );
   const [districts, setDistricts] = useState<District[]>([]);
   const [wards, setWards] = useState<Ward[]>([]);
+  const [selectedWard, setSelectedWard] = useState<Ward | null>(null);
 
   useEffect(() => {
-    // Load data from data.json file
-
     fetch("/dataCityVN.json")
       .then((response) => response.json())
       .then((data: City[]) => {
-        console.log("Data");
         console.log(data);
         setCities(data);
       })
@@ -23,30 +25,35 @@ export default function SelectCityVN() {
       });
   }, []);
 
-  const handleCityChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const cityId = event.target.value;
-    if (cityId === "") {
+  const handleCityChange = (
+    event: React.SyntheticEvent<Element, Event>,
+    newValue: City | null
+  ) => {
+    const cityId = newValue?.Id;
+    if (!cityId) {
       setDistricts([]);
       setWards([]);
     }
-    setSelectedCity(cityId);
+    setSelectedCity(newValue);
 
     const selectedCityData = cities.find((city) => city.Id === cityId);
     if (selectedCityData) {
       setDistricts(selectedCityData.Districts);
-      setSelectedDistrict("");
+      setSelectedDistrict(null);
+      setSelectedWard(null);
       setWards([]);
     }
   };
 
   const handleDistrictChange = (
-    event: React.ChangeEvent<HTMLSelectElement>
+    event: React.SyntheticEvent<Element, Event>,
+    newValue: District | null
   ) => {
-    const districtId = event.target.value;
-    if (districtId === "") {
+    const districtId = newValue?.Id;
+    if (!districtId) {
       setWards([]);
     }
-    setSelectedDistrict(districtId);
+    setSelectedDistrict(newValue);
 
     const selectedDistrictData = districts.find(
       (district) => district.Id === districtId
@@ -55,58 +62,78 @@ export default function SelectCityVN() {
       setWards(selectedDistrictData.Wards);
     }
   };
+
+  const handleWardChange = (
+    event: React.SyntheticEvent<Element, Event>,
+    newValue: Ward | null
+  ) => {
+    setSelectedWard(newValue);
+  };
   return (
-    <>
-      <label
-        htmlFor="countries"
-        className="block mb-2 text-sm font-medium text-gray-900 "
-      >
-        Select your address
-      </label>
-      <div className="flex flex-wrap justify-center">
-        <div className="w-1/2">
-          <select
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2 -mr-10"
-            value={selectedCity}
-            onChange={handleCityChange}
-          >
-            <option value="">Choose a city</option>
-            {cities.map((city) => (
-              <option key={city.Id} value={city.Id}>
-                {city.Name}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="w-1/2">
-          <select
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2"
-            value={selectedDistrict}
-            onChange={handleDistrictChange}
-            disabled={!selectedCity}
-          >
-            <option value="">Choose a district</option>
-            {districts.map((district) => (
-              <option key={district.Id} value={district.Id}>
-                {district.Name}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div>
-          <select
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2"
-            disabled={!selectedDistrict.length}
-          >
-            <option value="">Choose a wards</option>
-            {wards.map((ward) => (
-              <option key={ward.Id} value={ward.Id}>
-                {ward.Name}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
-    </>
+    <div className="w-full flex flex-col gap-3">
+      <Autocomplete
+        disablePortal
+        size="small"
+        value={selectedCity}
+        options={cities}
+        getOptionLabel={(city) => city.Name}
+        onChange={(event, newValue) => handleCityChange(event, newValue)}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            label="City"
+            InputProps={{
+              ...params.InputProps,
+            }}
+            // {...register("cityId", {
+            //   required: "City is required",
+            // })}
+            // error={!!errors.cityId}
+            // helperText={errors?.cityId?.message as string}
+          />
+        )}
+      />
+
+      <Autocomplete
+        disablePortal
+        size="small"
+        disabled={!selectedCity}
+        value={selectedDistrict}
+        options={districts}
+        getOptionLabel={(district) => district.Name}
+        onChange={(event, newValue) => handleDistrictChange(event, newValue)}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            label="District"
+            // {...register("districtId", {
+            //   required: "District is required",
+            // })}
+            // error={!!errors.districtId}
+            // helperText={errors?.districtId?.message as string}
+          />
+        )}
+      />
+      <Autocomplete
+        disablePortal
+        size="small"
+        disabled={!selectedDistrict}
+        value={selectedWard}
+        options={wards}
+        getOptionLabel={(ward) => ward.Name}
+        onChange={(event, newValue) => handleWardChange(event, newValue)}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            label="Wards"
+            // {...register("districtId", {
+            //   required: "District is required",
+            // })}
+            // error={!!errors.districtId}
+            // helperText={errors?.districtId?.message as string}
+          />
+        )}
+      />
+    </div>
   );
 }

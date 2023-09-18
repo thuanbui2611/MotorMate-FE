@@ -150,7 +150,7 @@ export default function ProductHomepage({ products }: Props) {
                       <h5 className="font-bold text-gradient inline-block">
                         100.000 VND
                       </h5>
-                      <span className="block -mt-[2px] md:-mt-1 font-semibold text-gray-500">
+                      <span className="block -mt-[2px] pb-1 md:-mt-1 font-semibold text-gray-500">
                         per day
                       </span>
                     </div>
@@ -175,7 +175,7 @@ export default function ProductHomepage({ products }: Props) {
 
   return (
     <>
-      <div className="py-20 relative">
+      <div className="py-10 relative">
         <button
           onClick={slideToPrevItem}
           className="absolute top-1/2 -translate-y-1/2 -translate-x-full left-[5%] md:left-[10%]"

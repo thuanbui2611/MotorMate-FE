@@ -87,7 +87,7 @@ export default function Checkout() {
           <div className="flex flex-wrap -mx-4 mb-14 xl:mb-24 pt-10">
             <div className=" w-full md:w-8/12 lg:w-2/4 px-4 mb-14 md:mb-0">
               <div className="py-12 px-8 md:pl-6 md:pr-16 bg-white rounded-3xl">
-                <div className="pb-16 mb-14 border-b border-gray-200 border-opacity-30">
+                <div className="pb-4 border-b border-gray-200 border-opacity-30">
                   <div className="max-w-lg mx-auto">
                     <div className="flex flex-wrap mb-6 items-center">
                       <div className="w-full md:w-1/3 mb-2 md:mb-0 md:pr-10 md:text-right">
@@ -132,7 +132,17 @@ export default function Checkout() {
                     </div>
                     {deliveryOption === "standardShipping" && (
                       <>
-                        <SelectCityVN />
+                        <div className="flex flex-col md:flex-row justify-center items-center md:items-start">
+                          <div className="w-full md:w-1/3 mb-2 md:mb-0 md:pr-10 md:text-right">
+                            <label className="text-lg">
+                              Select your address:
+                            </label>
+                          </div>
+                          <div className=" mb-4 justify-center items-center w-full md:w-2/3 mt-2 md:mt-0">
+                            <SelectCityVN />
+                          </div>
+                        </div>
+
                         <div className="flex flex-wrap mb-6 items-center">
                           <div className="w-full md:w-1/3 mb-2 md:mb-0 md:pr-10 md:text-right">
                             <label className="text-lg  ">
@@ -206,7 +216,7 @@ export default function Checkout() {
                         <label className="text-lg">Payment method:</label>
                       </div>
                       <div className="w-full md:w-2/3">
-                        <div className="grid grid-cols-2 mt-5 ">
+                        <div className="grid grid-cols-1 md:grid-cols-2 mt-5 ">
                           <label className="relative inline-flex mb-5 mr-16 items-center">
                             <input
                               className="relative appearance-none mr-3"

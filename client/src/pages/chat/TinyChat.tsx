@@ -37,7 +37,7 @@ export default function TinyChat() {
 
       {isFormVisible && (
         <div
-          className={`container mx-auto rounded-lg border-2 md:w-1/3 md:max-h-96 md:max-w-lg fixed bottom-0 right-0 2 z-50 py-1 bg-white
+          className={`container md:min-w-[400px] mx-auto rounded-lg border-2 md:w-1/3 md:max-h-96 md:max-w-lg fixed bottom-0 right-0 z-50 bg-white py-1
         ${isFormClosing ? "animate-fade-out" : "animate-fade-in"}
           `}
         >
@@ -49,22 +49,21 @@ export default function TinyChat() {
               <p className="font-semibold text-xl">Chat</p>
             </div>
             <div
-              className="flex justify-between items-center bg-blue-500 p-2 h-full rounded-lg -mt-1 "
+              className="flex justify-between items-center  bg-gradient-to-r from-[#ffa703] to-[#FF7E06] p-2 h-full rounded-lg -mt-1 "
               style={{ width: "61%" }}
             >
-              <div className="flex-row flex-initial items-center">
+              <div className="flex flex-initial items-center">
                 <div className="h-6 w-6 p-1 bg-yellow-500 rounded-full text-white font-semibold flex items-center justify-center">
                   J
                 </div>
                 <p className="flex-initial ml-2 text-white"> James</p>
               </div>
-              <div className="flex-row flex-initial items-center">
+              <div className="flex-row flex-initial items-center justify-center">
                 <button
                   type="button"
                   onClick={handleCloseClick}
-                  className="bg-white rounded-md inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+                  className="bg-white rounded-md flex text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
                 >
-                  <span className="sr-only">Close menu</span>
                   <svg
                     className="h-5 w-5"
                     xmlns="http://www.w3.org/2000/svg"
@@ -400,7 +399,7 @@ export default function TinyChat() {
                 </div>
                 {/* End detail message */}
               </div>
-              <div className="flex py-2 items-center bg-white sticky bottom-0">
+              <div className="flex py-2 mx-1 items-center bg-white sticky bottom-0">
                 <input
                   className="bg-white py-2 px-1 rounded-lg flex-grow text-xs"
                   style={{ width: "93%" }}

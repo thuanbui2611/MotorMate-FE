@@ -1,13 +1,13 @@
 export default function Footer() {
   return (
     <>
-      <footer className="bg-gray-900">
+      <footer className="bg-color-header">
         <div className="max-w-[85rem] py-10 px-4 sm:px-6 lg:px-8 lg:pt-20 mx-auto">
           {/* <!-- Grid --> */}
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
             <div className="col-span-full lg:col-span-1">
               <a
-                className="flex-none text-xl font-semibold text-white"
+                className="flex-none text-2xl font-black text-orange-based"
                 href="#"
                 aria-label="Brand"
               >
@@ -116,7 +116,7 @@ export default function Footer() {
                   </a>
                 </div>
                 <p className="mt-3 text-sm text-gray-400">
-                  New UI kits or big discounts. Never spam.
+                  New "MotorMate" or big discounts. Never spam.
                 </p>
               </form>
             </div>
