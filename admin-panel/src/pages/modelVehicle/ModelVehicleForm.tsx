@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import AppTextInput from "../../app/components/AppTextInput";
-import { FieldValues, useForm } from "react-hook-form";
+import { FieldValues, set, useForm } from "react-hook-form";
 import { Collection } from "../../app/models/Collection";
 import { useEffect, useState } from "react";
 import { useAppDispatch } from "../../app/store/ConfigureStore";
@@ -22,6 +22,17 @@ import {
 import agent from "../../app/api/agent";
 import { Color } from "../../app/models/Color";
 import Autocomplete from "@mui/material/Autocomplete";
+//
+import { Theme, useTheme } from "@mui/material/styles";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+import InputLabel from "@mui/material/InputLabel";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import Box from "@mui/material/Box";
+import Chip from "@mui/material/Chip";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import LoaderButton from "../../app/components/LoaderButton";
+//
 
 interface Props {
   modelVehicle: ModelVehicle | null;
@@ -46,8 +57,9 @@ export default function CollectionForm({
     mode: "all",
   });
 
+  const [loadingFetchCollection, setLoadingFetchCollection] = useState(true);
+  const [loadingFetchColors, setLoadingFetchColors] = useState(true);
   const [colors, setColors] = useState<Color[]>([]);
-  const [defaultColor, setDefaultColor] = useState<Color | null>(null);
   const [collections, setCollections] = useState<Collection[]>([]);
   const [defaultCollection, setDefaultCollection] = useState<Collection | null>(
     null
@@ -58,6 +70,7 @@ export default function CollectionForm({
       try {
         const response = await agent.Color.all();
         setColors(response);
+        setLoadingFetchColors(false);
       } catch (error) {
         console.error("Error fetching colors:", error);
       }
@@ -66,6 +79,7 @@ export default function CollectionForm({
       try {
         const response = await agent.Collection.all();
         setCollections(response);
+        setLoadingFetchCollection(false);
       } catch (error) {
         console.error("Error fetching collections:", error);
       }
@@ -79,11 +93,8 @@ export default function CollectionForm({
     if (modelVehicle) {
       reset(modelVehicle);
 
-      const defaultColor = colors.find(
-        (color) => color.id === modelVehicle.colors[0].id.toString()
-      );
-      setDefaultColor(defaultColor || null);
-      setValue("colorId", modelVehicle.colors[0].id.toString());
+      const defaultColors = modelVehicle.colors.map((color) => color.color);
+      setDefaultColors(defaultColors || null);
 
       const defaultCollection = collections.find(
         (collection) => collection.id === modelVehicle.collection.id.toString()
@@ -98,14 +109,14 @@ export default function CollectionForm({
 
   async function submitForm(data: FieldValues) {
     try {
-      console.log("Data:", data);
+      const selectedColors = getSelectedIds(defaultColors);
       const formData = {
         id: modelVehicle?.id,
         name: data.name,
         year: data.year,
         capacity: data.capacity,
         collectionId: data.collectionId,
-        colorIds: [data.colorId],
+        colorIds: selectedColors,
       };
       console.log("Form data:", formData);
       if (modelVehicle) {
@@ -122,6 +133,48 @@ export default function CollectionForm({
   const onClose = () => {
     cancelEdit();
   };
+
+  //Test multiple select
+
+  const [defaultColors, setDefaultColors] = useState<string[]>([]);
+  const [colorsSelected, setColorsSelected] = useState<Color[]>([]);
+
+  const ITEM_HEIGHT = 48;
+  const ITEM_PADDING_TOP = 8;
+  const MenuProps = {
+    PaperProps: {
+      style: {
+        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+        width: 250,
+      },
+    },
+    style: { zIndex: 9999 },
+  };
+
+  function getStyles(name: string, colors: string[], theme: Theme) {
+    return {
+      fontWeight:
+        colors.indexOf(name) === -1
+          ? theme.typography.fontWeightRegular
+          : theme.typography.fontWeightMedium,
+    };
+  }
+  const theme = useTheme();
+
+  const handleChange = (event: SelectChangeEvent<string[]>) => {
+    const {
+      target: { value },
+    } = event;
+    const selectedColors = event.target.value as string[];
+    setDefaultColors(selectedColors);
+  };
+  const getSelectedIds = (selectedColors: string[]) => {
+    return selectedColors.map((color) => {
+      const selectedColor = colors.find((c) => c.color === color);
+      return selectedColor ? selectedColor.id : "";
+    });
+  };
+  //End
   return (
     <>
       <Dialog
@@ -141,99 +194,139 @@ export default function CollectionForm({
           </CardHeader>
           <form onSubmit={handleSubmit(submitForm)}>
             <CardBody className="flex flex-col gap-4 overflow-y-auto max-h-[600px]">
-              <AppTextInput
-                control={control}
-                label="Model name"
-                {...register("name", {
-                  required: "Model name is required",
-                  pattern: {
-                    value:
-                      /^(?!.*[<>])(?!.*<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>)(?!.*\b(xss|XSS)\b).*$/i,
-                    message: "Invalid model name",
-                  },
-                })}
-              />
               <div className="flex flex-col justify-between gap-4 md:flex-row">
                 <div className="w-full md:w-2/3">
-                  <Autocomplete
-                    disablePortal
-                    value={defaultCollection}
-                    options={collections}
-                    getOptionLabel={(option) => option.name}
-                    onChange={(event, newValue) => {
-                      const collectionId = newValue?.id;
-                      setValue("collectionId", collectionId, {
-                        shouldValidate: true,
-                      });
-                      setDefaultCollection(newValue);
-                    }}
-                    renderInput={(params) => (
-                      <AppTextInput
-                        {...params}
-                        control={control}
-                        label="Collection"
-                        {...register("collectionId", {
-                          required: "Collection is required",
-                        })}
-                        error={!!errors.collectionId}
-                        helperText={errors?.collectionId?.message as string}
-                      />
-                    )}
+                  <AppTextInput
+                    control={control}
+                    label="Model name"
+                    {...register("name", {
+                      required: "Model name is required",
+                      pattern: {
+                        value:
+                          /^(?!.*[<>])(?!.*<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>)(?!.*\b(xss|XSS)\b).*$/i,
+                        message: "Invalid model name",
+                      },
+                    })}
                   />
                 </div>
 
                 <div className="w-full md:w-1/3 min-w-[130px]">
-                  <Autocomplete
-                    disablePortal
-                    value={defaultColor}
-                    options={colors}
-                    getOptionLabel={(option) => option.color}
-                    onChange={(event, newValue) => {
-                      const colorId = newValue?.id;
-                      setValue("colorId", colorId, { shouldValidate: true });
-                      setDefaultColor(newValue);
-                    }}
-                    renderInput={(params) => (
-                      <AppTextInput
-                        {...params}
-                        control={control}
-                        label="Color"
-                        {...register("colorId", {
-                          required: "Color is required",
-                        })}
-                        error={!!errors.colorId}
-                        helperText={errors?.colorId?.message as string}
-                      />
-                    )}
+                  <AppTextInput
+                    control={control}
+                    type="text"
+                    label="Year release"
+                    {...register("year", {
+                      required: "Year release is required",
+                      pattern: {
+                        value: /^[0-9]+$/,
+                        message: "Invalid year release, accept only number",
+                      },
+                    })}
                   />
                 </div>
               </div>
 
-              <div className="flex justify-between gap-4">
-                <AppTextInput
-                  control={control}
-                  type="text"
-                  label="Year release"
-                  {...register("year", {
-                    required: "Year release is required",
-                    pattern: {
-                      value: /^[0-9]+$/,
-                      message: "Invalid year release, accept only number",
-                    },
-                  })}
-                />
-                <AppTextInput
-                  control={control}
-                  type="text"
-                  label="Capacity"
-                  {...register("capacity", {
-                    required: "Year release is required",
-                    pattern: {
-                      value: /^[0-9]+$/,
-                      message: "Invalid year release, accept only number",
-                    },
-                  })}
-                />
+              <div className="flex flex-col justify-between gap-4 md:flex-row">
+                <div className="w-full items-center justify-center md:w-2/3">
+                  {loadingFetchCollection ? (
+                    <LoaderButton />
+                  ) : (
+                    <Autocomplete
+                      disablePortal
+                      value={defaultCollection}
+                      options={collections}
+                      getOptionLabel={(option) => option.name}
+                      onChange={(event, newValue) => {
+                        const collectionId = newValue?.id;
+                        setValue("collectionId", collectionId, {
+                          shouldValidate: true,
+                        });
+                        setDefaultCollection(newValue);
+                      }}
+                      renderInput={(params) => (
+                        <AppTextInput
+                          {...params}
+                          control={control}
+                          label="Collection"
+                          {...register("collectionId", {
+                            required: "Collection is required",
+                          })}
+                          error={!!errors.collectionId}
+                          helperText={errors?.collectionId?.message as string}
+                        />
+                      )}
+                    />
+                  )}
+                </div>
+
+                <div className="w-full md:w-1/3 min-w-[130px]">
+                  <AppTextInput
+                    control={control}
+                    type="text"
+                    label="Capacity"
+                    {...register("capacity", {
+                      required: "Capacity is required",
+                      pattern: {
+                        value: /^[0-9]+$/,
+                        message: "Invalid capacity, accept only number",
+                      },
+                    })}
+                  />
+                </div>
+              </div>
+
+              <div className="flex justify-center w-full">
+                {loadingFetchColors ? (
+                  <LoaderButton />
+                ) : (
+                  <FormControl sx={{ width: "100%" }}>
+                    <InputLabel id="demo-multiple-chip-label">Color</InputLabel>
+
+                    <Select
+                      required
+                      multiple
+                      value={defaultColors}
+                      onChange={handleChange}
+                      input={
+                        <OutlinedInput
+                          id="select-multiple-chip"
+                          label="Color"
+                        />
+                      }
+                      renderValue={(selected) => (
+                        <Box
+                          sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}
+                        >
+                          {selected.map((value) => {
+                            const selectedColor = colors.find(
+                              (c) => c.color === value
+                            );
+                            if (selectedColor) {
+                              return (
+                                <Chip
+                                  key={selectedColor.id}
+                                  label={selectedColor.color}
+                                />
+                              );
+                            }
+                            return null;
+                          })}
+                        </Box>
+                      )}
+                      MenuProps={MenuProps}
+                    >
+                      {colors.map((color) => (
+                        <MenuItem
+                          key={color.id}
+                          value={color.color}
+                          style={getStyles(color.color, defaultColors, theme)}
+                        >
+                          {color.color}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                )}
               </div>
             </CardBody>
             <CardFooter className="pt-0 flex flex-row justify-between gap-10">

@@ -19,6 +19,7 @@ import {
 } from "./ModelVehicleSlice";
 import ModelVehicleForm from "./ModelVehicleForm";
 import Pagination from "../../app/components/Pagination";
+import "./../../app/assets/css/custom.css";
 
 export default function ModelVehiclePage() {
   const [actionName, setActionName] = useState(String);
@@ -129,19 +130,22 @@ export default function ModelVehiclePage() {
             <table className="w-full table-auto">
               <thead>
                 <tr className=" bg-gray-2 text-left dark:bg-meta-4  font-bold">
-                  <th className="min-w-[220px] py-4 px-4 text-black dark:text-white xl:pl-11">
+                  <th className="min-w-[180px] py-4 px-4 text-black dark:text-white ">
                     Model Name
                   </th>
-                  <th className="min-w-[220px] py-4 px-4 text-black dark:text-white">
+                  <th className="min-w-[180px] py-4 px-4 text-black dark:text-white">
                     Collection name
                   </th>
-                  <th className="min-w-[50px] text-center py-4 px-4 text-black dark:text-white">
+                  <th className="w-[120px] py-4 px-4 text-black dark:text-white">
+                    Color
+                  </th>
+                  <th className="min-w-[40px] text-center py-4 px-4 text-black dark:text-white">
                     Capacity
                   </th>
-                  <th className="min-w-[100px] py-4 px-4 text-black dark:text-white">
+                  <th className="min-w-[50px] py-4 px-4 text-black dark:text-white">
                     Year
                   </th>
-                  <th className="min-w-[100px] text-center py-4 px-4 text-black dark:text-white">
+                  <th className="min-w-[60px] text-center py-4 px-4 text-black dark:text-white">
                     Status
                   </th>
                   <th className="py-4 px-4"></th>
@@ -158,18 +162,27 @@ export default function ModelVehiclePage() {
                   <>
                     {modelVehicles.map((modelVehicle) => (
                       <tr key={modelVehicle.id}>
-                        <td className="flex flex-col items-start border-b border-[#eee] py-4 px-4 xl:pl-11 dark:border-strokedark">
-                          <h5 className="font-medium text-black dark:text-white">
+                        <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark max-w-45">
+                          <h5 className="font-medium text-black dark:text-white whitespace-normal overflow-wrap-normal line-clamp-3">
                             {modelVehicle.name}
                           </h5>
-                          <p className="text-sm">
-                            {modelVehicle.colors[0].color}
-                          </p>
                         </td>
                         <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                           <h5 className="font-medium text-black dark:text-white">
                             {modelVehicle.collection.name}
                           </h5>
+                        </td>
+                        <td className="border-b text-center border-[#eee] py-5 px-4 dark:border-strokedark">
+                          <div className="flex flex-col max-h-25 overflow-y-auto scrollbar">
+                            {modelVehicle.colors.map((color, index) => (
+                              <h5
+                                className="font-medium text-left text-black dark:text-white"
+                                key={index}
+                              >
+                                {color.color}
+                              </h5>
+                            ))}
+                          </div>
                         </td>
                         <td className="border-b text-center border-[#eee] py-5 px-4 dark:border-strokedark">
                           <h5 className="font-medium text-black dark:text-white">

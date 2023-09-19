@@ -155,7 +155,7 @@ export default function CollectionPage() {
                   <>
                     {collections.map((collection) => (
                       <tr key={collection.id}>
-                        <td className="flex items-center border-b border-[#eee] py-4 px-4 dark:border-strokedark xl:pl-11">
+                        <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                           <h5 className="font-medium text-black dark:text-white">
                             {collection.name}
                           </h5>

@@ -19,6 +19,7 @@ import Autocomplete from "@mui/material/Autocomplete";
 import agent from "../../app/api/agent";
 import { TextField } from "@mui/material";
 import { Brand } from "../../app/models/Brand";
+import LoaderButton from "../../app/components/LoaderButton";
 
 interface Props {
   collection: Collection | null;
@@ -42,6 +43,7 @@ export default function CollectionForm({
     mode: "all",
   });
 
+  const [loadingFetchBrand, setLoadingFetchBrand] = useState<boolean>(true);
   const [brands, setBrands] = useState<Brand[]>([]);
   const [defaultBrand, setDefaultBrand] = useState<Brand | null>(null);
   useEffect(() => {
@@ -49,6 +51,7 @@ export default function CollectionForm({
       try {
         const response = await agent.Brand.all();
         setBrands(response);
+        setLoadingFetchBrand(false);
       } catch (error) {
         console.error("Error fetching brands:", error);
       }
@@ -123,29 +126,33 @@ export default function CollectionForm({
                   },
                 })}
               />
-              <Autocomplete
-                disablePortal
-                value={defaultBrand}
-                options={brands}
-                getOptionLabel={(option) => option.name}
-                onChange={(event, newValue) => {
-                  const brandId = newValue?.id;
-                  setValue("brandId", brandId, { shouldValidate: true });
-                  setDefaultBrand(newValue);
-                }}
-                renderInput={(params) => (
-                  <AppTextInput
-                    {...params}
-                    control={control}
-                    label="Brand"
-                    {...register("brandId", {
-                      required: "Brand is required",
-                    })}
-                    error={!!errors.brandId}
-                    helperText={errors?.brandId?.message as string}
-                  />
-                )}
-              />
+              {loadingFetchBrand ? (
+                <LoaderButton />
+              ) : (
+                <Autocomplete
+                  disablePortal
+                  value={defaultBrand}
+                  options={brands}
+                  getOptionLabel={(option) => option.name}
+                  onChange={(event, newValue) => {
+                    const brandId = newValue?.id;
+                    setValue("brandId", brandId, { shouldValidate: true });
+                    setDefaultBrand(newValue);
+                  }}
+                  renderInput={(params) => (
+                    <AppTextInput
+                      {...params}
+                      control={control}
+                      label="Brand"
+                      {...register("brandId", {
+                        required: "Brand is required",
+                      })}
+                      error={!!errors.brandId}
+                      helperText={errors?.brandId?.message as string}
+                    />
+                  )}
+                />
+              )}
             </CardBody>
             <CardFooter className="pt-0 flex flex-row justify-between gap-10">
               <LoadingButton
