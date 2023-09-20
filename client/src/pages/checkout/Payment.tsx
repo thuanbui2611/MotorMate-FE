@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import ProcessingBar from "../../app/components/ProcessingBar";
 
 export default function Payment() {
@@ -57,7 +58,12 @@ export default function Payment() {
           <ProcessingBar processing="payment" />
         </div>
       </section>
-      <a href="/bill"> Next</a>
+      <Link
+        to="/bill"
+        className="bg-orange-based p-5 text-white text-center font-bold text-xl"
+      >
+        Next
+      </Link>
     </>
   );
 }

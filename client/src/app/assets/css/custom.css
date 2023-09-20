@@ -1164,11 +1164,11 @@ p {
 }
 
 .animate-fade-in {
-  animation: fade-in 0.5s ease-in;
+  animation: fade-in 0.2s ease-in;
 }
 
 .animate-fade-out {
-  animation: fade-out 0.5s ease-out;
+  animation: fade-out 0.2s ease-out;
 }
 /* End of animation open and close chat */
 
