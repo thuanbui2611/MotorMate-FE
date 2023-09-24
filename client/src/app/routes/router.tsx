@@ -32,7 +32,7 @@ export const router = createBrowserRouter([
           { path: "", element: <HomePage /> },
           { path: "about", element: <About /> },
           { path: "contact", element: <Contact /> },
-          { path: "profile", element: <MyProfile /> },
+          { path: ":username", element: <MyProfile /> },
           { path: "products", element: <Products /> },
           { path: "product-detail/:id", element: <ProductDetails /> },
           { path: "check-out/:id", element: <Checkout /> },

@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { City, District, Ward } from "../models/Address";
 import { Autocomplete, TextField } from "@mui/material";
-import { set } from "react-hook-form";
 
 export default function SelectCityVN() {
   const [cities, setCities] = useState<City[]>([]);
@@ -14,10 +13,9 @@ export default function SelectCityVN() {
   const [selectedWard, setSelectedWard] = useState<Ward | null>(null);
 
   useEffect(() => {
-    fetch("/dataCityVN.json")
+    fetch("./dataCityVN.json")
       .then((response) => response.json())
       .then((data: City[]) => {
-        console.log(data);
         setCities(data);
       })
       .catch((error) => {
@@ -31,14 +29,19 @@ export default function SelectCityVN() {
   ) => {
     const cityId = newValue?.Id;
     if (!cityId) {
-      setDistricts([]);
+      setSelectedDistrict(null);
+      setSelectedWard(null);
       setWards([]);
     }
     setSelectedCity(newValue);
 
     const selectedCityData = cities.find((city) => city.Id === cityId);
     if (selectedCityData) {
-      setDistricts(selectedCityData.Districts);
+      setDistricts(
+        selectedCityData.Districts.sort((a: District, b: District) =>
+          sortString(a.Name, b.Name)
+        )
+      );
       setSelectedDistrict(null);
       setSelectedWard(null);
       setWards([]);
@@ -51,6 +54,7 @@ export default function SelectCityVN() {
   ) => {
     const districtId = newValue?.Id;
     if (!districtId) {
+      setSelectedWard(null);
       setWards([]);
     }
     setSelectedDistrict(newValue);
@@ -59,7 +63,12 @@ export default function SelectCityVN() {
       (district) => district.Id === districtId
     );
     if (selectedDistrictData) {
-      setWards(selectedDistrictData.Wards);
+      setSelectedWard(null);
+      setWards(
+        selectedDistrictData.Wards.sort((a: Ward, b: Ward) =>
+          sortString(a.Name, b.Name)
+        )
+      );
     }
   };
 
@@ -69,13 +78,31 @@ export default function SelectCityVN() {
   ) => {
     setSelectedWard(newValue);
   };
+
+  const sortString = (a: string, b: string) => {
+    const regex = /(\D+)(\d+)?/;
+    const [, aText, aNumber] = a.match(regex) || [];
+    const [, bText, bNumber] = b.match(regex) || [];
+    // Sort by alphabetic order first
+    const compareAlphabetic = aText.localeCompare(bText);
+    if (compareAlphabetic !== 0) {
+      return compareAlphabetic;
+    }
+    // Sort by numeric value if available
+    if (aNumber && bNumber) {
+      return Number(aNumber) - Number(bNumber);
+    }
+    // Sort other strings
+    return a.localeCompare(b);
+  };
   return (
-    <div className="w-full flex flex-col gap-3">
+    <>
       <Autocomplete
+        fullWidth={true}
         disablePortal
         size="small"
         value={selectedCity}
-        options={cities}
+        options={cities.sort((a: City, b: City) => sortString(a.Name, b.Name))}
         getOptionLabel={(city) => city.Name}
         onChange={(event, newValue) => handleCityChange(event, newValue)}
         renderInput={(params) => (
@@ -95,6 +122,7 @@ export default function SelectCityVN() {
       />
 
       <Autocomplete
+        fullWidth={true}
         disablePortal
         size="small"
         disabled={!selectedCity}
@@ -106,6 +134,7 @@ export default function SelectCityVN() {
           <TextField
             {...params}
             label="District"
+            className={`${!selectedCity && "bg-gray-200 rounded-md"}`}
             // {...register("districtId", {
             //   required: "District is required",
             // })}
@@ -115,6 +144,7 @@ export default function SelectCityVN() {
         )}
       />
       <Autocomplete
+        fullWidth={true}
         disablePortal
         size="small"
         disabled={!selectedDistrict}
@@ -126,6 +156,7 @@ export default function SelectCityVN() {
           <TextField
             {...params}
             label="Wards"
+            className={`${!selectedDistrict && "bg-gray-200 rounded-md"}`}
             // {...register("districtId", {
             //   required: "District is required",
             // })}
@@ -134,6 +165,6 @@ export default function SelectCityVN() {
           />
         )}
       />
-    </div>
+    </>
   );
 }

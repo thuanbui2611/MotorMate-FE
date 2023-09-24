@@ -18,8 +18,6 @@ export default function ChangePassword() {
   });
 
   const { resetCode } = useParams();
-  console.log("resetCode");
-  console.log(resetCode);
   async function submitForm(data: FieldValues) {
     try {
       if (!resetCode)

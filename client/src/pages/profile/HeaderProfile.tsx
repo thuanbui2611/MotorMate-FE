@@ -1,4 +1,10 @@
-export default function ProfileInfo() {
+import { UserDetail } from "../../app/models/User";
+
+interface Props {
+  user: UserDetail | undefined;
+}
+
+export default function ProfileInfo({ user }: Props) {
   return (
     <>
       <section className="pb-12 ">
@@ -48,13 +54,10 @@ export default function ProfileInfo() {
               </label>
             </div>
 
-            <div className="w-40 h-40 ml-2 -mb-32 lg:ml-4 lg:-mb-48 lg:w-60 lg:h-60 flex items-center">
-              <a
-                href="/profile"
-                className="text-black font-bold text-center text-2xl lg:text-4xl "
-              >
-                John Doe
-              </a>
+            <div className="w-fit h-40 ml-2 -mb-32 lg:ml-4 lg:-mb-48 lg:h-60 flex items-center">
+              <div className="text-black font-bold text-center text-2xl lg:text-4xl ">
+                {user?.fullName}
+              </div>
             </div>
           </div>
         </div>

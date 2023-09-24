@@ -138,7 +138,7 @@ export default function Checkout() {
                               Select your address:
                             </label>
                           </div>
-                          <div className=" mb-4 justify-center items-center w-full md:w-2/3 mt-2 md:mt-0">
+                          <div className=" flex flex-col gap-3 mb-4 justify-center items-center w-full md:w-2/3 mt-2 md:mt-0">
                             <SelectCityVN />
                           </div>
                         </div>

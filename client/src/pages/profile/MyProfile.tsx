@@ -8,20 +8,44 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import Loading from "../../app/components/Loading";
+import VehicleForm from "./VehicleForm";
+import { useParams } from "react-router-dom";
+import { UserDetail } from "../../app/models/User";
+import agentTest from "../../app/api/agentTest";
 
 export default function MyProfile() {
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState<Product[]>([]);
+  const [openVehicleForm, setOpenVehicleForm] = useState(false);
+  const [user, setUser] = useState<UserDetail>();
+
+  const { username } = useParams();
   useEffect(() => {
     agent.Product.all()
       .then((products) => setProducts(products))
       .catch((error) => console.log(error))
       .finally(() => setLoading(false));
+
+    //Fetch user
+    if (username) {
+      agentTest.Account.getDetailsByUserName(username)
+        .then((user) => setUser(user))
+        .catch((error) => console.log(error))
+        .finally(() => setLoading(false));
+    }
   }, []);
+
+  const cancelVehicleForm = () => {
+    setOpenVehicleForm((cur) => !cur);
+  };
+
+  const handleAddVehicle = () => {
+    setOpenVehicleForm((cur) => !cur);
+  };
   if (loading) return <Loading />;
   return (
     <>
-      <HeaderProfile />
+      <HeaderProfile user={user} />
 
       <div className="bg-gray-100">
         <div className="w-full text-white bg-main-color">
@@ -52,7 +76,7 @@ export default function MyProfile() {
                       <span className="font-bold">Email</span>
                       <span className="ml-auto">
                         <span className="bg-green-500 py-1 px-2 rounded text-white text-sm ">
-                          email@gmail.com
+                          {user?.email}
                         </span>
                       </span>
                     </li>
@@ -60,14 +84,14 @@ export default function MyProfile() {
                       <span className="font-bold">Contact Number</span>
                       <span className="ml-auto">
                         <span className="bg-green-500 py-1 px-2 rounded text-white text-sm">
-                          0971222333
+                          {user?.phoneNumber}
                         </span>
                       </span>
                     </li>
                     <li className="flex items-center py-3">
                       <span className="font-bold">Address</span>
                       <span className="ml-auto text-right">
-                        20 Cong Hoa, Tan Binh, TP HCM
+                        {user?.address}
                       </span>
                     </li>
                     <li className="flex items-center py-3">
@@ -143,9 +167,61 @@ export default function MyProfile() {
               </div>
 
               <div className="w-full md:w-9/12 mx-2 bg-white">
-                <p className=" text-black p-5 font-bold text-2xl ">
-                  Motor for rent:
-                </p>
+                <div className="flex justify-between">
+                  <p className=" text-black p-5 font-bold text-2xl ">
+                    Motor for rent:
+                  </p>
+                  <button
+                    onClick={handleAddVehicle}
+                    type="button"
+                    className="flex items-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                  >
+                    <svg
+                      className="h-5 w-5 mr-2"
+                      viewBox="0 0 21.00 21.00"
+                      version="1.1"
+                      xmlns="http://www.w3.org/2000/svg"
+                      xmlnsXlink="http://www.w3.org/1999/xlink"
+                      fill="#ffffff"
+                      stroke="#ffffff"
+                    >
+                      <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                      <g
+                        id="SVGRepo_tracerCarrier"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      ></g>
+                      <g id="SVGRepo_iconCarrier">
+                        <title>plus_circle [#ffffff]</title>
+                        <desc>Created with Sketch.</desc> <defs> </defs>
+                        <g
+                          id="Page-1"
+                          strokeWidth="0.00021000000000000004"
+                          fill="none"
+                          fillRule="evenodd"
+                        >
+                          <g
+                            id="Dribbble-Light-Preview"
+                            transform="translate(-419.000000, -520.000000)"
+                            fill="#ffffff"
+                          >
+                            <g
+                              id="icons"
+                              transform="translate(56.000000, 160.000000)"
+                            >
+                              <path
+                                d="M374.55,369 L377.7,369 L377.7,371 L374.55,371 L374.55,374 L372.45,374 L372.45,371 L369.3,371 L369.3,369 L372.45,369 L372.45,366 L374.55,366 L374.55,369 Z M373.5,378 C368.86845,378 365.1,374.411 365.1,370 C365.1,365.589 368.86845,362 373.5,362 C378.13155,362 381.9,365.589 381.9,370 C381.9,374.411 378.13155,378 373.5,378 L373.5,378 Z M373.5,360 C367.70085,360 363,364.477 363,370 C363,375.523 367.70085,380 373.5,380 C379.29915,380 384,375.523 384,370 C384,364.477 379.29915,360 373.5,360 L373.5,360 Z"
+                                id="plus_circle-[#ffffff]"
+                              ></path>
+                            </g>
+                          </g>
+                        </g>
+                      </g>
+                    </svg>
+                    <span>Add a vehicle</span>
+                  </button>
+                </div>
+
                 <div className="mx-10 py-5">
                   <Swiper
                     loop={true}
@@ -320,6 +396,8 @@ export default function MyProfile() {
           </div>
         </div>
       </div>
+
+      {openVehicleForm && <VehicleForm cancelForm={cancelVehicleForm} />}
     </>
   );
 }

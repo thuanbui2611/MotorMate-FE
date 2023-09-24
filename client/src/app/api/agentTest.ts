@@ -75,6 +75,8 @@ const requests = {
 
 const Account = {
   userDetail: () => requests.get("api/user/details"),
+  getDetailsByUserName: (username: string) =>
+    requests.get(`api/user/${username}/details`),
   login: (values: {}) => requests.post("api/auth/login", values),
   loginGoogle: (values: { tokenCredential: string }) =>
     requests.post("api/auth/sso/google", values),
@@ -85,8 +87,28 @@ const Account = {
     requests.post(`api/auth/change/password/${resetCode}`, values),
 };
 
+const Brand = {
+  all: () => requests.get("api/brand/all"),
+  list: () => requests.get("api/brand"),
+  detail: (id: string) => requests.get(`api/brand/${id}`),
+  create: (values: {}) => requests.post("api/brand", values),
+  update: (values: {}, id: string) => requests.put(`api/brand/${id}`, values),
+  delete: (id: string) => requests.delete(`api/brand/${id}`),
+};
+
+const Model = {
+  all: () => requests.get("api/model/all"),
+  list: () => requests.get("api/model"),
+  detail: (id: string) => requests.get(`api/model/${id}`),
+  create: (values: {}) => requests.post("api/model", values),
+  update: (values: {}, id: string) => requests.put(`api/model/${id}`, values),
+  delete: (id: string) => requests.delete(`api/model/${id}`),
+};
+
 const agentTest = {
   Account,
+  Brand,
+  Model,
 };
 
 export default agentTest;
