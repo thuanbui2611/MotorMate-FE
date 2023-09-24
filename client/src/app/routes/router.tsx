@@ -3,7 +3,6 @@ import App from "../../App";
 import DefaultLayout from "../layouts/DefaultLayout";
 import HomePage from "../../pages/home";
 import About from "../../pages/about";
-import MyProfile from "../../pages/profile/MyProfile";
 import Products from "../../pages/products";
 import ProductDetails from "../../pages/products/ProductDetails";
 import Checkout from "../../pages/checkout/Checkout";
@@ -20,6 +19,8 @@ import Orders from "../../pages/order";
 import ForgotPassword from "../../pages/account/ForgotPassword";
 import ChangePassword from "../../pages/account/ChangePassword";
 import NotFound from "../errors/NotFound";
+import Profile from "../../pages/profile";
+import ProfileDetails from "../../pages/profile/ProfileDetails";
 
 export const router = createBrowserRouter([
   {
@@ -30,9 +31,16 @@ export const router = createBrowserRouter([
         element: <DefaultLayout />,
         children: [
           { path: "", element: <HomePage /> },
+          {
+            path: ":username/",
+            element: <Profile />,
+            children: [
+              { path: "", element: <ProfileDetails /> },
+              { path: "settings", element: <SettingProfile /> },
+            ],
+          },
           { path: "about", element: <About /> },
           { path: "contact", element: <Contact /> },
-          { path: ":username", element: <MyProfile /> },
           { path: "products", element: <Products /> },
           { path: "product-detail/:id", element: <ProductDetails /> },
           { path: "check-out/:id", element: <Checkout /> },

@@ -3,7 +3,6 @@ import HeaderProfile from "./HeaderProfile";
 export default function SettingProfile() {
   return (
     <>
-      {/* <HeaderProfile /> */}
       <div className="container mx-auto my-5 p-5 flex-grow">
         <div className="w-full mx-auto rounded-sm">
           <div className=" bg-gray-200 p-3 shadow-sm rounded-sm">

@@ -13,7 +13,7 @@ import { useParams } from "react-router-dom";
 import { UserDetail } from "../../app/models/User";
 import agentTest from "../../app/api/agentTest";
 
-export default function MyProfile() {
+export default function ProfileDetails() {
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState<Product[]>([]);
   const [openVehicleForm, setOpenVehicleForm] = useState(false);
@@ -45,14 +45,12 @@ export default function MyProfile() {
   if (loading) return <Loading />;
   return (
     <>
-      <HeaderProfile user={user} />
-
       <div className="bg-gray-100">
         <div className="w-full text-white bg-main-color">
-          <div className="container mx-auto my-5 p-5">
+          <div className="w-full lg:max-w-[1600px] mx-auto my-5 p-5">
             <div className="md:flex no-wrap md:-mx-2 ">
               <div className="w-full md:w-3/12 md:mx-2">
-                <div className="bg-white p-3 border-t-4 border-green-400">
+                <div className="bg-white p-3 border-t-4 border-green-400 ">
                   <div className="image overflow-hidden">
                     <img
                       className="h-auto w-full mx-auto"
@@ -72,10 +70,10 @@ export default function MyProfile() {
                     aspernatur non deserunt
                   </p>
                   <ul className="bg-gray-100 text-gray-600 hover:text-gray-700 hover:shadow py-2 px-3 mt-3 divide-y rounded shadow-sm">
-                    <li className="flex items-center py-3">
-                      <span className="font-bold">Email</span>
+                    <li className="flex items-center py-3 flex-wrap">
+                      <span className="font-bold ">Email</span>
                       <span className="ml-auto">
-                        <span className="bg-green-500 py-1 px-2 rounded text-white text-sm ">
+                        <span className="bg-green-500 py-1 px-2 rounded text-white text-sm break-all">
                           {user?.email}
                         </span>
                       </span>
@@ -83,20 +81,22 @@ export default function MyProfile() {
                     <li className="flex items-center py-3">
                       <span className="font-bold">Contact Number</span>
                       <span className="ml-auto">
-                        <span className="bg-green-500 py-1 px-2 rounded text-white text-sm">
+                        <span className="bg-green-500 py-1 px-2 rounded text-white text-sm break-all">
                           {user?.phoneNumber}
                         </span>
                       </span>
                     </li>
                     <li className="flex items-center py-3">
                       <span className="font-bold">Address</span>
-                      <span className="ml-auto text-right">
+                      <span className="ml-auto text-right break-all">
                         {user?.address}
                       </span>
                     </li>
                     <li className="flex items-center py-3">
                       <span className="font-bold">Member since</span>
-                      <span className="ml-auto text-right">Aug 10, 2023</span>
+                      <span className="ml-auto text-right break-all">
+                        Aug 10, 2023
+                      </span>
                     </li>
                   </ul>
                 </div>

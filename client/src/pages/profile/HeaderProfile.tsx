@@ -7,19 +7,19 @@ interface Props {
 export default function ProfileInfo({ user }: Props) {
   return (
     <>
-      <section className="pb-12 ">
-        <div className="relative mb-20 h-96">
+      <section className="pb-12">
+        <div className="relative mb-20 h-96 bg-color-header flex justify-center items-center ">
           <img
-            className="object-cover w-full h-full bg-color-header"
+            className="object-cover w-full h-full max-w-[1900px]"
             src={require("../../app/assets/images/logo/logo-MotorMate-large.png")}
             alt=""
           />
 
-          <div className="absolute bottom-0 left-0 flex items-center">
+          <div className="absolute flex flex-col w-full md:w-fit md:flex-row justify-center bottom-0 left-0 items-center ">
             <div className="relative">
               <img
-                className="object-cover w-40 h-40 ml-4 -mb-16 rounded-full lg:ml-12 lg:-mb-24 lg:w-60 lg:h-60"
-                src="https://i.postimg.cc/q7pv50zT/pexels-edmond-dant-s-4342352.jpg"
+                className="object-cover w-40 h-40 ml-0 -mb-16 rounded-full md:ml-4 lg:ml-12 lg:-mb-24 lg:w-60 lg:h-60"
+                src="https://cafefcdn.com/thumb_w/640/203337114487263232/2022/3/3/photo1646280815645-1646280816151764748403.jpg"
                 alt="Cover image profile"
               />
               <label
@@ -54,8 +54,8 @@ export default function ProfileInfo({ user }: Props) {
               </label>
             </div>
 
-            <div className="w-fit h-40 ml-2 -mb-32 lg:ml-4 lg:-mb-48 lg:h-60 flex items-center">
-              <div className="text-black font-bold text-center text-2xl lg:text-4xl ">
+            <div className="w-fit h-40 ml-0 -mb-32 md:ml-2 lg:ml-4 lg:-mb-48 lg:h-60 flex items-center">
+              <div className="text-black font-bold text-center text-2xl lg:text-4xl mt-5 ">
                 {user?.fullName}
               </div>
             </div>

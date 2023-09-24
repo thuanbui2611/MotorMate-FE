@@ -25,55 +25,7 @@ export default function BrandPage() {
   const [selectedBrand, setSelectedBrand] = useState<Brand | null>(null);
   const [confirmDeleteDiaglog, setConfirmDeleteDiaglog] = useState(false);
   const [brandDeleted, setBrandDeleted] = useState<Brand>({} as Brand);
-  //Test upload multiple images
-  const [selectedFiles, setSelectedFiles] = useState<FileList | null>(null);
-  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-    setSelectedFiles((prevFiles) => {
-      if (prevFiles) {
-        // Convert the FileList to an array
-        const prevFilesArray = Array.from(prevFiles);
-        // Convert the new files to an array
-        const newFilesArray = Array.from(files || []);
-        // Concatenate the previous and new files arrays
-        const combinedFilesArray = [...prevFilesArray, ...newFilesArray];
-        // Convert the combined files array back to a FileList
-        const combinedFilesList = createFileList(combinedFilesArray);
-        return combinedFilesList;
-      }
-      // If there were no previous files, simply use the new FileList
-      return files;
-    });
-    console.log("Selected file:", selectedFiles);
-  };
 
-  const createFileList = (files: File[]) => {
-    const dataTransfer = new DataTransfer();
-    files.forEach((file) => {
-      dataTransfer.items.add(file);
-    });
-    return dataTransfer.files;
-  };
-
-  const handleSubmit = async () => {
-    const result = await uploadImages(selectedFiles!);
-    console.log("Result upload images:", result);
-    setSelectedFiles(null);
-  };
-  // End of test upload multiple images
-
-  // Test delete multiple images
-  const handleDeleteImages = async () => {
-    const listIdImage = [
-      "motormate/fzyiybjcpt5yxqdxwr6h",
-      "motormate/lgko1duvtq4qesxywakp",
-      "motormate/zkv4xffinpt79gzvzkvz",
-    ];
-    const result = await deleteImages(listIdImage);
-    console.log("Result upload images:", result);
-    setSelectedFiles(null);
-  };
-  // End of test delete multiple images
   const brands = useAppSelector(brandSelectors.selectAll);
   const { brandLoaded, metaData, brandParams } = useAppSelector(
     (state) => state.brand
@@ -167,15 +119,6 @@ export default function BrandPage() {
               </svg>
               <span>Add new brand</span>
             </button>
-            {/* Test upload multiple images */}
-            {/* <div>
-              <input type="file" onChange={handleFileChange} multiple />
-              <button onClick={handleSubmit}>Submit</button>
-            </div> */}
-            {/* End of test upload multiple images */}
-            {/* Test delete multiple images */}
-            {/* <button onClick={handleDeleteImages}>Delete images</button> */}
-            {/* End of test delete multiple images */}
           </div>
           <div className="max-w-full overflow-x-auto">
             <table className="w-full table-auto">
