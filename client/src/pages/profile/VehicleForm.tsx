@@ -4,22 +4,37 @@ import Autocomplete from "@mui/material/Autocomplete";
 import SelectCityVN from "../../app/components/SelectCityVN";
 import { Brand } from "../../app/models/Brand";
 import agentTest from "../../app/api/agentTest";
-import { Collection } from "../../app/models/Collection";
+import { ModelVehicle } from "../../app/models/ModelVehicle";
+import { Color } from "../../app/models/Color";
+import { FieldValues, useForm } from "react-hook-form";
+import { useAppSelector } from "../../app/store/ConfigureStore";
+import { UserDetail } from "../../app/models/User";
+import { uploadImages } from "../../app/utils/Cloudinary";
+import { Location } from "../../app/models/Address";
 
 interface Props {
+  currentUser: UserDetail | undefined;
   cancelForm: () => void;
 }
 type Image = {
   name: string;
   url: string;
 };
-export default function VehicleForm({ cancelForm }: Props) {
+export default function VehicleForm({currentUser, cancelForm }: Props) {
   //Note:
-
+  const {
+    control,
+    register,
+    setValue,
+    reset,
+    handleSubmit,
+    formState: { isSubmitting, errors },
+  } = useForm({
+    mode: "all",
+  });
   const [imagesUploaded, setImagesUploaded] = useState<FileList | null>();
-  const [imagesReview, setImagesReview] = useState<Image[] | null>(null);
+  const [imagesSelected, setImagesSelected] = useState<Image[] | null>(null);
   const [selectedFiles, setSelectedFiles] = useState<FileList | null>(null);
-
   const [brands, setBrands] = useState<Brand[]>([]);
   const [selectedBrand, setSelectedBrand] = useState<Brand | null>(null);
   const [collections, setCollections] = useState<
@@ -30,6 +45,11 @@ export default function VehicleForm({ cancelForm }: Props) {
     name: string;
   } | null>(null);
 
+  const [models, setModels] = useState<ModelVehicle[]>([]);
+  const [selectedModel, setSelectedModel] = useState<ModelVehicle | null>(null)
+  const [colors, setColors] = useState<Color[]>([]);
+  const [selectedColor, setSelectedColor] = useState<Color | null>(null);
+  const [location, setLocation] = useState<Location | null>(null);
   useEffect(() => {
     //set review images & selected images
     if (selectedFiles) {
@@ -40,7 +60,7 @@ export default function VehicleForm({ cancelForm }: Props) {
         const url = URL.createObjectURL(file);
         imagesReview.push({ name, url });
       }
-      setImagesReview(imagesReview);
+      setImagesSelected(imagesReview);
     }
 
     //fetch all brands
@@ -85,24 +105,16 @@ export default function VehicleForm({ cancelForm }: Props) {
     console.log("Selected file:", selectedFiles);
   };
 
-  const removeImageFromList = (fileList: Image) => {
-    //Can not remove directly from selectedFiles because it is read-only
-    //So we create a new array and set it to selectedFiles
-    //But need an index to remove
-    //How to get an index of file when we only have file name and url?
-    // => We can use file name to find index of file in selectedFiles array and remove it
-    // => But we need to remove file from imagesReview array first to avoid error when we remove file from selectedFiles array
-    // (because we use file name to find index of file in selectedFiles array)
-    //But when retrieve a exist data from API with url of image, we can not get file name from url of image
-    //=> we can not remove it from imagesReview array
-    //The API just response url and we can not get file name from url of image
-    //=> we can not remove it from imagesReview array
-    //=> we can not remove it from selectedFiles array
-    //How can we remove by the data from API?
-    //=> We can use url of image to find index of file in selectedFiles array and remove it
-    //But when we add a new image, we can not get url of image from file
-    //There will be two cases: not have existed data from API, have existed data from API
-    // => We can use file name to find index of file in selectedFiles array and remove it
+  const removeImageFromList = (file: Image, index: number) => {
+    const image = file.url;
+    if(selectedFiles)
+    {
+      
+      const fileList = Array.from(selectedFiles);
+      fileList.splice(index,1);
+      const convertToFileList = createFileList(fileList);
+      setSelectedFiles(convertToFileList);
+    }
   };
 
   const createFileList = (files: File[]) => {
@@ -118,8 +130,16 @@ export default function VehicleForm({ cancelForm }: Props) {
     newValue: Brand | null
   ) => {
     setSelectedBrand(newValue);
+    if(!newValue){
+      setSelectedCollection(null);
+      setSelectedModel(null);
+      setSelectedColor(null);
+    }
     if (newValue?.collections) {
       setCollections(newValue.collections);
+      setSelectedCollection(null);
+      setSelectedModel(null);
+      setSelectedColor(null);
     }
   };
 
@@ -127,10 +147,84 @@ export default function VehicleForm({ cancelForm }: Props) {
     event: React.SyntheticEvent<Element, Event>,
     newValue: { id: string; name: string } | null
   ) => {
+    if(!newValue)
+    {
+      setSelectedModel(null);
+      setSelectedColor(null);
+    }
+    
     setSelectedCollection(newValue);
+    
+    const getModels = async () => {
+      try {
+        if(newValue?.id)
+      {
+        const response = await agentTest.Model.getByCollection(newValue?.id);
+        setModels(response);
+      }
+      } catch (error) {
+        console.log("Error get models for selectOption:", error)
+      }
+      
+    }
+    getModels();
   };
 
-  const testSelectList = ["test1", "test2", "test3"];
+  const handleModelChange =  (
+    event: React.SyntheticEvent<Element, Event>,
+    newValue: ModelVehicle | null
+  ) => {
+    if(!newValue)
+    {
+      setSelectedColor(null);
+    }
+    setSelectedModel(newValue)
+    if(newValue?.colors){
+      setColors(newValue.colors)
+    }
+  };
+
+  const handleColorChange = (
+    event: React.SyntheticEvent<Element, Event>,
+    newValue: Color | null
+  ) => {
+    setSelectedColor(newValue)
+  };
+
+  const handleLocationChange = (value: Location) => {
+    setLocation(value);
+  }
+  async function submitForm(data: FieldValues) {
+    try {
+      let images;
+      if(selectedFiles)
+      {
+        images = await uploadImages(selectedFiles);
+      }
+      const address = data.locationSpecific + " " + location?.ward + " " + location?.district + " " + location?.city;
+      const formData = {
+        ownerId: currentUser?.id,
+        modelId: selectedModel?.id,
+        price: data.price,
+        location: address,
+        city: location?.city,
+        purchaseDate: data.purchaseDate,
+        conditionPercentage: data.conditionPercentage,
+        licensePlate: data.licensePlate,
+        insuranceNumber: data.insuranceNumber,
+        insuranceExpiry: data.insuranceExpiry,
+        status: 0,
+        colorName: selectedColor?.color,
+        images: images, 
+      }
+      console.log("form data:", formData);
+      
+      const result = await agentTest.Vehicle.create(formData);
+      cancelForm();
+    } catch (error) {
+      console.log("Error when submit form:", error)
+    }
+  }
 
   return (
     <>
@@ -138,7 +232,9 @@ export default function VehicleForm({ cancelForm }: Props) {
         className={`fixed inset-0 h-screen w-screen z-50 bg-black bg-opacity-30 flex items-center justify-center`}
         onClick={handleClickOutside}
       >
-        <form className="relative bg-white w-3/4 max-w-5xl h-fit p-10 pt-6 rounded-xl max-h-[600px] scrollbar overflow-auto">
+        <form 
+        className="relative bg-white w-3/4 max-w-5xl h-fit p-10 pt-6 rounded-xl max-h-[600px] scrollbar overflow-auto"
+        onSubmit={handleSubmit(submitForm)}>
           <div className="border-b-2 border-neutral-100 border-opacity-100 mb-5 pb-5">
             <p className="text-center text-4xl ">Add a vehicle</p>
             <button
@@ -207,13 +303,14 @@ export default function VehicleForm({ cancelForm }: Props) {
                 Model
               </label>
               <Autocomplete
+                disabled={!selectedCollection}
                 size="small"
                 disablePortal
-                // value={defaultCollection}
-                options={testSelectList}
-                // getOptionLabel={(option) => option.name}
-                onChange={(event, newValue) => {}}
-                renderInput={(params) => <TextField {...params} />}
+                value={selectedModel}
+                options={models}
+                getOptionLabel={(option) => option.name}
+                onChange={(event, newValue) => handleModelChange(event, newValue)}
+                renderInput={(params) => <TextField {...params}  className={`${!selectedCollection && "bg-gray-200 rounded-md"}`}/>}
               />
             </div>
             <div className="flex flex-col">
@@ -221,13 +318,14 @@ export default function VehicleForm({ cancelForm }: Props) {
                 Color
               </label>
               <Autocomplete
+                disabled={!selectedModel}
                 size="small"
                 disablePortal
-                // value={defaultCollection}
-                options={testSelectList}
-                // getOptionLabel={(option) => option.name}
-                onChange={(event, newValue) => {}}
-                renderInput={(params) => <TextField {...params} />}
+                value={selectedColor}
+                options={colors}
+                getOptionLabel={(option) => option.color}
+                onChange={(event, newValue) => handleColorChange(event, newValue)}
+                renderInput={(params) => <TextField {...params} className={`${!selectedModel && "bg-gray-200 rounded-md"}`}/>}
               />
             </div>
           </div>
@@ -244,13 +342,18 @@ export default function VehicleForm({ cancelForm }: Props) {
                   InputProps={{
                     endAdornment: <div className="pl-2">%</div>,
                   }}
+                  {...register("conditionPercentage", {
+                    required: "Condition is required",
+                  })}
                 />
               </div>
               <div>
                 <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                   Purchase Date
                 </label>
-                <TextField size="small" type="date" />
+                <TextField size="small" type="date" {...register("purchaseDate", {
+                  required: "Purchase date is required",
+                })}/>
               </div>
             </div>
             <div className="flex justify-between gap-6">
@@ -258,20 +361,38 @@ export default function VehicleForm({ cancelForm }: Props) {
                 <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                   Insurance Number
                 </label>
-                <TextField size="small" type="text" />
+                <TextField size="small" type="text" {...register("insuranceNumber", {
+                  required: "Insurance Number is required",
+                })}/>
               </div>
               <div>
                 <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                   Insurance expiry date
                 </label>
-                <TextField size="small" type="date" />
+                <TextField size="small" type="date" {...register("insuranceExpiry", {
+                  required: "Insurance expiry is required",
+                })}/>
               </div>
             </div>
             <div>
               <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                 License Plate
               </label>
-              <TextField size="small" type="text" placeholder="65L1-24084" />
+              <TextField size="small" type="text" placeholder="65L1-24084" {...register("licensePlate", {
+                  required: "Insurance expiry is required",
+                })}/>
+            </div>
+            <div>
+              <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                Price per day
+              </label>
+              <TextField 
+                size="small" 
+                type="number" 
+                placeholder="100.000" 
+                {...register("price", {
+                  required: "Price is required",
+                })}/>
             </div>
           </div>
           <div className="flex flex-col mb-2">
@@ -280,7 +401,7 @@ export default function VehicleForm({ cancelForm }: Props) {
             </label>
             <div className="flex flex-col gap-3">
               <div className="flex gap-3">
-                <SelectCityVN />
+                <SelectCityVN onSelect={handleLocationChange}/>
               </div>
 
               <div className=" w-full md:w-1/2">
@@ -289,16 +410,18 @@ export default function VehicleForm({ cancelForm }: Props) {
                   size="small"
                   type="text"
                   placeholder="House number, street name..."
+                  {...register("locationSpecific", {
+                    required: "You need to specify your address (house number, street name...)",
+                  })}
                 />
               </div>
             </div>
           </div>
-
           <div className="mb-1">
             <label className="block text-sm font-medium text-gray-900 dark:text-white">
               Images
             </label>
-            {!imagesReview && (
+            {!imagesSelected && (
               <div className="mb-8 mt-2">
                 <input
                   type="file"
@@ -328,20 +451,18 @@ export default function VehicleForm({ cancelForm }: Props) {
             )}
           </div>
 
-          {imagesReview && (
+          {imagesSelected && (
             <div className="flex gap-3 mb-5 rounded-md bg-[#F5F7FB] py-4 px-8 w-full scrollbar overflow-auto">
-              {imagesReview.map((image, index) => (
+              {imagesSelected.map((image, index) => (
                 <div className="max-w-[128px] h-40 pb-4" key={index}>
                   <div className="flex items-center justify-between pb-1 ">
                     <span className="truncate text-xs font-medium text-[#07074D]">
                       {image.name}
                     </span>
-                    <button
-                      className="text-[#07074D]"
-                      onClick={() => {
-                        //setImagesReview(null);
-                      }}
-                    >
+                    <div
+                      className="text-[#07074D] cursor-pointer hover:text-red-600"
+                      onClick={() => removeImageFromList(image, index)}
+                    > 
                       <svg
                         width="10"
                         height="10"
@@ -362,7 +483,7 @@ export default function VehicleForm({ cancelForm }: Props) {
                           fill="currentColor"
                         />
                       </svg>
-                    </button>
+                    </div>
                   </div>
                   <div className="flex"></div>
                   <img
@@ -372,7 +493,7 @@ export default function VehicleForm({ cancelForm }: Props) {
                   />
                 </div>
               ))}
-              <div className=" border w-40">
+              <div className=" border w-40 h-40">
                 <input
                   type="file"
                   name="logo"
@@ -392,11 +513,11 @@ export default function VehicleForm({ cancelForm }: Props) {
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
                   >
-                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                    <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
                     <g
                       id="SVGRepo_tracerCarrier"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                     ></g>
                     <g id="SVGRepo_iconCarrier">
                       <circle
@@ -404,13 +525,13 @@ export default function VehicleForm({ cancelForm }: Props) {
                         cy="12"
                         r="10"
                         stroke="#1C274C"
-                        stroke-width="1.2"
+                        strokeWidth="1.2"
                       ></circle>
                       <path
                         d="M15 12L12 12M12 12L9 12M12 12L12 9M12 12L12 15"
                         stroke="#1C274C"
-                        stroke-width="1.2"
-                        stroke-linecap="round"
+                        strokeWidth="1.2"
+                        strokeLinecap="round"
                       ></path>
                     </g>
                   </svg>
@@ -436,12 +557,12 @@ export default function VehicleForm({ cancelForm }: Props) {
               htmlFor="remember"
               className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
             >
-              I agree with the
+              I agree with the {" "}
               <a
                 href="#"
                 className="text-blue-600 hover:underline dark:text-blue-500"
               >
-                terms and conditions
+              terms and conditions
               </a>
               .
             </label>

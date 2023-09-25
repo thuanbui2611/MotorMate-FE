@@ -74,7 +74,7 @@ const requests = {
 };
 
 const Account = {
-  userDetail: () => requests.get("api/user/details"),
+  userDetails: () => requests.get("api/user/details"),
   getDetailsByUserName: (username: string) =>
     requests.get(`api/user/${username}/details`),
   login: (values: {}) => requests.post("api/auth/login", values),
@@ -100,15 +100,26 @@ const Model = {
   all: () => requests.get("api/model/all"),
   list: () => requests.get("api/model"),
   detail: (id: string) => requests.get(`api/model/${id}`),
+  getByCollection: (collectionId: string) => requests.get(`api/model/collection/${collectionId}`),
   create: (values: {}) => requests.post("api/model", values),
   update: (values: {}, id: string) => requests.put(`api/model/${id}`, values),
   delete: (id: string) => requests.delete(`api/model/${id}`),
+};
+
+const Vehicle = {
+  all: () => requests.get("api/vehicle/all"),
+  list: () => requests.get("api/vehicle"),
+  detail: (id: string) => requests.get(`api/vehicle/${id}`),
+  create: (values: {}) => requests.post("api/vehicle", values),
+  update: (values: {}, id: string) => requests.put(`api/vehicle/${id}`, values),
+  delete: (id: string) => requests.delete(`api/vehicle/${id}`),
 };
 
 const agentTest = {
   Account,
   Brand,
   Model,
+  Vehicle
 };
 
 export default agentTest;

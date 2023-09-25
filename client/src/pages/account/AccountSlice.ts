@@ -66,7 +66,7 @@ export const getUserDetails = createAsyncThunk<User>(
   "account/getUserDetails",
   async (_, thunkAPI) => {
     try {
-      const user = await agentTest.Account.userDetail();
+      const user = await agentTest.Account.userDetails();
       return user;
     } catch (error) {
       return thunkAPI.rejectWithValue({ error: (error as any).data });

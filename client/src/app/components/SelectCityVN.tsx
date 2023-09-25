@@ -1,8 +1,12 @@
 import { useEffect, useState } from "react";
-import { City, District, Ward } from "../models/Address";
+import { City, District, Location, Ward } from "../models/Address";
 import { Autocomplete, TextField } from "@mui/material";
 
-export default function SelectCityVN() {
+interface Props{
+  onSelect: (value: Location) => void;
+}
+
+export default function SelectCityVN({onSelect}: Props) {
   const [cities, setCities] = useState<City[]>([]);
   const [selectedCity, setSelectedCity] = useState<City | null>(null);
   const [selectedDistrict, setSelectedDistrict] = useState<District | null>(
@@ -11,7 +15,7 @@ export default function SelectCityVN() {
   const [districts, setDistricts] = useState<District[]>([]);
   const [wards, setWards] = useState<Ward[]>([]);
   const [selectedWard, setSelectedWard] = useState<Ward | null>(null);
-
+  
   useEffect(() => {
     fetch("./dataCityVN.json")
       .then((response) => response.json())
@@ -22,7 +26,18 @@ export default function SelectCityVN() {
         console.error("Error loading data:", error);
       });
   }, []);
+  useEffect(()=>{
+    if(selectedWard?.Name && selectedCity?.Name && selectedDistrict?.Name)
+    {
+      let location: Location = {
+        city: selectedCity.Name,
+        ward: selectedWard.Name, 
+        district: selectedDistrict.Name 
+      }
 
+      onSelect(location)
+    }
+  }, [selectedWard])
   const handleCityChange = (
     event: React.SyntheticEvent<Element, Event>,
     newValue: City | null
@@ -95,6 +110,11 @@ export default function SelectCityVN() {
     // Sort other strings
     return a.localeCompare(b);
   };
+
+  // const handleLocationChange = (event: any)=>{
+    
+    
+  // }
   return (
     <>
       <Autocomplete

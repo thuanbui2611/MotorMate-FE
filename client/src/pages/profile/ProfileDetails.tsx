@@ -17,8 +17,8 @@ export default function ProfileDetails() {
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState<Product[]>([]);
   const [openVehicleForm, setOpenVehicleForm] = useState(false);
-  const [user, setUser] = useState<UserDetail>();
-
+  const [userDetail, setUserDetail] = useState<UserDetail>();
+  const [currentUserLogin, setCurrentUserLogin] = useState<UserDetail>();
   const { username } = useParams();
   useEffect(() => {
     agent.Product.all()
@@ -26,13 +26,19 @@ export default function ProfileDetails() {
       .catch((error) => console.log(error))
       .finally(() => setLoading(false));
 
-    //Fetch user
+    //Fetch user detail
     if (username) {
       agentTest.Account.getDetailsByUserName(username)
-        .then((user) => setUser(user))
+        .then((user) => setUserDetail(user))
         .catch((error) => console.log(error))
         .finally(() => setLoading(false));
     }
+
+    //Fetch user login
+    agentTest.Account.userDetails()
+    .then((userLogin) => setCurrentUserLogin(userLogin))
+    .catch((error) => console.log(error))
+    .finally(() => setLoading(false));
   }, []);
 
   const cancelVehicleForm = () => {
@@ -74,7 +80,7 @@ export default function ProfileDetails() {
                       <span className="font-bold ">Email</span>
                       <span className="ml-auto">
                         <span className="bg-green-500 py-1 px-2 rounded text-white text-sm break-all">
-                          {user?.email}
+                          {userDetail?.email}
                         </span>
                       </span>
                     </li>
@@ -82,14 +88,14 @@ export default function ProfileDetails() {
                       <span className="font-bold">Contact Number</span>
                       <span className="ml-auto">
                         <span className="bg-green-500 py-1 px-2 rounded text-white text-sm break-all">
-                          {user?.phoneNumber}
+                          {userDetail?.phoneNumber}
                         </span>
                       </span>
                     </li>
                     <li className="flex items-center py-3">
                       <span className="font-bold">Address</span>
                       <span className="ml-auto text-right break-all">
-                        {user?.address}
+                        {userDetail?.address}
                       </span>
                     </li>
                     <li className="flex items-center py-3">
@@ -397,7 +403,7 @@ export default function ProfileDetails() {
         </div>
       </div>
 
-      {openVehicleForm && <VehicleForm cancelForm={cancelVehicleForm} />}
+      {openVehicleForm && <VehicleForm currentUser={currentUserLogin} cancelForm={cancelVehicleForm} />}
     </>
   );
 }

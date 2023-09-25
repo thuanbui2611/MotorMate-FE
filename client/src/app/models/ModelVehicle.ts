@@ -1,3 +1,5 @@
+import { Color } from "./Color";
+
 export interface ModelVehicle {
   id: string;
   name: string;
@@ -12,10 +14,6 @@ export interface ModelCollection {
   name: string;
 }
 
-export interface Color {
-  id: number;
-  color: string;
-}
 
 export interface ModelVehicleParams {
   pageNumber: number;

@@ -12,6 +12,11 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs, { Dayjs } from "dayjs";
 import Loading from "../../app/components/Loading";
 import ProductList from "./ProductList";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import Box from "@mui/material/Box";
+import Chip from "@mui/material/Chip";
+import { City } from "../../app/models/Address";
+import MultipleSelectCity from "../../app/components/MultipleSelectCity";
 
 // Filter by city
 const ITEM_HEIGHT = 48;
@@ -50,7 +55,17 @@ function getStyles(name: string, personName: readonly string[], theme: Theme) {
 
 export default function Products() {
   const [products, setProducts] = useState<Product[]>([]);
+  const [cities, setCities] = useState<City[]>([]);
   useEffect(() => {
+    //get city data
+    fetch("./dataCityVN.json")
+      .then((response) => response.json())
+      .then((data: City[]) => {
+        setCities(data);
+      })
+      .catch((error) => {
+        console.error("Error loading data:", error);
+      });
     fetch("https://fakestoreapi.com/products")
       .then((res) => res.json())
       .then((data) => setProducts(data))
@@ -128,44 +143,45 @@ export default function Products() {
             <div className="px-4 py-4 mx-auto max-w-7xl lg:py-6 md:px-6">
               <div className="flex flex-wrap mb-24 -mx-3">
                 <div className=" scrollbar overflow-y-auto max-h-[50vw] w-full pr-2 lg:w-1/4 lg:block">
+                  <MultipleSelectCity/>
                   {/* Filter by city form */}
-                  {/* <FormControl sx={{ m: 1, width: 200 }}>
-                    <InputLabel id="demo-multiple-chip-label">City</InputLabel>
-                    <Select
-                      labelId="demo-multiple-chip-label"
-                      id="demo-multiple-chip"
-                      multiple
-                      value={personName}
-                      onChange={handleFilterByCityChange}
-                      input={
-                        <OutlinedInput id="select-multiple-chip" label="Chip" />
-                      }
-                      renderValue={(selected) => (
-                        <Box
-                          sx={{
-                            display: "flex",
-                            flexWrap: "wrap",
-                            gap: 0.5,
-                          }}
-                        >
-                          {selected.map((value) => (
-                            <Chip key={value} label={value} />
-                          ))}
-                        </Box>
-                      )}
-                      MenuProps={MenuProps}
-                    >
-                      {names.map((name) => (
-                        <MenuItem
-                          key={name}
-                          value={name}
-                          style={getStyles(name, personName, theme)}
-                        >
-                          {name}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl> */}
+                    <FormControl sx={{ m: 1, width: 200 }}>
+                      <InputLabel id="demo-multiple-chip-label">City</InputLabel>
+                      <Select
+                        labelId="demo-multiple-chip-label"
+                        id="demo-multiple-chip"
+                        multiple
+                        value={personName}
+                        onChange={handleFilterByCityChange}
+                        input={
+                          <OutlinedInput id="select-multiple-chip" label="Chip" />
+                        }
+                        renderValue={(selected) => (
+                          <Box
+                            sx={{
+                              display: "flex",
+                              flexWrap: "wrap",
+                              gap: 0.5,
+                            }}
+                          >
+                            {selected.map((value) => (
+                              <Chip key={value} label={value} />
+                            ))}
+                          </Box>
+                        )}
+                        MenuProps={MenuProps}
+                      >
+                        {cities.map((city) => (
+                          <MenuItem
+                            key={city.Id}
+                            value={city.Name}
+                            style={getStyles(city.Name, personName, theme)}
+                          >
+                            {city.Name}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
                   {/* End Filter by city form */}
                   <div className="p-4 mb-5 bg-white border border-gray-200 ">
                     <h2 className="text-2xl font-bold text-center pb-3">

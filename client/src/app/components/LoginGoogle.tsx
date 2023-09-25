@@ -29,7 +29,12 @@ export default function LoginGoogle() {
     }
     setLoading(false);
   };
-  if (loading) return <Loading />;
+  if (loading) return <>
+  <div className="fixed inset-0">
+
+  <Loading />
+  </div>
+  </>;
 
   return (
     <GoogleLogin

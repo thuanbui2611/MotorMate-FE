@@ -13,3 +13,9 @@ export interface Ward {
   Name: string;
   Level: string;
 }
+
+export interface Location {
+  ward: string;
+  district: string;
+  city: string
+}
