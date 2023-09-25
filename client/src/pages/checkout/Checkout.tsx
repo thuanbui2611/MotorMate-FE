@@ -1,12 +1,13 @@
 import { useState } from "react";
 import SelectCityVN from "../../app/components/SelectCityVN";
 import ProcessingBar from "../../app/components/ProcessingBar";
+import { Location } from "../../app/models/Address";
 
 export default function Checkout() {
   //Select option Payment Method
   const [selectedPaymentOption, setSelectedPaymentOption] =
     useState("cashOnDelivery");
-  const [location, setLocation] = useState<String | null>(null);
+  const [location, setLocation] = useState<Location | null>(null);
   const handlePaymentOptionChange = (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -23,10 +24,9 @@ export default function Checkout() {
   };
   //End of select option delivery
 
-  const handleLocationChange = (value: string) => {
-
+  const handleLocationChange = (value: Location) => {
     setLocation(value);
-  }
+  };
   return (
     <>
       <section className="pt-12 pb-24 bg-gray-100 overflow-hidden">
@@ -144,7 +144,7 @@ export default function Checkout() {
                             </label>
                           </div>
                           <div className=" flex flex-col gap-3 mb-4 justify-center items-center w-full md:w-2/3 mt-2 md:mt-0">
-                            {/* <SelectCityVN onSelect={handleLocationChange} /> */}
+                            <SelectCityVN onSelect={handleLocationChange} />
                           </div>
                         </div>
 

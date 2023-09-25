@@ -20,7 +20,7 @@ type Image = {
   name: string;
   url: string;
 };
-export default function VehicleForm({currentUser, cancelForm }: Props) {
+export default function VehicleForm({ currentUser, cancelForm }: Props) {
   //Note:
   const {
     control,
@@ -46,7 +46,7 @@ export default function VehicleForm({currentUser, cancelForm }: Props) {
   } | null>(null);
 
   const [models, setModels] = useState<ModelVehicle[]>([]);
-  const [selectedModel, setSelectedModel] = useState<ModelVehicle | null>(null)
+  const [selectedModel, setSelectedModel] = useState<ModelVehicle | null>(null);
   const [colors, setColors] = useState<Color[]>([]);
   const [selectedColor, setSelectedColor] = useState<Color | null>(null);
   const [location, setLocation] = useState<Location | null>(null);
@@ -106,12 +106,9 @@ export default function VehicleForm({currentUser, cancelForm }: Props) {
   };
 
   const removeImageFromList = (file: Image, index: number) => {
-    const image = file.url;
-    if(selectedFiles)
-    {
-      
+    if (selectedFiles) {
       const fileList = Array.from(selectedFiles);
-      fileList.splice(index,1);
+      fileList.splice(index, 1);
       const convertToFileList = createFileList(fileList);
       setSelectedFiles(convertToFileList);
     }
@@ -130,7 +127,7 @@ export default function VehicleForm({currentUser, cancelForm }: Props) {
     newValue: Brand | null
   ) => {
     setSelectedBrand(newValue);
-    if(!newValue){
+    if (!newValue) {
       setSelectedCollection(null);
       setSelectedModel(null);
       setSelectedColor(null);
@@ -147,40 +144,36 @@ export default function VehicleForm({currentUser, cancelForm }: Props) {
     event: React.SyntheticEvent<Element, Event>,
     newValue: { id: string; name: string } | null
   ) => {
-    if(!newValue)
-    {
+    if (!newValue) {
       setSelectedModel(null);
       setSelectedColor(null);
     }
-    
+
     setSelectedCollection(newValue);
-    
+
     const getModels = async () => {
       try {
-        if(newValue?.id)
-      {
-        const response = await agentTest.Model.getByCollection(newValue?.id);
-        setModels(response);
-      }
+        if (newValue?.id) {
+          const response = await agentTest.Model.getByCollection(newValue?.id);
+          setModels(response);
+        }
       } catch (error) {
-        console.log("Error get models for selectOption:", error)
+        console.log("Error get models for selectOption:", error);
       }
-      
-    }
+    };
     getModels();
   };
 
-  const handleModelChange =  (
+  const handleModelChange = (
     event: React.SyntheticEvent<Element, Event>,
     newValue: ModelVehicle | null
   ) => {
-    if(!newValue)
-    {
+    if (!newValue) {
       setSelectedColor(null);
     }
-    setSelectedModel(newValue)
-    if(newValue?.colors){
-      setColors(newValue.colors)
+    setSelectedModel(newValue);
+    if (newValue?.colors) {
+      setColors(newValue.colors);
     }
   };
 
@@ -188,41 +181,48 @@ export default function VehicleForm({currentUser, cancelForm }: Props) {
     event: React.SyntheticEvent<Element, Event>,
     newValue: Color | null
   ) => {
-    setSelectedColor(newValue)
+    setSelectedColor(newValue);
   };
 
   const handleLocationChange = (value: Location) => {
     setLocation(value);
-  }
+  };
   async function submitForm(data: FieldValues) {
     try {
       let images;
-      if(selectedFiles)
-      {
-        images = await uploadImages(selectedFiles);
-      }
-      const address = data.locationSpecific + " " + location?.ward + " " + location?.district + " " + location?.city;
+      // if(selectedFiles)
+      // {
+      //   images = await uploadImages(selectedFiles);
+      // }
+      const address =
+        data.locationSpecific +
+        " " +
+        location?.ward +
+        " " +
+        location?.district +
+        " " +
+        location?.city;
       const formData = {
         ownerId: currentUser?.id,
         modelId: selectedModel?.id,
         price: data.price,
         location: address,
         city: location?.city,
-        purchaseDate: data.purchaseDate,
+        purchaseDate: data.purchaseDate + "T00:00:00.000Z",
         conditionPercentage: data.conditionPercentage,
         licensePlate: data.licensePlate,
         insuranceNumber: data.insuranceNumber,
-        insuranceExpiry: data.insuranceExpiry,
+        insuranceExpiry: data.insuranceExpiry + "T00:00:00.000Z",
         status: 0,
         colorName: selectedColor?.color,
-        images: images, 
-      }
+        images: images,
+      };
       console.log("form data:", formData);
-      
-      const result = await agentTest.Vehicle.create(formData);
+
+      // const result = await agentTest.Vehicle.create(formData);
       cancelForm();
     } catch (error) {
-      console.log("Error when submit form:", error)
+      console.log("Error when submit form:", error);
     }
   }
 
@@ -232,9 +232,10 @@ export default function VehicleForm({currentUser, cancelForm }: Props) {
         className={`fixed inset-0 h-screen w-screen z-50 bg-black bg-opacity-30 flex items-center justify-center`}
         onClick={handleClickOutside}
       >
-        <form 
-        className="relative bg-white w-3/4 max-w-5xl h-fit p-10 pt-6 rounded-xl max-h-[600px] scrollbar overflow-auto"
-        onSubmit={handleSubmit(submitForm)}>
+        <form
+          className="relative bg-white w-3/4 max-w-5xl h-fit p-10 pt-6 rounded-xl max-h-[600px] scrollbar overflow-auto"
+          onSubmit={handleSubmit(submitForm)}
+        >
           <div className="border-b-2 border-neutral-100 border-opacity-100 mb-5 pb-5">
             <p className="text-center text-4xl ">Add a vehicle</p>
             <button
@@ -309,8 +310,17 @@ export default function VehicleForm({currentUser, cancelForm }: Props) {
                 value={selectedModel}
                 options={models}
                 getOptionLabel={(option) => option.name}
-                onChange={(event, newValue) => handleModelChange(event, newValue)}
-                renderInput={(params) => <TextField {...params}  className={`${!selectedCollection && "bg-gray-200 rounded-md"}`}/>}
+                onChange={(event, newValue) =>
+                  handleModelChange(event, newValue)
+                }
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    className={`${
+                      !selectedCollection && "bg-gray-200 rounded-md"
+                    }`}
+                  />
+                )}
               />
             </div>
             <div className="flex flex-col">
@@ -324,8 +334,15 @@ export default function VehicleForm({currentUser, cancelForm }: Props) {
                 value={selectedColor}
                 options={colors}
                 getOptionLabel={(option) => option.color}
-                onChange={(event, newValue) => handleColorChange(event, newValue)}
-                renderInput={(params) => <TextField {...params} className={`${!selectedModel && "bg-gray-200 rounded-md"}`}/>}
+                onChange={(event, newValue) =>
+                  handleColorChange(event, newValue)
+                }
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    className={`${!selectedModel && "bg-gray-200 rounded-md"}`}
+                  />
+                )}
               />
             </div>
           </div>
@@ -351,9 +368,13 @@ export default function VehicleForm({currentUser, cancelForm }: Props) {
                 <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                   Purchase Date
                 </label>
-                <TextField size="small" type="date" {...register("purchaseDate", {
-                  required: "Purchase date is required",
-                })}/>
+                <TextField
+                  size="small"
+                  type="date"
+                  {...register("purchaseDate", {
+                    required: "Purchase date is required",
+                  })}
+                />
               </div>
             </div>
             <div className="flex justify-between gap-6">
@@ -361,38 +382,52 @@ export default function VehicleForm({currentUser, cancelForm }: Props) {
                 <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                   Insurance Number
                 </label>
-                <TextField size="small" type="text" {...register("insuranceNumber", {
-                  required: "Insurance Number is required",
-                })}/>
+                <TextField
+                  size="small"
+                  type="text"
+                  {...register("insuranceNumber", {
+                    required: "Insurance Number is required",
+                  })}
+                />
               </div>
               <div>
                 <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                   Insurance expiry date
                 </label>
-                <TextField size="small" type="date" {...register("insuranceExpiry", {
-                  required: "Insurance expiry is required",
-                })}/>
+                <TextField
+                  size="small"
+                  type="date"
+                  {...register("insuranceExpiry", {
+                    required: "Insurance expiry is required",
+                  })}
+                />
               </div>
             </div>
             <div>
               <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                 License Plate
               </label>
-              <TextField size="small" type="text" placeholder="65L1-24084" {...register("licensePlate", {
+              <TextField
+                size="small"
+                type="text"
+                placeholder="65L1-24084"
+                {...register("licensePlate", {
                   required: "Insurance expiry is required",
-                })}/>
+                })}
+              />
             </div>
             <div>
               <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                 Price per day
               </label>
-              <TextField 
-                size="small" 
-                type="number" 
-                placeholder="100.000" 
+              <TextField
+                size="small"
+                type="number"
+                placeholder="100.000"
                 {...register("price", {
                   required: "Price is required",
-                })}/>
+                })}
+              />
             </div>
           </div>
           <div className="flex flex-col mb-2">
@@ -401,7 +436,7 @@ export default function VehicleForm({currentUser, cancelForm }: Props) {
             </label>
             <div className="flex flex-col gap-3">
               <div className="flex gap-3">
-                <SelectCityVN onSelect={handleLocationChange}/>
+                <SelectCityVN onSelect={handleLocationChange} />
               </div>
 
               <div className=" w-full md:w-1/2">
@@ -411,7 +446,8 @@ export default function VehicleForm({currentUser, cancelForm }: Props) {
                   type="text"
                   placeholder="House number, street name..."
                   {...register("locationSpecific", {
-                    required: "You need to specify your address (house number, street name...)",
+                    required:
+                      "You need to specify your address (house number, street name...)",
                   })}
                 />
               </div>
@@ -462,7 +498,7 @@ export default function VehicleForm({currentUser, cancelForm }: Props) {
                     <div
                       className="text-[#07074D] cursor-pointer hover:text-red-600"
                       onClick={() => removeImageFromList(image, index)}
-                    > 
+                    >
                       <svg
                         width="10"
                         height="10"
@@ -557,12 +593,12 @@ export default function VehicleForm({currentUser, cancelForm }: Props) {
               htmlFor="remember"
               className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
             >
-              I agree with the {" "}
+              I agree with the{" "}
               <a
                 href="#"
                 className="text-blue-600 hover:underline dark:text-blue-500"
               >
-              terms and conditions
+                terms and conditions
               </a>
               .
             </label>

@@ -223,7 +223,7 @@
   }
 }
 
-/* Product card */
+/* Product Homepage card */
 .card-location {
   font-size: 8px;
 }
@@ -275,8 +275,8 @@
   }
 
   .card-container h5 {
-    font-size: 6px;
-    padding: 0;
+    font-size: 1.5vw;
+    /* padding: 0; */
     display: flex;
   }
 
@@ -293,6 +293,10 @@
 
   .card-location {
     font-size: 1vw;
+  }
+
+  .card-container button {
+    font-size: 1.1vw;
   }
 }
 

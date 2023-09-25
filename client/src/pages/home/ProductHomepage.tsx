@@ -1,16 +1,12 @@
 import { Product } from "../../app/models/Product";
 import { useSpringCarousel } from "react-spring-carousel";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 interface Props {
   products: Product[];
 }
 export default function ProductHomepage({ products }: Props) {
   const [currentSlide, setCurrentSlide] = useState(products[0].id);
-
-  // useEffect(() => {
-
-  // }, []);
 
   const {
     carouselFragment,
@@ -146,7 +142,7 @@ export default function ProductHomepage({ products }: Props) {
                   </div>
 
                   <div className="flex items-end md:flex-row">
-                    <div className="w-full md:w-2/3 h-4 pl-2 md:pl-5 md:pb-0 inline-table">
+                    <div className="w-2/3 h-4 pl-2 md:pl-5 md:pb-0 inline-table">
                       <h5 className="font-bold text-gradient inline-block">
                         100.000 VND
                       </h5>
@@ -154,8 +150,8 @@ export default function ProductHomepage({ products }: Props) {
                         per day
                       </span>
                     </div>
-                    <button className="w-12 md:mb-0 md:w-1/3 rounded-xl rounded-tr-none rounded-bl-none font-bold text-white transition-all bg-gradient-to-r from-[#FF6003] to-[#FF7E06] hover:brightness-125">
-                      Renting
+                    <button className="w-1/3 h-1/2 rounded-md md:text-sm md:mb-0 md:w-1/3 md:rounded-xl rounded-tr-none rounded-bl-none md:rounded-tr-none md:rounded-bl-none font-bold text-white transition-all bg-gradient-to-r from-[#FF6003] to-[#FF7E06] hover:brightness-125">
+                      Rent Now
                     </button>
                   </div>
                 </div>
