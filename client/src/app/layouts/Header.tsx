@@ -239,7 +239,7 @@ export default function Header(props: Props) {
                 <ul className="py-2" aria-labelledby="user-menu-button">
                   <li>
                     <a
-                      href={"/" + user.username}
+                      href={"/profile/" + user.username}
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 "
                     >
                       Profile

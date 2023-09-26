@@ -32,7 +32,7 @@ export const router = createBrowserRouter([
         children: [
           { path: "", element: <HomePage /> },
           {
-            path: ":username/",
+            path: "profile/:username/",
             element: <Profile />,
             children: [
               { path: "", element: <ProfileDetails /> },
