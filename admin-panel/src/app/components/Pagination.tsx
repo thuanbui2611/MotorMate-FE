@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, IconButton } from "@material-tailwind/react";
 import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { MetaData } from "../models/Pagination";
@@ -12,9 +12,12 @@ interface Props {
 }
 
 export default function Pagination({ metaData, onPageChange, loading }: Props) {
-  const [active, setActive] = useState(1);
+  const [active, setActive] = useState(metaData.currentPage);
   const { totalPageCount, currentPage } = metaData;
 
+  useEffect(() => {
+    setActive(metaData.currentPage);
+  }, [metaData]);
   const getItemProps = (index: number) =>
     ({
       variant: active === index ? "filled" : "outlined",

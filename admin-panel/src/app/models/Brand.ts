@@ -2,7 +2,12 @@ export interface Brand {
   id: string;
   name: string;
   image: Image;
-  collections?: any[];
+  collections?: Collection[];
+}
+
+export interface Collection {
+  id: string;
+  name: string;
 }
 
 export interface Image {

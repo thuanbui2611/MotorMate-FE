@@ -18,8 +18,11 @@ import {
   deleteImages,
   uploadImages,
 } from "../../app/utils/Cloudinary";
+import { useSearchParams } from "react-router-dom";
+import { set } from "react-hook-form";
 
 export default function BrandPage() {
+  const [pageNumber, setPageNumber] = useSearchParams({ pageNumber: "" });
   const [actionName, setActionName] = useState(String);
   const [openEditForm, setOpenEditForm] = useState(false);
   const [selectedBrand, setSelectedBrand] = useState<Brand | null>(null);
@@ -31,6 +34,20 @@ export default function BrandPage() {
     (state) => state.brand
   );
   const dispatch = useAppDispatch();
+
+  const pageNum = pageNumber.get("pageNumber");
+  useEffect(() => {
+    if (!pageNum || pageNum === "1") {
+      setPageNumber((prev) => {
+        prev.delete("pageNumber");
+        return prev;
+      });
+      dispatch(setBrandParams({ pageNumber: 1 }));
+    } else {
+      dispatch(setBrandParams({ pageNumber: +pageNum }));
+    }
+  }, [pageNum, dispatch]);
+
   const handleSelectBrand = (actionName: string, brand?: Brand) => {
     setOpenEditForm((cur) => !cur);
     if (brand) {
@@ -91,8 +108,6 @@ export default function BrandPage() {
                   strokeLinejoin="round"
                 ></g>
                 <g id="SVGRepo_iconCarrier">
-                  <title>plus_circle [#ffffff]</title>
-                  <desc>Created with Sketch.</desc> <defs> </defs>
                   <g
                     id="Page-1"
                     strokeWidth="0.00021000000000000004"
@@ -188,8 +203,6 @@ export default function BrandPage() {
                                   strokeLinejoin="round"
                                 ></g>
                                 <g id="SVGRepo_iconCarrier">
-                                  <title>edit [#1483]</title>
-                                  <desc>Created with Sketch.</desc>
                                   <defs> </defs>
                                   <g
                                     id="Page-1"
@@ -261,7 +274,11 @@ export default function BrandPage() {
             <Pagination
               metaData={metaData}
               onPageChange={(page: number) => {
-                dispatch(setBrandParams({ pageNumber: page }));
+                setPageNumber((prev) => {
+                  prev.set("pageNumber", page.toString());
+                  return prev;
+                });
+                // dispatch(setBrandParams({ pageNumber: page }));
               }}
               loading={brandLoaded}
             />

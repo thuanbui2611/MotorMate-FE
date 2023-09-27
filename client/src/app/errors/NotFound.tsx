@@ -480,7 +480,7 @@ export default function NotFound() {
             title="Go back to Motormate"
             to="/"
             // target="_blank" // comment this out and it will open in the same tab
-            className="block w-14 h-14 rounded-full transition-all shadow hover:shadow-lg transform hover:scale-110 hover:rotate-12"
+            className="block w-14 h-14 rounded-fullshadow hover:shadow-lg transition-all transform hover:scale-110 hover:rotate-12"
           >
             <img
               className="object-cover object-center w-full h-full rounded-full"

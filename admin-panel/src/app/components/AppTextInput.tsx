@@ -8,6 +8,7 @@ interface Props extends UseControllerProps {
   type?: string;
   error?: boolean;
   helperText?: string;
+  className?: string;
 }
 
 export default function AppTextInput(props: Props) {
@@ -22,6 +23,7 @@ export default function AppTextInput(props: Props) {
       type={props.type}
       fullWidth
       variant="outlined"
+      className={props.className}
       error={props.error || !!fieldState.error}
       helperText={props.error ? props.helperText : fieldState.error?.message}
     />

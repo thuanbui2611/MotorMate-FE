@@ -40,7 +40,7 @@ export default function ProductHomepage({ products }: Props) {
           >
             <div>
               <Link
-                className="group flex flex-col bg-white border shadow-xl rounded-lg md:rounded-2xl hover:shadow-2xl transition"
+                className="group flex flex-col bg-[#1D1D1D]/50 border md:border-2 border-[#FF3D00] shadow-xl rounded-lg md:rounded-2xl hover:shadow-2xl transition"
                 key={product.id}
                 to={"/product-detail/" + product.id}
               >
@@ -58,7 +58,7 @@ export default function ProductHomepage({ products }: Props) {
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="currentColor"
-                        className="text-gray-400 hover:text-red-500 h-2 w-2 md:h-3 md:w-3 "
+                        className="text-gray-200 hover:text-red-600 h-2 w-2 md:h-3 md:w-3 "
                         viewBox="0 0 16 16"
                       >
                         <path
@@ -118,7 +118,7 @@ export default function ProductHomepage({ products }: Props) {
                             ></path>
                           </g>
                         </svg>
-                        <p className="card-location uppercase text-black">
+                        <p className="card-location uppercase text-white">
                           Ho chi minh
                         </p>
                       </div>
@@ -129,14 +129,14 @@ export default function ProductHomepage({ products }: Props) {
                       </div>
                     </div>
 
-                    <h3 className="font-medium text-black group-hover:text-blue-600 line-clamp-1 text-justify">
+                    <h3 className="font-medium text-white group-hover:text-orange-based line-clamp-1 text-justify">
                       Wave RSX
                     </h3>
-                    <div className=" text-[8px] md:text-[10px] font-medium text-gray-600 group-hover:text-blue-600 line-clamp-1 text-justify">
+                    <div className=" text-[8px] md:text-[10px] font-medium text-gray-400 group-hover:text-orange-based line-clamp-1 text-justify">
                       Black
                     </div>
 
-                    <div className=" text-[8px] md:text-sm font-medium text-black group-hover:text-blue-600 line-clamp-1 text-justify">
+                    <div className=" text-[8px] md:text-sm font-medium text-white group-hover:text-orange-based line-clamp-1 text-justify">
                       65L1-24084
                     </div>
                   </div>

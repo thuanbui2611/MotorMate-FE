@@ -21,6 +21,8 @@ import ChangePassword from "../../pages/account/ChangePassword";
 import NotFound from "../errors/NotFound";
 import Profile from "../../pages/profile";
 import ProfileDetails from "../../pages/profile/ProfileDetails";
+import BlogPage from "../../pages/blog";
+import BlogDetails from "../../pages/blog/BlogDetails";
 
 export const router = createBrowserRouter([
   {
@@ -41,6 +43,8 @@ export const router = createBrowserRouter([
           },
           { path: "about", element: <About /> },
           { path: "contact", element: <Contact /> },
+          { path: "blog", element: <BlogPage /> },
+          { path: "blog/:id", element: <BlogDetails /> },
           { path: "products", element: <Products /> },
           { path: "product-detail/:id", element: <ProductDetails /> },
           { path: "check-out/:id", element: <Checkout /> },

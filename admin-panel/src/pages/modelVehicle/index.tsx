@@ -97,8 +97,6 @@ export default function ModelVehiclePage() {
                   strokeLinejoin="round"
                 ></g>
                 <g id="SVGRepo_iconCarrier">
-                  <title>plus_circle [#ffffff]</title>
-                  <desc>Created with Sketch.</desc> <defs> </defs>
                   <g
                     id="Page-1"
                     strokeWidth="0.00021000000000000004"
@@ -227,8 +225,6 @@ export default function ModelVehiclePage() {
                                   strokeLinejoin="round"
                                 ></g>
                                 <g id="SVGRepo_iconCarrier">
-                                  <title>edit [#1483]</title>
-                                  <desc>Created with Sketch.</desc>
                                   <defs> </defs>
                                   <g id="Page-1" fill="none" fillRule="evenodd">
                                     <g

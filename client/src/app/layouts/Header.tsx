@@ -2,13 +2,16 @@ import { useAppDispatch, useAppSelector } from "../store/ConfigureStore";
 
 import { signOut } from "../../pages/account/AccountSlice";
 import { Link, NavLink, useLocation } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 interface Props {}
 export default function Header(props: Props) {
   const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
-
+  const triggerUserMenu = useRef<any>(null);
+  const dropdownUserMenu = useRef<any>(null);
+  const triggerMobileMenu = useRef<any>(null);
+  const dropdownMobileMenu = useRef<any>(null);
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.account.user);
 
@@ -26,6 +29,57 @@ export default function Header(props: Props) {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
+  //for mobileMenu
+  useEffect(() => {
+    const clickHandler = ({ target }: MouseEvent) => {
+      if (!dropdownMobileMenu.current) return;
+      if (
+        !isMobileMenuOpen ||
+        dropdownMobileMenu.current.contains(target) ||
+        triggerMobileMenu.current.contains(target)
+      )
+        return;
+      setIsMobileMenuOpen(false);
+    };
+    document.addEventListener("click", clickHandler);
+    return () => document.removeEventListener("click", clickHandler);
+  });
+
+  // close if the esc key is pressed
+  useEffect(() => {
+    const keyHandler = ({ keyCode }: KeyboardEvent) => {
+      if (!isMobileMenuOpen || keyCode !== 27) return;
+      setIsMobileMenuOpen(false);
+    };
+    document.addEventListener("keydown", keyHandler);
+    return () => document.removeEventListener("keydown", keyHandler);
+  });
+  //for userMenu
+  useEffect(() => {
+    const clickHandler = ({ target }: MouseEvent) => {
+      if (!dropdownUserMenu.current) return;
+      if (
+        !isUserMenuOpen ||
+        dropdownUserMenu.current.contains(target) ||
+        triggerUserMenu.current.contains(target)
+      )
+        return;
+      setIsUserMenuOpen(false);
+    };
+    document.addEventListener("click", clickHandler);
+    return () => document.removeEventListener("click", clickHandler);
+  });
+
+  // close if the esc key is pressed
+  useEffect(() => {
+    const keyHandler = ({ keyCode }: KeyboardEvent) => {
+      if (!isUserMenuOpen || keyCode !== 27) return;
+      setIsUserMenuOpen(false);
+    };
+    document.addEventListener("keydown", keyHandler);
+    return () => document.removeEventListener("keydown", keyHandler);
+  });
 
   return (
     <nav className=" bg-color-header border-1 border-white shadow-black shadow-inner ">
@@ -202,6 +256,7 @@ export default function Header(props: Props) {
                 </a>
               </li>
               <button
+                ref={triggerUserMenu}
                 onClick={() => {
                   setIsUserMenuOpen(!isUserMenuOpen);
                   setIsMobileMenuOpen(false);
@@ -225,8 +280,10 @@ export default function Header(props: Props) {
               <div
                 className={`${
                   isUserMenuOpen ? "" : "hidden"
-                } absolute z-50 my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow`}
-                id="user-dropdown"
+                } absolute z-50 my-4 top-10 right-14 md:right-auto text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow`}
+                ref={dropdownUserMenu}
+                onFocus={() => setIsUserMenuOpen(true)}
+                onBlur={() => setIsUserMenuOpen(false)}
               >
                 <div className="px-4 py-3">
                   <span className="block text-sm text-gray-900 font-bold">
@@ -287,15 +344,13 @@ export default function Header(props: Props) {
               setIsMobileMenuOpen(!isMobileMenuOpen);
               setIsUserMenuOpen(false);
             }}
-            data-collapse-toggle="mobile-menu-2"
             type="button"
             className={` ${
               isMobileMenuOpen
                 ? "hover:bg-gray-50 focus:outline-none focus:ring-1 focus:ring-gray-100"
                 : ""
             } inline-flex items-center p-1 ml-1 text-sm text-gray-500 rounded-md md:hidden `}
-            aria-controls="mobile-menu-2"
-            aria-expanded={isMobileMenuOpen ? "true" : "false"}
+            ref={triggerMobileMenu}
           >
             <svg
               className="w-4 h-4"
@@ -313,11 +368,12 @@ export default function Header(props: Props) {
           </button>
         </div>
         <div
-          // className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1 "
           className={` items-center justify-between w-full md:flex md:w-auto md:order-1 ${
             isMobileMenuOpen ? "list-menu mr-4" : "hidden"
           }`}
-          id="mobile-menu-2"
+          ref={dropdownMobileMenu}
+          onFocus={() => setIsMobileMenuOpen(true)}
+          onBlur={() => setIsMobileMenuOpen(false)}
         >
           <ul className="flex flex-col p-1 md:p-0 mt-4 border border-gray-100 rounded-lg bg-white md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-transparent ">
             <li>
@@ -357,7 +413,18 @@ export default function Header(props: Props) {
                 Rent Motorcycles
               </Link>
             </li>
-
+            <li>
+              <Link
+                to="/blog"
+                className={`${
+                  location.pathname === "/blog"
+                    ? "md:text-orange-based"
+                    : "md:text-white"
+                } block header-items py-2 pl-3 pr-4 text-black rounded-md hover:bg-orange-based md:hover:bg-transparent md:p-0  md:hover:text-orange-based md:px-4 md:py-2`}
+              >
+                Blog
+              </Link>
+            </li>
             <li>
               <Link
                 to="/contact"

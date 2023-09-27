@@ -111,6 +111,8 @@ const Collection = {
 const ModelVehicle = {
   list: (params: URLSearchParams) => requests.get("api/model", params),
   details: (id: string) => requests.get(`api/model/${id}`),
+  getByCollection: (collectionId: string) =>
+    requests.get(`api/model/collection/${collectionId}`),
   create: (values: {}) => requests.post("api/model", values),
   update: (id: string, values: {}) => requests.patch(`api/model/${id}`, values),
   delete: (id: string) => requests.delete(`api/model/${id}`),
@@ -124,12 +126,32 @@ const Color = {
   delete: (id: string) => requests.delete(`api/color/${id}`),
 };
 
+const Vehicle = {
+  list: (params: URLSearchParams) => requests.get("api/vehicle", params),
+  details: (id: string) => requests.get(`api/vehicle/${id}`),
+  create: (values: {}) => requests.post("api/vehicle", values),
+  update: (id: string, values: {}) =>
+    requests.patch(`api/vehicle/${id}`, values),
+  delete: (id: string) => requests.delete(`api/vehicle/${id}`),
+};
+
+const User = {
+  all: () => requests.get("api/user/all"),
+  list: (params: URLSearchParams) => requests.get("api/user", params),
+  details: (username: string) => requests.get(`api/user/${username}/details`),
+  update: (username: string, values: {}) =>
+    requests.patch(`api/user/${username}`, values),
+  delete: (username: string) => requests.delete(`api/user/${username}`),
+};
+
 const agent = {
   Account,
   Brand,
   Collection,
   ModelVehicle,
   Color,
+  Vehicle,
+  User,
 };
 
 export default agent;

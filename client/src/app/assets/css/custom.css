@@ -62,14 +62,12 @@
 
 /* Cover Page */
 .cover-page {
-  /* width: 100%; */
+  width: 100%;
   /* height: 50vh; */
   padding: 0 0vw;
   height: fit-content;
   position: relative;
   display: inline-block;
-  /* align-items: center; */
-  /* justify-content: center; */
 }
 
 .cover-img {
@@ -78,13 +76,14 @@
   left: 0;
   /* width: 100%; */
   object-fit: scale-down;
-  z-index: -1;
+  z-index: 1;
   filter: brightness(100%);
 }
 
 .content {
   position: absolute;
   inset: auto auto auto 5vw;
+  z-index: 2;
   /* text-align: center;
   margin: 0 auto; */
 }
@@ -224,6 +223,17 @@
 }
 
 /* Product Homepage card */
+.bg-home-product {
+  background-image: url("../images/cover/bg-home-products.png");
+  background-size: cover;
+  background-position: center;
+}
+@media (max-width: 768px) {
+  .bg-home-product {
+    background-size: 100% 100%;
+  }
+}
+
 .card-location {
   font-size: 8px;
 }

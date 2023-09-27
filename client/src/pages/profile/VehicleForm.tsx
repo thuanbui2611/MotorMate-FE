@@ -2,7 +2,7 @@ import { TextField } from "@mui/material";
 import { ChangeEvent, useEffect, useState } from "react";
 import Autocomplete from "@mui/material/Autocomplete";
 import SelectCityVN from "../../app/components/SelectCityVN";
-import { Brand } from "../../app/models/Brand";
+import { Brand, Collection } from "../../app/models/Brand";
 import agentTest from "../../app/api/agentTest";
 import { ModelVehicle } from "../../app/models/ModelVehicle";
 import { Color } from "../../app/models/Color";
@@ -21,7 +21,6 @@ type Image = {
   url: string;
 };
 export default function VehicleForm({ currentUser, cancelForm }: Props) {
-  //Note:
   const {
     control,
     register,
@@ -32,24 +31,35 @@ export default function VehicleForm({ currentUser, cancelForm }: Props) {
   } = useForm({
     mode: "all",
   });
-  const [imagesUploaded, setImagesUploaded] = useState<FileList | null>();
+
   const [imagesSelected, setImagesSelected] = useState<Image[] | null>(null);
   const [selectedFiles, setSelectedFiles] = useState<FileList | null>(null);
   const [brands, setBrands] = useState<Brand[]>([]);
   const [selectedBrand, setSelectedBrand] = useState<Brand | null>(null);
-  const [collections, setCollections] = useState<
-    [{ id: string; name: string }]
-  >([{ id: "", name: "" }]);
-  const [selectedCollection, setSelectedCollection] = useState<{
-    id: string;
-    name: string;
-  } | null>(null);
+  const [collections, setCollections] = useState<Collection[]>([]);
+  const [selectedCollection, setSelectedCollection] =
+    useState<Collection | null>(null);
 
   const [models, setModels] = useState<ModelVehicle[]>([]);
   const [selectedModel, setSelectedModel] = useState<ModelVehicle | null>(null);
   const [colors, setColors] = useState<Color[]>([]);
   const [selectedColor, setSelectedColor] = useState<Color | null>(null);
   const [location, setLocation] = useState<Location | null>(null);
+
+  useEffect(() => {
+    //fetch all brands
+    const fetchBrands = async () => {
+      try {
+        const response = await agentTest.Brand.all();
+        setBrands(response);
+      } catch (error) {
+        console.error("Error fetching brands: ", error);
+      }
+    };
+
+    fetchBrands();
+  }, []);
+
   useEffect(() => {
     //set review images & selected images
     if (selectedFiles) {
@@ -62,18 +72,6 @@ export default function VehicleForm({ currentUser, cancelForm }: Props) {
       }
       setImagesSelected(imagesReview);
     }
-
-    //fetch all brands
-    const fetchBrands = async () => {
-      try {
-        const response = await agentTest.Brand.all();
-        setBrands(response);
-      } catch (error) {
-        console.error("Error fetching brands: ", error);
-      }
-    };
-
-    fetchBrands();
   }, [selectedFiles]);
 
   const onClose = () => {
@@ -208,11 +206,11 @@ export default function VehicleForm({ currentUser, cancelForm }: Props) {
         price: data.price,
         location: address,
         city: location?.city,
-        purchaseDate: data.purchaseDate + "T00:00:00.000Z",
+        purchaseDate: data.purchaseDate,
         conditionPercentage: data.conditionPercentage,
         licensePlate: data.licensePlate,
         insuranceNumber: data.insuranceNumber,
-        insuranceExpiry: data.insuranceExpiry + "T00:00:00.000Z",
+        insuranceExpiry: data.insuranceExpiry,
         status: 0,
         colorName: selectedColor?.color,
         images: images,

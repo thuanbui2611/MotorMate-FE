@@ -184,7 +184,7 @@ export default function TinyChat() {
   return (
     <>
       {!isFormVisible && (
-        <div className="fixed bottom-0 right-0 p-5">
+        <div className="fixed bottom-0 right-0 p-5 z-50">
           <button className="chatBtn" onClick={handleIconClick}>
             <svg
               height="1.6em"

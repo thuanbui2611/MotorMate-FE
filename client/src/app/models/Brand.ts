@@ -2,14 +2,12 @@ export interface Brand {
   id: string;
   name: string;
   image: Image;
-  collections?:
-    | [
-        {
-          id: string;
-          name: string;
-        }
-      ]
-    | null;
+  collections?: Collection[];
+}
+
+export interface Collection {
+  id: string;
+  name: string;
 }
 
 export interface Image {

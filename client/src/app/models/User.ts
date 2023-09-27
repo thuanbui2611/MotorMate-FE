@@ -11,8 +11,10 @@ export interface UserDetail {
   firstName: string;
   lastName: string;
   fullName: string;
+  userName: string;
+  picture: string;
   email: string;
-  address: any;
-  phoneNumber: any;
-  dateOfBirth: any;
+  address: string;
+  phoneNumber: string;
+  dateOfBirth: string;
 }
