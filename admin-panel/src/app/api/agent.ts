@@ -77,6 +77,7 @@ const requests = {
   get: (url: string, params?: URLSearchParams) =>
     axios.get(url, { params }).then(responseBody),
   post: (url: string, body: {}) => axios.post(url, body).then(responseBody),
+  put: (url: string, body: {}) => axios.put(url, body).then(responseBody),
   patch: (url: string, body: {}) => axios.patch(url, body).then(responseBody),
   delete: (url: string) => axios.delete(url).then(responseBody),
 };
@@ -94,7 +95,7 @@ const Brand = {
   list: (params: URLSearchParams) => requests.get("api/brand", params),
   details: (id: string) => requests.get(`api/brand/${id}`),
   create: (values: {}) => requests.post("api/brand", values),
-  update: (id: string, values: {}) => requests.patch(`api/brand/${id}`, values),
+  update: (id: string, values: {}) => requests.put(`api/brand/${id}`, values),
   delete: (id: string) => requests.delete(`api/brand/${id}`),
 };
 
@@ -104,7 +105,7 @@ const Collection = {
   details: (id: string) => requests.get(`api/collection/${id}`),
   create: (values: {}) => requests.post("api/collection", values),
   update: (id: string, values: {}) =>
-    requests.patch(`api/collection/${id}`, values),
+    requests.put(`api/collection/${id}`, values),
   delete: (id: string) => requests.delete(`api/collection/${id}`),
 };
 
@@ -114,7 +115,7 @@ const ModelVehicle = {
   getByCollection: (collectionId: string) =>
     requests.get(`api/model/collection/${collectionId}`),
   create: (values: {}) => requests.post("api/model", values),
-  update: (id: string, values: {}) => requests.patch(`api/model/${id}`, values),
+  update: (id: string, values: {}) => requests.put(`api/model/${id}`, values),
   delete: (id: string) => requests.delete(`api/model/${id}`),
 };
 
@@ -122,7 +123,7 @@ const Color = {
   all: () => requests.get("api/color/all"),
   details: (id: string) => requests.get(`api/color/${id}`),
   create: (values: {}) => requests.post("api/color", values),
-  update: (id: string, values: {}) => requests.patch(`api/color/${id}`, values),
+  update: (id: string, values: {}) => requests.put(`api/color/${id}`, values),
   delete: (id: string) => requests.delete(`api/color/${id}`),
 };
 
@@ -130,8 +131,7 @@ const Vehicle = {
   list: (params: URLSearchParams) => requests.get("api/vehicle", params),
   details: (id: string) => requests.get(`api/vehicle/${id}`),
   create: (values: {}) => requests.post("api/vehicle", values),
-  update: (id: string, values: {}) =>
-    requests.patch(`api/vehicle/${id}`, values),
+  update: (id: string, values: {}) => requests.put(`api/vehicle/${id}`, values),
   delete: (id: string) => requests.delete(`api/vehicle/${id}`),
 };
 
@@ -140,7 +140,7 @@ const User = {
   list: (params: URLSearchParams) => requests.get("api/user", params),
   details: (username: string) => requests.get(`api/user/${username}/details`),
   update: (username: string, values: {}) =>
-    requests.patch(`api/user/${username}`, values),
+    requests.put(`api/user/${username}`, values),
   delete: (username: string) => requests.delete(`api/user/${username}`),
 };
 

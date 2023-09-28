@@ -136,9 +136,91 @@ export default function ProductHomepage({ products }: Props) {
                       Black
                     </div>
 
-                    <div className=" text-[8px] md:text-sm font-medium text-white group-hover:text-orange-based line-clamp-1 text-justify">
-                      65L1-24084
-                    </div>
+                    <ul className="flex">
+                      <li>
+                        <svg
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="20"
+                          height="20"
+                          fill="#ffc73a"
+                        >
+                          <path
+                            d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"
+                            pathLength="360"
+                          ></path>
+                        </svg>
+                      </li>
+                      <li>
+                        <svg
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="20"
+                          height="20"
+                          fill="#ffc73a"
+                        >
+                          <path
+                            d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"
+                            pathLength="360"
+                          ></path>
+                        </svg>
+                      </li>
+                      <li>
+                        <svg
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="20"
+                          height="20"
+                          fill="#ffc73a"
+                        >
+                          <path
+                            d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"
+                            pathLength="360"
+                          ></path>
+                        </svg>
+                      </li>
+                      <li>
+                        <svg
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="20"
+                          height="20"
+                          fill="#ffc73a"
+                        >
+                          <path
+                            d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"
+                            pathLength="360"
+                          ></path>
+                        </svg>
+                      </li>
+                      <li>
+                        <svg
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="20"
+                          height="20"
+                        >
+                          <defs>
+                            <linearGradient
+                              id="colorGradient"
+                              x1="0"
+                              y1="0"
+                              x2="1"
+                              y2="0"
+                            >
+                              {/* set value for color, $.1 -> 10%, $.2 -> 20%... */}
+                              <stop offset="20%" stop-color="#ffc73a" />
+                              <stop offset="20%" stop-color="#ffffff" />
+                            </linearGradient>
+                          </defs>
+                          <path
+                            d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"
+                            pathLength="360"
+                            fill="url(#colorGradient)"
+                          ></path>
+                        </svg>
+                      </li>
+                    </ul>
                   </div>
 
                   <div className="flex items-end md:flex-row">

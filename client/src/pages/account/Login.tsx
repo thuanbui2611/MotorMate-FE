@@ -166,9 +166,9 @@ export default function Login() {
                   <input type="checkbox" />
                   <label className="ml-1">Remember me</label>
                 </div>
-                <a href="/forgot-password" className="span md:mr-5">
+                <Link to="/forgot-password" className="span md:mr-5">
                   Forgot password?
-                </a>
+                </Link>
               </div>
               <div className="text-left">
                 <LoadingButton
@@ -201,12 +201,12 @@ export default function Login() {
                 </LoadingButton>
               </div>
               <p className="p">
-                Don't have an account?
-                <a className="span" href="/sign-up">
+                Don't have an account?{" "}
+                <Link className="span" to="/sign-up">
                   Sign Up
-                </a>
+                </Link>
               </p>
-              <p className="p line">Or With</p>
+              <p className="p line">Or login with</p>
 
               <div className="flex justify-center items-center">
                 <LoginGoogle />

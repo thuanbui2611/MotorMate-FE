@@ -44,13 +44,13 @@ export default function BlogPage() {
                       width="20"
                       fill="none"
                       viewBox="0 0 24 24"
-                      stroke-width="1.5"
+                      strokeWidth="1.5"
                       stroke="currentColor"
                       className="w-5 h-5"
                     >
                       <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
                         d="M21.75 9v.906a2.25 2.25 0 01-1.183 1.981l-6.478 3.488M2.25 9v.906a2.25 2.25 0 001.183 1.981l6.478 3.488m8.839 2.51l-4.66-2.51m0 0l-1.023-.55a2.25 2.25 0 00-2.134 0l-1.022.55m0 0l-4.661 2.51m16.5 1.615a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V8.844a2.25 2.25 0 011.183-1.98l7.5-4.04a2.25 2.25 0 012.134 0l7.5 4.04a2.25 2.25 0 011.183 1.98V19.5z"
                       />
                     </svg>
@@ -72,13 +72,13 @@ export default function BlogPage() {
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
                         viewBox="0 0 24 24"
-                        stroke-width="1.5"
+                        strokeWidth="1.5"
                         stroke="currentColor"
                         className="w-5 h-5"
                       >
                         <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
                           d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"
                         />
                       </svg>
@@ -108,23 +108,22 @@ export default function BlogPage() {
 
           <div className="grid grid-cols-1 gap-8 mt-8 md:mt-16 md:grid-cols-2">
             {renderItem.map((item, index) => (
-              <>
-                <Link className="lg:flex group" to="/blog/1">
-                  <div className="relative flex flex-col md:flex-row md:space-x-5 space-y-3 md:space-y-0 rounded-xl shadow-lg p-3 max-w-xs md:max-w-3xl mx-auto border border-white bg-white group-hover:border-orange-based">
-                    <div className="w-full md:w-1/3 bg-white grid place-items-center">
-                      <img
-                        src="https://images.pexels.com/photos/4381392/pexels-photo-4381392.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-                        alt="tailwind logo"
-                        className="rounded-xl"
-                      />
-                    </div>
-                    <div className="w-full md:w-2/3 bg-white flex flex-col space-y-2 p-3">
-                      <div className="flex justify-between item-center">
-                        <p className="text-gray-500 font-medium hidden md:block text-xs md:text-sm lg:text-base">
-                          {/* category */}
-                          Vacations
-                        </p>
-                        {/* <div className="flex items-center">
+              <Link className="lg:flex group" to="/blog/1" key={index}>
+                <div className="relative flex flex-col md:flex-row md:space-x-5 space-y-3 md:space-y-0 rounded-xl shadow-lg p-3 max-w-xs md:max-w-3xl mx-auto border border-white bg-white group-hover:border-orange-based">
+                  <div className="w-full md:w-1/3 bg-white grid place-items-center">
+                    <img
+                      src="https://images.pexels.com/photos/4381392/pexels-photo-4381392.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+                      alt="tailwind logo"
+                      className="rounded-xl"
+                    />
+                  </div>
+                  <div className="w-full md:w-2/3 bg-white flex flex-col space-y-2 p-3">
+                    <div className="flex justify-between item-center">
+                      <p className="text-gray-500 font-medium hidden md:block text-xs md:text-sm lg:text-base">
+                        {/* category */}
+                        Vacations
+                      </p>
+                      {/* <div className="flex items-center">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         className="h-5 w-5 text-yellow-500"
@@ -154,25 +153,24 @@ export default function BlogPage() {
                         />
                       </svg>
                     </div> */}
-                        <div className="bg-gray-200 px-3 py-1 rounded-full text-xs font-medium text-gray-800 hidden md:block">
-                          27/09/2023
-                        </div>
+                      <div className="bg-gray-200 px-3 py-1 rounded-full text-xs font-medium text-gray-800 hidden md:block">
+                        27/09/2023
                       </div>
-                      <h3 className="font-black text-gray-800 lg:text-3xl text-xl group-hover:text-orange-based">
-                        The Majestic and Wonderful Bahamas
-                      </h3>
-                      <p className="lg:text-lg text-gray-500 text-sm">
-                        The best kept secret of The Bahamas is the country’s
-                        sheer size and diversity. With 16 major islands, The
-                        Bahamas is an unmatched destination
-                      </p>
-                      <p className=" text-base lg:text-xl font-black text-orange-based text-right">
-                        Read more
-                      </p>
                     </div>
+                    <h3 className="font-black text-gray-800 lg:text-3xl text-xl group-hover:text-orange-based">
+                      The Majestic and Wonderful Bahamas
+                    </h3>
+                    <p className="lg:text-lg text-gray-500 text-sm">
+                      The best kept secret of The Bahamas is the country’s sheer
+                      size and diversity. With 16 major islands, The Bahamas is
+                      an unmatched destination
+                    </p>
+                    <p className=" text-base lg:text-xl font-black text-orange-based text-right">
+                      Read more
+                    </p>
                   </div>
-                </Link>
-              </>
+                </div>
+              </Link>
             ))}
           </div>
         </div>

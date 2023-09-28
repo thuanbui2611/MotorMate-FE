@@ -39,10 +39,11 @@
 .list-menu {
   position: absolute;
   top: 40px;
-  right: 0;
-  width: 25%;
+  right: 16px;
+  height: fit-content;
+  width: fit-content;
   font-size: 9px;
-  z-index: 2;
+  z-index: 50;
 }
 
 .header-items {
@@ -957,7 +958,6 @@ p {
 
 .span {
   font-size: 14px;
-  margin-left: 5px;
   color: #2d79f3;
   font-weight: 500;
   cursor: pointer;

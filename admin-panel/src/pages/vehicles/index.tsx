@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Breadcrumb from "../../app/components/Breadcrumb";
 import { useAppDispatch, useAppSelector } from "../../app/store/ConfigureStore";
 import {
+  deleteVehicleAsync,
   getVehiclesAsync,
   setVehicleParams,
   vehicleSelectors,
@@ -13,6 +14,7 @@ import VehicleForm from "./VehicleForm";
 import ConfirmDeleteDialog from "../../app/components/ConfirmDeleteDialog";
 import { ConvertDatetimeToDate } from "../../app/utils/ConvertDatetimeToDate";
 import VehicleDetails from "./VehicleDetails";
+import { deleteImages } from "../../app/utils/Cloudinary";
 
 export default function VehiclesPage() {
   const [actionName, setActionName] = useState(String);
@@ -42,11 +44,11 @@ export default function VehiclesPage() {
     setActionName(actionName);
   };
 
-  async function handleDeleteVehicle(brandDeleted: Vehicle) {
-    // if (brandDeleted.image.publicId) {
-    //   await deleteImage(brandDeleted.image.publicId);
-    // }
-    // await dispatch(deleteBrandAsync(brandDeleted.id));
+  async function handleDeleteVehicle(vehicleDeleted: Vehicle) {
+    if (vehicleDeleted.images) {
+      await deleteImages(vehicleDeleted.images);
+    }
+    await dispatch(deleteVehicleAsync(vehicleDeleted.id));
   }
 
   const cancelEditForm = () => {
@@ -58,6 +60,12 @@ export default function VehiclesPage() {
     setSelectedVehicle(vehicle);
     setOpenDetails((cur) => !cur);
   };
+
+  const openConfirmDeleteDiaglog = (vehicle: Vehicle) => {
+    setConfirmDeleteDiaglog((cur) => !cur);
+    setVehicleDeleted(vehicle);
+  };
+
   const cancelDetailsDialog = () => {
     setSelectedVehicle(null);
     setOpenDetails((cur) => !cur);
@@ -159,8 +167,8 @@ export default function VehiclesPage() {
                       <div className="h-12 w-12 rounded-md">
                         <img
                           className="h-full w-full rounded-md object-cover"
-                          src="https://img5.thuthuatphanmem.vn/uploads/2021/09/04/anh-meo-bua-ngo-nghinh-buon-cuoi_114725643.jpg"
-                          alt="logo"
+                          src={vehicle.images[0].image || undefined}
+                          alt="Vehicle image"
                         />
                       </div>
                       <div className="ml-3 flex flex-col">
@@ -173,7 +181,7 @@ export default function VehiclesPage() {
 
                     <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                       <p className="text-black dark:text-white">
-                        {vehicle.owner.name}
+                        {vehicle.owner.username}
                       </p>
                     </td>
                     <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
@@ -273,7 +281,10 @@ export default function VehiclesPage() {
                             </g>
                           </svg>
                         </button>
-                        <button className="hover:text-primary">
+                        <button
+                          className="hover:text-red-600 hover:bg-red-600/30 rounded-full p-1"
+                          onClick={() => openConfirmDeleteDiaglog(vehicle)}
+                        >
                           <svg
                             className="fill-current"
                             width="18"
@@ -333,7 +344,7 @@ export default function VehiclesPage() {
 
         {confirmDeleteDiaglog && (
           <ConfirmDeleteDialog
-            objectName={vehicleDeleted.specifications.modelName}
+            objectName={vehicleDeleted.licensePlate}
             actionDelete={() => handleDeleteVehicle(vehicleDeleted)}
             cancelDelete={cancelConfirmDeleteDialog}
           />

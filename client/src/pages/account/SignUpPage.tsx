@@ -34,8 +34,9 @@ export default function SignUpPage() {
         <div className="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8 py-10">
           <div className="flex">
             <Link
-              to="/"
+              to="#"
               className="flex items-center justify-center h-7 w-fit sm:h-9 text-orange-based font-bold hover:brightness-75 "
+              onClick={() => navigate(-1)}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -440,10 +441,26 @@ export default function SignUpPage() {
               </div>
               <div className="flex-row-login ">
                 <div className="flex items-center justify-center">
-                  <input type="checkbox" required />
-                  <label className="ml-1">Accept our policy</label>
+                  <input
+                    id="link-checkbox"
+                    type="checkbox"
+                    value=""
+                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                  />
+                  <label
+                    htmlFor="link-checkbox"
+                    className="ml-2 text-sm font-medium text-gray-900 w-full"
+                  >
+                    I agree with the{" "}
+                    <a
+                      href="#"
+                      className="text-blue-600 dark:text-blue-500 hover:underline"
+                    >
+                      terms and conditions
+                    </a>
+                    .
+                  </label>
                 </div>
-                <span className="span md:mr-5">Forgot password?</span>
               </div>
               <div className="text-left">
                 <LoadingButton
@@ -472,14 +489,14 @@ export default function SignUpPage() {
                     },
                   }}
                 >
-                  Sign In
+                  Sign Up
                 </LoadingButton>
               </div>
               <p className="p">
-                Already have an account?
-                <a href="/login" className="span">
+                Already have an account? {""}
+                <Link to="/login" className="span">
                   Log in
-                </a>
+                </Link>
               </p>
               <p className="p line">Or login with</p>
 

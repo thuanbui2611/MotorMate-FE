@@ -42,9 +42,9 @@ export default function BlogDetails() {
               </div> */}
             </div>
 
-            <div className="w-full px-10  mx-auto text-2xl text-gray-700 mt-4 rounded bg-gray-100">
+            <div className="w-full px-2 md:px-10  mx-auto text-2xl text-gray-700 mt-4 rounded bg-gray-100">
               <div>
-                <p className="mt-2 p-8">
+                <p className="mt-2 p-4 font-medium md:p-8 text-xs md:text-xl">
                   If you created a web application and wanted it to grow a user
                   base reall quickly,the easiest way is to avoid bothering them
                   with alot forms. No one likes filling up forms! A web form
@@ -61,7 +61,7 @@ export default function BlogDetails() {
                 />
               </div>
               <div>
-                <p className="mt-2 p-8">
+                <p className="mt-2 p-4 font-normal md:p-8 text-xs md:text-xl">
                   If you created a web application and wanted it to grow a user
                   base reall quickly,the easiest way is to avoid bothering them
                   with alot forms. No one likes filling up forms! A web form
@@ -90,7 +90,7 @@ export default function BlogDetails() {
                     />
                   </a>
                   <div className="relative flex flex-col items-start px-6 bg-white border border-t-0 border-gray-200 py-7 rounded-b-2xl">
-                    <div className="bg-indigo-400 absolute top-0 -mt-3 flex items-center px-3 py-1.5 leading-none w-auto inline-block rounded-full text-xs font-medium uppercase text-white inline-block">
+                    <div className="bg-indigo-400 absolute top-0 -mt-3 flex items-center px-3 py-1.5 leading-none w-auto rounded-full text-xs font-medium uppercase text-white">
                       <span>Flask</span>
                     </div>
                     <h2 className="text-base text-gray-500 font-bold sm:text-lg md:text-xl">
@@ -117,7 +117,7 @@ export default function BlogDetails() {
                     />
                   </a>
                   <div className="relative flex flex-col items-start px-6 bg-white border border-t-0 border-gray-200 py-7 rounded-b-2xl">
-                    <div className="bg-red-400 absolute top-0 -mt-3 flex items-center px-3 py-1.5 leading-none w-auto inline-block rounded-full text-xs font-medium uppercase text-white inline-block">
+                    <div className="bg-red-400 absolute top-0 -mt-3 flex items-center px-3 py-1.5 leading-none w-auto  rounded-full text-xs font-medium uppercase text-white">
                       <span>Django</span>
                     </div>
                     <h2 className="text-base text-gray-500 font-bold sm:text-lg md:text-xl">
@@ -144,7 +144,7 @@ export default function BlogDetails() {
                     />
                   </a>
                   <div className="relative flex flex-col items-start px-6 bg-white border border-t-0 border-gray-200 py-7 rounded-b-2xl">
-                    <div className="bg-purple-500 absolute top-0 -mt-3 flex items-center px-3 py-1.5 leading-none w-auto inline-block rounded-full text-xs font-medium uppercase text-white inline-block">
+                    <div className="bg-purple-500 absolute top-0 -mt-3 flex items-center px-3 py-1.5 leading-none w-auto  rounded-full text-xs font-medium uppercase text-white ">
                       <span>Flask</span>
                     </div>
                     <h2 className="text-base text-gray-500 font-bold sm:text-lg md:text-xl">

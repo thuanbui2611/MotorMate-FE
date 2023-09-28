@@ -59,19 +59,19 @@ export default function BrandForm({ brand, cancelEdit, actionName }: Props) {
       const formData = {
         id: brand?.id,
         name: data.name,
-        imageUrl: brand?.image.image,
-        publicId: brand?.image.publicId,
+        imageUrl: brand?.image.image || null,
+        publicId: brand?.image.publicId || null,
       };
       if (imageUploaded) {
         let getImage = await uploadImage(imageUploaded as any);
         if (getImage) {
-          formData.imageUrl = getImage.url;
+          formData.imageUrl = getImage.image;
           formData.publicId = getImage.publicId;
         }
       }
       if (deleteCurrentImage) {
-        formData.imageUrl = undefined;
-        formData.publicId = undefined;
+        formData.imageUrl = null;
+        formData.publicId = null;
       }
       console.log("Form data:", formData);
       if (brand) {

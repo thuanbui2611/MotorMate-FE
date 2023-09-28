@@ -7,7 +7,7 @@ import agentTest from "../../app/api/agentTest";
 import LoginGoogle from "../../app/components/LoginGoogle";
 
 export default function ForgotPassword() {
-  console.log("ForgotPassword");
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -32,7 +32,8 @@ export default function ForgotPassword() {
         <div className="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8 py-10">
           <div className="flex">
             <Link
-              to="/"
+              to="#"
+              onClick={() => navigate(-1)}
               className="flex items-center justify-center h-7 w-fit sm:h-9 text-orange-based font-bold hover:brightness-75 "
             >
               <svg
@@ -144,10 +145,10 @@ export default function ForgotPassword() {
                 </LoadingButton>
               </div>
               <p className="p">
-                Already have an account?
-                <a href="/login" className="span">
+                Already have an account? {""}
+                <Link to="/login" className="span">
                   Log in
-                </a>
+                </Link>
               </p>
               <p className="p line">Or login with</p>
 

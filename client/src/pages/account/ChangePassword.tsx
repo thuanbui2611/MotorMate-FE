@@ -34,7 +34,8 @@ export default function ChangePassword() {
         <div className="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8 py-10">
           <div className="flex">
             <Link
-              to="/"
+              to="#"
+              onClick={() => navigate(-1)}
               className="flex items-center justify-center h-7 w-fit sm:h-9 text-orange-based font-bold hover:brightness-75 "
             >
               <svg

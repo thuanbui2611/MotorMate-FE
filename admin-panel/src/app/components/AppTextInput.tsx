@@ -3,6 +3,8 @@ import { useController, UseControllerProps } from "react-hook-form";
 
 interface Props extends UseControllerProps {
   label: string;
+  placeholder?: string;
+  size?: "small" | "medium";
   multiline?: boolean;
   rows?: number;
   type?: string;
@@ -21,6 +23,8 @@ export default function AppTextInput(props: Props) {
       multiline={props.multiline}
       rows={props.rows}
       type={props.type}
+      size={props.size}
+      placeholder={props.placeholder}
       fullWidth
       variant="outlined"
       className={props.className}

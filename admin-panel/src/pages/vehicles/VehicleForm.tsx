@@ -20,26 +20,33 @@ import AppTextInput from "../../app/components/AppTextInput";
 import { Box, TextField } from "@mui/material";
 import SelectCityVN from "../../app/components/SelectCityVN";
 import { UserDetail } from "../../app/models/User";
-import { uploadImages } from "../../app/utils/Cloudinary";
+import { deleteImages, uploadImages } from "../../app/utils/Cloudinary";
 import { addVehicleAsync, updateVehicleAsync } from "./VehicleSlice";
 import { useAppDispatch } from "../../app/store/ConfigureStore";
 import { ConvertDatetimeToDate } from "../../app/utils/ConvertDatetimeToDate";
-
+import { Image } from "../../app/models/Image";
+import { LoadingButton } from "@mui/lab";
 interface Props {
   vehicle: Vehicle | null;
   cancelEdit: () => void;
   actionName: string;
 }
-type Image = {
-  name: string;
-  url: string;
+type ImageFile = {
+  name?: string | null;
+  url: string | null;
 };
 export default function VehicleForm({
   vehicle,
   cancelEdit,
   actionName,
 }: Props) {
-  const [imagesSelected, setImagesSelected] = useState<Image[] | null>(null);
+  const [imagesFromServer, setImagesFromServer] = useState<Image[]>([]);
+  const [imagesFromServerDeleted, setImagesFromServerDeleted] = useState<
+    Image[]
+  >([]);
+  const [imagesSelected, setImagesSelected] = useState<ImageFile[] | null>(
+    null
+  );
   const [selectedFiles, setSelectedFiles] = useState<FileList | null>(null);
   const [brands, setBrands] = useState<Brand[]>([]);
   const [selectedBrand, setSelectedBrand] = useState<Brand | null>(null);
@@ -54,10 +61,12 @@ export default function VehicleForm({
   const [colors, setColors] = useState<Color[]>([]);
   const [selectedColor, setSelectedColor] = useState<Color | null>(null);
   const [location, setLocation] = useState<Location | null>(null);
+  const [selectedLocation, setSelectedLocation] = useState<Location | null>(
+    null
+  );
   const {
     control,
     register,
-    setValue,
     reset,
     handleSubmit,
     formState: { isSubmitting, errors },
@@ -92,6 +101,21 @@ export default function VehicleForm({
       reset(vehicleDetails);
       const defaultUser = users.find((x) => x.email === vehicle.owner.email);
       setSelectedUser(defaultUser || null);
+      //get location and set selected location
+      const defaultLocation: Location = {
+        city: vehicle.city,
+        district: vehicle.district,
+        ward: vehicle.ward,
+      };
+      setSelectedLocation(defaultLocation);
+      //get images and set selected images
+      const defaultImage: ImageFile[] = vehicle.images.map((image) => ({
+        // name: image.publicId,
+        url: image.image,
+      }));
+      setImagesSelected(defaultImage);
+      //set images from server for delete image in cloudinary
+      setImagesFromServer(vehicle.images);
     }
   }, [vehicle, reset, users]);
 
@@ -157,27 +181,32 @@ export default function VehicleForm({
   }, []);
 
   useEffect(() => {
-    //set review images & selected images
+    //add selected images when user upload
     if (selectedFiles) {
-      const imagesReview: Image[] = [];
+      const imagesSelected: ImageFile[] = [];
+      // Set image from server
+      if (imagesFromServer) {
+        const setImageSelected: ImageFile[] = imagesFromServer.map((image) => ({
+          url: image.image,
+        }));
+        setImagesSelected(setImageSelected);
+      }
+      // Set image from user upload
+      // Convert selectedFiles to selectedImages
       for (let i = 0; i < selectedFiles?.length; i++) {
         const file = selectedFiles[i];
         const name = file.name;
         const url = URL.createObjectURL(file);
-        imagesReview.push({ name, url });
+        imagesSelected.push({ name, url });
       }
-      setImagesSelected(imagesReview);
+      setImagesSelected((prevImages) => [...prevImages!, ...imagesSelected]);
     }
   }, [selectedFiles]);
 
   const onClose = () => {
     cancelEdit();
   };
-  const handleClickOutside = (event: React.MouseEvent<HTMLDivElement>) => {
-    if (event.target === event.currentTarget) {
-      onClose();
-    }
-  };
+
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     setSelectedFiles((prevFiles) => {
@@ -195,16 +224,42 @@ export default function VehicleForm({
       // If there were no previous files, simply use the new FileList
       return files;
     });
-    console.log("Files:", files);
+    console.log("Files change:", files);
     console.log("Selected file:", selectedFiles);
   };
 
-  const removeImageFromList = (file: Image, index: number) => {
+  const removeImageFromList = (file: ImageFile, index: number) => {
     if (selectedFiles) {
+      //Remove image from user upload
       const fileList = Array.from(selectedFiles);
-      fileList.splice(index, 1);
-      const convertToFileList = createFileList(fileList);
-      setSelectedFiles(convertToFileList);
+      const result = fileList.filter((i) => i.name !== file.name);
+      setSelectedFiles(createFileList(result));
+    }
+    if (imagesFromServer) {
+      //Remove image from server
+      const imageDeleted = imagesFromServer.find(
+        (image) =>
+          image.image?.trim().toLowerCase() === file.url?.trim().toLowerCase()
+      );
+      if (imageDeleted) {
+        //remove image of state image-from-server
+        const imagesList = [...imagesFromServer];
+        const resultImagesFromServer = imagesList.filter(
+          (image) => image.publicId !== imageDeleted.publicId
+        );
+        setImagesFromServer(resultImagesFromServer);
+        //remove image from selected images
+        const imagesSelectedList = [...imagesSelected!];
+        const resultImageSelected = imagesSelectedList.filter(
+          (image) =>
+            image.url?.trim().toLowerCase() !==
+            imageDeleted.image?.trim().toLowerCase()
+        );
+        setImagesSelected(resultImageSelected);
+        setImagesFromServerDeleted((prev) => [...prev, { ...imageDeleted }]);
+      }
+      //set remove image to cloudinary after change
+      // setImagesFromServer(images);
     }
   };
 
@@ -278,38 +333,54 @@ export default function VehicleForm({
   };
   async function submitForm(data: FieldValues) {
     try {
-      let images;
-      if (selectedFiles) {
-        images = await uploadImages(selectedFiles);
-      }
-      const address =
-        data.locationSpecific +
-        " " +
-        location?.ward +
-        " " +
-        location?.district +
-        " " +
-        location?.city;
+      let imagesRequest: Image[] | null = [];
       const formData = {
+        id: vehicle?.id,
         ownerId: selectedUser?.id,
         modelId: selectedModel?.id,
         price: data.price,
-        location: address,
+        address: data.address,
+        district: location?.district,
+        ward: location?.ward,
         city: location?.city,
         purchaseDate: data.purchaseDate,
         conditionPercentage: data.conditionPercentage,
         licensePlate: data.licensePlate,
         insuranceNumber: data.insuranceNumber,
         insuranceExpiry: data.insuranceExpiry,
-        status: 0,
+        isActive: 0,
         colorName: selectedColor?.color,
-        images: images,
+        images: imagesRequest,
       };
       console.log("form data:", formData);
 
       if (vehicle) {
-        await dispatch(updateVehicleAsync(formData));
+        if (imagesFromServer) {
+          //EDIT VEHICLE
+          //remove image from server
+          if (imagesFromServerDeleted) {
+            await deleteImages(imagesFromServerDeleted);
+          }
+          //get image to upload new image to cloudinary
+          let resultUploadImage: Image[] | null = [];
+          const imagesUploadToCloudinary = selectedFiles;
+          //upload image to cloudinary
+          if (imagesUploadToCloudinary) {
+            resultUploadImage = await uploadImages(imagesUploadToCloudinary);
+          }
+          //Get image from server and image uploaded to cloudinary
+          const resultUpload = [...imagesFromServer, ...resultUploadImage!];
+
+          //Update images request to formData
+          formData.images = resultUpload;
+          await dispatch(updateVehicleAsync(formData));
+        }
       } else {
+        //ADD VEHICLE
+        if (selectedFiles) {
+          let images = await uploadImages(selectedFiles);
+          formData.images = images!;
+        }
         await dispatch(addVehicleAsync(formData));
       }
       cancelEdit();
@@ -544,7 +615,9 @@ export default function VehicleForm({
                   <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                     Purchase Date
                   </label>
-                  <TextField
+                  <AppTextInput
+                    label=""
+                    control={control}
                     size="small"
                     type="date"
                     {...register("purchaseDate", {
@@ -570,7 +643,9 @@ export default function VehicleForm({
                   <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                     Insurance expiry date
                   </label>
-                  <TextField
+                  <AppTextInput
+                    label=""
+                    control={control}
                     size="small"
                     type="date"
                     {...register("insuranceExpiry", {
@@ -583,12 +658,14 @@ export default function VehicleForm({
                 <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                   License Plate
                 </label>
-                <TextField
+                <AppTextInput
+                  label=""
+                  control={control}
                   size="small"
                   type="text"
                   placeholder="65L1-24084"
                   {...register("licensePlate", {
-                    required: "Insurance expiry is required",
+                    required: "License plate is required",
                   })}
                 />
               </div>
@@ -596,12 +673,18 @@ export default function VehicleForm({
                 <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                   Price per day
                 </label>
-                <TextField
+                <AppTextInput
+                  label=""
+                  control={control}
                   size="small"
                   type="number"
                   placeholder="100.000"
                   {...register("price", {
                     required: "Price is required",
+                    pattern: {
+                      value: /^[0-9]+$/,
+                      message: "Invalid price release, accept only number",
+                    },
                   })}
                 />
               </div>
@@ -612,18 +695,27 @@ export default function VehicleForm({
               </label>
               <div className="flex flex-col gap-3">
                 <div className="flex gap-3">
-                  <SelectCityVN onSelect={handleLocationChange} />
+                  <SelectCityVN
+                    defaultLocation={selectedLocation}
+                    onSelect={handleLocationChange}
+                  />
                 </div>
 
                 <div className=" w-full md:w-1/2">
-                  <TextField
-                    fullWidth={true}
+                  <AppTextInput
+                    control={control}
+                    label=""
                     size="small"
                     type="text"
                     placeholder="House number, street name..."
-                    {...register("locationSpecific", {
+                    {...register("address", {
                       required:
                         "You need to specify your address (house number, street name...)",
+                      pattern: {
+                        value:
+                          /^(?!.*[<>])(?!.*<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>)(?!.*\b(xss|XSS)\b).*$/i,
+                        message: "Invalid address",
+                      },
                     })}
                   />
                 </div>
@@ -700,7 +792,7 @@ export default function VehicleForm({
                     <div className="flex"></div>
                     <img
                       className="h-full w-40"
-                      src={image.url}
+                      src={image.url || undefined}
                       alt="Logo brand preview"
                     />
                   </div>
@@ -779,12 +871,26 @@ export default function VehicleForm({
                 .
               </label>
             </div>
-            <button
-              type="submit"
-              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            >
-              Submit
-            </button>
+            <CardFooter className="pt-0 pb-0 flex flex-row justify-center gap-16 ">
+              <LoadingButton
+                className="bg-gradient-to-tr from-light-blue-600 to-light-blue-400 text-white shadow-md shadow-light-blue-500/20 hover:shadow-lg hover:shadow-light-blue-500/40 active:opacity-[0.85]"
+                loading={isSubmitting}
+                disabled={isSubmitting}
+                type="submit"
+                variant="contained"
+                color="success"
+              >
+                <span className="font-bold">Confirm</span>
+              </LoadingButton>
+              <Button
+                variant="gradient"
+                color="red"
+                size="lg"
+                onClick={onClose}
+              >
+                Cancel
+              </Button>
+            </CardFooter>
           </form>
         </Card>
       </Dialog>

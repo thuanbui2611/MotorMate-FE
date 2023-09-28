@@ -1,19 +1,13 @@
 import { toast } from "react-toastify";
 import CryptoJS from "crypto-js";
-
-interface ResponseCloudinary {
-  url: string;
-  publicId: string;
-}
+import { Image } from "../models/Image";
 
 const apiSecret = process.env.REACT_APP_CLOUDINARY_API_SECRET;
 const apiKey = process.env.REACT_APP_CLOUDINARY_API_KEY;
 const cloudName = process.env.REACT_APP_CLOUDINARY_NAME;
 const uploadPreset = process.env.REACT_APP_CLOUDINARY_UPLOADPRESET;
 
-export async function uploadImage(
-  image: File
-): Promise<ResponseCloudinary | null> {
+export async function uploadImage(image: File): Promise<Image | null> {
   try {
     const formData = new FormData();
     formData.append("file", image);
@@ -31,8 +25,8 @@ export async function uploadImage(
       const imgData = await uploadCloudinary.json();
       console.log("imgData to json: ", imgData);
       console.log("publid id: ", imgData.public_id);
-      let response = {
-        url: imgData.url.toString(),
+      let response: Image = {
+        image: imgData.url.toString(),
         publicId: imgData.public_id.toString(),
       };
       return response;
@@ -46,11 +40,9 @@ export async function uploadImage(
   }
 }
 
-export async function uploadImages(
-  files: FileList
-): Promise<ResponseCloudinary[] | null> {
+export async function uploadImages(files: FileList): Promise<Image[] | null> {
   try {
-    const results: ResponseCloudinary[] = [];
+    const results: Image[] = [];
     for (let i = 0; i < files.length; i++) {
       const formData = new FormData();
       formData.append("file", files[i]);
@@ -70,7 +62,7 @@ export async function uploadImages(
       const data = await response.json();
       console.log(`Image ${i + 1} uploaded successfully:`, data.secure_url);
       results.push({
-        url: data.secure_url,
+        image: data.secure_url,
         publicId: data.public_id,
       });
     }
@@ -116,42 +108,79 @@ export async function deleteImage(publicId: string) {
   }
 }
 
-//error CORS
-export async function deleteImages(publicIds: string[]) {
+export async function deleteImages(images: Image[]) {
+  console.log("Start delete image: ");
+  // if (!images.map((image) => image.publicId)) return console.log("No public id");
   try {
-    const timestamp = new Date().getTime();
-    const corsUrl = "https://cors-anywhere.herokuapp.com/";
-    const signature = CryptoJS.SHA1(
-      `public_ids=${publicIds.join(",")}&timestamp=${timestamp}${apiSecret}`
-    ).toString();
-    console.log("publicIds: ", publicIds);
-    console.log("timestamp: ", timestamp);
-    console.log("signature: ", signature);
-    const response = await fetch(
-      corsUrl +
-        `https://api.cloudinary.com/v1_1/${cloudName}/resources/image/destroy`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-Requested-With": "XMLHttpRequest",
-        },
-        body: JSON.stringify({
-          public_ids: publicIds,
-          api_key: apiKey,
-          signature: signature,
-          timestamp: timestamp,
-        }),
+    for (let i = 0; i < images.length; i++) {
+      const timestamp = new Date().getTime();
+      const signature = CryptoJS.SHA1(
+        `public_id=${images[i].publicId}&timestamp=${timestamp}${apiSecret}`
+      ).toString();
+      const response = await fetch(
+        `https://api.cloudinary.com/v1_1/${cloudName}/image/destroy`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            public_id: images[i].publicId,
+            signature: signature,
+            api_key: apiKey,
+            timestamp: timestamp,
+          }),
+        }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Delete image success data: ", data);
+        return data;
+      } else {
+        throw new Error("Unable to delete image");
       }
-    );
-    if (response.ok) {
-      const data = await response.json();
-      console.log("Delete images success data: ", data);
-      return data;
-    } else {
-      throw new Error("Unable to delete image");
     }
   } catch (error: any) {
     throw new Error("Image deletion failed:", error);
   }
 }
+
+//error CORS
+// export async function deleteImages(publicIds: string[]) {
+//   try {
+//     const timestamp = new Date().getTime();
+//     const corsUrl = "https://cors-anywhere.herokuapp.com/";
+//     const signature = CryptoJS.SHA1(
+//       `public_ids=${publicIds.join(",")}&timestamp=${timestamp}${apiSecret}`
+//     ).toString();
+//     console.log("publicIds: ", publicIds);
+//     console.log("timestamp: ", timestamp);
+//     console.log("signature: ", signature);
+//     const response = await fetch(
+//       corsUrl +
+//         `https://api.cloudinary.com/v1_1/${cloudName}/resources/image/destroy`,
+//       {
+//         method: "POST",
+//         headers: {
+//           "Content-Type": "application/json",
+//           "X-Requested-With": "XMLHttpRequest",
+//         },
+//         body: JSON.stringify({
+//           public_ids: publicIds,
+//           api_key: apiKey,
+//           signature: signature,
+//           timestamp: timestamp,
+//         }),
+//       }
+//     );
+//     if (response.ok) {
+//       const data = await response.json();
+//       console.log("Delete images success data: ", data);
+//       return data;
+//     } else {
+//       throw new Error("Unable to delete image");
+//     }
+//   } catch (error: any) {
+//     throw new Error("Image deletion failed:", error);
+//   }
+// }
