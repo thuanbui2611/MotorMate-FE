@@ -12,8 +12,10 @@ import {
 } from "./CollectionSlice";
 import Loader from "../../app/components/Loader";
 import CollectionForm from "./CollectionForm";
+import { useSearchParams } from "react-router-dom";
 
 export default function CollectionPage() {
+  const [pageNumber, setPageNumber] = useSearchParams({ pageNumber: "" });
   const [actionName, setActionName] = useState(String);
   const [openEditForm, setOpenEditForm] = useState(false);
   const [selectedCollection, setSelectedCollection] =
@@ -28,6 +30,22 @@ export default function CollectionPage() {
     (state) => state.collection
   );
   const dispatch = useAppDispatch();
+
+  //Pagination
+  const pageNum = pageNumber.get("pageNumber");
+  useEffect(() => {
+    if (!pageNum || pageNum === "1") {
+      setPageNumber((prev) => {
+        prev.delete("pageNumber");
+        return prev;
+      });
+      dispatch(setCollectionParams({ pageNumber: 1 }));
+    } else {
+      dispatch(setCollectionParams({ pageNumber: +pageNum }));
+    }
+  }, [pageNum, dispatch]);
+  //
+
   const handleSelectCollection = (
     actionName: string,
     collection?: Collection
@@ -265,7 +283,10 @@ export default function CollectionPage() {
             <Pagination
               metaData={metaData}
               onPageChange={(page: number) => {
-                dispatch(setCollectionParams({ pageNumber: page }));
+                setPageNumber((prev) => {
+                  prev.set("pageNumber", page.toString());
+                  return prev;
+                });
               }}
               loading={collectionLoaded}
             />

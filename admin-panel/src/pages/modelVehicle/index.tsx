@@ -16,12 +16,15 @@ import {
   deleteModelVehicleAsync,
   getModelVehiclesAsync,
   modelVehicleSelectors,
+  setModelVehicleParams,
 } from "./ModelVehicleSlice";
 import ModelVehicleForm from "./ModelVehicleForm";
 import Pagination from "../../app/components/Pagination";
 import "./../../app/assets/css/custom.css";
+import { useSearchParams } from "react-router-dom";
 
 export default function ModelVehiclePage() {
+  const [pageNumber, setPageNumber] = useSearchParams({ pageNumber: "" });
   const [actionName, setActionName] = useState(String);
   const [openEditForm, setOpenEditForm] = useState(false);
   const [selectedModelVehicle, setSelectedModelVehicle] =
@@ -36,6 +39,20 @@ export default function ModelVehiclePage() {
     (state) => state.modelVehicle
   );
   const dispatch = useAppDispatch();
+  //pagination
+  const pageNum = pageNumber.get("pageNumber");
+  useEffect(() => {
+    if (!pageNum || pageNum === "1") {
+      setPageNumber((prev) => {
+        prev.delete("pageNumber");
+        return prev;
+      });
+      dispatch(setModelVehicleParams({ pageNumber: 1 }));
+    } else {
+      dispatch(setModelVehicleParams({ pageNumber: +pageNum }));
+    }
+  }, [pageNum, dispatch]);
+
   const handleSelectModelVehicle = (
     actionName: string,
     modelVehicle?: ModelVehicle
@@ -291,7 +308,10 @@ export default function ModelVehiclePage() {
             <Pagination
               metaData={metaData}
               onPageChange={(page: number) => {
-                dispatch(setCollectionParams({ pageNumber: page }));
+                setPageNumber((prev) => {
+                  prev.set("pageNumber", page.toString());
+                  return prev;
+                });
               }}
               loading={modelVehicleLoaded}
             />

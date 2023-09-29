@@ -11,6 +11,7 @@ interface Props extends UseControllerProps {
   error?: boolean;
   helperText?: string;
   className?: string;
+  InputProps?: any;
 }
 
 export default function AppTextInput(props: Props) {
@@ -30,6 +31,7 @@ export default function AppTextInput(props: Props) {
       className={props.className}
       error={props.error || !!fieldState.error}
       helperText={props.error ? props.helperText : fieldState.error?.message}
+      inputProps={props.InputProps}
     />
   );
 }

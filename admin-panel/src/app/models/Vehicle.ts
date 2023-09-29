@@ -46,4 +46,8 @@ export interface Specifications {
 export interface VehicleParams {
   pageNumber: number;
   pageSize: number;
+  Brands?: string[];
+  Collections?: string[];
+  Models?: string[];
+  Cities?: string[];
 }

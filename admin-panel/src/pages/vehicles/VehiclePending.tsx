@@ -1,5 +1,8 @@
-import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import Breadcrumb from "../../app/components/Breadcrumb";
+import ConfirmDeleteDialog from "../../app/components/ConfirmDeleteDialog";
+import { Vehicle } from "../../app/models/Vehicle";
+import { ConvertDatetimeToDate } from "../../app/utils/ConvertDatetimeToDate";
 import { useAppDispatch, useAppSelector } from "../../app/store/ConfigureStore";
 import {
   deleteVehicleAsync,
@@ -7,28 +10,14 @@ import {
   setVehicleParams,
   vehicleSelectors,
 } from "./VehicleSlice";
-import Loader from "../../app/components/Loader";
+import { useEffect, useState } from "react";
 import Pagination from "../../app/components/Pagination";
-import { Vehicle } from "../../app/models/Vehicle";
-import VehicleForm from "./VehicleForm";
-import ConfirmDeleteDialog from "../../app/components/ConfirmDeleteDialog";
-import { ConvertDatetimeToDate } from "../../app/utils/ConvertDatetimeToDate";
 import VehicleDetails from "./VehicleDetails";
+import VehicleForm from "./VehicleForm";
 import { deleteImages } from "../../app/utils/Cloudinary";
-import { useSearchParams } from "react-router-dom";
-import { City } from "../../app/models/Address";
-import Autocomplete from "@mui/material/Autocomplete";
-import { TextField } from "@mui/material";
-import { Brand } from "../../app/models/Brand";
-import agent from "../../app/api/agent";
-import { Collection } from "../../app/models/Collection";
-import { ModelVehicle } from "../../app/models/ModelVehicle";
-import LoaderButton from "../../app/components/LoaderButton";
-import { HexColorPicker } from "react-colorful";
+import Loader from "../../app/components/Loader";
 
-export default function VehiclesPage() {
-  const [searchParams, setSearchParams] = useSearchParams({});
-
+export default function VehiclePending() {
   const [actionName, setActionName] = useState(String);
   const [selectedVehicle, setSelectedVehicle] = useState<Vehicle | null>(null);
   const [openEditForm, setOpenEditForm] = useState(false);
@@ -36,297 +25,17 @@ export default function VehiclesPage() {
   const [vehicleDeleted, setVehicleDeleted] = useState<Vehicle>({} as Vehicle);
   const [openDetails, setOpenDetails] = useState(false);
 
-  const [cities, setCities] = useState<City[]>([]);
-  const [selectedCities, setSelectedCities] = useState<City[]>([]);
-  const [brands, setBrands] = useState<Brand[]>([]);
-  const [selectedBrands, setSelectedBrands] = useState<Brand[]>([]);
-  const [collections, setCollections] = useState<Collection[]>([]);
-  const [selectedCollections, setSelectedCollections] = useState<Collection[]>(
-    []
-  );
-  const [models, setModels] = useState<ModelVehicle[]>([]);
-  const [selectedModels, setSelectedModels] = useState<ModelVehicle[]>([]);
-  const [loadingFetchModelsFilter, setLoadingFetchModelsFilter] =
-    useState(true);
-  const [loadingFetchCollectionsFilter, setLoadingFetchCollectionsFilter] =
-    useState(true);
-  const [loadingFetchBrandsFilter, setLoadingFetchBrandsFilter] =
-    useState(true);
-  const [loadingFetchCitiesFilter, setLoadingFetchCitiesFilter] =
-    useState(true);
-
   const vehicles = useAppSelector(vehicleSelectors.selectAll);
   const { vehicleLoaded, metaData, vehicleParams } = useAppSelector(
     (state) => state.vehicle
   );
   const dispatch = useAppDispatch();
-  //Get params value from url
-  const pageNum = searchParams.get("pageNumber");
-  const brandsParam = searchParams.get("Brands");
-  const modelsParam = searchParams.get("Models");
-  const collectionsParam = searchParams.get("Collections");
-  const citiesParam = searchParams.get("Cities");
-
-  // Get data for filter
-  useEffect(() => {
-    //get city data
-    fetch("./dataCityVN.json")
-      .then((response) => response.json())
-      .then((data: City[]) => {
-        setCities(data);
-        setLoadingFetchCitiesFilter(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching city for filter:", error);
-      });
-    //get brands data
-    agent.Brand.all()
-      .then((data) => {
-        setBrands(data);
-        setLoadingFetchBrandsFilter(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching brands for filter:", error);
-      });
-    //get collections data
-    agent.Collection.all()
-      .then((data) => {
-        setCollections(data);
-        setLoadingFetchCollectionsFilter(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching collections for filter", error);
-      });
-    //get models data
-    agent.ModelVehicle.all()
-      .then((data) => {
-        setModels(data);
-        setLoadingFetchModelsFilter(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching models for filter", error);
-      });
-  }, []);
-  // End of Get data for filter
-  //Get valueFilter from url params, then set selected filterValue and request (dispatch).
-  useEffect(() => {
-    if (modelsParam !== "") {
-      if (models.length > 0) {
-        if (modelsParam) {
-          const modelsFiltered = modelsParam.split("%2C");
-          const modelsSelected = models.filter((model) =>
-            modelsFiltered.includes(model.name)
-          );
-          setSelectedModels(modelsSelected);
-          dispatch(setVehicleParams({ Models: modelsFiltered }));
-        } else {
-          dispatch(setVehicleParams({ Models: [] }));
-          setSelectedModels([]);
-        }
-      }
-    } else {
-      setSearchParams((prev) => {
-        prev.delete("Models");
-        return prev;
-      });
-      dispatch(setVehicleParams({ Models: [] }));
-    }
-  }, [modelsParam, models]); //searchParams
-
-  useEffect(() => {
-    if (collectionsParam !== "") {
-      if (collections.length > 0) {
-        if (collectionsParam) {
-          const collectionsFiltered = collectionsParam.split("%2C");
-          const collectionsSelected = collections.filter((collection) =>
-            collectionsFiltered.includes(collection.name)
-          );
-          setSelectedCollections(collectionsSelected);
-          dispatch(setVehicleParams({ Collections: collectionsFiltered }));
-        } else {
-          dispatch(setVehicleParams({ Collections: [] }));
-          setSelectedCollections([]);
-        }
-      }
-    } else {
-      setSearchParams((prev) => {
-        prev.delete("Collections");
-        return prev;
-      });
-      dispatch(setVehicleParams({ Collections: [] }));
-    }
-  }, [collectionsParam, collections]);
-
-  useEffect(() => {
-    if (brandsParam !== "") {
-      if (brands.length > 0) {
-        if (brandsParam) {
-          const brandsFiltered = brandsParam.split("%2C");
-          const brandsSelected = brands.filter((brand) =>
-            brandsFiltered.includes(brand.name)
-          );
-          setSelectedBrands(brandsSelected);
-          dispatch(setVehicleParams({ Brands: brandsFiltered }));
-        } else {
-          dispatch(setVehicleParams({ Brands: [] }));
-          setSelectedBrands([]);
-        }
-      }
-    } else {
-      setSearchParams((prev) => {
-        prev.delete("Brands");
-        return prev;
-      });
-      dispatch(setVehicleParams({ Brands: [] }));
-    }
-  }, [brandsParam, brands]);
-
-  useEffect(() => {
-    if (citiesParam !== "") {
-      if (cities.length > 0) {
-        if (citiesParam) {
-          const citiesFiltered = citiesParam.split("%2C");
-          const citiesSelected = cities.filter((city) =>
-            citiesFiltered.includes(city.Name)
-          );
-          setSelectedCities(citiesSelected);
-          dispatch(setVehicleParams({ Cities: citiesFiltered }));
-        } else {
-          dispatch(setVehicleParams({ Cities: [] }));
-          setSelectedCities([]);
-        }
-      }
-    } else {
-      setSearchParams((prev) => {
-        prev.delete("Cities");
-        return prev;
-      });
-      dispatch(setVehicleParams({ Cities: [] }));
-    }
-  }, [citiesParam, cities]);
-
-  useEffect(() => {
-    if (!pageNum || pageNum === "1") {
-      setSearchParams((prev) => {
-        prev.delete("pageNumber");
-        return prev;
-      });
-      dispatch(setVehicleParams({ pageNumber: 1 }));
-    } else {
-      dispatch(setVehicleParams({ pageNumber: +pageNum }));
-    }
-  }, [pageNum, dispatch]);
-  //End of get valueFilter from url params and set selected
 
   useEffect(() => {
     if (!vehicleLoaded) {
       dispatch(getVehiclesAsync());
     }
   }, [dispatch, vehicleParams]);
-
-  // Handle change filter
-  const handleSelectCollectionChange = (
-    event: React.SyntheticEvent<Element, Event>,
-    newValue: Collection[]
-  ) => {
-    // set to url params
-    if (newValue.length > 0) {
-      const collectionsFiltered = newValue?.map(
-        (collection) => collection.name
-      );
-      if (searchParams.get("Collections")) {
-        setSearchParams((prev) => {
-          prev.set("Collections", collectionsFiltered?.join("%2C") || "");
-          return prev;
-        });
-      } else {
-        setSearchParams((prev) => {
-          prev.append("Collections", collectionsFiltered?.join("%2C") || "");
-          return prev;
-        });
-      }
-    } else {
-      setSearchParams((prev) => {
-        prev.delete("Collections");
-        return prev;
-      });
-    }
-  };
-  const handleSelectModelChange = (
-    event: React.SyntheticEvent<Element, Event>,
-    newValue: ModelVehicle[]
-  ) => {
-    // set to url params
-    if (newValue.length > 0) {
-      const modelsFiltered = newValue?.map((model) => model.name);
-      if (searchParams.get("Models")) {
-        setSearchParams((prev) => {
-          prev.set("Models", modelsFiltered?.join("%2C") || "");
-          return prev;
-        });
-      } else {
-        setSearchParams((prev) => {
-          prev.append("Models", modelsFiltered?.join("%2C") || "");
-          return prev;
-        });
-      }
-    } else {
-      setSearchParams((prev) => {
-        prev.delete("Models");
-        return prev;
-      });
-    }
-  };
-  const handleSelectCityChange = (
-    event: React.SyntheticEvent<Element, Event>,
-    newValue: City[]
-  ) => {
-    if (newValue.length > 0) {
-      const citiesFiltered = newValue?.map((city) => city.Name);
-      if (searchParams.get("Cities")) {
-        setSearchParams((prev) => {
-          prev.set("Cities", citiesFiltered?.join("%2C") || "");
-          return prev;
-        });
-      } else {
-        setSearchParams((prev) => {
-          prev.append("Cities", citiesFiltered?.join("%2C") || "");
-          return prev;
-        });
-      }
-    } else {
-      setSearchParams((prev) => {
-        prev.delete("Cities");
-        return prev;
-      });
-    }
-  };
-  const handleSelectBrandChange = (
-    event: React.SyntheticEvent<Element, Event>,
-    newValue: Brand[]
-  ) => {
-    // set to url params
-    if (newValue.length > 0) {
-      const brandsFiltered = newValue?.map((brand) => brand.name);
-      if (searchParams.get("Brands")) {
-        setSearchParams((prev) => {
-          prev.set("Brands", brandsFiltered?.join("%2C") || "");
-          return prev;
-        });
-      } else {
-        setSearchParams((prev) => {
-          prev.append("Brands", brandsFiltered?.join("%2C") || "");
-          return prev;
-        });
-      }
-    } else {
-      setSearchParams((prev) => {
-        prev.delete("Brands");
-        return prev;
-      });
-    }
-  };
-  // End of handle change filter
 
   const handleSelectVehicle = (actionName: string, vehicle?: Vehicle) => {
     setOpenEditForm((cur) => !cur);
@@ -364,19 +73,13 @@ export default function VehiclesPage() {
   };
 
   const cancelConfirmDeleteDialog = () => setConfirmDeleteDiaglog(false);
-  const [colorPick, setColorPick] = useState("#b32aa9");
+
   if (!metaData) {
     return <Loader />;
   } else
     return (
       <>
-        <Breadcrumb pageName="Vehicles" />
-        <div>
-          <HexColorPicker color={colorPick} onChange={setColorPick} />
-          <div className="value" style={{ borderLeftColor: colorPick }}>
-            Current color is {colorPick}
-          </div>
-        </div>
+        <Breadcrumb pageName="Vehicles Pending" />
         <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
           <div className="flex justify-end">
             <button
@@ -427,99 +130,6 @@ export default function VehiclesPage() {
               <span>Add new vehicle</span>
             </button>
           </div>
-          <div className="flex overflow-auto scrollbar max-h-[333px]">
-            <p className="w-fit">Filter:</p>
-            <div className="flex flex-wrap space-x-2 space-y-2 justify-start items-center mb-2 w-full">
-              <div className="max-w-[25%] min-w-[170px] flex-1 ml-2 mt-2">
-                {/* Filter by models */}
-                {loadingFetchModelsFilter ? (
-                  <LoaderButton />
-                ) : (
-                  <Autocomplete
-                    fullWidth={true}
-                    size="small"
-                    multiple={true}
-                    disablePortal
-                    value={selectedModels}
-                    options={models}
-                    getOptionLabel={(option) => option.name}
-                    onChange={(event, newValue) =>
-                      handleSelectModelChange(event, newValue)
-                    }
-                    renderInput={(params) => (
-                      <TextField {...params} placeholder="Models" />
-                    )}
-                  />
-                )}
-              </div>
-              <div className="max-w-[25%] min-w-[170px] flex-1">
-                {/* Filter by collections */}
-                {loadingFetchCollectionsFilter ? (
-                  <LoaderButton />
-                ) : (
-                  <Autocomplete
-                    fullWidth={true}
-                    size="small"
-                    multiple={true}
-                    disablePortal
-                    value={selectedCollections}
-                    options={collections}
-                    getOptionLabel={(option) => option.name}
-                    onChange={(event, newValue) =>
-                      handleSelectCollectionChange(event, newValue)
-                    }
-                    renderInput={(params) => (
-                      <TextField {...params} placeholder="Collections" />
-                    )}
-                  />
-                )}
-              </div>
-              <div className="max-w-[25%] min-w-[150px] flex-1">
-                {/* Filter by brands */}
-                {loadingFetchBrandsFilter ? (
-                  <LoaderButton />
-                ) : (
-                  <Autocomplete
-                    fullWidth={true}
-                    size="small"
-                    multiple={true}
-                    disablePortal
-                    value={selectedBrands}
-                    options={brands}
-                    getOptionLabel={(option) => option.name}
-                    onChange={(event, newValue) =>
-                      handleSelectBrandChange(event, newValue)
-                    }
-                    renderInput={(params) => (
-                      <TextField {...params} placeholder="Brands" />
-                    )}
-                  />
-                )}
-              </div>
-              <div className="max-w-[25%] min-w-[220px] flex-1">
-                {/* Filter city */}
-                {loadingFetchCitiesFilter ? (
-                  <LoaderButton />
-                ) : (
-                  <Autocomplete
-                    fullWidth={true}
-                    size="small"
-                    multiple={true}
-                    disablePortal
-                    value={selectedCities}
-                    options={cities}
-                    getOptionLabel={(option) => option.Name}
-                    onChange={(event, newValue) =>
-                      handleSelectCityChange(event, newValue)
-                    }
-                    renderInput={(params) => (
-                      <TextField {...params} placeholder="Cities" />
-                    )}
-                  />
-                )}
-              </div>
-            </div>
-          </div>
           <div className="max-w-full overflow-x-auto">
             <table className="w-full table-auto">
               <thead>
@@ -542,9 +152,7 @@ export default function VehiclesPage() {
                   <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
                     Price
                   </th>
-                  <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
-                    Profit
-                  </th>
+
                   <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
                     Status
                   </th>
@@ -552,7 +160,7 @@ export default function VehiclesPage() {
                 </tr>
               </thead>
               <tbody>
-                {vehicles.map((vehicle) => (
+                {vehicles.map((vehicle: Vehicle) => (
                   <tr
                     key={vehicle.id}
                     className="dark:border-strokedark border-[#eee] border-b"
@@ -600,11 +208,8 @@ export default function VehiclesPage() {
                     </td>
 
                     <td className="py-5 px-4">
-                      <p className="text-meta-3">10.000</p>
-                    </td>
-                    <td className="py-5 px-4">
-                      <p className="inline-flex rounded-full bg-danger bg-opacity-10 py-1 px-3 text-sm font-medium text-danger">
-                        Renting
+                      <p className="inline-flex rounded-full bg-blue-500 bg-opacity-30 py-1 px-3 text-sm font-medium text-blue-800 dark:text-blue-300">
+                        Pending
                       </p>
                     </td>
                     <td className="py-5 px-4">
@@ -716,10 +321,7 @@ export default function VehiclesPage() {
             <Pagination
               metaData={metaData}
               onPageChange={(page: number) => {
-                setSearchParams((prev) => {
-                  prev.set("pageNumber", page.toString());
-                  return prev;
-                });
+                dispatch(setVehicleParams({ pageNumber: page }));
               }}
               loading={vehicleLoaded}
             />

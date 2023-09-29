@@ -28,6 +28,7 @@ function App() {
         draggable
         pauseOnHover
         theme="colored"
+        style={{ zIndex: 999999 }}
       />
       <Outlet />
     </>

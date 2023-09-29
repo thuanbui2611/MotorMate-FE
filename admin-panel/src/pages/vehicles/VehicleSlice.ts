@@ -23,6 +23,27 @@ function getAxiosParams(vehicleParams: VehicleParams) {
   const params = new URLSearchParams();
   params.append("pageNumber", vehicleParams.pageNumber.toString());
   params.append("pageSize", vehicleParams.pageSize.toString());
+  if (vehicleParams.Models!.length > 0) {
+    vehicleParams.Models!.forEach((model) => {
+      params.append("Models", model);
+    });
+  }
+  if (vehicleParams.Brands!.length > 0) {
+    vehicleParams.Brands!.forEach((brand) => {
+      params.append("Brands", brand);
+    });
+  }
+  if (vehicleParams.Collections!.length > 0) {
+    vehicleParams.Collections!.forEach((collection) => {
+      params.append("Collections", collection);
+    });
+  }
+  if (vehicleParams.Cities!.length > 0) {
+    vehicleParams.Cities!.forEach((city) => {
+      params.append("Cities", city);
+    });
+  }
+
   return params;
 }
 
@@ -82,7 +103,11 @@ export const deleteVehicleAsync = createAsyncThunk(
 function initParams() {
   return {
     pageNumber: 1,
-    pageSize: 5,
+    pageSize: 2,
+    Brands: [],
+    Collections: [],
+    Models: [],
+    Cities: [],
   };
 }
 
@@ -96,7 +121,7 @@ export const VehicleSlice = createSlice({
   }),
   reducers: {
     setVehicleParams: (state, action) => {
-      state.vehicle = {
+      state.vehicleParams = {
         ...state.vehicleParams,
         ...action.payload,
       };

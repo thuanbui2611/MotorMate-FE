@@ -26,6 +26,8 @@ import { useAppDispatch } from "../../app/store/ConfigureStore";
 import { ConvertDatetimeToDate } from "../../app/utils/ConvertDatetimeToDate";
 import { Image } from "../../app/models/Image";
 import { LoadingButton } from "@mui/lab";
+import { toast } from "react-toastify";
+import LoaderButton from "../../app/components/LoaderButton";
 interface Props {
   vehicle: Vehicle | null;
   cancelEdit: () => void;
@@ -64,6 +66,10 @@ export default function VehicleForm({
   const [selectedLocation, setSelectedLocation] = useState<Location | null>(
     null
   );
+
+  const [loadingFetchOwner, setLoadingFetchOwner] = useState(true);
+  const [loadingFetchBrand, setLoadingFetchBrand] = useState(true);
+  const [loadingFetchModel, setLoadingFetchModel] = useState(false);
   const {
     control,
     register,
@@ -79,6 +85,7 @@ export default function VehicleForm({
   const getModelsByCollection = async (collectionValue: Collection | null) => {
     try {
       if (collectionValue?.id) {
+        setLoadingFetchModel(true);
         const response = await agent.ModelVehicle.getByCollection(
           collectionValue?.id
         );
@@ -143,6 +150,7 @@ export default function VehicleForm({
           );
           setSelectedModel(defaultModel || null);
           setColors(defaultModel?.colors || []);
+          setLoadingFetchModel(false);
         })
         .catch((error) => {
           console.log("Error when fetching collections:", error);
@@ -163,6 +171,7 @@ export default function VehicleForm({
       try {
         const response = await agent.Brand.all();
         setBrands(response);
+        setLoadingFetchBrand(false);
       } catch (error) {
         console.error("Error fetching brands: ", error);
       }
@@ -172,6 +181,7 @@ export default function VehicleForm({
       try {
         const response = await agent.User.all();
         setUsers(response);
+        setLoadingFetchOwner(false);
       } catch (error) {
         console.error("Error fetching users:", error);
       }
@@ -210,11 +220,19 @@ export default function VehicleForm({
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     setSelectedFiles((prevFiles) => {
+      // Check type
+      for (let i = 0; i < files?.length!; i++) {
+        if (!files![i].type.startsWith("image/")) {
+          toast.error("Accept only image file");
+          return prevFiles;
+        }
+      }
       if (prevFiles) {
         // Convert the FileList to an array
         const prevFilesArray = Array.from(prevFiles);
         // Convert the new files to an array
         const newFilesArray = Array.from(files || []);
+
         // Concatenate the previous and new files arrays
         const combinedFilesArray = [...prevFilesArray, ...newFilesArray];
         // Convert the combined files array back to a FileList
@@ -303,9 +321,11 @@ export default function VehicleForm({
       setSelectedModel(null);
       setSelectedColor(null);
     }
+    setLoadingFetchModel(true);
     setSelectedCollection(newValue);
     const model = await getModelsByCollection(newValue);
     setModels(model);
+    setLoadingFetchModel(false);
   };
 
   const handleModelChange = (
@@ -331,6 +351,7 @@ export default function VehicleForm({
   const handleLocationChange = (value: Location) => {
     setLocation(value);
   };
+
   async function submitForm(data: FieldValues) {
     try {
       let imagesRequest: Image[] | null = [];
@@ -397,10 +418,10 @@ export default function VehicleForm({
         className="bg-transparent shadow-none"
       >
         <Card className="mx-auto w-full max-w-[100rem] ">
-          <CardHeader className=" mx-auto text-center w-fit px-10 bg-orange-500">
+          <CardHeader className=" mx-auto text-center w-fit px-10 bg-orange-500 ">
             <Typography
               variant="h3"
-              className="text-center py-4  text-white rounded-sm dark:bg-boxdark dark:text-white"
+              className="text-center py-4  text-white rounded-sm"
             >
               {actionName}
             </Typography>
@@ -411,91 +432,95 @@ export default function VehicleForm({
           >
             <div className="grid md:grid-cols-3 gap-6 mb-6">
               <div className="md:col-span-1 flex flex-col">
-                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                <label className="block mb-2 text-sm font-semibold text-black">
                   Owner
                 </label>
-                <Autocomplete
-                  size="small"
-                  disablePortal
-                  value={selectedUser}
-                  options={users}
-                  getOptionLabel={(option) => option.userName}
-                  onChange={(event, newValue) =>
-                    handleUserChange(event, newValue)
-                  }
-                  renderOption={(props, option) => (
-                    <Box
-                      component="li"
-                      sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
-                      {...props}
-                    >
-                      <div className="flex items-center justify-start">
-                        <div className="h-12 w-12 rounded-md mr-2">
-                          <img
-                            className="h-full w-full rounded-md object-cover"
-                            src={option.picture}
-                            alt="logo"
-                          />
+                {loadingFetchOwner ? (
+                  <LoaderButton />
+                ) : (
+                  <Autocomplete
+                    size="small"
+                    disablePortal
+                    value={selectedUser}
+                    options={users}
+                    getOptionLabel={(option) => option.userName}
+                    onChange={(event, newValue) =>
+                      handleUserChange(event, newValue)
+                    }
+                    renderOption={(props, option) => (
+                      <Box
+                        component="li"
+                        sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
+                        {...props}
+                      >
+                        <div className="flex items-center justify-start">
+                          <div className="h-12 w-12 rounded-md mr-2">
+                            <img
+                              className="h-full w-full rounded-md object-cover"
+                              src={option.picture}
+                              alt="logo"
+                            />
+                          </div>
+                          {option.userName}
                         </div>
-                        {option.userName}
-                      </div>
-                    </Box>
-                  )}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      InputProps={{
-                        ...params.InputProps,
-                        startAdornment: (
-                          <>
-                            {selectedUser && (
-                              <img
-                                className="h-6 w-6 rounded-full"
-                                src={selectedUser.picture}
-                                alt="avatar"
-                              />
-                            )}
-                            {params.InputProps.startAdornment}
-                          </>
-                        ),
-                      }}
-                    />
-                  )}
-                />
+                      </Box>
+                    )}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        InputProps={{
+                          ...params.InputProps,
+                          startAdornment: (
+                            <>
+                              {selectedUser && (
+                                <img
+                                  className="h-6 w-6 rounded-full"
+                                  src={selectedUser.picture}
+                                  alt="avatar"
+                                />
+                              )}
+                              {params.InputProps.startAdornment}
+                            </>
+                          ),
+                        }}
+                      />
+                    )}
+                  />
+                )}
               </div>
               {selectedUser && (
                 <div className="md:col-span-2 flex justify-start items-end">
                   <div className="flex flex-wrap gap-4 md:gap-2 md:grid md:grid-cols-2">
                     <div className="flex">
-                      <label className="block text-sm font-semibold text-gray-900 dark:text-white">
+                      <label className="block text-sm font-semibold text-black">
                         Fullname:
                       </label>
-                      <p className="block ml-1 text-sm font-medium text-gray-900 dark:text-white">
+                      <p className="block ml-1 text-sm font-medium text-black">
                         {selectedUser.fullName}
                       </p>
                     </div>
 
                     <div className="flex">
-                      <label className="block text-sm font-semibold text-gray-900 dark:text-white">
+                      <label className="block text-sm  font-semibold text-black">
                         Email:
                       </label>
-                      <p className="block ml-1 text-sm font-medium text-gray-900 dark:text-white">
+                      <p className="block ml-1 text-sm font-medium text-black">
                         {selectedUser.email}
                       </p>
                     </div>
                     <div className="flex">
-                      <label className="block text-sm font-semibold text-gray-900 dark:text-white">
+                      <label className="block text-sm  font-semibold text-black">
                         Phone number:
                       </label>
-                      <p className="block ml-1 text-sm font-medium text-gray-900 dark:text-white">
+                      <p className="block ml-1 text-sm font-medium text-black">
                         {selectedUser.phoneNumber}
                       </p>
                     </div>
                     <div className="flex">
-                      <label className="block text-sm font-semibold text-gray-900 dark:text-white">
+                      <label className="block text-sm  font-semibold text-black">
                         Address:
                       </label>
-                      <p className="block ml-1 text-sm font-medium text-gray-900 dark:text-white">
+                      <p className="block ml-1 text-sm font-medium text-black">
                         {selectedUser.address}
                       </p>
                     </div>
@@ -505,23 +530,75 @@ export default function VehicleForm({
             </div>
             <div className="grid md:grid-cols-2 gap-6 mb-6">
               <div className="flex flex-col">
-                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                <label className="block mb-2 text-sm font-semibold text-black">
                   Brand
                 </label>
-                <Autocomplete
-                  size="small"
-                  disablePortal
-                  value={selectedBrand}
-                  options={brands}
-                  getOptionLabel={(option) => option.name}
-                  onChange={(event, newValue) =>
-                    handleBrandChange(event, newValue)
-                  }
-                  renderInput={(params) => <TextField {...params} />}
-                />
+                {loadingFetchBrand ? (
+                  <LoadingButton />
+                ) : (
+                  // <Autocomplete
+                  //   size="small"
+                  //   disablePortal
+                  //   value={selectedBrand}
+                  //   options={brands}
+                  //   getOptionLabel={(option) => option.name}
+                  //   onChange={(event, newValue) =>
+                  //     handleBrandChange(event, newValue)
+                  //   }
+                  //   renderInput={(params) => <TextField {...params} />}
+                  // />
+                  <Autocomplete
+                    size="small"
+                    disablePortal
+                    value={selectedBrand}
+                    options={brands}
+                    getOptionLabel={(option) => option.name}
+                    onChange={(event, newValue) =>
+                      handleBrandChange(event, newValue)
+                    }
+                    renderOption={(props, option) => (
+                      <Box
+                        component="li"
+                        sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
+                        {...props}
+                      >
+                        <div className="flex items-center justify-start">
+                          <div className="h-12 w-12 rounded-md mr-2">
+                            <img
+                              className="h-full w-full rounded-md object-cover"
+                              src={option.image.image}
+                              alt="logo brand"
+                            />
+                          </div>
+                          {option.name}
+                        </div>
+                      </Box>
+                    )}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        InputProps={{
+                          ...params.InputProps,
+                          startAdornment: (
+                            <>
+                              {selectedBrand && (
+                                <img
+                                  className="h-6 w-6 rounded-full"
+                                  src={selectedBrand.image.image}
+                                  alt="logo brand"
+                                />
+                              )}
+                              {params.InputProps.startAdornment}
+                            </>
+                          ),
+                        }}
+                      />
+                    )}
+                  />
+                )}
               </div>
               <div className="flex flex-col">
-                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                <label className="block mb-2 text-sm font-semibold text-black">
                   Collection
                 </label>
                 <Autocomplete
@@ -545,31 +622,35 @@ export default function VehicleForm({
                 />
               </div>
               <div className="flex flex-col">
-                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                <label className="block mb-2 text-sm font-semibold text-black">
                   Model
                 </label>
-                <Autocomplete
-                  disabled={!selectedCollection}
-                  size="small"
-                  disablePortal
-                  value={selectedModel}
-                  options={models}
-                  getOptionLabel={(option) => option.name}
-                  onChange={(event, newValue) =>
-                    handleModelChange(event, newValue)
-                  }
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      className={`${
-                        !selectedCollection && " bg-blue-gray-50 rounded-md"
-                      }`}
-                    />
-                  )}
-                />
+                {loadingFetchModel ? (
+                  <LoaderButton />
+                ) : (
+                  <Autocomplete
+                    disabled={!selectedCollection}
+                    size="small"
+                    disablePortal
+                    value={selectedModel}
+                    options={models}
+                    getOptionLabel={(option) => option.name}
+                    onChange={(event, newValue) =>
+                      handleModelChange(event, newValue)
+                    }
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        className={`${
+                          !selectedCollection && " bg-blue-gray-50 rounded-md"
+                        }`}
+                      />
+                    )}
+                  />
+                )}
               </div>
               <div className="flex flex-col">
-                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                <label className="block mb-2 text-sm font-semibold text-black">
                   Color
                 </label>
                 <Autocomplete
@@ -596,10 +677,12 @@ export default function VehicleForm({
             <div className="grid gap-6 mb-6 md:grid-cols-2">
               <div className="flex justify-between gap-6">
                 <div>
-                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                  <label className="block mb-2 text-sm font-semibold text-black">
                     Condition
                   </label>
-                  <TextField
+                  <AppTextInput
+                    label=""
+                    control={control}
                     size="small"
                     type="number"
                     placeholder="1-100"
@@ -608,11 +691,21 @@ export default function VehicleForm({
                     }}
                     {...register("conditionPercentage", {
                       required: "Condition is required",
+                      pattern: {
+                        value: /^[0-9]+$/,
+                        message: "Invalid condition, accept only number",
+                      },
+                      validate: (value) => {
+                        if (value > 100 || value < 0) {
+                          return "Condion must be between 0 and 100";
+                        }
+                        return true;
+                      },
                     })}
                   />
                 </div>
                 <div>
-                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                  <label className="block mb-2 text-sm font-semibold text-black">
                     Purchase Date
                   </label>
                   <AppTextInput
@@ -628,10 +721,12 @@ export default function VehicleForm({
               </div>
               <div className="flex justify-between gap-6">
                 <div>
-                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                  <label className="block mb-2 text-sm font-semibold text-black">
                     Insurance Number
                   </label>
-                  <TextField
+                  <AppTextInput
+                    label=""
+                    control={control}
                     size="small"
                     type="text"
                     {...register("insuranceNumber", {
@@ -640,7 +735,7 @@ export default function VehicleForm({
                   />
                 </div>
                 <div>
-                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                  <label className="block mb-2 text-sm font-semibold text-black">
                     Insurance expiry date
                   </label>
                   <AppTextInput
@@ -655,7 +750,7 @@ export default function VehicleForm({
                 </div>
               </div>
               <div>
-                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                <label className="block mb-2 text-sm font-semibold text-black">
                   License Plate
                 </label>
                 <AppTextInput
@@ -670,7 +765,7 @@ export default function VehicleForm({
                 />
               </div>
               <div>
-                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                <label className="block mb-2 text-sm font-semibold text-black">
                   Price per day
                 </label>
                 <AppTextInput
@@ -683,14 +778,14 @@ export default function VehicleForm({
                     required: "Price is required",
                     pattern: {
                       value: /^[0-9]+$/,
-                      message: "Invalid price release, accept only number",
+                      message: "Invalid price, accept only number",
                     },
                   })}
                 />
               </div>
             </div>
             <div className="flex flex-col mb-2">
-              <label className="block mb-3 text-sm font-medium text-gray-900 dark:text-white">
+              <label className="block mb-3 text-sm font-semibold text-black">
                 Address
               </label>
               <div className="flex flex-col gap-3">
@@ -722,7 +817,7 @@ export default function VehicleForm({
               </div>
             </div>
             <div className="mb-1">
-              <label className="block text-sm font-medium text-gray-900 dark:text-white">
+              <label className="block text-sm font-semibold text-black">
                 Images
               </label>
               {!imagesSelected && (
@@ -733,6 +828,7 @@ export default function VehicleForm({
                     id="file"
                     className="sr-only"
                     onChange={handleImageChange}
+                    accept="image/*"
                     multiple
                   />
                   <label
@@ -804,6 +900,7 @@ export default function VehicleForm({
                     id="file"
                     className="sr-only"
                     onChange={handleImageChange}
+                    accept="image/*"
                     multiple
                   />
                   <label
@@ -859,7 +956,7 @@ export default function VehicleForm({
               </div>
               <label
                 htmlFor="remember"
-                className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                className="ml-2 text-sm font-medium text-black dark:text-gray-300"
               >
                 I agree with the{" "}
                 <a

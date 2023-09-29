@@ -110,6 +110,7 @@ const Collection = {
 };
 
 const ModelVehicle = {
+  all: () => requests.get("api/model/all"),
   list: (params: URLSearchParams) => requests.get("api/model", params),
   details: (id: string) => requests.get(`api/model/${id}`),
   getByCollection: (collectionId: string) =>

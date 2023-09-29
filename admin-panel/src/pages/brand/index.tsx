@@ -278,7 +278,6 @@ export default function BrandPage() {
                   prev.set("pageNumber", page.toString());
                   return prev;
                 });
-                // dispatch(setBrandParams({ pageNumber: page }));
               }}
               loading={brandLoaded}
             />
