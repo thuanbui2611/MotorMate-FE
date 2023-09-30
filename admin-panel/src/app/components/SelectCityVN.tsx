@@ -1,14 +1,13 @@
 import { useEffect, useState } from "react";
 import { City, District, Location, Ward } from "../models/Address";
 import { Autocomplete, TextField } from "@mui/material";
-
+import dataCityVN from "./../data/dataCityVN.json";
 interface Props {
   defaultLocation?: Location | null;
   onSelect: (value: Location) => void;
 }
 
 export default function SelectCityVN({ onSelect, defaultLocation }: Props) {
-  const [cities, setCities] = useState<City[]>([]);
   const [selectedCity, setSelectedCity] = useState<City | null>(null);
   const [selectedDistrict, setSelectedDistrict] = useState<District | null>(
     null
@@ -17,16 +16,7 @@ export default function SelectCityVN({ onSelect, defaultLocation }: Props) {
   const [wards, setWards] = useState<Ward[]>([]);
   const [selectedWard, setSelectedWard] = useState<Ward | null>(null);
 
-  useEffect(() => {
-    fetch("./dataCityVN.json")
-      .then((response) => response.json())
-      .then((data: City[]) => {
-        setCities(data);
-      })
-      .catch((error) => {
-        console.error("Error loading data:", error);
-      });
-  }, []);
+  const cities = dataCityVN as City[];
   useEffect(() => {
     //Check default value and set to selected value
     if (defaultLocation && cities.length > 0) {

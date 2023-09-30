@@ -23,7 +23,7 @@ export default function HomePage() {
         <div className="relative mx-auto w-fit flex shrink-0 justify-center items-center ">
           <img
             className="cover-img"
-            src={require("../../app/assets/images/cover/Background.png")}
+            src={require("../../app/assets/images/cover/HeroCover-homepage.png")}
             alt="Cover website"
           />
           <div className="content">

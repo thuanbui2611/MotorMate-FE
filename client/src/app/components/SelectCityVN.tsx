@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import { City, District, Location, Ward } from "../models/Address";
 import { Autocomplete, TextField } from "@mui/material";
-
-interface Props{
+import dataCityVN from "./../data/dataCityVN.json";
+interface Props {
   onSelect: (value: Location) => void;
 }
 
-export default function SelectCityVN({onSelect}: Props) {
-  const [cities, setCities] = useState<City[]>([]);
+export default function SelectCityVN({ onSelect }: Props) {
   const [selectedCity, setSelectedCity] = useState<City | null>(null);
   const [selectedDistrict, setSelectedDistrict] = useState<District | null>(
     null
@@ -15,29 +14,19 @@ export default function SelectCityVN({onSelect}: Props) {
   const [districts, setDistricts] = useState<District[]>([]);
   const [wards, setWards] = useState<Ward[]>([]);
   const [selectedWard, setSelectedWard] = useState<Ward | null>(null);
-  
+
+  const cities = dataCityVN as City[];
   useEffect(() => {
-    fetch("./dataCityVN.json")
-      .then((response) => response.json())
-      .then((data: City[]) => {
-        setCities(data);
-      })
-      .catch((error) => {
-        console.error("Error loading data:", error);
-      });
-  }, []);
-  useEffect(()=>{
-    if(selectedWard?.Name && selectedCity?.Name && selectedDistrict?.Name)
-    {
+    if (selectedWard?.Name && selectedCity?.Name && selectedDistrict?.Name) {
       let location: Location = {
         city: selectedCity.Name,
-        ward: selectedWard.Name, 
-        district: selectedDistrict.Name 
-      }
+        ward: selectedWard.Name,
+        district: selectedDistrict.Name,
+      };
 
-      onSelect(location)
+      onSelect(location);
     }
-  }, [selectedWard])
+  }, [selectedWard]);
   const handleCityChange = (
     event: React.SyntheticEvent<Element, Event>,
     newValue: City | null
@@ -112,8 +101,7 @@ export default function SelectCityVN({onSelect}: Props) {
   };
 
   // const handleLocationChange = (event: any)=>{
-    
-    
+
   // }
   return (
     <>

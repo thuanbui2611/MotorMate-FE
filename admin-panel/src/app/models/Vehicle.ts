@@ -8,7 +8,6 @@ export interface Vehicle {
   isAvaiable: boolean;
   isActive: boolean;
   isLocked: boolean;
-  color: string;
   price: number;
   address: string;
   district: string;
@@ -41,6 +40,8 @@ export interface Specifications {
   collectionName: string;
   brandId: string;
   brandName: string;
+  hexCode: string;
+  color: string;
 }
 
 export interface VehicleParams {

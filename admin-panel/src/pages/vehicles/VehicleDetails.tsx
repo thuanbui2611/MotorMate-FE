@@ -121,7 +121,7 @@ export default function VehicleDetails({ vehicle, onClose }: Props) {
                               Color:
                             </p>
                             <p className="ml-1 text-base leading-4 text-black break-all">
-                              {vehicle?.color}
+                              {vehicle?.specifications.color}
                             </p>
                           </div>
                           <div className="flex justify-center items-center">
@@ -210,7 +210,7 @@ export default function VehicleDetails({ vehicle, onClose }: Props) {
                               <p className="text-sm leading-5 text-black font-bold">
                                 Available:
                               </p>
-                              <p className="ml-1 text-sm leading-4 break-all inline-flex rounded-full bg-success bg-opacity-10 py-1 px-2 font-medium text-meta-3">
+                              <p className="ml-1 text-sm leading-4 break-all inline-flex rounded-full bg-success bg-opacity-10 py-1 px-2 font-bold  text-meta-3">
                                 Available
                               </p>
                             </div>
@@ -218,16 +218,31 @@ export default function VehicleDetails({ vehicle, onClose }: Props) {
                               <p className="text-sm leading-5 text-black font-bold">
                                 Lock:
                               </p>
-                              <p className="ml-1 text-sm leading-4 break-all inline-flex rounded-full bg-success bg-opacity-10 py-1 px-2 font-medium text-meta-3">
-                                Active
+                              <p
+                                className={`ml-1 text-sm leading-4 break-all inline-flex rounded-full  py-1 px-2 font-bold  ${
+                                  vehicle?.isLocked
+                                    ? "bg-danger opacity-10 text-danger"
+                                    : " text-meta-3 bg-success bg-opacity-10 "
+                                }`}
+                              >
+                                {vehicle?.isLocked ? "Locked" : "Active"}
                               </p>
                             </div>
                             <div className="w-1/2 justify-start flex items-center min-w-fit">
                               <p className="text-sm leading-5 text-black font-bold">
                                 Status:
                               </p>
-                              <p className="ml-1 text-sm leading-4 break-all inline-flex rounded-full bg-danger bg-opacity-10 py-1 px-2 font-medium text-danger">
-                                Renting
+                              <p
+                                className={`ml-1 text-sm leading-4 break-all inline-flex rounded-full  py-1 px-2 font-bold ${
+                                  vehicle?.status.toLowerCase() === "pending"
+                                    ? "bg-blue-500 bg-opacity-30 text-blue-800"
+                                    : vehicle?.status.toLowerCase() ===
+                                      "approved"
+                                    ? "bg-success bg-opacity-10 text-meta-3"
+                                    : "bg-danger bg-opacity-10 text-danger"
+                                } `}
+                              >
+                                {vehicle?.status}
                               </p>
                             </div>
                           </div>

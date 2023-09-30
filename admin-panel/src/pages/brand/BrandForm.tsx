@@ -15,7 +15,7 @@ import { useEffect, useState } from "react";
 import { addBrandAsync, updateBrandAsync } from "./BrandSlice";
 import { toast } from "react-toastify";
 import { LoadingButton } from "@mui/lab";
-// import "./style.css";
+
 import { deleteImage, uploadImage } from "../../app/utils/Cloudinary";
 interface Props {
   brand: Brand | null;

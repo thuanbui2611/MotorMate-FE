@@ -7,6 +7,7 @@ export default function TinyChat() {
   const [selectedMessage, setSelectedMessage] = useState<
     MessageDetail[] | null
   >(null);
+  const [newChatForm, setNewChatForm] = useState(false);
 
   const handleIconClick = () => {
     setIsFormVisible(true);
@@ -181,6 +182,12 @@ export default function TinyChat() {
     hiddenDiv.classList.add("hidden");
   }
   // End of hover to see time message
+
+  // Handle start new chat form
+  const handleStartNewChat = () => {
+    setNewChatForm(true);
+    setSelectedMessage(null);
+  };
   return (
     <>
       {!isFormVisible && (
@@ -214,8 +221,8 @@ export default function TinyChat() {
             className="flex justify-between items-center bg-white border-b-2"
             style={{ fontSize: "0.8rem;" }}
           >
-            <div className=" text-center" style={{ width: "40%" }}>
-              <p className="font-semibold text-xl">Chat</p>
+            <div className="text-center" style={{ width: "40%" }}>
+              <p className="font-semibold text-xl ml-2">Chat</p>
             </div>
             <div
               className="flex justify-between items-center  bg-gradient-to-r from-[#ffa703] to-[#FF7E06] p-2 h-full rounded-lg -mt-1 "
@@ -223,9 +230,10 @@ export default function TinyChat() {
             >
               <div className="flex flex-initial items-center">
                 {selectedMessage ? (
-                  <div className="h-6 w-6 p-1 bg-yellow-500 rounded-full text-white font-semibold flex items-center justify-center">
-                    J
-                  </div>
+                  <img
+                    className="h-9 w-9 p-1 rounded-full text-white font-semibold flex items-center justify-center"
+                    src="https://source.unsplash.com/_7LbC5J-jw4/600x600"
+                  />
                 ) : (
                   ""
                 )}
@@ -264,12 +272,47 @@ export default function TinyChat() {
           </div>
           <div className="flex flex-row justify-between bg-white max-h-80 ">
             <div className="flex flex-col w-2/3 border-r-2  max-h-80 overflow-y-autoscrollbar ">
-              <div className="border-b-2 py-2 px-1 h-11 sticky top-0 bg-white">
+              <div className="flex justify-between gap-1 border-b-2 py-2 px-1 h-11 sticky top-0 bg-white">
                 <input
                   type="text"
                   placeholder="Search"
                   className="py-1 px-1 border-2 border-gray-200 rounded-xl w-full text-center h-full text-xs"
                 />
+                <div
+                  className="flex items-center justify-center w-fit h-fit  bg-gray-200 pt-2 pb-1 px-[6px] rounded-full cursor-pointer hover:bg-gray-300"
+                  onClick={handleStartNewChat}
+                >
+                  <svg
+                    className="w-4 h-4"
+                    viewBox="0 0 24.00 24.00"
+                    xmlns="http://www.w3.org/2000/svg"
+                    mirror-in-rtl="true"
+                    fill="#000000"
+                    stroke="#000000"
+                    stroke-width="0.00024000000000000003"
+                  >
+                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                    <g
+                      id="SVGRepo_tracerCarrier"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke="#CCCCCC"
+                      stroke-width="1.344"
+                    ></g>
+                    <g id="SVGRepo_iconCarrier">
+                      <path
+                        fill="#000000"
+                        fill-rule="evenodd"
+                        d="M24 3v4a1 1 0 0 1-2 0V3a1 1 0 0 0-.9-.99c-.05 0-.08-.01-.11-.01H3a1.016 1.016 0 0 0-1 1v10a1.016 1.016 0 0 0 1 1h2v2.81l2.69-2.32.57-.49H15a1 1 0 0 1 0 2H9l-4.35 3.76A.969.969 0 0 1 4 20a1.059 1.059 0 0 1-.42-.09A1 1 0 0 1 3 19v-3a3.009 3.009 0 0 1-3-3V3a3.009 3.009 0 0 1 3-3h18a2.832 2.832 0 0 1 .3.02A3 3 0 0 1 24 3z"
+                      ></path>
+                      <path
+                        fill="#000000"
+                        fill-rule="evenodd"
+                        d="M24 11a1 1 0 0 1-1 1h-3v3a1 1 0 0 1-2 0v-3h-3a1 1 0 0 1 0-2h3V7a1 1 0 0 1 2 0v3h3a1 1 0 0 1 1 1z"
+                      ></path>
+                    </g>
+                  </svg>
+                </div>
               </div>
               {/* List user send message */}
               {messageList.map((message, index) => (
@@ -314,13 +357,60 @@ export default function TinyChat() {
                 ref={chatContainerRef}
                 onScroll={handleScroll}
               >
-                {!selectedMessage ? (
-                  <div className="flex items-center justify-center h-full w-full font-medium text-gray-600 text-xs">
-                    <div>Please select a chat or start a new chat</div>
+                {/* Start new chat form */}
+                {newChatForm && !selectedMessage && (
+                  <div className="flex flex-col items-center justify-center font-medium text-gray-600 text-xs">
+                    <input
+                      type="text"
+                      placeholder="Start new chat with..."
+                      className="py-1 px-1 border-2 border-gray-200 rounded-xl w-5/6 text-center h-8 text-xs"
+                    />
                   </div>
+                )}
+                {!selectedMessage && !newChatForm ? (
+                  <>
+                    <div className="flex flex-col items-center justify-center h-full w-full font-medium text-gray-600 text-xs">
+                      <div>Please select a chat or start a new chat</div>
+                      <div
+                        className="flex items-center justify-center mt-1 w-fit h-fit bg-gray-200 pt-2 pb-1 px-[6px] rounded-full cursor-pointer hover:bg-gray-300"
+                        onClick={handleStartNewChat}
+                      >
+                        <svg
+                          className="w-5 h-5"
+                          viewBox="0 0 24.00 24.00"
+                          xmlns="http://www.w3.org/2000/svg"
+                          mirror-in-rtl="true"
+                          fill="#000000"
+                          stroke="#000000"
+                          stroke-width="0.00024000000000000003"
+                        >
+                          <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                          <g
+                            id="SVGRepo_tracerCarrier"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke="#CCCCCC"
+                            stroke-width="1.344"
+                          ></g>
+                          <g id="SVGRepo_iconCarrier">
+                            <path
+                              fill="#000000"
+                              fill-rule="evenodd"
+                              d="M24 3v4a1 1 0 0 1-2 0V3a1 1 0 0 0-.9-.99c-.05 0-.08-.01-.11-.01H3a1.016 1.016 0 0 0-1 1v10a1.016 1.016 0 0 0 1 1h2v2.81l2.69-2.32.57-.49H15a1 1 0 0 1 0 2H9l-4.35 3.76A.969.969 0 0 1 4 20a1.059 1.059 0 0 1-.42-.09A1 1 0 0 1 3 19v-3a3.009 3.009 0 0 1-3-3V3a3.009 3.009 0 0 1 3-3h18a2.832 2.832 0 0 1 .3.02A3 3 0 0 1 24 3z"
+                            ></path>
+                            <path
+                              fill="#000000"
+                              fill-rule="evenodd"
+                              d="M24 11a1 1 0 0 1-1 1h-3v3a1 1 0 0 1-2 0v-3h-3a1 1 0 0 1 0-2h3V7a1 1 0 0 1 2 0v3h3a1 1 0 0 1 1 1z"
+                            ></path>
+                          </g>
+                        </svg>
+                      </div>
+                    </div>
+                  </>
                 ) : (
                   <>
-                    {selectedMessage.map((message) => (
+                    {selectedMessage?.map((message) => (
                       <>
                         {/* Start detail message */}
                         {message.isSender ? (

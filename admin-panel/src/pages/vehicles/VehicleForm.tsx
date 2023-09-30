@@ -75,11 +75,14 @@ export default function VehicleForm({
     register,
     reset,
     handleSubmit,
+    getValues,
+    setValue,
     formState: { isSubmitting, errors },
   } = useForm({
     mode: "all",
   });
 
+  console.log("Vehicle:", vehicle);
   const dispatch = useAppDispatch();
 
   const getModelsByCollection = async (collectionValue: Collection | null) => {
@@ -115,6 +118,7 @@ export default function VehicleForm({
         ward: vehicle.ward,
       };
       setSelectedLocation(defaultLocation);
+
       //get images and set selected images
       const defaultImage: ImageFile[] = vehicle.images.map((image) => ({
         // name: image.publicId,
@@ -160,7 +164,9 @@ export default function VehicleForm({
 
   useEffect(() => {
     if (vehicle && colors.length > 0) {
-      const defaultColor = colors.find((x) => x.color === vehicle.color);
+      const defaultColor = colors.find(
+        (x) => x.color === vehicle.specifications.color
+      );
       setSelectedColor(defaultColor || null);
     }
   }, [vehicle, colors]);
@@ -536,17 +542,6 @@ export default function VehicleForm({
                 {loadingFetchBrand ? (
                   <LoadingButton />
                 ) : (
-                  // <Autocomplete
-                  //   size="small"
-                  //   disablePortal
-                  //   value={selectedBrand}
-                  //   options={brands}
-                  //   getOptionLabel={(option) => option.name}
-                  //   onChange={(event, newValue) =>
-                  //     handleBrandChange(event, newValue)
-                  //   }
-                  //   renderInput={(params) => <TextField {...params} />}
-                  // />
                   <Autocomplete
                     size="small"
                     disablePortal

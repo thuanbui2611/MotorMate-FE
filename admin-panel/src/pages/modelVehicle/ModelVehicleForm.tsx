@@ -32,6 +32,9 @@ import Chip from "@mui/material/Chip";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import LoaderButton from "../../app/components/LoaderButton";
+import { TextField } from "@mui/material";
+import FormAddColors from "../../app/components/FormAddColors";
+import { current } from "@reduxjs/toolkit";
 //
 
 interface Props {
@@ -49,7 +52,6 @@ export default function CollectionForm({
     control,
     register,
     setValue,
-    getValues,
     reset,
     handleSubmit,
     formState: { isSubmitting, errors },
@@ -64,30 +66,36 @@ export default function CollectionForm({
   const [defaultCollection, setDefaultCollection] = useState<Collection | null>(
     null
   );
+  const [addColorDialog, setAddColorDialog] = useState(false);
+  const [colorAdded, setColorAdded] = useState(false);
+
+  const fetchColors = async () => {
+    try {
+      const response = await agent.Color.all();
+      setColors(response);
+      setLoadingFetchColors(false);
+    } catch (error) {
+      console.error("Error fetching colors:", error);
+    }
+  };
+
+  const fetchCollection = async () => {
+    try {
+      const response = await agent.Collection.all();
+      setCollections(response);
+      setLoadingFetchCollection(false);
+    } catch (error) {
+      console.error("Error fetching collections:", error);
+    }
+  };
 
   useEffect(() => {
-    const fetchColors = async () => {
-      try {
-        const response = await agent.Color.all();
-        setColors(response);
-        setLoadingFetchColors(false);
-      } catch (error) {
-        console.error("Error fetching colors:", error);
-      }
-    };
-    const fetchCollection = async () => {
-      try {
-        const response = await agent.Collection.all();
-        setCollections(response);
-        setLoadingFetchCollection(false);
-      } catch (error) {
-        console.error("Error fetching collections:", error);
-      }
-    };
-
     fetchColors();
     fetchCollection();
   }, []);
+  useEffect(() => {
+    fetchColors();
+  }, [colorAdded]);
 
   useEffect(() => {
     if (modelVehicle) {
@@ -134,10 +142,12 @@ export default function CollectionForm({
     cancelEdit();
   };
 
+  const checkAddedColor = () => {
+    setColorAdded((cur) => !cur);
+  };
   //Test multiple select
 
   const [defaultColors, setDefaultColors] = useState<string[]>([]);
-  const [colorsSelected, setColorsSelected] = useState<Color[]>([]);
 
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;
@@ -175,6 +185,10 @@ export default function CollectionForm({
     });
   };
   //End
+
+  const cancelAddNewColorForm = () => {
+    setAddColorDialog((cur) => !cur);
+  };
   return (
     <>
       <Dialog
@@ -279,53 +293,66 @@ export default function CollectionForm({
                 {loadingFetchColors ? (
                   <LoaderButton />
                 ) : (
-                  <FormControl sx={{ width: "100%" }}>
-                    <InputLabel id="demo-multiple-chip-label">Color</InputLabel>
-
-                    <Select
-                      required
-                      multiple
-                      value={defaultColors}
-                      onChange={handleChange}
-                      input={
-                        <OutlinedInput
-                          id="select-multiple-chip"
-                          label="Color"
-                        />
-                      }
-                      renderValue={(selected) => (
-                        <Box
-                          sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}
-                        >
-                          {selected.map((value) => {
-                            const selectedColor = colors.find(
-                              (c) => c.color === value
-                            );
-                            if (selectedColor) {
-                              return (
-                                <Chip
-                                  key={selectedColor.id}
-                                  label={selectedColor.color}
-                                />
-                              );
-                            }
-                            return null;
-                          })}
-                        </Box>
-                      )}
-                      MenuProps={MenuProps}
+                  <>
+                    <FormControl
+                      sx={{ minWidth: "100px", width: "fit-content" }}
                     >
-                      {colors.map((color) => (
+                      <InputLabel id="demo-multiple-chip-label">
+                        Color
+                      </InputLabel>
+
+                      <Select
+                        required
+                        multiple
+                        value={defaultColors}
+                        onChange={handleChange}
+                        input={
+                          <OutlinedInput
+                            id="select-multiple-chip"
+                            label="Color"
+                          />
+                        }
+                        renderValue={(selected) => (
+                          <Box
+                            sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}
+                          >
+                            {selected.map((value) => {
+                              const selectedColor = colors.find(
+                                (c) => c.color === value
+                              );
+                              if (selectedColor) {
+                                return (
+                                  <Chip
+                                    key={selectedColor.id}
+                                    label={selectedColor.color}
+                                  />
+                                );
+                              }
+                              return null;
+                            })}
+                          </Box>
+                        )}
+                        MenuProps={MenuProps}
+                      >
                         <MenuItem
-                          key={color.id}
-                          value={color.color}
-                          style={getStyles(color.color, defaultColors, theme)}
+                          style={{ fontWeight: 600, backgroundColor: "gray" }}
+                          onClick={() => setAddColorDialog(true)}
                         >
-                          {color.color}
+                          Add new colors
                         </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
+
+                        {colors.map((color) => (
+                          <MenuItem
+                            key={color.id}
+                            value={color.color}
+                            style={getStyles(color.color, defaultColors, theme)}
+                          >
+                            {color.color}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </>
                 )}
               </div>
             </CardBody>
@@ -350,6 +377,12 @@ export default function CollectionForm({
             </CardFooter>
           </form>
         </Card>
+        {addColorDialog && (
+          <FormAddColors
+            isColorAdded={checkAddedColor}
+            cancelForm={cancelAddNewColorForm}
+          />
+        )}
       </Dialog>
     </>
   );

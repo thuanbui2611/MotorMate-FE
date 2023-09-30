@@ -69,7 +69,7 @@ export default function ProductHomepage({ products }: Props) {
                     </button>
                   </div>
                   <div
-                    className="p-1 px-2 md:px-5 md:py-1 min-h-[90px]"
+                    className="p-1 px-2 md:px-5 md:py-1 h-fit"
                     style={{ lineClamp: 2 }}
                   >
                     <div className="w-full inline-flex items-center justify-between">
@@ -139,10 +139,9 @@ export default function ProductHomepage({ products }: Props) {
                     <ul className="flex">
                       <li>
                         <svg
+                          className="w-[2vw] md:w-4 md:h-4 lg:w-5 lg:h-5"
                           viewBox="0 0 24 24"
                           xmlns="http://www.w3.org/2000/svg"
-                          width="20"
-                          height="20"
                           fill="#ffc73a"
                         >
                           <path
@@ -153,10 +152,9 @@ export default function ProductHomepage({ products }: Props) {
                       </li>
                       <li>
                         <svg
+                          className="w-[2vw] md:w-4 md:h-4 lg:w-5 lg:h-5"
                           viewBox="0 0 24 24"
                           xmlns="http://www.w3.org/2000/svg"
-                          width="20"
-                          height="20"
                           fill="#ffc73a"
                         >
                           <path
@@ -167,10 +165,9 @@ export default function ProductHomepage({ products }: Props) {
                       </li>
                       <li>
                         <svg
+                          className="w-[2vw] md:w-4 md:h-4 lg:w-5 lg:h-5"
                           viewBox="0 0 24 24"
                           xmlns="http://www.w3.org/2000/svg"
-                          width="20"
-                          height="20"
                           fill="#ffc73a"
                         >
                           <path
@@ -181,10 +178,9 @@ export default function ProductHomepage({ products }: Props) {
                       </li>
                       <li>
                         <svg
+                          className="w-[2vw] md:w-4 md:h-4 lg:w-5 lg:h-5"
                           viewBox="0 0 24 24"
                           xmlns="http://www.w3.org/2000/svg"
-                          width="20"
-                          height="20"
                           fill="#ffc73a"
                         >
                           <path
@@ -195,10 +191,9 @@ export default function ProductHomepage({ products }: Props) {
                       </li>
                       <li>
                         <svg
+                          className="w-[2vw] md:w-4 md:h-4 lg:w-5 lg:h-5"
                           viewBox="0 0 24 24"
                           xmlns="http://www.w3.org/2000/svg"
-                          width="20"
-                          height="20"
                         >
                           <defs>
                             <linearGradient

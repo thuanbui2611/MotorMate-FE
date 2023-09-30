@@ -5,6 +5,7 @@ import { AccountSlice } from "../../pages/account/AccountSlice";
 import { CollectionSlice } from "../../pages/collection/CollectionSlice";
 import { ModelVehicleSlice } from "../../pages/modelVehicle/ModelVehicleSlice";
 import { VehicleSlice } from "../../pages/vehicles/VehicleSlice";
+import { ColorSlice } from "../../pages/color/ColorSlice";
 
 export const store = configureStore({
   reducer: {
@@ -13,6 +14,7 @@ export const store = configureStore({
     collection: CollectionSlice.reducer,
     modelVehicle: ModelVehicleSlice.reducer,
     vehicle: VehicleSlice.reducer,
+    color: ColorSlice.reducer,
   },
 });
 

@@ -7,7 +7,9 @@ import { useAppDispatch, useAppSelector } from "../../app/store/ConfigureStore";
 import {
   deleteVehicleAsync,
   getVehiclesAsync,
+  getVehiclesPendingAsync,
   setVehicleParams,
+  setVehiclePendingParams,
   vehicleSelectors,
 } from "./VehicleSlice";
 import { useEffect, useState } from "react";
@@ -25,17 +27,16 @@ export default function VehiclePending() {
   const [vehicleDeleted, setVehicleDeleted] = useState<Vehicle>({} as Vehicle);
   const [openDetails, setOpenDetails] = useState(false);
 
-  const vehicles = useAppSelector(vehicleSelectors.selectAll);
-  const { vehicleLoaded, metaData, vehicleParams } = useAppSelector(
-    (state) => state.vehicle
-  );
+  const vehiclesPending = useAppSelector(vehicleSelectors.selectAll);
+  const { vehiclePendingLoaded, metaData, vehiclePendingParams } =
+    useAppSelector((state) => state.vehicle);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (!vehicleLoaded) {
-      dispatch(getVehiclesAsync());
+    if (!vehiclePendingLoaded) {
+      dispatch(getVehiclesPendingAsync());
     }
-  }, [dispatch, vehicleParams]);
+  }, [dispatch, vehiclePendingParams]);
 
   const handleSelectVehicle = (actionName: string, vehicle?: Vehicle) => {
     setOpenEditForm((cur) => !cur);
@@ -160,7 +161,7 @@ export default function VehiclePending() {
                 </tr>
               </thead>
               <tbody>
-                {vehicles.map((vehicle: Vehicle) => (
+                {vehiclesPending.map((vehicle: Vehicle) => (
                   <tr
                     key={vehicle.id}
                     className="dark:border-strokedark border-[#eee] border-b"
@@ -177,7 +178,9 @@ export default function VehiclePending() {
                         <h5 className="font-medium text-black dark:text-white">
                           {vehicle.specifications.modelName}
                         </h5>
-                        <p className="text-sm">{vehicle.color}</p>
+                        <p className="text-sm">
+                          {vehicle.specifications.color}
+                        </p>
                       </div>
                     </td>
 
@@ -203,12 +206,12 @@ export default function VehiclePending() {
                     </td>
                     <td className="py-5 px-4">
                       <p className="text-black dark:text-white">
-                        {vehicle.price}
+                        {vehicle.price.toLocaleString()}
                       </p>
                     </td>
 
                     <td className="py-5 px-4">
-                      <p className="inline-flex rounded-full bg-blue-500 bg-opacity-30 py-1 px-3 text-sm font-medium text-blue-800 dark:text-blue-300">
+                      <p className="inline-flex rounded-full bg-blue-500 bg-opacity-30 py-1 px-3 text-sm font-bold text-blue-800 dark:text-blue-300">
                         Pending
                       </p>
                     </td>
@@ -321,9 +324,9 @@ export default function VehiclePending() {
             <Pagination
               metaData={metaData}
               onPageChange={(page: number) => {
-                dispatch(setVehicleParams({ pageNumber: page }));
+                dispatch(setVehiclePendingParams({ pageNumber: page }));
               }}
-              loading={vehicleLoaded}
+              loading={vehiclePendingLoaded}
             />
           </div>
         </div>

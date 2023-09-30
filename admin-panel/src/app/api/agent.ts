@@ -122,14 +122,18 @@ const ModelVehicle = {
 
 const Color = {
   all: () => requests.get("api/color/all"),
+  list: (params: URLSearchParams) => requests.get("api/color", params),
   details: (id: string) => requests.get(`api/color/${id}`),
   create: (values: {}) => requests.post("api/color", values),
+  bulkCreate: (values: {}) => requests.post("api/color/bulk", values),
   update: (id: string, values: {}) => requests.put(`api/color/${id}`, values),
   delete: (id: string) => requests.delete(`api/color/${id}`),
 };
 
 const Vehicle = {
   list: (params: URLSearchParams) => requests.get("api/vehicle", params),
+  listVehicleByStatus: (params: URLSearchParams, statusRoute: string) =>
+    requests.get(`api/vehicle/status/${statusRoute}`, params),
   details: (id: string) => requests.get(`api/vehicle/${id}`),
   create: (values: {}) => requests.post("api/vehicle", values),
   update: (id: string, values: {}) => requests.put(`api/vehicle/${id}`, values),

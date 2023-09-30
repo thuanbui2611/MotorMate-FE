@@ -14,10 +14,14 @@ interface VehicleState {
   vehicle: Vehicle | null;
   vehicleLoaded: boolean;
   vehicleParams: VehicleParams;
+  vehiclePending: Vehicle | null;
+  vehiclePendingLoaded: boolean;
+  vehiclePendingParams: VehicleParams;
   metaData: MetaData | null;
 }
 
 const vehiclesAdapter = createEntityAdapter<Vehicle>();
+const vehiclesPendingAdapter = createEntityAdapter<Vehicle>();
 
 function getAxiosParams(vehicleParams: VehicleParams) {
   const params = new URLSearchParams();
@@ -55,6 +59,21 @@ export const getVehiclesAsync = createAsyncThunk<
   const params = getAxiosParams(ThunkAPI.getState().vehicle.vehicleParams);
   try {
     const response = await agent.Vehicle.list(params);
+    ThunkAPI.dispatch(setMetaData(response.metaData));
+    return response.items;
+  } catch (error: any) {
+    return ThunkAPI.rejectWithValue({ error: error.data });
+  }
+});
+
+export const getVehiclesPendingAsync = createAsyncThunk<
+  Vehicle[],
+  void,
+  { state: RootState }
+>("vehicle/getVehiclesPendingAsync", async (_, ThunkAPI) => {
+  const params = getAxiosParams(ThunkAPI.getState().vehicle.vehicleParams);
+  try {
+    const response = await agent.Vehicle.listVehicleByStatus(params, "pending");
     ThunkAPI.dispatch(setMetaData(response.metaData));
     return response.items;
   } catch (error: any) {
@@ -116,6 +135,9 @@ export const VehicleSlice = createSlice({
   initialState: vehiclesAdapter.getInitialState<VehicleState>({
     vehicle: null,
     vehicleLoaded: false,
+    vehiclePending: null,
+    vehiclePendingLoaded: false,
+    vehiclePendingParams: initParams(),
     vehicleParams: initParams(),
     metaData: null,
   }),
@@ -123,6 +145,12 @@ export const VehicleSlice = createSlice({
     setVehicleParams: (state, action) => {
       state.vehicleParams = {
         ...state.vehicleParams,
+        ...action.payload,
+      };
+    },
+    setVehiclePendingParams: (state, action) => {
+      state.vehiclePendingParams = {
+        ...state.vehiclePendingParams,
         ...action.payload,
       };
     },
@@ -154,6 +182,18 @@ export const VehicleSlice = createSlice({
         console.log("Get vehicles rejected: ", action);
         state.vehicleLoaded = false;
       });
+    builder
+      .addCase(getVehiclesPendingAsync.fulfilled, (state, action) => {
+        vehiclesPendingAdapter.setAll(state, action.payload);
+        state.vehiclePendingLoaded = false;
+      })
+      .addCase(getVehiclesPendingAsync.pending, (state, action) => {
+        state.vehiclePendingLoaded = true;
+      })
+      .addCase(getVehiclesPendingAsync.rejected, (state, action) => {
+        console.log("Get vehiclesPending rejected: ", action);
+        state.vehiclePendingLoaded = false;
+      });
 
     builder.addCase(addVehicleAsync.fulfilled, (state, action) => {
       toast.success("Add vehicle successfully!");
@@ -175,9 +215,14 @@ export const vehicleSelectors = vehiclesAdapter.getSelectors(
   (state: RootState) => state.vehicle
 );
 
+export const vehiclePendingSelectors = vehiclesPendingAdapter.getSelectors(
+  (state: RootState) => state.vehicle
+);
+
 export const {
   setVehicleParams,
   resetVehicleParams,
+  setVehiclePendingParams,
   setMetaData,
   setPageNumber,
 } = VehicleSlice.actions;
