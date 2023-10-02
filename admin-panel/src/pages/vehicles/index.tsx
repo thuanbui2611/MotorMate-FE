@@ -25,6 +25,8 @@ import { Collection } from "../../app/models/Collection";
 import { ModelVehicle } from "../../app/models/ModelVehicle";
 import LoaderButton from "../../app/components/LoaderButton";
 import dataCityVN from "./../../app/data/dataCityVN.json";
+import SelectPageSize from "../../app/components/SelectPageSize";
+import { set } from "react-hook-form";
 
 export default function VehiclesPage() {
   const [searchParams, setSearchParams] = useSearchParams({});
@@ -50,6 +52,7 @@ export default function VehiclesPage() {
     useState(true);
   const [loadingFetchBrandsFilter, setLoadingFetchBrandsFilter] =
     useState(true);
+  const [paramsCompleted, setParamsCompleted] = useState(false);
 
   const vehicles = useAppSelector(vehicleSelectors.selectAll);
   const { vehicleLoaded, metaData, vehicleParams } = useAppSelector(
@@ -98,8 +101,14 @@ export default function VehiclesPage() {
   // End of Get data for filter
   //Get valueFilter from url params, then set selected filterValue and request (dispatch).
   useEffect(() => {
-    if (modelsParam !== "") {
-      if (models.length > 0) {
+    if (
+      models.length > 0 &&
+      collections.length > 0 &&
+      brands.length > 0 &&
+      cities.length > 0
+    ) {
+      //Model filter
+      if (modelsParam !== "") {
         if (modelsParam) {
           const modelsFiltered = modelsParam.split("%2C");
           const modelsSelected = models.filter((model) =>
@@ -111,19 +120,14 @@ export default function VehiclesPage() {
           dispatch(setVehicleParams({ Models: [] }));
           setSelectedModels([]);
         }
+      } else {
+        setSearchParams((prev) => {
+          prev.delete("Models");
+          return prev;
+        });
       }
-    } else {
-      setSearchParams((prev) => {
-        prev.delete("Models");
-        return prev;
-      });
-      dispatch(setVehicleParams({ Models: [] }));
-    }
-  }, [modelsParam, models]);
-
-  useEffect(() => {
-    if (collectionsParam !== "") {
-      if (collections.length > 0) {
+      //Collection filter
+      if (collectionsParam !== "") {
         if (collectionsParam) {
           const collectionsFiltered = collectionsParam.split("%2C");
           const collectionsSelected = collections.filter((collection) =>
@@ -135,19 +139,14 @@ export default function VehiclesPage() {
           dispatch(setVehicleParams({ Collections: [] }));
           setSelectedCollections([]);
         }
+      } else {
+        setSearchParams((prev) => {
+          prev.delete("Collections");
+          return prev;
+        });
       }
-    } else {
-      setSearchParams((prev) => {
-        prev.delete("Collections");
-        return prev;
-      });
-      dispatch(setVehicleParams({ Collections: [] }));
-    }
-  }, [collectionsParam, collections]);
-
-  useEffect(() => {
-    if (brandsParam !== "") {
-      if (brands.length > 0) {
+      //Brand filter
+      if (brandsParam !== "") {
         if (brandsParam) {
           const brandsFiltered = brandsParam.split("%2C");
           const brandsSelected = brands.filter((brand) =>
@@ -159,19 +158,14 @@ export default function VehiclesPage() {
           dispatch(setVehicleParams({ Brands: [] }));
           setSelectedBrands([]);
         }
+      } else {
+        setSearchParams((prev) => {
+          prev.delete("Brands");
+          return prev;
+        });
       }
-    } else {
-      setSearchParams((prev) => {
-        prev.delete("Brands");
-        return prev;
-      });
-      dispatch(setVehicleParams({ Brands: [] }));
-    }
-  }, [brandsParam, brands]);
-
-  useEffect(() => {
-    if (citiesParam !== "") {
-      if (cities.length > 0) {
+      //City filter
+      if (citiesParam !== "") {
         if (citiesParam) {
           const citiesFiltered = citiesParam.split("%2C");
           const citiesSelected = cities.filter((city) =>
@@ -183,15 +177,45 @@ export default function VehiclesPage() {
           dispatch(setVehicleParams({ Cities: [] }));
           setSelectedCities([]);
         }
+      } else {
+        setSearchParams((prev) => {
+          prev.delete("Cities");
+          return prev;
+        });
+        dispatch(setVehicleParams({ Cities: [] }));
       }
-    } else {
-      setSearchParams((prev) => {
-        prev.delete("Cities");
-        return prev;
-      });
-      dispatch(setVehicleParams({ Cities: [] }));
-    }
-  }, [citiesParam, cities]);
+      setParamsCompleted(true);
+    } else
+      switch (true) {
+        case models === null || typeof models === "undefined":
+          console.log("models is null or undefined");
+          setParamsCompleted(true);
+          break;
+        case collections === null || typeof collections === "undefined":
+          console.log("collections is null or undefined");
+          setParamsCompleted(true);
+          break;
+        case brands === null || typeof brands === "undefined":
+          console.log("brands is null or undefined");
+          setParamsCompleted(true);
+          break;
+        case cities === null || typeof cities === "undefined":
+          console.log("cities is null or undefined");
+          setParamsCompleted(true);
+          break;
+        default:
+      }
+  }, [
+    modelsParam,
+    models,
+    citiesParam,
+    cities,
+    brandsParam,
+    brands,
+    collectionsParam,
+    collections,
+  ]);
+  // End of Get valueFilter from url params, then set selected filterValue and request (dispatch).
 
   useEffect(() => {
     if (!pageNum || pageNum === "1") {
@@ -207,10 +231,10 @@ export default function VehiclesPage() {
   //End of get valueFilter from url params and set selected
 
   useEffect(() => {
-    if (!vehicleLoaded) {
+    if (!vehicleLoaded && paramsCompleted) {
       dispatch(getVehiclesAsync());
     }
-  }, [dispatch, vehicleParams]);
+  }, [dispatch, vehicleParams, paramsCompleted]);
 
   // Handle change filter
   const handleSelectCollectionChange = (
@@ -352,6 +376,10 @@ export default function VehiclesPage() {
   };
 
   const cancelConfirmDeleteDialog = () => setConfirmDeleteDiaglog(false);
+
+  const handleSelectPageSize = (pageSize: number) => {
+    dispatch(setVehicleParams({ pageSize }));
+  };
 
   if (!metaData) {
     return <Loader />;
@@ -530,7 +558,9 @@ export default function VehiclesPage() {
                   <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
                     Status
                   </th>
-                  <th className="py-4 px-4"></th>
+                  <th className="py-4 px-4">
+                    <SelectPageSize onSelectPageSize={handleSelectPageSize} />
+                  </th>
                 </tr>
               </thead>
               <tbody>

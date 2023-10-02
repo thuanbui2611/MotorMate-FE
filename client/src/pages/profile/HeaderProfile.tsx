@@ -1,10 +1,10 @@
 import { UserDetail } from "../../app/models/User";
 
 interface Props {
-  user: UserDetail | undefined;
+  userDetail: UserDetail | undefined;
 }
 
-export default function ProfileInfo({ user }: Props) {
+export default function ProfileInfo({ userDetail }: Props) {
   return (
     <>
       <section className="pb-12">
@@ -19,7 +19,7 @@ export default function ProfileInfo({ user }: Props) {
             <div className="relative">
               <img
                 className="object-cover w-40 h-40 ml-0 -mb-16 rounded-full md:ml-4 lg:ml-12 lg:-mb-24 lg:w-60 lg:h-60"
-                src="https://cafefcdn.com/thumb_w/640/203337114487263232/2022/3/3/photo1646280815645-1646280816151764748403.jpg"
+                src={userDetail?.picture}
                 alt="Cover image profile"
               />
               <label
@@ -56,7 +56,7 @@ export default function ProfileInfo({ user }: Props) {
 
             <div className="w-fit h-40 ml-0 -mb-32 md:ml-2 lg:ml-4 lg:-mb-48 lg:h-60 flex items-center">
               <div className="text-black font-bold text-center text-2xl lg:text-4xl mt-5 ">
-                {user?.fullName}
+                {userDetail?.fullName}
               </div>
             </div>
           </div>

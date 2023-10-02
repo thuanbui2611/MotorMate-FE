@@ -21,7 +21,11 @@ import { Box, TextField } from "@mui/material";
 import SelectCityVN from "../../app/components/SelectCityVN";
 import { UserDetail } from "../../app/models/User";
 import { deleteImages, uploadImages } from "../../app/utils/Cloudinary";
-import { addVehicleAsync, updateVehicleAsync } from "./VehicleSlice";
+import {
+  addVehicleAsync,
+  setVehicleParams,
+  updateVehicleAsync,
+} from "./VehicleSlice";
 import { useAppDispatch } from "../../app/store/ConfigureStore";
 import { ConvertDatetimeToDate } from "../../app/utils/ConvertDatetimeToDate";
 import { Image } from "../../app/models/Image";
@@ -82,7 +86,6 @@ export default function VehicleForm({
     mode: "all",
   });
 
-  console.log("Vehicle:", vehicle);
   const dispatch = useAppDispatch();
 
   const getModelsByCollection = async (collectionValue: Collection | null) => {
@@ -233,12 +236,21 @@ export default function VehicleForm({
           return prevFiles;
         }
       }
+      // Check limit file upload
+      if (files?.length! > 5) {
+        toast.error("You can only upload 5 images");
+        return prevFiles;
+      }
+      // Check prev files limit
+      if (imagesSelected && imagesSelected.length + files!.length > 5) {
+        toast.error("You can only use 5 images");
+        return prevFiles;
+      }
       if (prevFiles) {
         // Convert the FileList to an array
         const prevFilesArray = Array.from(prevFiles);
         // Convert the new files to an array
         const newFilesArray = Array.from(files || []);
-
         // Concatenate the previous and new files arrays
         const combinedFilesArray = [...prevFilesArray, ...newFilesArray];
         // Convert the combined files array back to a FileList
@@ -246,6 +258,7 @@ export default function VehicleForm({
         return combinedFilesList;
       }
       // If there were no previous files, simply use the new FileList
+
       return files;
     });
     console.log("Files change:", files);
@@ -474,6 +487,7 @@ export default function VehicleForm({
                     renderInput={(params) => (
                       <TextField
                         {...params}
+                        required
                         InputProps={{
                           ...params.InputProps,
                           startAdornment: (
@@ -540,7 +554,7 @@ export default function VehicleForm({
                   Brand
                 </label>
                 {loadingFetchBrand ? (
-                  <LoadingButton />
+                  <LoaderButton />
                 ) : (
                   <Autocomplete
                     size="small"
@@ -572,6 +586,7 @@ export default function VehicleForm({
                     renderInput={(params) => (
                       <TextField
                         {...params}
+                        required
                         InputProps={{
                           ...params.InputProps,
                           startAdornment: (
@@ -609,6 +624,7 @@ export default function VehicleForm({
                   renderInput={(params) => (
                     <TextField
                       {...params}
+                      required
                       className={`${
                         !selectedBrand && "bg-blue-gray-50 rounded-md"
                       }`}
@@ -636,6 +652,7 @@ export default function VehicleForm({
                     renderInput={(params) => (
                       <TextField
                         {...params}
+                        required
                         className={`${
                           !selectedCollection && " bg-blue-gray-50 rounded-md"
                         }`}
@@ -661,6 +678,7 @@ export default function VehicleForm({
                   renderInput={(params) => (
                     <TextField
                       {...params}
+                      required
                       className={`${
                         !selectedModel && "bg-blue-gray-50 rounded-md"
                       }`}
@@ -847,9 +865,9 @@ export default function VehicleForm({
             </div>
 
             {imagesSelected && (
-              <div className="flex gap-3 mb-5 rounded-md bg-[#F5F7FB] py-4 px-8 w-full scrollbar overflow-auto">
+              <div className="flex w-full h-[190px] gap-3 mb-5 rounded-md bg-[#F5F7FB] py-4 px-8 w-full scrollbar overflow-auto">
                 {imagesSelected.map((image, index) => (
-                  <div className="max-w-[128px] h-40 pb-4" key={index}>
+                  <div className="w-1/5 pb-4 pb-4" key={index}>
                     <div className="flex items-center justify-between pb-1 ">
                       <span className="truncate text-xs font-medium text-[#07074D]">
                         {image.name}
@@ -882,60 +900,62 @@ export default function VehicleForm({
                     </div>
                     <div className="flex"></div>
                     <img
-                      className="h-full w-40"
+                      className="h-full w-full"
                       src={image.url || undefined}
                       alt="Logo brand preview"
                     />
                   </div>
                 ))}
-                <div className=" border w-40 h-40">
-                  <input
-                    type="file"
-                    name="logo"
-                    id="file"
-                    className="sr-only"
-                    onChange={handleImageChange}
-                    accept="image/*"
-                    multiple
-                  />
-                  <label
-                    htmlFor="file"
-                    className="w-full h-full flex flex-col justify-center items-center hover:bg-blue-gray-50 cursor-pointer"
-                  >
-                    <svg
-                      width="30px"
-                      height="30px"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
+                {imagesSelected && imagesSelected?.length < 5 && (
+                  <div className=" border w-40 h-full">
+                    <input
+                      type="file"
+                      name="logo"
+                      id="file"
+                      className="sr-only"
+                      onChange={handleImageChange}
+                      accept="image/*"
+                      multiple
+                    />
+                    <label
+                      htmlFor="file"
+                      className="w-full h-full flex flex-col justify-center items-center hover:bg-blue-gray-50 cursor-pointer"
                     >
-                      <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-                      <g
-                        id="SVGRepo_tracerCarrier"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      ></g>
-                      <g id="SVGRepo_iconCarrier">
-                        <circle
-                          cx="12"
-                          cy="12"
-                          r="10"
-                          stroke="#1C274C"
-                          strokeWidth="1.2"
-                        ></circle>
-                        <path
-                          d="M15 12L12 12M12 12L9 12M12 12L12 9M12 12L12 15"
-                          stroke="#1C274C"
-                          strokeWidth="1.2"
+                      <svg
+                        width="30px"
+                        height="30px"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                        <g
+                          id="SVGRepo_tracerCarrier"
                           strokeLinecap="round"
-                        ></path>
-                      </g>
-                    </svg>
-                    <span className=" text-xs font-medium ml-1">
-                      Add more images
-                    </span>
-                  </label>
-                </div>
+                          strokeLinejoin="round"
+                        ></g>
+                        <g id="SVGRepo_iconCarrier">
+                          <circle
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="#1C274C"
+                            strokeWidth="1.2"
+                          ></circle>
+                          <path
+                            d="M15 12L12 12M12 12L9 12M12 12L12 9M12 12L12 15"
+                            stroke="#1C274C"
+                            strokeWidth="1.2"
+                            strokeLinecap="round"
+                          ></path>
+                        </g>
+                      </svg>
+                      <span className=" text-xs font-medium ml-1">
+                        Add more images
+                      </span>
+                    </label>
+                  </div>
+                )}
               </div>
             )}
 

@@ -33,14 +33,8 @@ export const router = createBrowserRouter([
         element: <DefaultLayout />,
         children: [
           { path: "", element: <HomePage /> },
-          {
-            path: "profile/:username/",
-            element: <Profile />,
-            children: [
-              { path: "", element: <ProfileDetails /> },
-              { path: "settings", element: <SettingProfile /> },
-            ],
-          },
+          { path: "profile/:username/", element: <Profile /> },
+          { path: "profile/:username/settings", element: <SettingProfile /> },
           { path: "about", element: <About /> },
           { path: "contact", element: <Contact /> },
           { path: "blog", element: <BlogPage /> },

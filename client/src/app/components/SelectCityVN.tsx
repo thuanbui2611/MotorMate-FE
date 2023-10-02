@@ -3,10 +3,11 @@ import { City, District, Location, Ward } from "../models/Address";
 import { Autocomplete, TextField } from "@mui/material";
 import dataCityVN from "./../data/dataCityVN.json";
 interface Props {
+  defaultLocation?: Location | null;
   onSelect: (value: Location) => void;
 }
 
-export default function SelectCityVN({ onSelect }: Props) {
+export default function SelectCityVN({ onSelect, defaultLocation }: Props) {
   const [selectedCity, setSelectedCity] = useState<City | null>(null);
   const [selectedDistrict, setSelectedDistrict] = useState<District | null>(
     null
@@ -17,16 +18,41 @@ export default function SelectCityVN({ onSelect }: Props) {
 
   const cities = dataCityVN as City[];
   useEffect(() => {
+    //Check default value and set to selected value
+    if (defaultLocation && cities.length > 0) {
+      const defaultCity = cities.find(
+        (city) =>
+          city.Name.toLowerCase().trim() ===
+          defaultLocation.city.toLowerCase().trim()
+      );
+      setSelectedCity(defaultCity || null);
+      const defaultDistrict = defaultCity?.Districts.find(
+        (district) =>
+          district.Name.toLowerCase().trim() ===
+          defaultLocation.district.toLowerCase().trim()
+      );
+      setSelectedDistrict(defaultDistrict || null);
+      const defaultWard = defaultDistrict?.Wards.find(
+        (ward) =>
+          ward.Name.toLowerCase().trim() ===
+          defaultLocation.ward.toLowerCase().trim()
+      );
+      setSelectedWard(defaultWard || null);
+    }
+  }, [defaultLocation, cities]);
+
+  useEffect(() => {
+    //return value to parent component when selectedWard change
     if (selectedWard?.Name && selectedCity?.Name && selectedDistrict?.Name) {
       let location: Location = {
         city: selectedCity.Name,
         ward: selectedWard.Name,
         district: selectedDistrict.Name,
       };
-
       onSelect(location);
     }
   }, [selectedWard]);
+
   const handleCityChange = (
     event: React.SyntheticEvent<Element, Event>,
     newValue: City | null
@@ -100,9 +126,6 @@ export default function SelectCityVN({ onSelect }: Props) {
     return a.localeCompare(b);
   };
 
-  // const handleLocationChange = (event: any)=>{
-
-  // }
   return (
     <>
       <Autocomplete
@@ -120,11 +143,7 @@ export default function SelectCityVN({ onSelect }: Props) {
             InputProps={{
               ...params.InputProps,
             }}
-            // {...register("cityId", {
-            //   required: "City is required",
-            // })}
-            // error={!!errors.cityId}
-            // helperText={errors?.cityId?.message as string}
+            required
           />
         )}
       />
@@ -142,12 +161,8 @@ export default function SelectCityVN({ onSelect }: Props) {
           <TextField
             {...params}
             label="District"
-            className={`${!selectedCity && "bg-gray-200 rounded-md"}`}
-            // {...register("districtId", {
-            //   required: "District is required",
-            // })}
-            // error={!!errors.districtId}
-            // helperText={errors?.districtId?.message as string}
+            className={`${!selectedCity && "bg-blue-gray-50 rounded-md"}`}
+            required
           />
         )}
       />
@@ -164,12 +179,8 @@ export default function SelectCityVN({ onSelect }: Props) {
           <TextField
             {...params}
             label="Wards"
-            className={`${!selectedDistrict && "bg-gray-200 rounded-md"}`}
-            // {...register("districtId", {
-            //   required: "District is required",
-            // })}
-            // error={!!errors.districtId}
-            // helperText={errors?.districtId?.message as string}
+            className={`${!selectedDistrict && "bg-blue-gray-50 rounded-md"}`}
+            required
           />
         )}
       />

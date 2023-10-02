@@ -24,7 +24,7 @@ export default function BlogPage() {
               {/* <span className="text-transparent bg-clip-text bg-gradient-to-br from-indigo-600 from-20% via-blue-600 via-30% to-green-600">
                 {" "}
               </span> */}
-              <span className="text-gradient ">Motomate</span>
+              <span className="text-gradient ">Motormate</span>
             </h1>
             <p className="mt-8 text-gray-700">
               Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolores

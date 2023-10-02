@@ -3,7 +3,7 @@ import { TextField } from "@mui/material";
 import { useForm, FieldValues } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import agentTest from "../../app/api/agentTest";
+import agentTest from "../../app/api/agent";
 import LoginGoogle from "../../app/components/LoginGoogle";
 
 export default function ForgotPassword() {

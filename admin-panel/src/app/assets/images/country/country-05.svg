@@ -20,12 +20,12 @@
 </g>
 <defs>
 <linearGradient id="paint0_linear_22_85" x1="0" y1="0.411499" x2="0" y2="7.07816" gradientUnits="userSpaceOnUse">
-<stop stop-color="white"/>
-<stop offset="1" stop-color="#F0F0F0"/>
+<stop stopColor="white"/>
+<stop offset="1" stopColor="#F0F0F0"/>
 </linearGradient>
 <linearGradient id="paint1_linear_22_85" x1="0" y1="0.411499" x2="0" y2="6.63372" gradientUnits="userSpaceOnUse">
-<stop stop-color="#FF2E3B"/>
-<stop offset="1" stop-color="#FC0D1B"/>
+<stop stopColor="#FF2E3B"/>
+<stop offset="1" stopColor="#FC0D1B"/>
 </linearGradient>
 <clipPath id="clip0_22_85">
 <rect width="20.2222" height="14" fill="white"/>

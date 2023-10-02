@@ -146,11 +146,7 @@ export default function SelectCityVN({ onSelect, defaultLocation }: Props) {
             InputProps={{
               ...params.InputProps,
             }}
-            // {...register("cityId", {
-            //   required: "City is required",
-            // })}
-            // error={!!errors.cityId}
-            // helperText={errors?.cityId?.message as string}
+            required
           />
         )}
       />
@@ -169,11 +165,7 @@ export default function SelectCityVN({ onSelect, defaultLocation }: Props) {
             {...params}
             label="District"
             className={`${!selectedCity && "bg-blue-gray-50 rounded-md"}`}
-            // {...register("districtId", {
-            //   required: "District is required",
-            // })}
-            // error={!!errors.districtId}
-            // helperText={errors?.districtId?.message as string}
+            required
           />
         )}
       />
@@ -191,11 +183,7 @@ export default function SelectCityVN({ onSelect, defaultLocation }: Props) {
             {...params}
             label="Wards"
             className={`${!selectedDistrict && "bg-blue-gray-50 rounded-md"}`}
-            // {...register("districtId", {
-            //   required: "District is required",
-            // })}
-            // error={!!errors.districtId}
-            // helperText={errors?.districtId?.message as string}
+            required
           />
         )}
       />

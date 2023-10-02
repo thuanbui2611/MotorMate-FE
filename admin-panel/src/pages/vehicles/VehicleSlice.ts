@@ -122,7 +122,7 @@ export const deleteVehicleAsync = createAsyncThunk(
 function initParams() {
   return {
     pageNumber: 1,
-    pageSize: 2,
+    pageSize: 5,
     Brands: [],
     Collections: [],
     Models: [],

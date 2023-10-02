@@ -11,7 +11,7 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    agent.Product.all()
+    agent.Vehicle.all()
       .then((products) => setProducts(products))
       .catch((error) => console.log(error))
       .finally(() => setLoading(false));

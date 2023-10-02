@@ -1,13 +1,9 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import { store } from "../store/ConfigureStore";
-import { useNavigate } from "react-router-dom";
 import { PaginatedResponse } from "../models/Pagination";
 
 axios.defaults.baseURL = "https://motormate.azurewebsites.net/";
-// const axios = axios.create({
-//   baseURL: "https://motormate.azurewebsites.net/",
-// });
 axios.defaults.headers.post["Content-Type"] = "application/json";
 const responseBody = (response: AxiosResponse) => response.data;
 axios.interceptors.request.use((config) => {
@@ -34,16 +30,16 @@ axios.interceptors.response.use(
     // const navigate = useNavigate();
     switch (status) {
       case 400:
-        // if ((data as any).errors) {
-        //   const modalStateErrors: string[] = [];
-        //   for (const key in (data as any).errors) {
-        //     if ((data as any).errors[key]) {
-        //       modalStateErrors.push((data as any).errors[key]);
-        //     }
-        //   }
-        //   toast.error((data as any).errors[0].description);
-        //   throw modalStateErrors.flat();
-        // }
+        if ((data as any).errors) {
+          const modalStateErrors: string[] = [];
+          for (const key in (data as any).errors) {
+            if ((data as any).errors[key]) {
+              modalStateErrors.push((data as any).errors[key]);
+            }
+          }
+          toast.error((data as any).errors[0].description);
+          throw modalStateErrors.flat();
+        }
         console.log(data);
         toast.error((data as any).message);
         break;

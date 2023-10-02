@@ -21,10 +21,7 @@ export async function uploadImage(image: File): Promise<Image | null> {
       }
     );
     if (uploadCloudinary.ok) {
-      console.log(uploadCloudinary);
       const imgData = await uploadCloudinary.json();
-      console.log("imgData to json: ", imgData);
-      console.log("publid id: ", imgData.public_id);
       let response: Image = {
         image: imgData.url.toString(),
         publicId: imgData.public_id.toString(),
@@ -60,7 +57,6 @@ export async function uploadImages(files: FileList): Promise<Image[] | null> {
         throw new Error("Unable to upload image");
       }
       const data = await response.json();
-      console.log(`Image ${i + 1} uploaded successfully:`, data.secure_url);
       results.push({
         image: data.secure_url,
         publicId: data.public_id,
@@ -74,7 +70,6 @@ export async function uploadImages(files: FileList): Promise<Image[] | null> {
 }
 
 export async function deleteImage(publicId: string) {
-  console.log("Start delete image: ");
   if (!publicId) return console.log("No public id");
   try {
     const timestamp = new Date().getTime();
@@ -109,7 +104,6 @@ export async function deleteImage(publicId: string) {
 }
 
 export async function deleteImages(images: Image[]) {
-  console.log("Start delete image: ");
   // if (!images.map((image) => image.publicId)) return console.log("No public id");
   try {
     for (let i = 0; i < images.length; i++) {

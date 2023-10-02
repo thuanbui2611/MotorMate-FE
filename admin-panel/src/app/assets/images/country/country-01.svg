@@ -23,8 +23,8 @@
 <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_22_27" result="shape"/>
 </filter>
 <linearGradient id="paint0_linear_22_27" x1="0.953613" y1="1.30035" x2="0.953613" y2="5.74479" gradientUnits="userSpaceOnUse">
-<stop stop-color="white"/>
-<stop offset="1" stop-color="#F0F0F0"/>
+<stop stopColor="white"/>
+<stop offset="1" stopColor="#F0F0F0"/>
 </linearGradient>
 <clipPath id="clip0_22_27">
 <rect width="20.2222" height="14" fill="white"/>

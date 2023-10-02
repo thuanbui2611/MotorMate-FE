@@ -204,8 +204,8 @@ export default function ProductHomepage({ products }: Props) {
                               y2="0"
                             >
                               {/* set value for color, $.1 -> 10%, $.2 -> 20%... */}
-                              <stop offset="20%" stop-color="#ffc73a" />
-                              <stop offset="20%" stop-color="#ffffff" />
+                              <stop offset="20%" stopColor="#ffc73a" />
+                              <stop offset="20%" stopColor="#ffffff" />
                             </linearGradient>
                           </defs>
                           <path

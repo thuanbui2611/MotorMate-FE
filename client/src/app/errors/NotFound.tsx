@@ -396,8 +396,8 @@ export default function NotFound() {
                     x2="242.075"
                     y2="224.179"
                   >
-                    <stop offset="0" stop-color="#fff" />
-                    <stop offset="1" stop-color="#fff" stop-opacity="0" />
+                    <stop offset="0" stopColor="#fff" />
+                    <stop offset="1" stopColor="#fff" stop-opacity="0" />
                   </linearGradient>
                   <path
                     className="st17"

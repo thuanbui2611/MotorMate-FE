@@ -1,9 +1,9 @@
 import { createAsyncThunk, createSlice, isAnyOf } from "@reduxjs/toolkit";
 import { User } from "../../app/models/User";
 import { FieldValues } from "react-hook-form";
-import agentTest from "../../app/api/agentTest";
 import jwt_decode from "jwt-decode";
 import { toast } from "react-toastify";
+import agent from "../../app/api/agent";
 
 interface AccountState {
   user: User | null;
@@ -17,7 +17,7 @@ export const signInUser = createAsyncThunk<User, FieldValues>(
   "account/signInUser",
   async (data, thunkAPI) => {
     try {
-      const userLogin = await agentTest.Account.login(data);
+      const userLogin = await agent.Account.login(data);
       localStorage.setItem("user", JSON.stringify(userLogin));
       return userLogin.token;
     } catch (error) {
@@ -30,7 +30,7 @@ export const signInByGoogle = createAsyncThunk<User, string>(
   "account/signInByGoogle",
   async (tokenCredential, thunkAPI) => {
     try {
-      const userLogin = await agentTest.Account.loginGoogle({
+      const userLogin = await agent.Account.loginGoogle({
         tokenCredential,
       });
       localStorage.setItem("user", JSON.stringify(userLogin));
@@ -66,7 +66,7 @@ export const getUserDetails = createAsyncThunk<User>(
   "account/getUserDetails",
   async (_, thunkAPI) => {
     try {
-      const user = await agentTest.Account.userDetails();
+      const user = await agent.Account.userDetail();
       return user;
     } catch (error) {
       return thunkAPI.rejectWithValue({ error: (error as any).data });

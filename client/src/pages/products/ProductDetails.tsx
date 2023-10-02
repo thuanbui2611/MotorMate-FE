@@ -6,21 +6,26 @@ import ReviewProduct from "./ReviewProduct";
 import ProductSuggested from "./ProductSuggested";
 import Loading from "../../app/components/Loading";
 import NotFound from "../../app/errors/NotFound";
+import { Vehicle } from "../../app/models/Vehicle";
 
 export default function ProductDetails() {
   const { id } = useParams<{ id: string }>();
-  const [book, setBook] = useState<Product | null>(null);
+  const [product, setProduct] = useState<Vehicle | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    agent.Product.details(parseInt(id as string))
-      .then((product) => setBook(product))
+    window.scrollTo(0, 0); // Scroll to the top of the page
+  }, []);
+
+  useEffect(() => {
+    agent.Vehicle.details(id!)
+      .then((product) => setProduct(product))
       .catch((error) => console.log(error))
       .finally(() => setLoading(false));
   }, [id]);
 
   if (loading) return <Loading />;
-  if (!book) return <NotFound />;
+  if (!product) return <NotFound />;
   return (
     <>
       {/* <!-- Features --> */}
@@ -37,10 +42,10 @@ export default function ProductDetails() {
               >
                 <div className="w-full lg:py-6 mt-6 lg:mt-0">
                   <h2 className="text-sm title-font text-gray-500 tracking-widest">
-                    {book.category}
+                    {product.specifications.brandName}
                   </h2>
                   <h1 className="text-gray-900 text-3xl title-font font-medium mb-1">
-                    {book.title}
+                    {product.specifications.modelName}
                   </h1>
                   <div className="flex mb-4">
                     <span className="flex items-center">
@@ -178,7 +183,7 @@ export default function ProductDetails() {
                       </a>
                     </span>
                   </div>
-                  <p className="leading-relaxed">{book.description}</p>
+                  <p className="leading-relaxed">Decription bla bla bla</p>
                   <div className="flex mt-6 items-center pb-2 border-b-2 border-gray-100 mb-5">
                     <div className="flex">
                       <span className="mr-3">Color</span>
@@ -214,10 +219,10 @@ export default function ProductDetails() {
                   <hr></hr>
                   <div className="flex pt-5">
                     <span className="title-font font-medium text-2xl text-gray-900">
-                      ${book.price}
+                      ${product.price}
                     </span>
                     <a
-                      href={"/check-out/" + book.id}
+                      href={"/check-out/" + product.id}
                       className="flex ml-auto text-white bg-orange-based border-0 py-2 px-6 focus:outline-none hover:bg-orange-600 rounded"
                     >
                       Rent now
@@ -249,7 +254,7 @@ export default function ProductDetails() {
                   <div className="" aria-labelledby="Image of book">
                     <img
                       className="object-scale-down shadow-xl h-96 w-full  shadow-gray-200 rounded-xl dark:shadow-gray-900/[.2]"
-                      src={book.image}
+                      src={product.images[0].image!}
                       alt="Image Description"
                     />
                   </div>

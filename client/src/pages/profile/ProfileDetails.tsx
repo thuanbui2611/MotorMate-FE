@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import HeaderProfile from "./HeaderProfile";
 import agent from "../../app/api/agent";
 import { Product } from "../../app/models/Product";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -9,36 +8,28 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import Loading from "../../app/components/Loading";
 import VehicleForm from "./VehicleForm";
-import { useParams } from "react-router-dom";
 import { UserDetail } from "../../app/models/User";
-import agentTest from "../../app/api/agentTest";
+import { Vehicle } from "../../app/models/Vehicle";
 
-export default function ProfileDetails() {
+interface Props {
+  userDetail: UserDetail | undefined;
+}
+export default function ProfileDetails({ userDetail }: Props) {
   const [loading, setLoading] = useState(true);
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<Vehicle[]>([]);
   const [openVehicleForm, setOpenVehicleForm] = useState(false);
-  const [userDetail, setUserDetail] = useState<UserDetail>();
   const [currentUserLogin, setCurrentUserLogin] = useState<UserDetail>();
-  const { username } = useParams();
   useEffect(() => {
-    agent.Product.all()
+    agent.Vehicle.all()
       .then((products) => setProducts(products))
       .catch((error) => console.log(error))
       .finally(() => setLoading(false));
 
-    //Fetch user detail
-    if (username) {
-      agentTest.Account.getDetailsByUserName(username)
-        .then((user) => setUserDetail(user))
-        .catch((error) => console.log(error))
-        .finally(() => setLoading(false));
-    }
-
     //Fetch user login
-    agentTest.Account.userDetails()
-    .then((userLogin) => setCurrentUserLogin(userLogin))
-    .catch((error) => console.log(error))
-    .finally(() => setLoading(false));
+    agent.Account.userDetail()
+      .then((userLogin) => setCurrentUserLogin(userLogin))
+      .catch((error) => console.log(error))
+      .finally(() => setLoading(false));
   }, []);
 
   const cancelVehicleForm = () => {
@@ -290,7 +281,7 @@ export default function ProfileDetails() {
                                   <img
                                     className="object-scale-down h-40 rounded-t-xl hover:scale-110 transition-all"
                                     style={{ width: "100vw" }}
-                                    src={product.image}
+                                    src={product.images[0].image!}
                                     alt="Image Book"
                                   />
                                   <button
@@ -367,19 +358,19 @@ export default function ProfileDetails() {
                                       </g>
                                     </svg>
                                     <p className="mt-2 text-xs uppercase text-gray-600 dark:text-gray-400">
-                                      {product.category}
+                                      {product.specifications.brandName}
                                     </p>
                                   </div>
 
                                   <h3 className="mt-2 text-base font-medium text-gray-800 group-hover:text-blue-600 dark:text-gray-300 dark:group-hover:text-white line-clamp-1 text-justify">
-                                    {product.title}
+                                    {product.specifications.modelName}
                                   </h3>
                                 </div>
 
                                 <div className="flex">
                                   <div className="w-2/3 px-5 pb-3">
                                     <p className="text-base font-bold text-blue-500 dark:text-blue-300">
-                                      100.000 VND
+                                      {product.price.toLocaleString()} VND
                                     </p>
                                     <span className="block -mt-1 text-xs font-semibold text-gray-400 ">
                                       per day
@@ -403,7 +394,13 @@ export default function ProfileDetails() {
         </div>
       </div>
 
-      {openVehicleForm && <VehicleForm currentUser={currentUserLogin} cancelForm={cancelVehicleForm} />}
+      {openVehicleForm && (
+        <VehicleForm
+          vehicle={null}
+          userLoggedIn={currentUserLogin}
+          cancelForm={cancelVehicleForm}
+        />
+      )}
     </>
   );
 }

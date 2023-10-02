@@ -17,5 +17,5 @@ export interface Ward {
 export interface Location {
   ward: string;
   district: string;
-  city: string
+  city: string;
 }

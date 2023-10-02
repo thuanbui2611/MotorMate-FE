@@ -3,9 +3,9 @@ import { TextField } from "@mui/material";
 import { useForm, FieldValues } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import agentTest from "../../app/api/agentTest";
 import LoginGoogle from "../../app/components/LoginGoogle";
 import { Link } from "react-router-dom";
+import agent from "../../app/api/agent";
 
 export default function ChangePassword() {
   const navigate = useNavigate();
@@ -22,7 +22,7 @@ export default function ChangePassword() {
     try {
       if (!resetCode)
         toast.error("Reset code is required, please check your email !");
-      await agentTest.Account.ChangePassword(data, resetCode!);
+      await agent.Account.ChangePassword(data, resetCode!);
       toast.success("Your password has been changed successfully");
     } catch (error) {
       console.log(error);
