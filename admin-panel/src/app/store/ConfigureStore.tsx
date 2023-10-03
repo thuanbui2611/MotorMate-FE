@@ -6,6 +6,8 @@ import { CollectionSlice } from "../../pages/collection/CollectionSlice";
 import { ModelVehicleSlice } from "../../pages/modelVehicle/ModelVehicleSlice";
 import { VehicleSlice } from "../../pages/vehicles/VehicleSlice";
 import { ColorSlice } from "../../pages/color/ColorSlice";
+import { VehiclePendingSlice } from "../../pages/vehicles/VehiclePendingSlice";
+import { VehicleDeniedSlice } from "../../pages/vehicles/VehicleDeniedSlice";
 
 export const store = configureStore({
   reducer: {
@@ -14,6 +16,8 @@ export const store = configureStore({
     collection: CollectionSlice.reducer,
     modelVehicle: ModelVehicleSlice.reducer,
     vehicle: VehicleSlice.reducer,
+    vehiclePending: VehiclePendingSlice.reducer,
+    vehicleDenied: VehicleDeniedSlice.reducer,
     color: ColorSlice.reducer,
   },
 });

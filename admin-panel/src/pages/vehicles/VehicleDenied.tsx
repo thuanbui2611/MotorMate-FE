@@ -10,7 +10,7 @@ import VehicleDetails from "./VehicleDetails";
 import VehicleForm from "./VehicleForm";
 import { deleteImages } from "../../app/utils/Cloudinary";
 import Loader from "../../app/components/Loader";
-import { deleteVehiclePendingAsync, getVehiclesPendingAsync, setVehiclePendingParams, vehiclePendingSelectors } from "./VehiclePendingSlice";
+import { deleteVehicleDeniedAsync, getVehiclesDeniedAsync, setVehicleDeniedParams, vehicleDeniedSelectors } from "./VehicleDeniedSlice";
 
 export default function VehiclePending() {
   const [actionName, setActionName] = useState(String);
@@ -20,16 +20,16 @@ export default function VehiclePending() {
   const [vehicleDeleted, setVehicleDeleted] = useState<Vehicle>({} as Vehicle);
   const [openDetails, setOpenDetails] = useState(false);
 
-  const vehiclesPending = useAppSelector(vehiclePendingSelectors.selectAll);
-  const { vehiclesPendingLoaded, metaData, vehiclesPendingParams } =
-    useAppSelector((state) => state.vehiclePending);
+  const vehiclesDenied = useAppSelector(vehicleDeniedSelectors.selectAll);
+  const { vehiclesDeniedLoaded, metaData, vehiclesDeniedParams } =
+    useAppSelector((state) => state.vehicleDenied);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (!vehiclesPendingLoaded) {
-      dispatch(getVehiclesPendingAsync());
+    if (!vehiclesDeniedLoaded) {
+      dispatch(getVehiclesDeniedAsync());
     }
-  }, [dispatch, vehiclesPendingParams]);
+  }, [dispatch, vehiclesDeniedParams]);
 
   const handleSelectVehicle = (actionName: string, vehicle?: Vehicle) => {
     setOpenEditForm((cur) => !cur);
@@ -43,7 +43,7 @@ export default function VehiclePending() {
     if (vehicleDeleted.images) {
       await deleteImages(vehicleDeleted.images);
     }
-    await dispatch(deleteVehiclePendingAsync(vehicleDeleted.id));
+    await dispatch(deleteVehicleDeniedAsync(vehicleDeleted.id));
   }
 
   const cancelEditForm = () => {
@@ -73,7 +73,7 @@ export default function VehiclePending() {
   } else
     return (
       <>
-        <Breadcrumb pageName="Vehicles Pending" />
+        <Breadcrumb pageName="Vehicles Denied" />
         <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
           <div className="flex justify-end">
             <button
@@ -154,13 +154,13 @@ export default function VehiclePending() {
                 </tr>
               </thead>
               <tbody>
-                {vehiclesPending.map((vehicle: Vehicle) => (
+                {vehiclesDenied.map((vehicle: Vehicle) => (
                   <tr
                     key={vehicle.id}
                     className="dark:border-strokedark border-[#eee] border-b"
                   >
                     <td className="py-5 px-4 pl-9 xl:pl-11">
-                      <div className="flex items-center h-full">
+                      <div className="flex items-center h-full ">
                       <div className="h-12 w-12 rounded-md">
                         <img
                           className="h-full w-full rounded-md object-cover"
@@ -208,7 +208,7 @@ export default function VehiclePending() {
 
                     <td className="py-5 px-4">
                       <p className="inline-flex rounded-full bg-blue-500 bg-opacity-30 py-1 px-3 text-sm font-bold text-blue-800 dark:text-blue-300">
-                        {vehicle.status}
+                        Pending
                       </p>
                     </td>
                     <td className="py-5 px-4">
@@ -320,9 +320,9 @@ export default function VehiclePending() {
             <Pagination
               metaData={metaData}
               onPageChange={(page: number) => {
-                dispatch(setVehiclePendingParams({ pageNumber: page }));
+                dispatch(setVehicleDeniedParams({ pageNumber: page }));
               }}
-              loading={vehiclesPendingLoaded}
+              loading={vehiclesDeniedLoaded}
             />
           </div>
         </div>

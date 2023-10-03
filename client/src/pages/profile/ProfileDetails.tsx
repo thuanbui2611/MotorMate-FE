@@ -20,10 +20,10 @@ export default function ProfileDetails({ userDetail }: Props) {
   const [openVehicleForm, setOpenVehicleForm] = useState(false);
   const [currentUserLogin, setCurrentUserLogin] = useState<UserDetail>();
   useEffect(() => {
-    agent.Vehicle.all()
-      .then((products) => setProducts(products))
-      .catch((error) => console.log(error))
-      .finally(() => setLoading(false));
+    // agent.Vehicle.all()
+    //   .then((products) => setProducts(products))
+    //   .catch((error) => console.log(error))
+    //   .finally(() => setLoading(false));
 
     //Fetch user login
     agent.Account.userDetail()

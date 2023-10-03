@@ -18,7 +18,7 @@ import Collection from "../../pages/collection";
 import ModelVehicle from "../../pages/modelVehicle";
 import VehiclesPage from "../../pages/vehicles";
 import VehiclePending from "../../pages/vehicles/VehiclePending";
-import VehicleDeny from "../../pages/vehicles/VehicleDeny";
+import VehicleDenied from "../../pages/vehicles/VehicleDenied";
 
 export const router = createBrowserRouter([
   {
@@ -37,7 +37,7 @@ export const router = createBrowserRouter([
           { path: "model-vehicles", element: <ModelVehicle /> },
           { path: "vehicles", element: <VehiclesPage /> },
           { path: "vehicles/pending", element: <VehiclePending /> },
-          { path: "vehicles/deny", element: <VehicleDeny /> },
+          { path: "vehicles/deny", element: <VehicleDenied /> },
           { path: "profile", element: <Profile /> },
           { path: "forms/form-elements", element: <FormElements /> },
           { path: "forms/form-layout", element: <FormLayout /> },

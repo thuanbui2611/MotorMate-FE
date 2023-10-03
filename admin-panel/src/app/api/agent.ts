@@ -133,6 +133,7 @@ const Vehicle = {
   details: (id: string) => requests.get(`api/vehicle/${id}`),
   create: (values: {}) => requests.post("api/vehicle", values),
   update: (id: string, values: {}) => requests.put(`api/vehicle/${id}`, values),
+  updateStatusVehicle: (vehicleId: string, statusNumber: number) => requests.post(`api/vehicle/${vehicleId}/status/${statusNumber}`, {}),
   delete: (id: string) => requests.delete(`api/vehicle/${id}`),
 };
 

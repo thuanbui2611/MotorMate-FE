@@ -23,7 +23,6 @@ import { UserDetail } from "../../app/models/User";
 import { deleteImages, uploadImages } from "../../app/utils/Cloudinary";
 import {
   addVehicleAsync,
-  setVehicleParams,
   updateVehicleAsync,
 } from "./VehicleSlice";
 import { useAppDispatch } from "../../app/store/ConfigureStore";
@@ -32,6 +31,7 @@ import { Image } from "../../app/models/Image";
 import { LoadingButton } from "@mui/lab";
 import { toast } from "react-toastify";
 import LoaderButton from "../../app/components/LoaderButton";
+import { updateVehiclePendingAsync } from "./VehiclePendingSlice";
 interface Props {
   vehicle: Vehicle | null;
   cancelEdit: () => void;
@@ -413,6 +413,18 @@ export default function VehicleForm({
 
           //Update images request to formData
           formData.images = resultUpload;
+          //Update to vehicle approved or pending or deny
+          switch(vehicle.status.trim().toLowerCase()){
+            case "approved":
+              await dispatch(updateVehicleAsync(formData));
+              break;
+            case "pending":
+              await dispatch(updateVehiclePendingAsync(formData));
+              break;
+            case "deny":
+              break;
+            
+          }
           await dispatch(updateVehicleAsync(formData));
         }
       } else {

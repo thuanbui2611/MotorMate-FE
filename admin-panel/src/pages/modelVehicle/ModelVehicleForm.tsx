@@ -335,7 +335,7 @@ export default function CollectionForm({
                         MenuProps={MenuProps}
                       >
                         <MenuItem
-                          style={{ fontWeight: 600, backgroundColor: "gray" }}
+                          style={{ fontWeight: 600, backgroundColor: "#f0f0f0" }}
                           onClick={() => setAddColorDialog(true)}
                         >
                           Add new colors

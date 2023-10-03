@@ -542,7 +542,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                 (pathname === "/vehicles" && "!text-white")
                               }
                             >
-                              All
+                              Approved
                             </NavLink>
                           </li>
                           <li>

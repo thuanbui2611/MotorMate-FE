@@ -437,10 +437,31 @@ export default function VehiclesPage() {
               <span>Add new vehicle</span>
             </button>
           </div>
-          <div className="flex overflow-auto scrollbar max-h-[333px]">
-            <p className="w-fit">Filter:</p>
+          <div className="flex overflow-auto scrollbar max-h-[333px] justify-center items-center">
             <div className="flex flex-wrap space-x-2 space-y-2 justify-start items-center mb-2 w-full">
-              <div className="max-w-[25%] min-w-[170px] flex-1 ml-2 mt-2">
+              <div className="max-w-[25%] min-w-[220px] flex-1  ml-2 mt-2">
+                {/* Filter city */}
+                {!cities ? (
+                  <LoaderButton />
+                ) : (
+                  <Autocomplete
+                    fullWidth={true}
+                    size="small"
+                    multiple={true}
+                    disablePortal
+                    value={selectedCities}
+                    options={cities}
+                    getOptionLabel={(option) => option.Name}
+                    onChange={(event, newValue) =>
+                      handleSelectCityChange(event, newValue)
+                    }
+                    renderInput={(params) => (
+                      <TextField {...params} placeholder="Cities" />
+                    )}
+                  />
+                )}
+              </div>
+              <div className="max-w-[25%] min-w-[170px] flex-1">
                 {/* Filter by models */}
                 {loadingFetchModelsFilter ? (
                   <LoaderButton />
@@ -484,7 +505,7 @@ export default function VehiclesPage() {
                   />
                 )}
               </div>
-              <div className="max-w-[25%] min-w-[150px] flex-1">
+              <div className="max-w-[25%] min-w-[170px] flex-1">
                 {/* Filter by brands */}
                 {loadingFetchBrandsFilter ? (
                   <LoaderButton />
@@ -506,28 +527,7 @@ export default function VehiclesPage() {
                   />
                 )}
               </div>
-              <div className="max-w-[25%] min-w-[220px] flex-1">
-                {/* Filter city */}
-                {!cities ? (
-                  <LoaderButton />
-                ) : (
-                  <Autocomplete
-                    fullWidth={true}
-                    size="small"
-                    multiple={true}
-                    disablePortal
-                    value={selectedCities}
-                    options={cities}
-                    getOptionLabel={(option) => option.Name}
-                    onChange={(event, newValue) =>
-                      handleSelectCityChange(event, newValue)
-                    }
-                    renderInput={(params) => (
-                      <TextField {...params} placeholder="Cities" />
-                    )}
-                  />
-                )}
-              </div>
+              
             </div>
           </div>
           <div className="max-w-full overflow-x-auto">
@@ -570,7 +570,8 @@ export default function VehiclesPage() {
                       key={vehicle.id}
                       className="dark:border-strokedark border-[#eee] border-b"
                     >
-                      <td className="flex items-center h-full py-5 px-4 pl-9 xl:pl-11">
+                      <td className="py-5 px-4 pl-9 xl:pl-11">
+                        <div className="flex items-center h-full ">
                         <div className="h-12 w-12 rounded-md">
                           <img
                             className="h-full w-full rounded-md object-cover"
@@ -586,6 +587,8 @@ export default function VehiclesPage() {
                             {vehicle.specifications.color}
                           </p>
                         </div>
+                        </div>
+                        
                       </td>
 
                       <td className="py-5 px-4">
