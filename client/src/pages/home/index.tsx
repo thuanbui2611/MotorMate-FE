@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
-import { Product } from "../../app/models/Product";
 import agent from "../../app/api/agent";
 import ProductHomepage from "./ProductHomepage";
 import Loading from "../../app/components/Loading";
-import { useAppDispatch } from "../../app/store/ConfigureStore";
 import { Link } from "react-router-dom";
 import BlogList from "./BlogList";
+import { Vehicle } from "../../app/models/Vehicle";
 export default function HomePage() {
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<Vehicle[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

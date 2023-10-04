@@ -1,10 +1,10 @@
 import { Outlet, OutletProps, useParams } from "react-router-dom";
-import HeaderProfile from "./HeaderProfile";
+import HeaderProfile from "../../app/components/HeaderProfile";
 import { useEffect, useState } from "react";
 import { UserDetail } from "../../app/models/User";
 import NotFound from "../../app/errors/NotFound";
 import Loading from "../../app/components/Loading";
-import ProfileDetails from "./ProfileDetails";
+import ProfileDetails from "../../app/components/ProfileDetails";
 import agent from "../../app/api/agent";
 
 export default function Profile() {
@@ -14,13 +14,14 @@ export default function Profile() {
 
   useEffect(() => {
     //Fetch user
+    setLoading(true);
     if (username) {
       agent.Account.getDetailsByUserName(username)
         .then((user) => setUserDetail(user))
         .catch((error) => console.log(error))
         .finally(() => setLoading(false));
     }
-  }, []);
+  }, [username]);
 
   if (loading) {
     return <Loading />;

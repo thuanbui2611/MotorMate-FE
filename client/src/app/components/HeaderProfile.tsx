@@ -1,4 +1,4 @@
-import { UserDetail } from "../../app/models/User";
+import { UserDetail } from "../models/User";
 
 interface Props {
   userDetail: UserDetail | undefined;

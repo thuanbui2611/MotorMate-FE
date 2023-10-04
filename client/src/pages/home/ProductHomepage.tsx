@@ -1,13 +1,14 @@
-import { Product } from "../../app/models/Product";
 import { useSpringCarousel } from "react-spring-carousel";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { store } from "../../app/store/ConfigureStore";
+import { Vehicle } from "../../app/models/Vehicle";
 interface Props {
-  products: Product[];
+  products: Vehicle[];
 }
 export default function ProductHomepage({ products }: Props) {
   const [currentSlide, setCurrentSlide] = useState(products[0].id);
-
+  const userLogin = store.getState().account.user;
   const {
     carouselFragment,
     slideToPrevItem, // go back to previous slide
@@ -40,7 +41,7 @@ export default function ProductHomepage({ products }: Props) {
           >
             <div>
               <Link
-                className="group flex flex-col bg-[#1D1D1D]/50 border md:border-2 border-[#FF3D00] shadow-xl rounded-lg md:rounded-2xl hover:shadow-2xl transition"
+                className="group flex flex-col bg-[#1D1D1D]/50 border md:border-2 border-[#FF7E06] shadow-xl rounded-lg md:rounded-2xl hover:shadow-2xl transition"
                 key={product.id}
                 to={"/product-detail/" + product.id}
               >
@@ -67,6 +68,13 @@ export default function ProductHomepage({ products }: Props) {
                         ></path>
                       </svg>
                     </button>
+                    {userLogin &&
+                      userLogin.username.toLowerCase() ===
+                        product.owner.username.toLowerCase() && (
+                        <span className="absolute top-2 right-2 font-semibold px-1 z-1 h-fit w-fit text-[12px] shadow-md rounded-sm bg-orange-based text-white flex items-center justify-center">
+                          Owner
+                        </span>
+                      )}
                   </div>
                   <div
                     className="p-1 px-2 md:px-5 md:py-1 h-fit"
@@ -75,65 +83,72 @@ export default function ProductHomepage({ products }: Props) {
                     <div className="w-full inline-flex items-center justify-between">
                       <div className="flex items-center">
                         <svg
-                          viewBox="0 0 1024 1024"
-                          className="icon mr-[1px] md:mr-1 h-1 w-1 md:h-3 md:w-3 "
-                          version="1.1"
+                          className="icon"
+                          version="1.0"
+                          id="Layer_1"
                           xmlns="http://www.w3.org/2000/svg"
+                          xmlnsXlink="http://www.w3.org/1999/xlink"
+                          viewBox="0 0 64 64"
+                          enable-background="new 0 0 64 64"
+                          xmlSpace="preserve"
                           fill="#000000"
                         >
-                          <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                          <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                           <g
                             id="SVGRepo_tracerCarrier"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
                           ></g>
                           <g id="SVGRepo_iconCarrier">
-                            <path
-                              d="M522.24 81.984a308.288 308.288 0 0 0-308.352 308.352c0 224.96 308.352 461.632 308.352 461.632s85.056-65.6 165.888-160.256a22.4 22.4 0 0 0-15.744-38.4 22.016 22.016 0 0 0-17.152 8.512l-0.064-0.064 74.496-109.376 3.52 2.176a21.568 21.568 0 0 0-3.968 11.968 22.4 22.4 0 0 0 22.4 22.464 22.272 22.272 0 0 0 20.992-15.36c33.92-58.56 57.92-121.216 57.92-183.232A308.224 308.224 0 0 0 522.24 81.984z"
-                              fill=""
-                            ></path>
-                            <path
-                              d="M716.864 620.416m-22.4 0a22.4 22.4 0 1 0 44.8 0 22.4 22.4 0 1 0-44.8 0Z"
-                              fill=""
-                            ></path>
-                            <path
-                              d="M522.24 126.784a263.808 263.808 0 0 0-263.552 263.552c0 163.008 191.168 341.824 263.552 403.648 72.384-61.824 263.552-240.64 263.552-403.648A263.872 263.872 0 0 0 522.24 126.784z m0 432.576a172.032 172.032 0 1 1 0-344.064 172.032 172.032 0 0 1 0 344.064z"
-                              fill="#F15D43"
-                            ></path>
-                            <path
-                              d="M522.24 387.328m-127.168 0a127.168 127.168 0 1 0 254.336 0 127.168 127.168 0 1 0-254.336 0Z"
-                              fill="#FFFFFF"
-                            ></path>
-                            <path
-                              d="M186.304 936.384m-22.4 0a22.4 22.4 0 1 0 44.8 0 22.4 22.4 0 1 0-44.8 0Z"
-                              fill=""
-                            ></path>
-                            <path
-                              d="M263.04 913.984a22.464 22.464 0 0 0-22.4 22.4v0.064c0 12.288 10.112 22.4 22.4 22.4h595.2c12.288 0 22.4-10.048 22.4-22.4v-0.064a22.464 22.464 0 0 0-22.4-22.4h-595.2z"
-                              fill=""
-                            ></path>
-                            <path
-                              d="M292.8 359.36a16 16 0 0 1-15.744-18.816c25.6-144 153.28-183.616 158.656-185.216a16 16 0 0 1 9.152 30.656c-4.672 1.408-114.24 35.968-136.384 160.192a16 16 0 0 1-15.68 13.184z"
-                              fill="#FFFFFF"
-                            ></path>
+                            <g>
+                              <g>
+                                <path
+                                  fill="#171717"
+                                  d="M32,0C18.745,0,8,10.745,8,24c0,5.678,2.502,10.671,5.271,15l17.097,24.156C30.743,63.686,31.352,64,32,64 s1.257-0.314,1.632-0.844L50.729,39C53.375,35.438,56,29.678,56,24C56,10.745,45.255,0,32,0z M48.087,39h-0.01L32,61L15.923,39 h-0.01C13.469,35.469,10,29.799,10,24c0-12.15,9.85-22,22-22s22,9.85,22,22C54,29.799,50.281,35.781,48.087,39z"
+                                ></path>
+                                <path
+                                  fill="#171717"
+                                  d="M32,14c-5.523,0-10,4.478-10,10s4.477,10,10,10s10-4.478,10-10S37.523,14,32,14z M32,32 c-4.418,0-8-3.582-8-8s3.582-8,8-8s8,3.582,8,8S36.418,32,32,32z"
+                                ></path>
+                                <path
+                                  fill="#171717"
+                                  d="M32,10c-7.732,0-14,6.268-14,14s6.268,14,14,14s14-6.268,14-14S39.732,10,32,10z M32,36 c-6.627,0-12-5.373-12-12s5.373-12,12-12s12,5.373,12,12S38.627,36,32,36z"
+                                ></path>
+                              </g>
+                              <g>
+                                <path
+                                  fill="#FF7E06"
+                                  d="M32,12c-6.627,0-12,5.373-12,12s5.373,12,12,12s12-5.373,12-12S38.627,12,32,12z M32,34 c-5.522,0-10-4.477-10-10s4.478-10,10-10s10,4.477,10,10S37.522,34,32,34z"
+                                ></path>
+                                <path
+                                  fill="#FF7E06"
+                                  d="M32,2c-12.15,0-22,9.85-22,22c0,5.799,3.469,11.469,5.913,15h0.01L32,61l16.077-22h0.01 C50.281,35.781,54,29.799,54,24C54,11.85,44.15,2,32,2z M32,38c-7.732,0-14-6.268-14-14s6.268-14,14-14s14,6.268,14,14 S39.732,38,32,38z"
+                                ></path>
+                              </g>
+                              <path
+                                opacity="0.2"
+                                fill="#171717"
+                                d="M32,12c-6.627,0-12,5.373-12,12s5.373,12,12,12s12-5.373,12-12S38.627,12,32,12z M32,34 c-5.522,0-10-4.477-10-10s4.478-10,10-10s10,4.477,10,10S37.522,34,32,34z"
+                              ></path>
+                            </g>
                           </g>
                         </svg>
                         <p className="card-location uppercase text-white">
-                          Ho chi minh
+                          {product.city.replace(/Thành Phố |Tỉnh /g, "")}
                         </p>
                       </div>
                       <div className="flex items-center justify-center">
-                        <p className="card-brand flex-row uppercase text-white rounded-sm px-1 bg-orange-based justify-end">
-                          Honda
+                        <p className="card-brand px-[2px] text-center flex items-center justify-center md:px-1 flex-row uppercase text-white rounded-sm bg-orange-based">
+                          {product.specifications.brandName}
                         </p>
                       </div>
                     </div>
 
                     <h3 className="font-medium text-white group-hover:text-orange-based line-clamp-1 text-justify">
-                      Wave RSX
+                      {product.specifications.modelName}
                     </h3>
-                    <div className=" text-[8px] md:text-[10px] font-medium text-gray-400 group-hover:text-orange-based line-clamp-1 text-justify">
-                      Black
+                    <div className=" text-[8px] md:text-[10px] font-medium text-gray-300 group-hover:text-orange-based line-clamp-1 text-justify">
+                      {product.specifications.color}
                     </div>
 
                     <ul className="flex">
@@ -227,7 +242,7 @@ export default function ProductHomepage({ products }: Props) {
                         per day
                       </span>
                     </div>
-                    <button className="w-1/3 h-1/2 rounded-md md:text-sm md:mb-0 md:w-1/3 md:rounded-xl rounded-tr-none rounded-bl-none md:rounded-tr-none md:rounded-bl-none font-bold text-white transition-all bg-gradient-to-r from-[#FF6003] to-[#FF7E06] hover:brightness-125">
+                    <button className="flex items-center justify-center w-1/3 min-h-[50%] rounded-md md:mb-0 md:w-1/3 md:rounded-xl rounded-tr-none rounded-bl-none md:rounded-tr-none md:rounded-bl-none font-bold text-white transition-all bg-gradient-to-r from-[#FF6003] to-[#FF7E06] hover:brightness-125">
                       Rent Now
                     </button>
                   </div>

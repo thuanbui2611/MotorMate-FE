@@ -107,6 +107,14 @@ export default function MenuItemUser({ user }: Props) {
           </li>
           <li>
             <Link
+              to={"/profile/" + user.username + "/my-products"}
+              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+            >
+              My products
+            </Link>
+          </li>
+          <li>
+            <Link
               to="/profile-setting"
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
             >

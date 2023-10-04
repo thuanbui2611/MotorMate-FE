@@ -9,6 +9,14 @@ import {
 } from "@material-tailwind/react";
 import { Vehicle } from "../../app/models/Vehicle";
 import { ConvertDatetimeToDate } from "../../app/utils/ConvertDatetimeToDate";
+import { LoadingButton } from "@mui/lab";
+import { useState } from "react";
+import { useAppDispatch } from "../../app/store/ConfigureStore";
+import { removeVehiclePending } from "./VehiclePendingSlice";
+import agent from "../../app/api/agent";
+import { addVehicle, removeVehicle } from "./VehicleSlice";
+import { addVehicleDenied, removeVehicleDenied } from "./VehicleDeniedSlice";
+import { toast } from "react-toastify";
 
 interface Props {
   vehicle: Vehicle | null;
@@ -16,6 +24,55 @@ interface Props {
 }
 
 export default function VehicleDetails({ vehicle, onClose }: Props) {
+  const [isApproving, setIsApproving] = useState(false);
+  const [isDenying, setIsDenying] = useState(false);
+
+  const dispatch = useAppDispatch();
+  const handleSetStatus = async (vehicle: Vehicle, statusNumber: number) => {
+    try {
+      if (statusNumber === 1) {
+        setIsApproving(true);
+      } else if (statusNumber === 2) {
+        setIsDenying(true);
+      }
+      //0: pending, 1: approve, 2: deny
+      const response = await agent.Vehicle.updateStatusVehicle(
+        vehicle.id,
+        statusNumber
+      );
+      if (response) {
+        switch (statusNumber) {
+          case 1: //Approve
+            if (vehicle.status.trim().toLowerCase() === "pending") {
+              dispatch(removeVehiclePending(vehicle.id));
+            } else if (vehicle.status.trim().toLowerCase() === "denied") {
+              dispatch(removeVehicleDenied(vehicle.id));
+            }
+            dispatch(addVehicle(response));
+            toast.success(
+              "Approve vehicle: " + vehicle.licensePlate + " successfully"
+            );
+            break;
+          case 2: //Deny
+            if (vehicle.status.trim().toLowerCase() === "pending") {
+              dispatch(removeVehiclePending(vehicle.id));
+            } else if (vehicle.status.trim().toLowerCase() === "approved") {
+              dispatch(removeVehicle(vehicle.id));
+            }
+            dispatch(addVehicleDenied(response));
+            toast.success(
+              "Deny vehicle: " + vehicle.licensePlate + " successfully"
+            );
+            break;
+        }
+      }
+      setIsApproving(false);
+      setIsDenying(false);
+      onClose();
+    } catch (error) {
+      console.error("Error when update status", error);
+    }
+  };
   return (
     <>
       <Dialog
@@ -25,6 +82,27 @@ export default function VehicleDetails({ vehicle, onClose }: Props) {
         className="bg-transparent shadow-none w-fit"
       >
         <Card className="mx-auto ">
+          <button
+            type="button"
+            onClick={onClose}
+            className="absolute right-1 top-1 rounded-md bg-blue-gray-50 flex text-gray-500 hover:text-gray-800 hover:bg-blue-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+          >
+            <svg
+              className="h-5 w-5"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
           <CardHeader className=" mx-auto text-center w-fit px-10 bg-orange-500">
             <Typography
               variant="h3"
@@ -250,13 +328,33 @@ export default function VehicleDetails({ vehicle, onClose }: Props) {
                       </div>
                     </div>
                   </div>
-                  <div className="flex flex-wrap items-center justify-center">
-                    <button
-                      className="w-20 px-4 py-2 bg-blue-600 rounded-md text-white hover:bg-blue-600"
-                      onClick={onClose}
-                    >
-                      OK
-                    </button>
+                  <div className="flex flex-wrap items-center justify-center gap-6">
+                    {vehicle?.status.trim().toLowerCase() !== "approved" && (
+                      <LoadingButton
+                        loading={isApproving}
+                        disabled={isApproving || isDenying}
+                        type="submit"
+                        variant="contained"
+                        color="primary"
+                        sx={{ fontWeight: 600, width: "100px" }}
+                        onClick={() => handleSetStatus(vehicle!, 1)}
+                      >
+                        Approve
+                      </LoadingButton>
+                    )}
+                    {vehicle?.status.trim().toLowerCase() !== "denied" && (
+                      <LoadingButton
+                        loading={isDenying}
+                        disabled={isApproving || isDenying}
+                        type="submit"
+                        variant="contained"
+                        color="error"
+                        sx={{ fontWeight: 600, width: "100px" }}
+                        onClick={() => handleSetStatus(vehicle!, 2)}
+                      >
+                        Deny
+                      </LoadingButton>
+                    )}
                   </div>
                 </div>
               </div>

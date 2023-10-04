@@ -1,6 +1,9 @@
-@import "./font.css";
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;500;600;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 
+html,
+body {
+  font-family: "Montserrat", sans-serif;
+}
 /* Header */
 .text-gradient {
   background: linear-gradient(90deg, #ff6003, #ff7e06);
@@ -223,7 +226,7 @@
   }
 }
 
-/* Product Homepage card */
+/* Product Homepage */
 .bg-home-product {
   background-image: url("../images/cover/bg-home-products.png");
   background-size: cover;
@@ -234,17 +237,24 @@
     background-size: 100% 100%;
   }
 }
-
-.card-location {
-  font-size: 8px;
-}
-
+/* Product Homepage card */
+.card-location,
 .card-brand {
   font-size: 8px;
+}
+.icon {
+  width: 8px;
+  height: 8px;
 }
 .card-container span {
   margin-left: 2px;
   font-size: 9px;
+}
+.card-container button {
+  font-size: 12px;
+}
+.icon {
+  margin-right: 4px;
 }
 @media (max-width: 1150px) {
   .card-container {
@@ -253,10 +263,6 @@
     /* min-width: fit-content; */
   }
 
-  .icon {
-    width: 10px;
-    height: 10px;
-  }
   .card-container h3 {
     font-size: 12px;
   }
@@ -265,18 +271,27 @@
   }
 
   .card-container button {
-    font-size: 1.3vw;
+    font-size: 1vw;
   }
 
   .card-container span {
     font-size: 8px;
   }
+  .icon {
+    margin-right: 2px;
+  }
 }
 
 @media (max-width: 768px) {
-  .card-brand {
-    font-size: 4px;
-    padding-bottom: 0.3px;
+  .card-brand,
+  .card-location {
+    font-size: 1vw;
+  }
+
+  .icon {
+    margin-right: 2px;
+    width: 1vw;
+    height: 1vw;
   }
 
   .card-container span {
@@ -294,16 +309,6 @@
   .card-container h3 {
     margin-top: -5px;
     font-size: 8px;
-  }
-
-  .icon {
-    margin-bottom: 1px;
-    width: 6px;
-    height: 6px;
-  }
-
-  .card-location {
-    font-size: 1vw;
   }
 
   .card-container button {

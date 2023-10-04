@@ -1,4 +1,4 @@
-import HeaderProfile from "./HeaderProfile";
+import HeaderProfile from "../../app/components/HeaderProfile";
 
 export default function SettingProfile() {
   return (

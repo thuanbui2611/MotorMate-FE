@@ -1,30 +1,40 @@
 import { useEffect, useState } from "react";
-import agent from "../../app/api/agent";
-import { Product } from "../../app/models/Product";
+import agent from "../api/agent";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Pagination, Autoplay, Navigation } from "swiper";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-import Loading from "../../app/components/Loading";
-import VehicleForm from "./VehicleForm";
-import { UserDetail } from "../../app/models/User";
-import { Vehicle } from "../../app/models/Vehicle";
+import Loading from "./Loading";
+import VehicleForm from "../../pages/profile/VehicleForm";
+import { UserDetail } from "../models/User";
+import { useAppDispatch, useAppSelector } from "../store/ConfigureStore";
+import {
+  getProductsOfUserAsync,
+  profileSelectors,
+} from "../../pages/profile/ProfileSlice";
 
 interface Props {
   userDetail: UserDetail | undefined;
 }
 export default function ProfileDetails({ userDetail }: Props) {
   const [loading, setLoading] = useState(true);
-  const [products, setProducts] = useState<Vehicle[]>([]);
   const [openVehicleForm, setOpenVehicleForm] = useState(false);
   const [currentUserLogin, setCurrentUserLogin] = useState<UserDetail>();
-  useEffect(() => {
-    // agent.Vehicle.all()
-    //   .then((products) => setProducts(products))
-    //   .catch((error) => console.log(error))
-    //   .finally(() => setLoading(false));
 
+  const productsOfUser = useAppSelector(profileSelectors.selectAll);
+  const products = productsOfUser.filter(
+    (product) =>
+      product.owner.username.trim().toLowerCase() ===
+      userDetail?.userName.trim().toLowerCase()
+  );
+
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    //Fetch products of profileUser
+    if (userDetail) {
+      dispatch(getProductsOfUserAsync(userDetail?.id));
+    }
     //Fetch user login
     agent.Account.userDetail()
       .then((userLogin) => setCurrentUserLogin(userLogin))

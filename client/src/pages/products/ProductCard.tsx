@@ -1,12 +1,15 @@
 import { Link } from "react-router-dom";
 import { Product } from "../../app/models/Product";
 import { Vehicle } from "../../app/models/Vehicle";
+import { store } from "../../app/store/ConfigureStore";
+import { User } from "../../app/models/User";
 
 interface Props {
   product: Vehicle;
+  userLogin: User | null;
 }
 
-export default function ProductCard({ product }: Props) {
+export default function ProductCard({ product, userLogin }: Props) {
   return (
     <>
       <Link
@@ -14,11 +17,18 @@ export default function ProductCard({ product }: Props) {
         className="hover:brightness-90 border border-gray-300 bg-white rounded-md w-full shadow-lg"
       >
         <div className="relative bg-white">
+          {userLogin &&
+            userLogin.username.toLowerCase() ===
+              product.owner.username.toLowerCase() && (
+              <span className="absolute top-0 right-0 font-semibold px-1 z-1 h-fit w-fit text-[12px] shadow-md rounded-sm bg-orange-based text-white flex items-center justify-center">
+                Owner
+              </span>
+            )}
           <a href={"/product-detail/" + product.id}>
             <img
               src={product.images[0].image!}
               alt=""
-              className="object-cover w-full h-56 mx-auto"
+              className="object-cover w-full h-56 mx-auto rounded-md rounded-b-none"
             />
           </a>
         </div>

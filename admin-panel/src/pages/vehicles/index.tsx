@@ -26,7 +26,6 @@ import { ModelVehicle } from "../../app/models/ModelVehicle";
 import LoaderButton from "../../app/components/LoaderButton";
 import dataCityVN from "./../../app/data/dataCityVN.json";
 import SelectPageSize from "../../app/components/SelectPageSize";
-import { set } from "react-hook-form";
 
 export default function VehiclesPage() {
   const [searchParams, setSearchParams] = useSearchParams({});
@@ -527,7 +526,6 @@ export default function VehiclesPage() {
                   />
                 )}
               </div>
-              
             </div>
           </div>
           <div className="max-w-full overflow-x-auto">
@@ -564,7 +562,11 @@ export default function VehiclesPage() {
                 </tr>
               </thead>
               <tbody>
-                {vehicles.length !== 0 ? (
+                {vehicles.length === 0 ? (
+                  <tr className="text-center h-20 flex items-center justify-center w-full">
+                    No Items Found.
+                  </tr>
+                ) : (
                   vehicles.map((vehicle) => (
                     <tr
                       key={vehicle.id}
@@ -572,23 +574,22 @@ export default function VehiclesPage() {
                     >
                       <td className="py-5 px-4 pl-9 xl:pl-11">
                         <div className="flex items-center h-full ">
-                        <div className="h-12 w-12 rounded-md">
-                          <img
-                            className="h-full w-full rounded-md object-cover"
-                            src={vehicle.images[0].image || undefined}
-                            alt="Vehicle image"
-                          />
+                          <div className="h-12 w-12 rounded-md">
+                            <img
+                              className="h-full w-full rounded-md object-cover"
+                              src={vehicle.images[0].image || undefined}
+                              alt="Vehicle image"
+                            />
+                          </div>
+                          <div className="ml-3 flex flex-col">
+                            <h5 className="font-medium text-black dark:text-white">
+                              {vehicle.specifications.modelName}
+                            </h5>
+                            <p className="text-sm">
+                              {vehicle.specifications.color}
+                            </p>
+                          </div>
                         </div>
-                        <div className="ml-3 flex flex-col">
-                          <h5 className="font-medium text-black dark:text-white">
-                            {vehicle.specifications.modelName}
-                          </h5>
-                          <p className="text-sm">
-                            {vehicle.specifications.color}
-                          </p>
-                        </div>
-                        </div>
-                        
                       </td>
 
                       <td className="py-5 px-4">
@@ -727,10 +728,6 @@ export default function VehiclesPage() {
                       </td>
                     </tr>
                   ))
-                ) : (
-                  <tr className="text-center h-20 flex items-center justify-center w-full">
-                    No Items Found.
-                  </tr>
                 )}
               </tbody>
             </table>

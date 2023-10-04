@@ -9,39 +9,22 @@ import { RootState } from "../../app/store/ConfigureStore";
 import agent from "../../app/api/agent";
 
 interface ProfileState {
-  profileUser: UserDetail | null;
   productOfUser: Vehicle | null;
-  profileLoaded: boolean;
-  productLoaded: boolean;
+  productOfUserLoaded: boolean;
 }
 
 const initialState: ProfileState = {
-  profileUser: null,
   productOfUser: null,
-  profileLoaded: false,
-  productLoaded: false,
+  productOfUserLoaded: false,
 };
 
-const profileAdapter = createEntityAdapter<UserDetail>();
+const profileAdapter = createEntityAdapter<Vehicle>();
 
-export const getProfileUserAsync = createAsyncThunk<
-  UserDetail,
+export const getProductsOfUserAsync = createAsyncThunk<
+  Vehicle[],
   string,
   { state: RootState }
->("profile/getProfileUserAsync", async (username: string, ThunkAPI) => {
-  try {
-    const response = await agent.User.details(username);
-    return response;
-  } catch (error: any) {
-    return ThunkAPI.rejectWithValue({ error: error.data });
-  }
-});
-
-export const getProductUserAsync = createAsyncThunk<
-  Vehicle,
-  string,
-  { state: RootState }
->("profile/getProfileUserAsync", async (ownerId: string, ThunkAPI) => {
+>("profile/getProductUserAsync", async (ownerId: string, ThunkAPI) => {
   try {
     const response = await agent.Vehicle.getVehicleByOwner(ownerId);
     return response;
@@ -53,46 +36,32 @@ export const getProductUserAsync = createAsyncThunk<
 export const ProfileSlice = createSlice({
   name: "profile",
   initialState: profileAdapter.getInitialState<ProfileState>({
-    profileUser: null,
     productOfUser: null,
-    profileLoaded: false,
-    productLoaded: false,
+    productOfUserLoaded: false,
   }),
   reducers: {
-    // getProfileUser: (state, action) => {
-    //   state.profileUser = action.payload;
-    //   state.profileLoaded = true;
-    // },
-    // getProductUser: (state, action) => {
-    //   state.productOfUser = action.payload;
-    //   state.productLoaded = true;
-    // },
+    addProductUser: (state, action) => {
+      profileAdapter.addOne(state, action.payload);
+    },
+    updateProductUser: (state, action) => {
+      profileAdapter.upsertOne(state, action.payload);
+    },
+    removeProductUser: (state, action) => {
+      profileAdapter.removeOne(state, action.payload);
+    },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getProfileUserAsync.fulfilled, (state, action) => {
-        profileAdapter.setOne(state, action.payload);
-        state.profileLoaded = false;
+      .addCase(getProductsOfUserAsync.fulfilled, (state, action) => {
+        profileAdapter.upsertMany(state, action.payload);
+        state.productOfUserLoaded = false;
       })
-      .addCase(getProfileUserAsync.pending, (state, action) => {
-        state.profileLoaded = true;
+      .addCase(getProductsOfUserAsync.pending, (state, action) => {
+        state.productOfUserLoaded = true;
       })
-      .addCase(getProfileUserAsync.rejected, (state, action) => {
-        console.log("Get profile rejected: ", action);
-        state.profileLoaded = false;
-      });
-
-    builder
-      .addCase(getProductUserAsync.fulfilled, (state, action) => {
-        state.productOfUser = action.payload;
-        state.productLoaded = false;
-      })
-      .addCase(getProductUserAsync.pending, (state, action) => {
-        state.productLoaded = true;
-      })
-      .addCase(getProductUserAsync.rejected, (state, action) => {
+      .addCase(getProductsOfUserAsync.rejected, (state, action) => {
         console.log("Get product by user rejected: ", action);
-        state.productLoaded = false;
+        state.productOfUserLoaded = false;
       });
   },
 });

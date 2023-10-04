@@ -106,18 +106,18 @@ export default function BlogPage() {
             Blog
           </h1>
 
-          <div className="grid grid-cols-1 gap-8 mt-8 md:mt-16 md:grid-cols-2">
+          <div className="grid grid-cols-1 gap-4 lg:gap-8 mt-8 lg:mt-16 lg:grid-cols-2">
             {renderItem.map((item, index) => (
               <Link className="lg:flex group" to="/blog/1" key={index}>
-                <div className="relative flex flex-col md:flex-row md:space-x-5 space-y-3 md:space-y-0 rounded-xl shadow-lg p-3 max-w-xs md:max-w-3xl mx-auto border border-white bg-white group-hover:border-orange-based">
-                  <div className="w-full md:w-1/3 bg-white grid place-items-center">
+                <div className="relative flex flex-row md:flex-col lg:flex-row lg:space-x-5 space-y-3 md:space-y-0 rounded-xl shadow-lg p-3 max-w-3xl  mx-auto border border-white bg-white group-hover:border-orange-based">
+                  <div className="w-1/3 md:w-full lg:w-1/3 bg-white grid place-items-center">
                     <img
                       src="https://images.pexels.com/photos/4381392/pexels-photo-4381392.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
                       alt="tailwind logo"
                       className="rounded-xl"
                     />
                   </div>
-                  <div className="w-full md:w-2/3 bg-white flex flex-col space-y-2 p-3">
+                  <div className="w-2/3 md:w-full lg:w-2/3 bg-white flex flex-col p-3">
                     <div className="flex justify-between item-center">
                       <p className="text-gray-500 font-medium hidden md:block text-xs md:text-sm lg:text-base">
                         {/* category */}

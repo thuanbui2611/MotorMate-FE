@@ -54,7 +54,10 @@ export const getVehiclesAsync = createAsyncThunk<
 >("vehicle/getVehiclesAsync", async (_, ThunkAPI) => {
   const params = getAxiosParams(ThunkAPI.getState().vehicle.vehicleParams);
   try {
-    const response = await agent.Vehicle.listVehicleByStatus(params, "approved");
+    const response = await agent.Vehicle.listVehicleByStatus(
+      params,
+      "approved"
+    );
     ThunkAPI.dispatch(setMetaData(response.metaData));
     return response.items;
   } catch (error: any) {
@@ -120,6 +123,12 @@ export const VehicleSlice = createSlice({
     metaData: null,
   }),
   reducers: {
+    addVehicle: (state, action) => {
+      vehiclesAdapter.addOne(state, action.payload);
+    },
+    removeVehicle: (state, action) => {
+      vehiclesAdapter.removeOne(state, action.payload);
+    },
     setVehicleParams: (state, action) => {
       state.vehicleParams = {
         ...state.vehicleParams,
@@ -154,7 +163,7 @@ export const VehicleSlice = createSlice({
         console.log("Get vehicles rejected: ", action);
         state.vehicleLoaded = false;
       });
-  
+
     builder.addCase(addVehicleAsync.fulfilled, (state, action) => {
       toast.success("Add vehicle successfully!");
       vehiclesAdapter.addOne(state, action.payload);
@@ -180,4 +189,6 @@ export const {
   resetVehicleParams,
   setMetaData,
   setPageNumber,
+  addVehicle,
+  removeVehicle,
 } = VehicleSlice.actions;

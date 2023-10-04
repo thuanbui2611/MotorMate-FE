@@ -20,9 +20,9 @@ import ForgotPassword from "../../pages/account/ForgotPassword";
 import ChangePassword from "../../pages/account/ChangePassword";
 import NotFound from "../errors/NotFound";
 import Profile from "../../pages/profile";
-import ProfileDetails from "../../pages/profile/ProfileDetails";
 import BlogPage from "../../pages/blog";
 import BlogDetails from "../../pages/blog/BlogDetails";
+import MyProducts from "../../pages/profile/MyProducts";
 
 export const router = createBrowserRouter([
   {
@@ -35,6 +35,7 @@ export const router = createBrowserRouter([
           { path: "", element: <HomePage /> },
           { path: "profile/:username/", element: <Profile /> },
           { path: "profile/:username/settings", element: <SettingProfile /> },
+          { path: "profile/:username/my-products", element: <MyProducts /> },
           { path: "about", element: <About /> },
           { path: "contact", element: <Contact /> },
           { path: "blog", element: <BlogPage /> },
