@@ -5,10 +5,10 @@ import Loading from "../../app/components/Loading";
 import { Link } from "react-router-dom";
 import BlogList from "./BlogList";
 import { Vehicle } from "../../app/models/Vehicle";
+
 export default function HomePage() {
   const [products, setProducts] = useState<Vehicle[]>([]);
   const [loading, setLoading] = useState(true);
-
   useEffect(() => {
     agent.Vehicle.all()
       .then((products) => setProducts(products))
@@ -46,240 +46,31 @@ export default function HomePage() {
           </div>
         </div>
       </div>
-      {/* <div className=" text-center max-w-[85rem] px-4 py-5 sm:px-6 lg:px-8 lg:py-14 mx-auto">
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 items-center gap-8 md:gap-12">
-          <div className="flex flex-col min-h- items-center border-1 border-orange-based rounded-lg pt-2 pb-2 shadow-xl shadow-orange-based md:shadow-lg md:shadow-orange-based ">
-            <div className="relative flex justify-center items-center w-12 h-12 bg-white rounded-xl mt-2 before:absolute before:-inset-px before:-z-[1] before:bg-gradient-to-br before:from-blue-600 before:via-transparent before:to-violet-600 before:rounded-xl">
-              <svg
-                width="100px"
-                height="100px"
-                viewBox="0 0 512 512"
-                xmlns="http://www.w3.org/2000/svg"
-                className="text-blue-600"
-                fill="currentColor"
-              >
-                <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-                <g
-                  id="SVGRepo_tracerCarrier"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                ></g>
-                <g id="SVGRepo_iconCarrier">
-                  {" "}
-                  <defs> </defs> <title></title>{" "}
-                  <g data-name="Layer 4" id="Layer_4">
-                    {" "}
-                    <path
-                      className="cls-1"
-                      d="M171,226v93s-62,15-62-49C109,215,171,226,171,226Z"
-                    ></path>{" "}
-                    <path
-                      className="cls-2"
-                      d="M343,226v93s60,15,60-49C403,215,343,226,343,226Z"
-                    ></path>{" "}
-                    <path d="M369.87,216.24V203.48c0-30.55-10.81-58.94-30.41-80C319.37,101.86,291.75,90,261.62,90H251.08c-30.13,0-57.75,11.86-77.84,33.48-19.6,21.06-30.41,49.45-30.41,80v12.76a45.81,45.81,0,0,0-42.69,45.62v19.95a45.75,45.75,0,0,0,45.68,45.68h25.74a8.39,8.39,0,0,0,8.37-8.37V224.47a8.39,8.39,0,0,0-8.37-8.37h-12V203.48c0-55.17,39.34-96.74,91.44-96.74h10.53c52.17,0,91.44,41.57,91.44,96.74V216.1H341a8.39,8.39,0,0,0-8.37,8.37v94.58a8.39,8.39,0,0,0,8.37,8.37h11.72c-3.42,43.66-33.48,53.78-47.43,56.08a29.43,29.43,0,0,0-28-20.3H256.39a29.4,29.4,0,0,0,0,58.8h21a29.44,29.44,0,0,0,28.32-21.62,79.17,79.17,0,0,0,28.39-9.69c15.14-8.86,33.06-26.92,35.43-63.33a45.74,45.74,0,0,0,42.89-45.62V261.79A45.57,45.57,0,0,0,369.87,216.24ZM163.34,310.68H146A29,29,0,0,1,117,281.74V261.79A29,29,0,0,1,146,232.84h17.37Zm114,94.58h-21a12.62,12.62,0,1,1,0-25.25h21a12.62,12.62,0,0,1,0,25.25ZM395.74,281.74a29,29,0,0,1-28.95,28.95H349.43V232.84H366.8a29,29,0,0,1,28.95,28.95Z"></path>{" "}
-                    <path d="M296.15,263.82H296l-79,.37a8.5,8.5,0,0,1-.08-17l79-.37a8.5,8.5,0,0,1,.19,17Z"></path>{" "}
-                  </g>{" "}
-                </g>
-              </svg>
-            </div>
-            <div className="mt-5">
-              <h3 className="text-2xl font-bold text-gray-800 ">
-                24/7 Support
-              </h3>
-              <p className="mt-1 text-gray-600  mx-1 mb-3">
-                Contact us 24 hours a day, 7 days a week
-              </p>
-            </div>
-          </div>
 
-          <div className="flex flex-col items-center border-1 border-orange-based rounded-lg pt-2 pb-2 shadow-xl shadow-orange-based md:shadow-lg md:shadow-orange-based ">
-            <div className="relative flex justify-center items-center w-12 h-12 bg-white rounded-xl mt-2 before:absolute before:-inset-px before:-z-[1] before:bg-gradient-to-br before:from-blue-600 before:via-transparent before:to-violet-600 before:rounded-xl">
-              <svg
-                className="w-7 h-7 text-blue-600 "
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                fill="currentColor"
-                viewBox="0 0 16 16"
-              >
-                <path d="M9.465 10H12a2 2 0 1 1 0 4H9.465c.34-.588.535-1.271.535-2 0-.729-.195-1.412-.535-2z" />
-                <path d="M6 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 1a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm.535-10a3.975 3.975 0 0 1-.409-1H4a1 1 0 0 1 0-2h2.126c.091-.355.23-.69.41-1H4a2 2 0 1 0 0 4h2.535z" />
-                <path d="M14 4a4 4 0 1 1-8 0 4 4 0 0 1 8 0z" />
-              </svg>
-            </div>
-            <div className="mt-5">
-              <h3 className="text-2xl font-bold text-gray-800 ">
-                Motorcycle Reservation Anytime
-              </h3>
-              <p className="mt-1 text-gray-600  mx-1 mb-3">
-                Feel free to choose time and date for your reservation
-              </p>
-            </div>
-          </div>
-
-          <div className="flex flex-col items-center border-1 border-orange-based rounded-lg pt-2 pb-2 shadow-xl shadow-orange-based md:shadow-lg md:shadow-orange-based ">
-            <div className="relative flex justify-center items-center w-12 h-12 bg-white rounded-xl mt-2 before:absolute before:-inset-px before:-z-[1] before:bg-gradient-to-br before:from-blue-600 before:via-transparent before:to-violet-600 before:rounded-xl">
-              <svg
-                className="w-7 h-7 text-blue-600"
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                fill="currentColor"
-                viewBox="0 0 16 16"
-              >
-                <path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z" />
-                <path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5L9.5 0zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z" />
-              </svg>
-            </div>
-            <div className="mt-5">
-              <h3 className="text-2xl font-bold text-gray-800 ">
-                Lots Of Pickup Locations
-              </h3>
-              <p className="mt-1 text-gray-600  mx-1 mb-3">
-                Every component and plugin is well documented
-              </p>
-            </div>
-          </div>
-
-          <div className="flex flex-col items-center border-1 border-orange-based rounded-lg pt-2 pb-2 shadow-xl shadow-orange-based md:shadow-lg md:shadow-orange-based ">
-            <div className="relative flex justify-center items-center w-12 h-12 bg-white rounded-xl mt-2 before:absolute before:-inset-px before:-z-[1] before:bg-gradient-to-br before:from-blue-600 before:via-transparent before:to-violet-600 before:rounded-xl">
-              <svg
-                className="w-7 h-7 text-blue-600 "
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                fill="currentColor"
-                viewBox="0 0 16 16"
-              >
-                <path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
-                <path d="M5 6a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
-              </svg>
-            </div>
-            <div className="mt-5">
-              <h3 className="text-2xl font-bold text-gray-800 ">
-                24/7 Support
-              </h3>
-              <p className="mt-1 text-gray-600  mx-1 mb-3">
-                Contact us 24 hours a day, 7 days a week
-              </p>
-            </div>
-          </div>
-        </div>
-      </div> */}
-
-      {/* <div className="text-center pt-10">
-        <div className="">
-          <div className="flex justify-center">
-            <hr className="w-1/4"></hr>
-          </div>
-          <div className="w-full py-8 mx-auto flex justify-center ">
-            <h1 className=" bg-cyan-500 shadow-lg shadow-cyan-500/50 pb-2 text-center text-uppercase text-4xl font-extrabold leading-none tracking-tight md:text-5xl lg:text-6xl px-6">
-              <span className="drop-shadow-lg text-white ">WELCOME TO </span>
-              <span className=" text-black drop-shadow-lg">MOTORMATE</span>
-            </h1>
-          </div>
-
-          <div className="flex justify-center pb-10">
-            <AdsHomepage />
-
-            <div className="homepage-welcome">
-              <img
-                className="w-full mb-4"
-                src={require("../../app/assets/images/image1.png")}
-                alt=""
-              />
-              <p className="leading-loose md:text-base text-sm">
-                Justo et eos et ut takimata sed sadipscing dolore lorem, et
-                elitr labore labore voluptua no rebum sed, stet voluptua amet
-                sed elitr ea dolor dolores no clita. Dolores diam magna clita ea
-                eos amet, amet rebum voluptua vero vero sed clita accusam
-                takimata. Nonumy labore ipsum sea voluptua sea eos sit justo, no
-                ipsum sanctus sanctus no et no ipsum amet, tempor labore est
-                labore no. Eos diam eirmod lorem ut eirmod, ipsum diam
-                sadipscing stet dolores elitr elitr eirmod dolore. Magna elitr
-                accusam takimata labore, et at erat eirmod consetetur tempor
-                eirmod invidunt est, ipsum nonumy at et.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div> */}
       {/* Choose your motorcycle */}
 
-      <section className=" bg-home-product ">
-        <div className="py-8  mx-auto w-full px-0 md:px-4 md:max-w-screen-xl lg:py-10 lg:px-6 ">
-          <div className="mx-auto max-w-screen-sm text-center mb-8 lg:mb-16">
+      <section className="bg-home-product ">
+        <div className="py-8 mx-auto w-full px-0 md:px-4 md:max-w-screen-xl lg:py-20 lg:pb-44 lg:px-6 ">
+          <div className="mx-auto max-w-screen-md text-center mb-8 lg:mb-16 lg:pt-10">
             <div className="flex justify-center">
               <hr className="w-1/4 pb-3"></hr>
             </div>
-            <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-white">
+            <h2 className="mb-4 text-2xl md:text-4xl lg:text-6xl tracking-tight font-extrabold text-gradient">
               Choose your Motorcycle
             </h2>
-            <p className="font-light text-gray-50 lg:mb-8 sm:text-xl ">
-              Explore the whole collection of open-source web components and
-              elements built with the utility classes from Tailwind
+            <p className="font-light text-gray-50 mx-10 md:mx-0 lg:mb-8 text-xs md:text-lg lg:text-xl ">
+              With options ranging from different brands, models, and features
+              for the perfect motorcycle.
             </p>
           </div>
           {/* List product */}
           <ProductHomepage products={products} />
           {/* End list product */}
 
-          {/* Other list product */}
-          {/* <section className="flex items-center py-20 bg-gray-100 lg:h-screen">
-            <div className="px-4 mx-auto max-w-7xl">
-              <div className="grid grid-cols-1 gap-4 lg:gap-6 sm:gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                {products.slice(0, 8).map((product) => (
-                  <div className="relative overflow-hidden bg-white shadow rounded-xl">
-                    <div className="relative overflow-hidden">
-                      <div className="mb-5 overflow-hidden">
-                        <img
-                          className="object-cover w-full mx-auto transition-all rounded h-72 hover:scale-110"
-                          src={product.image}
-                          alt=""
-                        />
-                      </div>
-                      <button className="absolute top-0 left-0 p-3 bg-blue-500 rounded-l-none hover:bg-blue-600 rounded-b-xl">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="20"
-                          height="20"
-                          fill="currentColor"
-                          className="text-white"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"
-                          ></path>
-                        </svg>
-                      </button>
-                    </div>
-                    <a>
-                      <h3 className="px-5 mb-4 text-lg font-bold ">
-                        {product.title}
-                      </h3>
-                    </a>
-                    <div className="flex">
-                      <div className="w-1/2 px-5 pb-3">
-                        <p className="text-lg font-bold text-blue-500 ">
-                          $299.99
-                        </p>
-                      </div>
-                      <button className="flex-1 text-sm text-white transition-all bg-blue-500 rounded-r-none hover:bg-blue-600 rounded-t-xl">
-                        Add To Cart
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section> */}
-          {/* End of other list product */}
           <div className="text-center">
-            <a
-              href="/products"
-              className="inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center text-white bg-gradient-to-r from-[#FF6003] to-[#FF7E06] rounded-lg hover:text-black focus:ring-2 focus:ring-orange-based  transition-all transform hover:scale-110 hover:rotate-2"
+            <Link
+              to="/products"
+              className="inline-flex items-center justify-center w-fit px-3 py-2 text-xs md:text-sm lg:text-base font-medium text-center text-white bg-gradient-to-r from-[#FF6003] to-[#FF7E06] rounded-lg hover:text-black focus:ring-2 focus:ring-orange-based  transition-all transform hover:scale-110 hover:rotate-2"
             >
               See more
               <svg
@@ -294,7 +85,298 @@ export default function HomePage() {
                   clipRule="evenodd"
                 ></path>
               </svg>
-            </a>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Our Features */}
+      <section className="bg-home-features">
+        <div className="mx-auto pt-6 md:max-w-screen-2xl md:pt-8 md:px-4 lg:pt-10 lg:px-6">
+          <div className="flex items-center justify-start gap-3 md:gap-5 lg:gap-6 ">
+            <hr></hr>
+            <h1>Our Features</h1>
+          </div>
+        </div>
+
+        <div className="featureContainer pb-8 pt-4 mx-auto w-full px-0 md:px-4 lg:pb-20 lg:pt-8 lg:px-6 ">
+          <div className="grid grid-cols-3 gap-2 md:gap-4 lg:gap-6">
+            <div className="featureItem">
+              <div className="flex flex-col items-center justify-center px-1 md:px-4 lg:px-5">
+                <svg
+                  fill="#000000"
+                  viewBox="0 0 24 24"
+                  id="motorcycle"
+                  data-name="Line Color"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <g id="SVGRepo_bgCarrier" strokeWidth={0} />
+                  <g
+                    id="SVGRepo_tracerCarrier"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <g id="SVGRepo_iconCarrier">
+                    <path
+                      id="primary"
+                      d="M14,17.82a4.58,4.58,0,0,0,2.82-1.52,1,1,0,0,0,.18-.58V13a4,4,0,0,0-4-4H11a4,4,0,0,0-4,4v2.72a1,1,0,0,0,.18.58A4.58,4.58,0,0,0,10,17.82"
+                      style={{
+                        fill: "none",
+                        stroke: "#FF7E06",
+                        strokeLinecap: "round",
+                        strokeLinejoin: "round",
+                        strokeWidth: 1.56,
+                      }}
+                    />
+                    <rect
+                      id="secondary"
+                      x="10"
+                      y="15"
+                      width="4"
+                      height="6"
+                      rx="2"
+                      style={{
+                        fill: "none",
+                        stroke: "#FF7E06",
+                        strokeLinecap: "round",
+                        strokeLinejoin: "round",
+                        strokeWidth: 1.56,
+                      }}
+                    />
+                    <line
+                      id="secondary-2"
+                      data-name="secondary"
+                      x1="15"
+                      y1="6"
+                      x2="18"
+                      y2="6"
+                      style={{
+                        fill: "none",
+                        stroke: "#FF7E06",
+                        strokeLinecap: "round",
+                        strokeLinejoin: "round",
+                        strokeWidth: 1.56,
+                      }}
+                    />
+                    <line
+                      id="secondary-3"
+                      data-name="secondary"
+                      x1="9"
+                      y1="6"
+                      x2="6"
+                      y2="6"
+                      style={{
+                        fill: "none",
+                        stroke: "#FF7E06",
+                        strokeLinecap: "round",
+                        strokeLinejoin: "round",
+                        strokeWidth: 1.56,
+                      }}
+                    />
+                    <circle
+                      id="primary-2"
+                      data-name="primary"
+                      cx="12"
+                      cy="6"
+                      r="3"
+                      style={{
+                        fill: "none",
+                        stroke: "#FF7E06",
+                        strokeLinecap: "round",
+                        strokeLinejoin: "round",
+                        strokeWidth: 1.56,
+                      }}
+                    />
+                  </g>
+                </svg>
+                <h2>Diversed Selection</h2>
+                <p>
+                  Choose from a wide range <br></br>
+                  of motorcycles for your <br></br> perfect ride
+                </p>
+              </div>
+            </div>
+            <div className="featureItem">
+              <div className="flex flex-col items-center justify-center px-1 md:px-3 lg:px-5">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <g id="SVGRepo_bgCarrier" strokeWidth="0" />
+
+                  <g
+                    id="SVGRepo_tracerCarrier"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+
+                  <g id="SVGRepo_iconCarrier">
+                    <path
+                      d="M15 12L10.8 16L9 14.2857M13 3H5V21H19V9M13 3H14L19 8V9M13 3V7C13 8 14 9 15 9H19"
+                      stroke="#FF7E06"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </g>
+                </svg>
+                <h2>Insurance Coverage</h2>
+                <p>
+                  Ride worry-free with <br></br>
+                  comprehensive insurance <br></br> included.
+                </p>
+              </div>
+            </div>
+            <div className="featureItem">
+              <div className="flex flex-col items-center justify-center px-1 md:px-5">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <g id="SVGRepo_bgCarrier" strokeWidth="0" />
+
+                  <g
+                    id="SVGRepo_tracerCarrier"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+
+                  <g id="SVGRepo_iconCarrier">
+                    <path
+                      d="M8.5 12.5L10.5 14.5L15.5 9.5"
+                      stroke="#FF7E06"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M3.02907 13.0776C2.7032 12.3958 2.7032 11.6032 3.02907 10.9214C3.16997 10.6266 3.41023 10.3447 3.89076 9.78084C4.08201 9.55642 4.17764 9.44421 4.25796 9.32437C4.44209 9.04965 4.56988 8.74114 4.63393 8.41669C4.66188 8.27515 4.6736 8.12819 4.69706 7.83426C4.75599 7.09576 4.78546 6.72651 4.89427 6.41844C5.14594 5.70591 5.7064 5.14546 6.41893 4.89378C6.72699 4.78497 7.09625 4.7555 7.83475 4.69657C8.12868 4.67312 8.27564 4.66139 8.41718 4.63344C8.74163 4.56939 9.05014 4.4416 9.32485 4.25747C9.4447 4.17715 9.55691 4.08152 9.78133 3.89027C10.3452 3.40974 10.6271 3.16948 10.9219 3.02859C11.6037 2.70271 12.3963 2.70271 13.0781 3.02859C13.3729 3.16948 13.6548 3.40974 14.2187 3.89027C14.4431 4.08152 14.5553 4.17715 14.6752 4.25747C14.9499 4.4416 15.2584 4.56939 15.5828 4.63344C15.7244 4.66139 15.8713 4.67312 16.1653 4.69657C16.9038 4.7555 17.273 4.78497 17.5811 4.89378C18.2936 5.14546 18.8541 5.70591 19.1058 6.41844M4.89427 17.5806C5.14594 18.2931 5.7064 18.8536 6.41893 19.1053C6.72699 19.2141 7.09625 19.2435 7.83475 19.3025C8.12868 19.3259 8.27564 19.3377 8.41718 19.3656C8.74163 19.4297 9.05014 19.5574 9.32485 19.7416C9.44469 19.8219 9.55691 19.9175 9.78133 20.1088C10.3452 20.5893 10.6271 20.8296 10.9219 20.9705C11.6037 21.2963 12.3963 21.2963 13.0781 20.9705C13.3729 20.8296 13.6548 20.5893 14.2187 20.1088C14.4431 19.9175 14.5553 19.8219 14.6752 19.7416C14.9499 19.5574 15.2584 19.4297 15.5828 19.3656C15.7244 19.3377 15.8713 19.3259 16.1653 19.3025C16.9038 19.2435 17.273 19.2141 17.5811 19.1053C18.2936 18.8536 18.8541 18.2931 19.1058 17.5806C19.2146 17.2725 19.244 16.9033 19.303 16.1648C19.3264 15.8709 19.3381 15.7239 19.3661 15.5824C19.4301 15.2579 19.5579 14.9494 19.7421 14.6747C19.8224 14.5548 19.918 14.4426 20.1093 14.2182C20.5898 13.6543 20.8301 13.3724 20.971 13.0776C21.2968 12.3958 21.2968 11.6032 20.971 10.9214"
+                      stroke="#FF7E06"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                    />{" "}
+                  </g>
+                </svg>
+                <h2>Easy Online Booking</h2>
+                <p>
+                  Easy and seamless <br></br>
+                  reservation process for a <br></br> hassle-free
+                </p>
+              </div>
+            </div>
+            <div className="featureItem">
+              <div className="flex flex-col items-center justify-center px-1 md:px-5">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <g id="SVGRepo_bgCarrier" strokeWidth="0" />
+
+                  <g
+                    id="SVGRepo_tracerCarrier"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+
+                  <g id="SVGRepo_iconCarrier">
+                    <path
+                      d="M12 7V12L14.5 10.5M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"
+                      stroke="#FF7E06"
+                      strokeWidth="1.68"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </g>
+                </svg>
+                <h2>Flexible Rentals</h2>
+                <p>
+                  Hourly, daily, or weekly<br></br>
+                  options tailored to your <br></br> schedule
+                </p>
+              </div>
+            </div>
+            <div className="featureItem">
+              <div
+                className="flex flex-col items-center justify-center px-1 md:px-5"
+                style={{ marginTop: "-1.4vw" }}
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <g id="SVGRepo_bgCarrier" strokeWidth="0" />
+
+                  <g
+                    id="SVGRepo_tracerCarrier"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+
+                  <g id="SVGRepo_iconCarrier">
+                    <path
+                      d="M12 21C15.5 17.4 19 14.1764 19 10.2C19 6.22355 15.866 3 12 3C8.13401 3 5 6.22355 5 10.2C5 14.1764 8.5 17.4 12 21Z"
+                      stroke="#FF7E06"
+                      strokeWidth="1.344"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M12 13C13.6569 13 15 11.6569 15 10C15 8.34315 13.6569 7 12 7C10.3431 7 9 8.34315 9 10C9 11.6569 10.3431 13 12 13Z"
+                      stroke="#FF7E06"
+                      strokeWidth="1.344"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </g>
+                </svg>
+                <h2>Convienient Location</h2>
+                <p>
+                  Flexible location for easy<br></br>
+                  collection and return.
+                </p>
+              </div>
+            </div>
+            <div className="featureItem">
+              <div
+                className="flex flex-col items-center justify-center px-1 md:px-5"
+                style={{ marginTop: "-1.4vw" }}
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  id="_24x24_On_Light_Support"
+                  data-name="24x24/On Light/Support"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="#000000"
+                >
+                  <g id="SVGRepo_bgCarrier" strokeWidth="0" />
+
+                  <g
+                    id="SVGRepo_tracerCarrier"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+
+                  <g id="SVGRepo_iconCarrier">
+                    <rect id="view-box" width="24" height="24" fill="none" />
+                    <path
+                      id="Shape"
+                      d="M8,17.751a2.749,2.749,0,0,1,5.127-1.382C15.217,15.447,16,14,16,11.25v-3c0-3.992-2.251-6.75-5.75-6.75S4.5,4.259,4.5,8.25v3.5a.751.751,0,0,1-.75.75h-1A2.753,2.753,0,0,1,0,9.751v-1A2.754,2.754,0,0,1,2.75,6h.478c.757-3.571,3.348-6,7.022-6s6.264,2.429,7.021,6h.478a2.754,2.754,0,0,1,2.75,2.75v1a2.753,2.753,0,0,1-2.75,2.75H17.44A5.85,5.85,0,0,1,13.5,17.84,2.75,2.75,0,0,1,8,17.751Zm1.5,0a1.25,1.25,0,1,0,1.25-1.25A1.251,1.251,0,0,0,9.5,17.751Zm8-6.75h.249A1.251,1.251,0,0,0,19,9.751v-1A1.251,1.251,0,0,0,17.75,7.5H17.5Zm-16-2.25v1A1.251,1.251,0,0,0,2.75,11H3V7.5H2.75A1.251,1.251,0,0,0,1.5,8.751Z"
+                      transform="translate(1.75 2.25)"
+                      fill="#FF7E06"
+                    />
+                  </g>
+                </svg>
+                <h2>24/7 Customer Support</h2>
+                <p>
+                  Dedicated assistance for a <br></br>
+                  smooth and enjoyable ride.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </section>

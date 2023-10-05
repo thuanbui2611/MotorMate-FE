@@ -8,7 +8,7 @@ import Loading from "../../app/components/Loading";
 import NotFound from "../../app/errors/NotFound";
 import { Vehicle } from "../../app/models/Vehicle";
 import "lightbox.js-react/dist/index.css";
-import { SlideshowLightbox, initLightboxJS } from "lightbox.js-react";
+import { SlideshowLightbox } from "lightbox.js-react";
 import ImagesCarousel from "../../app/components/ImagesCarousel";
 
 export default function ProductDetails() {
@@ -28,15 +28,6 @@ export default function ProductDetails() {
       .catch((error) => console.log(error))
       .finally(() => setLoading(false));
   }, [id]);
-
-  //Test carousel images
-  const imagesList = [
-    "https://vetfarm.vn/wp-content/uploads/2022/11/Anh-meo-dep-998x800.jpg",
-    "https://qpet.vn/wp-content/uploads/2023/03/Avatar-cute-meo.jpg",
-    "https://cafebiz.cafebizcdn.vn/thumb_w/600/162123310254002176/2022/7/9/photo1657324993775-1657324993859181735127.jpg",
-  ];
-
-  //End of test carousel images
 
   const handleOpenImage = (index: number) => {
     setOpenImage(index);
@@ -282,7 +273,7 @@ export default function ProductDetails() {
                     /> */}
                     {/* Carousel image */}
                     <ImagesCarousel
-                      imagesList={imagesList}
+                      imagesList={product.images.map((image) => image.image!)}
                       openImage={handleOpenImage}
                     />
 
@@ -296,10 +287,10 @@ export default function ProductDetails() {
                         setOpenSlideShow(false);
                       }}
                     >
-                      {imagesList.map((image, index) => (
+                      {product.images.map((image, index) => (
                         <img
                           className="w-full rounded hidden"
-                          src={image}
+                          src={image.image || undefined}
                           key={index}
                         />
                       ))}

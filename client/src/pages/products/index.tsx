@@ -378,7 +378,7 @@ export default function Products() {
               <div className="flex flex-wrap mb-24">
                 <div className="grid grid-cols-2  gap-4 lg:gap-4 lg:grid-cols-1 scrollbar overflow-y-auto max-h-[50vw] w-full lg:w-1/5 lg:block">
                   <div className="w-full md:w-[95%] p-4 mx-2 lg:mb-4 lg:mx-0 bg-white border border-gray-200 ">
-                    <h2 className="text-2xl font-bold text-center pb-3">
+                    <h2 className=" text-sm md:text-xl lg:text-2xl font-bold text-center pb-3">
                       City
                     </h2>
                     <div className="flex justify-center items-center h-0">
@@ -410,7 +410,7 @@ export default function Products() {
                   </div>
 
                   <div className="w-full md:w-[95%] p-4 mx-2 lg:mb-4 lg:mx-0 bg-white border border-gray-200 ">
-                    <h2 className="text-2xl font-bold text-center pb-3">
+                    <h2 className=" text-sm md:text-xl lg:text-2xl font-bold text-center pb-3">
                       Brand
                     </h2>
                     <div className="flex justify-center items-center h-0">
@@ -441,7 +441,7 @@ export default function Products() {
                   </div>
 
                   <div className="w-full md:w-[95%] p-4 mx-2 lg:mb-4 lg:mx-0 bg-white border border-gray-200 ">
-                    <h2 className="text-2xl font-bold text-center pb-3">
+                    <h2 className=" text-sm md:text-xl lg:text-2xl font-bold text-center pb-3">
                       Collections
                     </h2>
                     <div className="flex justify-center items-center h-0">
@@ -470,7 +470,7 @@ export default function Products() {
                   </div>
 
                   <div className="w-full md:w-[95%] p-4 mx-2 lg:mx-0 bg-white border border-gray-200 ">
-                    <h2 className="text-2xl font-bold text-center pb-3">
+                    <h2 className=" text-sm md:text-xl lg:text-2xl font-bold text-center pb-3">
                       Models
                     </h2>
                     <div className="flex justify-center items-center h-0">

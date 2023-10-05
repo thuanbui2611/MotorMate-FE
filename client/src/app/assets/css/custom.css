@@ -231,6 +231,7 @@ body {
   background-image: url("../images/cover/bg-home-products.png");
   background-size: cover;
   background-position: center;
+  max-height: 1024px;
 }
 @media (max-width: 768px) {
   .bg-home-product {
@@ -316,6 +317,117 @@ body {
   }
 }
 
+/* Our Features  */
+.bg-home-features {
+  background-image: url("../images/cover/bg-home-features.png");
+  background-size: cover;
+  background-position: center;
+  max-height: 1024px;
+}
+@media (max-width: 768px) {
+  .bg-home-features {
+    background-size: 100% 100%;
+  }
+}
+
+.bg-home-features h1 {
+  font-size: 68px;
+  font-weight: 900;
+  color: #ff7e06;
+  text-align: left;
+  margin-bottom: 14px;
+}
+
+.bg-home-features h2 {
+  font-size: 21px;
+  font-weight: 700;
+  color: #ff7e06;
+  text-align: center;
+  margin-bottom: 14px;
+}
+
+.bg-home-features p {
+  font-size: 18px;
+  font-weight: 200;
+  color: #ffffff;
+  text-align: center;
+  letter-spacing: 1px;
+}
+
+.bg-home-features hr {
+  border: none;
+  background-color: #ff7e06;
+  width: 100px;
+  height: 5px;
+}
+
+.featureItem {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom-width: 8px;
+  width: 380px;
+  height: 380px;
+  border-color: #ff7e06;
+  background-color: #242424;
+}
+
+.featureItem svg {
+  width: 7rem;
+  height: 7rem;
+  margin-bottom: 16px;
+}
+
+.featureContainer {
+  max-width: 1280px;
+}
+
+@media (max-width: 1530px) {
+  .featureContainer {
+    max-width: 84vw;
+  }
+  .featureItem {
+    width: 25vw;
+    height: 25vw;
+    border-bottom-width: 1vw;
+  }
+}
+
+@media (max-width: 1200px) {
+  .bg-home-features h1 {
+    font-size: 4vw;
+    margin-bottom: 1vw;
+  }
+
+  .bg-home-features h2 {
+    font-size: 2vw;
+    margin-bottom: 1vw;
+  }
+
+  .bg-home-features p {
+    font-size: 1.5vw;
+    letter-spacing: 1px;
+  }
+
+  .bg-home-features hr {
+    width: 7vw;
+    height: 0.3vw;
+  }
+
+  .featureItem {
+    border-bottom-width: 1vw;
+    width: 26vw;
+    height: 26vw;
+  }
+
+  .featureItem svg {
+    width: 7vw;
+    height: 7vw;
+    margin-bottom: 1vw;
+  }
+}
+
+/* End of Our Features */
 /* .product-card {
   width: fit-content;
   height: fit-content;
