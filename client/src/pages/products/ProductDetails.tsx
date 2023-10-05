@@ -7,11 +7,16 @@ import ProductSuggested from "./ProductSuggested";
 import Loading from "../../app/components/Loading";
 import NotFound from "../../app/errors/NotFound";
 import { Vehicle } from "../../app/models/Vehicle";
+import "lightbox.js-react/dist/index.css";
+import { SlideshowLightbox, initLightboxJS } from "lightbox.js-react";
+import ImagesCarousel from "../../app/components/ImagesCarousel";
 
 export default function ProductDetails() {
   const { id } = useParams<{ id: string }>();
   const [product, setProduct] = useState<Vehicle | null>(null);
   const [loading, setLoading] = useState(true);
+  const [openImage, setOpenImage] = useState<number>();
+  const [openSlideShow, setOpenSlideShow] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0); // Scroll to the top of the page
@@ -23,6 +28,24 @@ export default function ProductDetails() {
       .catch((error) => console.log(error))
       .finally(() => setLoading(false));
   }, [id]);
+
+  //Test carousel images
+  const imagesList = [
+    "https://vetfarm.vn/wp-content/uploads/2022/11/Anh-meo-dep-998x800.jpg",
+    "https://qpet.vn/wp-content/uploads/2023/03/Avatar-cute-meo.jpg",
+    "https://cafebiz.cafebizcdn.vn/thumb_w/600/162123310254002176/2022/7/9/photo1657324993775-1657324993859181735127.jpg",
+  ];
+
+  //End of test carousel images
+
+  const handleOpenImage = (index: number) => {
+    setOpenImage(index);
+  };
+  useEffect(() => {
+    if (openImage || openImage === 0) {
+      setOpenSlideShow(true);
+    }
+  }, [openImage]);
 
   if (loading) return <Loading />;
   if (!product) return <NotFound />;
@@ -251,46 +274,43 @@ export default function ProductDetails() {
                 {/* <!-- Tab Content --> */}
                 <div>
                   {/*  lg:pl-48 */}
-                  <div className="" aria-labelledby="Image of book">
-                    <img
-                      className="object-scale-down shadow-xl h-96 w-full  shadow-gray-200 rounded-xl dark:shadow-gray-900/[.2]"
+                  <div className="" aria-labelledby="Images of vehicle">
+                    {/* <img
+                      className="object-scale-down shadow-xl h-96 w-full  shadow-gray-200 rounded-xl"
                       src={product.images[0].image!}
                       alt="Image Description"
+                    /> */}
+                    {/* Carousel image */}
+                    <ImagesCarousel
+                      imagesList={imagesList}
+                      openImage={handleOpenImage}
                     />
+
+                    <SlideshowLightbox
+                      startingSlideIndex={openImage}
+                      className="container grid grid-cols-3 gap-2 mx-auto"
+                      showThumbnails={true}
+                      open={openSlideShow}
+                      onClose={() => {
+                        setOpenImage(undefined);
+                        setOpenSlideShow(false);
+                      }}
+                    >
+                      {imagesList.map((image, index) => (
+                        <img
+                          className="w-full rounded hidden"
+                          src={image}
+                          key={index}
+                        />
+                      ))}
+                    </SlideshowLightbox>
+                    {/* End of Carousel image */}
                   </div>
                 </div>
                 {/* <!-- End Tab Content --> */}
 
                 {/* <!-- SVG Element --> */}
-                <div className="hidden absolute top-0 right-10 translate-x-20 md:block lg:translate-x-20">
-                  <svg
-                    className="w-16 h-auto text-orange-500"
-                    width="121"
-                    height="135"
-                    viewBox="0 0 121 135"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M5 16.4754C11.7688 27.4499 21.2452 57.3224 5 89.0164"
-                      stroke="currentColor"
-                      strokeWidth="10"
-                      strokeLinecap="round"
-                    />
-                    <path
-                      d="M33.6761 112.104C44.6984 98.1239 74.2618 57.6776 83.4821 5"
-                      stroke="currentColor"
-                      strokeWidth="10"
-                      strokeLinecap="round"
-                    />
-                    <path
-                      d="M50.5525 130C68.2064 127.495 110.731 117.541 116 78.0874"
-                      stroke="currentColor"
-                      strokeWidth="10"
-                      strokeLinecap="round"
-                    />
-                  </svg>
-                </div>
+
                 {/* <!-- End SVG Element --> */}
               </div>
             </div>
