@@ -11,7 +11,6 @@ import Bill from "../../pages/checkout/Bill";
 import SettingProfile from "../../pages/profile/SettingProfile";
 import Cart from "../../pages/cart";
 import Login from "../../pages/account/Login";
-import Chat from "../../pages/chat/Chat";
 import ServerErrors from "../errors/ServerErrors";
 import Contact from "../../pages/contact";
 import SignUpPage from "../../pages/account/SignUpPage";
@@ -48,8 +47,6 @@ export const router = createBrowserRouter([
           { path: "my-orders", element: <Orders /> },
           { path: "profile-setting", element: <SettingProfile /> },
           { path: "my-cart", element: <Cart /> },
-
-          { path: "chat", element: <Chat /> },
           { path: "server-error", element: <ServerErrors /> },
         ],
       },

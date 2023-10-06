@@ -7,6 +7,7 @@
     "@emotion/styled": "^11.11.0",
     "@heroicons/react": "^2.0.18",
     "@material-tailwind/react": "^2.1.1",
+    "@microsoft/signalr": "^7.0.11",
     "@mui/lab": "^5.0.0-alpha.139",
     "@mui/material": "^5.14.3",
     "@mui/x-date-pickers": "^6.11.0",
@@ -34,7 +35,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "set PORT=3000 && react-scripts start",
     "build": "react-scripts build",
     "build:css": "tailwind build src/index.css -o src/styles.css",
     "test": "react-scripts test",

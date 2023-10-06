@@ -1,5 +1,13 @@
+import {
+  HttpTransportType,
+  HubConnectionBuilder,
+  LogLevel,
+} from "@microsoft/signalr";
 import { useEffect, useRef, useState } from "react";
 import { set } from "react-hook-form";
+import { useAppDispatch, useAppSelector } from "../../app/store/ConfigureStore";
+import { Message, RequestCreateNewChat } from "../../app/models/Chat";
+import { addListChat, loadListChat } from "./ChatSlice";
 
 export default function TinyChat() {
   const [isFormVisible, setIsFormVisible] = useState(false);
@@ -9,6 +17,81 @@ export default function TinyChat() {
   >(null);
   const [newChatForm, setNewChatForm] = useState(false);
 
+  const dispatch = useAppDispatch();
+  const chats = useAppSelector((state) => state.chat.listChat);
+  //Connect hub
+  const [connection, setConnection] = useState<any>(null);
+
+  const userId = "7762bfc2-8f19-46cd-b3e5-086aec57907d";
+  useEffect(() => {
+    const userLogin = JSON.parse(localStorage.getItem("user")!);
+    const connection = new HubConnectionBuilder()
+      .withUrl(
+        `https://motormate.azurewebsites.net/messages?userId=${userId}&pageNumber=1&pageSize=10`,
+        {
+          accessTokenFactory: () => `${userLogin.token!}`,
+          // skipNegotiation: true,
+          // transport: HttpTransportType.WebSockets,
+        }
+      )
+      .withAutomaticReconnect()
+      .configureLogging(LogLevel.Information)
+      .build();
+
+    connection
+      .start()
+      .then(() => {
+        // setIsLoading(false);
+        debugger;
+        console.log("Connected");
+        connection.on("ReceiveChat", (message: Message) => {
+          debugger;
+          dispatch(addListChat(message));
+        });
+
+        connection.on("LoadChats", (chats: any[]) => {
+          debugger;
+          dispatch(loadListChat(chats));
+        });
+
+        connection.invoke("OnConnectedAsync");
+        setConnection(connection);
+      })
+      .catch((error) =>
+        console.log("Error while establishing connection: " + error)
+      );
+
+    return () => {
+      connection
+        .stop()
+        .catch((error) =>
+          console.log("Error while stopping connection: " + error)
+        );
+    };
+  }, [dispatch]);
+
+  const createNewChat = async (newChat: RequestCreateNewChat) => {
+    try {
+      await connection.invoke("CreateChatAsync", newChat);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleSubmitCreateChat = async (event: any) => {
+    event.preventDefault();
+    debugger;
+    const newChat: RequestCreateNewChat = {
+      members: ["", ""],
+      chatMessage: {
+        userName: "",
+        message: "",
+      },
+    };
+
+    createNewChat(newChat);
+  };
+  //End of connect hub
   const handleIconClick = () => {
     setIsFormVisible(true);
   };
@@ -315,14 +398,16 @@ export default function TinyChat() {
                 </div>
               </div>
               {/* List user send message */}
-              {messageList.map((message, index) => (
+              {chats.map((chat, index) => (
                 <div
-                  className={`flex flex-row py-2 px-1 justify-center items-center border-b-2 hover:bg-gray-200 cursor-pointer  ${
+                  className={`flex flex-row py-2 px-1 justify-center items-center border-b-2 hover:bg-gray-200 cursor-pointer  
+                  ${
                     selectedMessage?.some(
-                      (mess) => mess.user === message.user
+                      (mess) => mess.user === chat.Members[0].Username ///////////
                     ) && "bg-gray-200"
-                  }`}
-                  onClick={() => handleMessageClick(message)}
+                  }
+                  `}
+                  // onClick={() => handleMessageClick(message)}
                   key={index}
                 >
                   <div className="w-1/4">
@@ -335,14 +420,14 @@ export default function TinyChat() {
                   <div className="w-3/4">
                     <div className="flex justify-between">
                       <div className="flex-row flex-initial text-sm font-semibold line-clamp-1">
-                        {message.user}
+                        {chat.Members[0].Username}
                       </div>
                       <div className=" flex-row flex-initial text-xs font-semibold justify-end text-gray-500">
-                        {message.time}
+                        {chat.LastUpdatedAt}
                       </div>
                     </div>
                     <span className="text-gray-500 text-xs line-clamp-1">
-                      {message.lastestMessage}
+                      {/* {message.lastestMessage} */} Lastest message
                     </span>
                   </div>
                 </div>
