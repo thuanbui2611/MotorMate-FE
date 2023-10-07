@@ -19,56 +19,59 @@ export default function TinyChat() {
 
   const dispatch = useAppDispatch();
   const chats = useAppSelector((state) => state.chat.listChat);
+  const userLogin = useAppSelector((state) => state.account.user);
+  const userLoginDetail = useAppSelector((state) => state.account.userDetail);
   //Connect hub
   const [connection, setConnection] = useState<any>(null);
 
-  const userId = "7762bfc2-8f19-46cd-b3e5-086aec57907d";
   useEffect(() => {
-    const userLogin = JSON.parse(localStorage.getItem("user")!);
-    const connection = new HubConnectionBuilder()
-      .withUrl(
-        `https://motormate.azurewebsites.net/messages?userId=${userId}&pageNumber=1&pageSize=10`,
-        {
-          accessTokenFactory: () => `${userLogin.token!}`,
-          // skipNegotiation: true,
-          // transport: HttpTransportType.WebSockets,
-        }
-      )
-      .withAutomaticReconnect()
-      .configureLogging(LogLevel.Information)
-      .build();
+    if (userLoginDetail && userLogin) {
+      debugger;
+      const connection = new HubConnectionBuilder()
+        .withUrl(
+          `https://motormate.azurewebsites.net/messages?userId=${userLoginDetail?.id}&pageNumber=1&pageSize=10`,
+          {
+            accessTokenFactory: () => `${userLogin?.token}`,
+            // skipNegotiation: true,
+            // transport: HttpTransportType.WebSockets,
+          }
+        )
+        .withAutomaticReconnect()
+        .configureLogging(LogLevel.Information)
+        .build();
 
-    connection
-      .start()
-      .then(() => {
-        // setIsLoading(false);
-        debugger;
-        console.log("Connected");
-        connection.on("ReceiveChat", (message: Message) => {
-          debugger;
-          dispatch(addListChat(message));
-        });
-
-        connection.on("LoadChats", (chats: any[]) => {
-          debugger;
-          dispatch(loadListChat(chats));
-        });
-
-        connection.invoke("OnConnectedAsync");
-        setConnection(connection);
-      })
-      .catch((error) =>
-        console.log("Error while establishing connection: " + error)
-      );
-
-    return () => {
       connection
-        .stop()
+        .start()
+        .then(() => {
+          // setIsLoading(false);
+          debugger;
+          console.log("Connected");
+          connection.on("ReceiveChat", (message: Message) => {
+            dispatch(addListChat(message));
+            debugger;
+          });
+
+          connection.on("LoadChats", (chats: any[]) => {
+            dispatch(loadListChat(chats));
+            debugger;
+          });
+
+          // connection.invoke("OnConnectedAsync");
+          setConnection(connection);
+        })
         .catch((error) =>
-          console.log("Error while stopping connection: " + error)
+          console.log("Error while establishing connection: " + error)
         );
-    };
-  }, [dispatch]);
+
+      return () => {
+        connection
+          .stop()
+          .catch((error) =>
+            console.log("Error while stopping connection: " + error)
+          );
+      };
+    }
+  }, [dispatch, userLoginDetail]);
 
   const createNewChat = async (newChat: RequestCreateNewChat) => {
     try {
@@ -80,7 +83,6 @@ export default function TinyChat() {
 
   const handleSubmitCreateChat = async (event: any) => {
     event.preventDefault();
-    debugger;
     const newChat: RequestCreateNewChat = {
       members: ["", ""],
       chatMessage: {
@@ -271,6 +273,7 @@ export default function TinyChat() {
     setNewChatForm(true);
     setSelectedMessage(null);
   };
+
   return (
     <>
       {!isFormVisible && (
@@ -403,7 +406,7 @@ export default function TinyChat() {
                   className={`flex flex-row py-2 px-1 justify-center items-center border-b-2 hover:bg-gray-200 cursor-pointer  
                   ${
                     selectedMessage?.some(
-                      (mess) => mess.user === chat.Members[0].Username ///////////
+                      (mess) => mess.user === chat.members[0].username ///////////
                     ) && "bg-gray-200"
                   }
                   `}
@@ -420,10 +423,10 @@ export default function TinyChat() {
                   <div className="w-3/4">
                     <div className="flex justify-between">
                       <div className="flex-row flex-initial text-sm font-semibold line-clamp-1">
-                        {chat.Members[0].Username}
+                        {chat.members[0].username}
                       </div>
                       <div className=" flex-row flex-initial text-xs font-semibold justify-end text-gray-500">
-                        {chat.LastUpdatedAt}
+                        {chat.lastUpdatedAt}
                       </div>
                     </div>
                     <span className="text-gray-500 text-xs line-clamp-1">
@@ -444,13 +447,15 @@ export default function TinyChat() {
               >
                 {/* Start new chat form */}
                 {newChatForm && !selectedMessage && (
-                  <div className="flex flex-col items-center justify-center font-medium text-gray-600 text-xs">
-                    <input
-                      type="text"
-                      placeholder="Start new chat with..."
-                      className="py-1 px-1 border-2 border-gray-200 rounded-xl w-5/6 text-center h-8 text-xs"
-                    />
-                  </div>
+                  <form onSubmit={handleSubmitCreateChat}>
+                    <div className="flex flex-col items-center justify-center font-medium text-gray-600 text-xs">
+                      <input
+                        type="text"
+                        placeholder="Start new chat with..."
+                        className="py-1 px-1 border-2 border-gray-200 rounded-xl w-5/6 text-center h-8 text-xs"
+                      />
+                    </div>
+                  </form>
                 )}
                 {!selectedMessage && !newChatForm ? (
                   <>

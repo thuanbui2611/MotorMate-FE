@@ -17,6 +17,7 @@ export const ChatSlice = createSlice({
       state.listChat.push(action.payload);
     },
     loadListChat: (state, action) => {
+      debugger;
       state.listChat = action.payload;
     },
   },

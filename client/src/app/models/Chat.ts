@@ -1,20 +1,20 @@
 export interface Chat {
-  Id: string;
-  LastUpdatedAt: string;
-  Members: MemberOfChat[];
+  id: string;
+  lastUpdatedAt: string;
+  members: MemberOfChat[];
 }
 
 export interface MemberOfChat {
-  Id: string;
-  Username: string;
-  Avatar: string;
+  id: string;
+  username: string;
+  avatar: string;
 }
 
 export interface Message {
-  Id: string;
-  Message: string;
-  Time: string;
-  User: MemberOfChat;
+  id: string;
+  message: string;
+  time: string;
+  user: MemberOfChat;
 }
 
 export interface RequestCreateNewChat {

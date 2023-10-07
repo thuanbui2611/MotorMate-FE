@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, isAnyOf } from "@reduxjs/toolkit";
-import { User } from "../../app/models/User";
+import { User, UserDetail } from "../../app/models/User";
 import { FieldValues } from "react-hook-form";
 import jwt_decode from "jwt-decode";
 import { toast } from "react-toastify";
@@ -7,10 +7,12 @@ import agent from "../../app/api/agent";
 
 interface AccountState {
   user: User | null;
+  userDetail: UserDetail | null;
 }
 
 const initialState: AccountState = {
   user: null,
+  userDetail: null
 };
 
 export const signInUser = createAsyncThunk<User, FieldValues>(
@@ -62,7 +64,7 @@ export const fetchUserFromToken = createAsyncThunk<User>(
   }
 );
 
-export const getUserDetails = createAsyncThunk<User>(
+export const getUserDetails = createAsyncThunk<UserDetail>(
   "account/getUserDetails",
   async (_, thunkAPI) => {
     try {
@@ -109,6 +111,14 @@ export const accountSlice = createSlice({
       toast.error(action.error.message);
     });
 
+    builder
+    .addCase(getUserDetails.fulfilled, (state, action) => {
+      state.userDetail = action.payload;
+    })
+    .addCase(getUserDetails.rejected, (state, action) => {
+      console.log("Auth user fail")
+    })
+
     builder.addMatcher(
       isAnyOf(
         signInUser.fulfilled,
@@ -128,6 +138,8 @@ export const accountSlice = createSlice({
         console.log(action.payload);
       }
     );
+
+    
   },
 });
 
