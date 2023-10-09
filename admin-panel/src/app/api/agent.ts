@@ -132,8 +132,11 @@ const Vehicle = {
     requests.get(`api/vehicle/status/${statusRoute}`, params),
   details: (id: string) => requests.get(`api/vehicle/${id}`),
   create: (values: {}) => requests.post("api/vehicle", values),
+  lock: (vehicleId: string) =>
+    requests.post(`api/vehicle/${vehicleId}/lock`, {}),
   update: (id: string, values: {}) => requests.put(`api/vehicle/${id}`, values),
-  updateStatusVehicle: (vehicleId: string, statusNumber: number) => requests.post(`api/vehicle/${vehicleId}/status/${statusNumber}`, {}),
+  updateStatusVehicle: (vehicleId: string, statusNumber: number) =>
+    requests.post(`api/vehicle/${vehicleId}/status/${statusNumber}`, {}),
   delete: (id: string) => requests.delete(`api/vehicle/${id}`),
 };
 

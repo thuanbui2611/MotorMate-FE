@@ -11,7 +11,7 @@ export default function Header(props: Props) {
 
   const triggerMobileMenu = useRef<any>(null);
   const dropdownMobileMenu = useRef<any>(null);
-  const user = useAppSelector((state) => state.account.user);
+  const user = useAppSelector((state) => state.account.userDetail);
 
   useEffect(() => {
     const handleResize = () => {

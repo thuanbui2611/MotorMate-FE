@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from "react";
-import { User } from "../models/User";
-import { useAppDispatch } from "../store/ConfigureStore";
+import { User, UserDetail } from "../models/User";
+import { useAppDispatch, useAppSelector } from "../store/ConfigureStore";
 import { signOut } from "../../pages/account/AccountSlice";
 import { Link } from "react-router-dom";
 
 interface Props {
-  user: User;
+  user: UserDetail;
 }
 
 export default function MenuItemUser({ user }: Props) {
@@ -13,6 +13,7 @@ export default function MenuItemUser({ user }: Props) {
   const triggerUserMenu = useRef<any>(null);
   const dropdownUserMenu = useRef<any>(null);
 
+  const userFromToken = useAppSelector((state) => state.account.user);
   const dispatch = useAppDispatch();
   useEffect(() => {
     const clickHandler = ({ target }: MouseEvent) => {
@@ -61,7 +62,7 @@ export default function MenuItemUser({ user }: Props) {
         type="button"
         className={` ${
           isUserMenuOpen ? "focus:ring-2 focus:ring-orange-based" : ""
-        } flex mr-3 text-sm bg-gray-800 rounded-full md:mr-0`}
+        } flex w-8 h-8 mr-3 text-sm bg-gray-800 rounded-full md:mr-0`}
         // id="user-menu-button"
         // aria-expanded={isUserMenuOpen ? "true" : "false"}
         // data-dropdown-toggle="user-dropdown"
@@ -69,8 +70,12 @@ export default function MenuItemUser({ user }: Props) {
         // data-dropdown-placement="bottom"
       >
         <img
-          className="w-8 h-8 rounded-full"
-          src="https://img.freepik.com/free-icon/user_318-563642.jpg?w=2000"
+          className="w-full h-full rounded-full"
+          src={
+            user.picture
+              ? user.picture
+              : "https://img.freepik.com/free-icon/user_318-563642.jpg?w=2000"
+          }
           alt="user photo"
         />
       </button>
@@ -82,16 +87,16 @@ export default function MenuItemUser({ user }: Props) {
       >
         <div className="px-4 py-3">
           <span className="block text-sm text-gray-900 font-bold">
-            {user?.name}
+            {user?.fullName}
           </span>
           <span className="block text-sm  text-gray-500 truncate">
-            {user?.role}
+            {userFromToken?.role}
           </span>
         </div>
         <ul className="py-2" aria-labelledby="user-menu-button">
           <li>
             <Link
-              to={"/profile/" + user.username}
+              to={"/profile/" + user.userName}
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 "
             >
               Profile
@@ -107,7 +112,7 @@ export default function MenuItemUser({ user }: Props) {
           </li>
           <li>
             <Link
-              to={"/profile/" + user.username + "/my-products"}
+              to={"/profile/" + user.userName + "/my-products"}
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
             >
               My products

@@ -9,7 +9,6 @@ import { RootState } from "../../app/store/ConfigureStore";
 import agent from "../../app/api/agent";
 import { FieldValues } from "react-hook-form";
 import { toast } from "react-toastify";
-import { vehiclesAdapter } from "./VehicleSlice";
 
 interface VehicleState {
   vehiclesPending: Vehicle | null;

@@ -92,14 +92,15 @@ export default function HomePage() {
 
       {/* Our Features */}
       <section className="bg-home-features">
-        <div className="mx-auto pt-6 md:max-w-screen-2xl md:pt-8 md:px-4 lg:pt-10 lg:px-6">
-          <div className="flex items-center justify-start gap-3 md:gap-5 lg:gap-6 ">
-            <hr></hr>
-            <h1>Our Features</h1>
+        <div className="featureContainer pb-8 pt-4 mx-auto w-full px-0 md:px-4 lg:pb-20 lg:pt-8 lg:px-6">
+          <div className="mx-auto pt-6">
+            <div className="relative flex items-center justify-start">
+              <div className="hrDiv">
+                <hr></hr>
+              </div>
+              <h1>Our Features</h1>
+            </div>
           </div>
-        </div>
-
-        <div className="featureContainer pb-8 pt-4 mx-auto w-full px-0 md:px-4 lg:pb-20 lg:pt-8 lg:px-6 ">
           <div className="grid grid-cols-3 gap-2 md:gap-4 lg:gap-6">
             <div className="featureItem">
               <div className="flex flex-col items-center justify-center px-1 md:px-4 lg:px-5">

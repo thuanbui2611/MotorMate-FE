@@ -4,6 +4,7 @@ html,
 body {
   font-family: "Montserrat", sans-serif;
 }
+
 /* Header */
 .text-gradient {
   background: linear-gradient(90deg, #ff6003, #ff7e06);
@@ -330,6 +331,12 @@ body {
   }
 }
 
+.hrDiv {
+  position: absolute;
+  top: 40%;
+  left: -8rem;
+}
+
 .bg-home-features h1 {
   font-size: 68px;
   font-weight: 900;
@@ -383,6 +390,13 @@ body {
 }
 
 @media (max-width: 1530px) {
+  .hrDiv {
+    left: -8vw;
+  }
+  .bg-home-features hr {
+    width: 6.5vw;
+  }
+
   .featureContainer {
     max-width: 84vw;
   }
@@ -394,6 +408,9 @@ body {
 }
 
 @media (max-width: 1200px) {
+  .hrDiv {
+    left: -5.5vw;
+  }
   .bg-home-features h1 {
     font-size: 4vw;
     margin-bottom: 1vw;
@@ -410,7 +427,7 @@ body {
   }
 
   .bg-home-features hr {
-    width: 7vw;
+    width: 4.5vw;
     height: 0.3vw;
   }
 
@@ -1512,7 +1529,7 @@ p {
   bottom: -1px;
   left: -8px;
   width: 0;
-  background-color: #ff4655;
+  background-image: linear-gradient(to right, #ff6003, #ff7e06);
   transform: skew(-15deg);
   transition: all 0.2s ease;
 }

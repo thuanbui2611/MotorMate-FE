@@ -297,10 +297,10 @@ export default function VehicleDetails({ vehicle, onClose }: Props) {
                                 Lock:
                               </p>
                               <p
-                                className={`ml-1 text-sm leading-4 break-all inline-flex rounded-full  py-1 px-2 font-bold  ${
+                                className={`ml-1 text-sm leading-4 break-all inline-flex rounded-full bg-opacity-10  py-1 px-2 font-bold  ${
                                   vehicle?.isLocked
-                                    ? "bg-danger opacity-10 text-danger"
-                                    : " text-meta-3 bg-success bg-opacity-10 "
+                                    ? "bg-danger text-danger"
+                                    : "text-meta-3 bg-success"
                                 }`}
                               >
                                 {vehicle?.isLocked ? "Locked" : "Active"}

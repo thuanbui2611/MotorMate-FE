@@ -89,6 +89,20 @@ export const updateVehicleAsync = createAsyncThunk<Vehicle, FieldValues>(
   }
 );
 
+export const lockVehicleAsync = createAsyncThunk(
+  "vehicle/lockVehicleAsync",
+  async (id: string) => {
+    try {
+      const response = await agent.Vehicle.lock(id);
+
+      return response;
+    } catch (error: any) {
+      toast.error(error.data.message);
+      throw error;
+    }
+  }
+);
+
 export const deleteVehicleAsync = createAsyncThunk(
   "vehicle/deleteVehicleAsync",
   async (id: string) => {
@@ -168,6 +182,23 @@ export const VehicleSlice = createSlice({
       toast.success("Add vehicle successfully!");
       vehiclesAdapter.addOne(state, action.payload);
     });
+
+    builder
+      .addCase(lockVehicleAsync.fulfilled, (state, action) => {
+        const { id, isLocked } = action.payload;
+        vehiclesAdapter.updateOne(state, {
+          id: id,
+          changes: { isLocked: isLocked },
+        });
+        if (isLocked) {
+          toast.success("Lock vehicle successfully!");
+        } else {
+          toast.success("Unlock vehicle successfully!");
+        }
+      })
+      .addCase(lockVehicleAsync.rejected, (state, action) => {
+        toast.error("Lock vehicle failed!");
+      });
 
     builder.addCase(updateVehicleAsync.fulfilled, (state, action) => {
       toast.success("Update vehicle successfully!");

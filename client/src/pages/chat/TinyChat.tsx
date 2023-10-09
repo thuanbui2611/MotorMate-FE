@@ -6,34 +6,57 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { set } from "react-hook-form";
 import { useAppDispatch, useAppSelector } from "../../app/store/ConfigureStore";
-import { Message, RequestCreateNewChat } from "../../app/models/Chat";
-import { addListChat, loadListChat } from "./ChatSlice";
+import { Chat, Message, RequestCreateNewChat } from "../../app/models/Chat";
+import {
+  addListChat,
+  addListMessage,
+  loadListChat,
+  loadListMessage,
+  resetListMessage,
+  setPageNumber,
+} from "./ChatSlice";
+import SelectUserChat from "../../app/components/SelectUserChat";
+import {
+  formatChatTime,
+  formatChatTimeOnHover,
+} from "../../app/utils/formatChatTime";
+import { connect } from "http2";
+import LoaderButton from "../../app/components/LoaderButton";
 
 export default function TinyChat() {
   const [isFormVisible, setIsFormVisible] = useState(false);
   const [isFormClosing, setIsFormClosing] = useState(false);
-  const [selectedMessage, setSelectedMessage] = useState<
-    MessageDetail[] | null
-  >(null);
-  const [newChatForm, setNewChatForm] = useState(false);
+
+  const [newChatForm, setNewChatForm] = useState(true);
+  const [userNewChat, setUserNewChat] = useState<string | null>(null);
+  const [messageSend, setMessageSend] = useState<string>("");
+  const [selectedChat, setSelectedChat] = useState<string | null>(null);
+  const [listMessageLoaded, setListMessageLoaded] = useState<boolean>(false);
+  const [listChatLoaded, setListChatLoaded] = useState<boolean>(true);
+  const [isFetchPreviousMess, setIsFetchPreviousMess] =
+    useState<boolean>(false);
 
   const dispatch = useAppDispatch();
-  const chats = useAppSelector((state) => state.chat.listChat);
+  const { listChat, listMessage, pagination } = useAppSelector(
+    (state) => state.chat
+  );
+
   const userLogin = useAppSelector((state) => state.account.user);
   const userLoginDetail = useAppSelector((state) => state.account.userDetail);
-  //Connect hub
-  const [connection, setConnection] = useState<any>(null);
 
+  //Connect hub
+  const [connectionMessagesHub, setConnectionMessagesHub] = useState<any>(null);
+  const [connectionChatDetailHub, setConnectionChatDetailHub] =
+    useState<any>(null);
+
+  // Connect to ChatHub
   useEffect(() => {
     if (userLoginDetail && userLogin) {
-      debugger;
       const connection = new HubConnectionBuilder()
         .withUrl(
           `https://motormate.azurewebsites.net/messages?userId=${userLoginDetail?.id}&pageNumber=1&pageSize=10`,
           {
             accessTokenFactory: () => `${userLogin?.token}`,
-            // skipNegotiation: true,
-            // transport: HttpTransportType.WebSockets,
           }
         )
         .withAutomaticReconnect()
@@ -43,21 +66,17 @@ export default function TinyChat() {
       connection
         .start()
         .then(() => {
-          // setIsLoading(false);
-          debugger;
           console.log("Connected");
-          connection.on("ReceiveChat", (message: Message) => {
-            dispatch(addListChat(message));
-            debugger;
+          connection.on("ReceiveChat", (message: Chat) => {
+            const result = dispatch(addListChat(message));
+            setSelectedChat(result.payload.id);
           });
 
-          connection.on("LoadChats", (chats: any[]) => {
+          connection.on("LoadChats", (chats: Chat[]) => {
             dispatch(loadListChat(chats));
-            debugger;
+            setListChatLoaded(false);
           });
-
-          // connection.invoke("OnConnectedAsync");
-          setConnection(connection);
+          setConnectionMessagesHub(connection);
         })
         .catch((error) =>
           console.log("Error while establishing connection: " + error)
@@ -73,26 +92,87 @@ export default function TinyChat() {
     }
   }, [dispatch, userLoginDetail]);
 
-  const createNewChat = async (newChat: RequestCreateNewChat) => {
+  //Connect to Messagehub
+  useEffect(() => {
+    if (userLoginDetail && userLogin && selectedChat) {
+      const connection = new HubConnectionBuilder()
+        .withUrl(
+          `https://motormate.azurewebsites.net/chat-details?chatId=${selectedChat}&pageNumber=${pagination.pageNumber}&pageSize=${pagination.pageSize}`,
+          {
+            accessTokenFactory: () => `${userLogin?.token}`,
+          }
+        )
+        .withAutomaticReconnect()
+        .configureLogging(LogLevel.Information)
+        .build();
+
+      connection
+        .start()
+        .then(() => {
+          console.log("Connected to messageHub");
+          connection.on("ReceiveMessage", (message: Message) => {
+            dispatch(addListMessage(message));
+          });
+
+          connection.on("LoadMessages", (chats: Message[]) => {
+            dispatch(loadListMessage(chats));
+            setIsFetchPreviousMess(false);
+            setListMessageLoaded(false);
+          });
+          setConnectionChatDetailHub(connection);
+        })
+        .catch((error) =>
+          console.log("Error while establishing connection: " + error)
+        );
+
+      return () => {
+        connection
+          .stop()
+          .catch((error) =>
+            console.log("Error while stopping connection: " + error)
+          );
+      };
+    }
+  }, [dispatch, userLoginDetail, selectedChat, pagination.pageNumber]);
+
+  const handleSubmitSendMessage = async (event: any) => {
     try {
-      await connection.invoke("CreateChatAsync", newChat);
+      if (messageSend && !checkOnlySpaces(messageSend)) {
+        event.preventDefault();
+        const request = {
+          message: messageSend,
+          senderId: userLoginDetail?.id,
+        };
+
+        await connectionChatDetailHub.invoke("CreateMessageAsync", request);
+        setMessageSend("");
+        await connectionMessagesHub.invoke("OnConnectedAsync");
+      }
     } catch (error) {
-      console.log(error);
+      console.log("Error when send mess: ", error);
     }
   };
 
   const handleSubmitCreateChat = async (event: any) => {
-    event.preventDefault();
-    const newChat: RequestCreateNewChat = {
-      members: ["", ""],
-      chatMessage: {
-        userName: "",
-        message: "",
-      },
-    };
+    try {
+      if (messageSend) {
+        event.preventDefault();
+        const request = {
+          members: [userLoginDetail?.userName, userNewChat],
+          chatMessage: {
+            userName: userLoginDetail?.userName,
+            message: messageSend,
+          },
+        };
 
-    createNewChat(newChat);
+        await connectionMessagesHub.invoke("CreateChatAsync", request);
+        setMessageSend("");
+      }
+    } catch (error) {
+      console.log("Error when create new chat", error);
+    }
   };
+
   //End of connect hub
   const handleIconClick = () => {
     setIsFormVisible(true);
@@ -103,6 +183,10 @@ export default function TinyChat() {
     setIsFormVisible(false);
     setIsFormClosing(false);
   };
+
+  function checkOnlySpaces(str: string): boolean {
+    return /^\s*$/.test(str);
+  }
   //Test data message
   type MessageList = {
     user: string;
@@ -203,12 +287,12 @@ export default function TinyChat() {
       isSender: true,
     },
   ];
-  const handleMessageClick = (message: MessageList) => {
-    if (message.user === "James") {
-      setSelectedMessage(messageDetailJames);
-    } else if (message.user === "Petter") {
-      setSelectedMessage(messageDetailPetter);
-    }
+
+  const handleChatClick = (chatId: string) => {
+    setNewChatForm(false);
+    setListMessageLoaded(true);
+    dispatch(resetListMessage());
+    setSelectedChat(chatId);
   };
   //End of test data message
   // Scroll to the bottom when open chat
@@ -216,7 +300,7 @@ export default function TinyChat() {
 
   useEffect(() => {
     scrollToBottom();
-  }, [selectedMessage]);
+  }, [selectedChat]);
 
   const scrollToBottom = (): void => {
     if (chatContainerRef.current) {
@@ -227,7 +311,7 @@ export default function TinyChat() {
 
   // End of scroll to the bottom when open chat
 
-  // Scroll on top to fetch more message
+  // Scroll on top to fetch previous message
   const handleScroll = (): void => {
     if (chatContainerRef.current) {
       const { scrollTop, clientHeight, scrollHeight } =
@@ -235,15 +319,19 @@ export default function TinyChat() {
       const hasScrollbar = scrollHeight > clientHeight;
 
       if (hasScrollbar && scrollTop === 0) {
-        fetchMessages();
+        fetchPreviousMessages();
       }
     }
   };
 
-  const fetchMessages = (): void => {
-    console.log("Fetching new messages...");
+  const fetchPreviousMessages = (): void => {
+    if (listMessage) {
+      console.log("fetching previous messages");
+      setIsFetchPreviousMess(true);
+      dispatch(setPageNumber(pagination.pageNumber + 1));
+    }
   };
-  // End of scroll on top to fetch more message
+  // End of scroll on top to fetch previous message
 
   // Hover to see time message
   let hoverTimer: ReturnType<typeof setTimeout>;
@@ -271,7 +359,8 @@ export default function TinyChat() {
   // Handle start new chat form
   const handleStartNewChat = () => {
     setNewChatForm(true);
-    setSelectedMessage(null);
+    setSelectedChat(null);
+    setListMessageLoaded(true);
   };
 
   return (
@@ -299,37 +388,48 @@ export default function TinyChat() {
 
       {isFormVisible && (
         <div
-          className={`container md:min-w-[400px] mx-auto rounded-lg border-2 md:w-1/3 md:max-h-96 md:max-w-lg fixed bottom-0 right-0 z-50 bg-white py-1
+          className={`container md:min-w-[400px] overflow-auto mx-auto rounded-lg border-2 md:w-1/3 md:max-h-96 md:max-w-lg fixed bottom-0 right-0 z-50 bg-white py-1
         ${isFormClosing ? "animate-fade-out" : "animate-fade-in"}
           `}
         >
           <div
-            className="flex justify-between items-center bg-white border-b-2"
-            style={{ fontSize: "0.8rem;" }}
+            className="flex  justify-between items-center bg-white border-b-2"
+            style={{ fontSize: "0.8rem" }}
           >
-            <div className="text-center" style={{ width: "40%" }}>
+            <div className="text-center min-w-[150px]" style={{ width: "40%" }}>
               <p className="font-semibold text-xl ml-2">Chat</p>
             </div>
             <div
-              className="flex justify-between items-center  bg-gradient-to-r from-[#ffa703] to-[#FF7E06] p-2 h-full rounded-lg -mt-1 "
+              className="flex justify-between items-center min-w-[220px]  bg-gradient-to-r from-[#ffa703] to-[#FF7E06] p-2 h-full rounded-l-sm rounded-lg -mt-1 "
               style={{ width: "61%" }}
             >
               <div className="flex flex-initial items-center">
-                {selectedMessage ? (
-                  <img
-                    className="h-9 w-9 p-1 rounded-full text-white font-semibold flex items-center justify-center"
-                    src="https://source.unsplash.com/_7LbC5J-jw4/600x600"
-                  />
-                ) : (
-                  ""
+                {selectedChat && (
+                  <>
+                    <div className="h-8 w-8 border shadow-md rounded-full">
+                      <img
+                        className="h-full w-full rounded-full text-white font-semibold flex items-center justify-center"
+                        src={
+                          listChat
+                            .find((chat) => chat.id === selectedChat)
+                            ?.members.find(
+                              (member) =>
+                                member.username !== userLoginDetail?.userName
+                            )?.avatar || ""
+                        }
+                      />
+                    </div>
+
+                    <p className="flex-initial ml-2 text-white line-clamp-1 overflow-ellipsis break-all">
+                      {listChat
+                        .find((chat) => chat.id === selectedChat)
+                        ?.members.find(
+                          (member) =>
+                            member.username !== userLoginDetail?.userName
+                        )?.username || ""}
+                    </p>
+                  </>
                 )}
-                <p className="flex-initial ml-2 text-white">
-                  {selectedMessage ? (
-                    <> {selectedMessage.find((m) => m.isSender)?.user} </>
-                  ) : (
-                    ""
-                  )}
-                </p>
               </div>
               <div className="flex-row flex-initial items-center justify-center">
                 <button
@@ -356,8 +456,9 @@ export default function TinyChat() {
               </div>
             </div>
           </div>
-          <div className="flex flex-row justify-between bg-white max-h-80 ">
-            <div className="flex flex-col w-2/3 border-r-2  max-h-80 overflow-y-autoscrollbar ">
+          <div className="flex flex-row justify-between bg-white max-h-80">
+            {/* List of chat */}
+            <div className="flex flex-col min-w-[150px] w-[40%] border-r-2  max-h-80 overflow-y-autoscrollbar ">
               <div className="flex justify-between gap-1 border-b-2 py-2 px-1 h-11 sticky top-0 bg-white">
                 <input
                   type="text"
@@ -401,37 +502,44 @@ export default function TinyChat() {
                 </div>
               </div>
               {/* List user send message */}
-              {chats.map((chat, index) => (
+              {listChatLoaded && <LoaderButton />}
+              {listChat.map((chat, index) => (
                 <div
-                  className={`flex flex-row py-2 px-1 justify-center items-center border-b-2 hover:bg-gray-200 cursor-pointer  
-                  ${
-                    selectedMessage?.some(
-                      (mess) => mess.user === chat.members[0].username ///////////
-                    ) && "bg-gray-200"
-                  }
+                  className={`flex py-2 px-1 justify-start items-center border-b-2 hover:bg-gray-200 cursor-pointer  
+                  ${selectedChat === chat.id && "bg-gray-200"}
                   `}
-                  // onClick={() => handleMessageClick(message)}
+                  onClick={() => handleChatClick(chat.id)}
                   key={index}
                 >
-                  <div className="w-1/4">
+                  <div className="w-8 h-8 mr-1">
                     <img
-                      src="https://source.unsplash.com/_7LbC5J-jw4/600x600"
-                      className="object-cover h-8 w-8 rounded-full"
+                      src={
+                        chat.members.find(
+                          (member) =>
+                            member.username !== userLoginDetail?.userName
+                        )?.avatar || ""
+                      }
+                      className="object-cover w-full h-full rounded-full shadow-md"
                       alt=""
                     />
                   </div>
-                  <div className="w-3/4">
-                    <div className="flex justify-between">
-                      <div className="flex-row flex-initial text-sm font-semibold line-clamp-1">
-                        {chat.members[0].username}
-                      </div>
-                      <div className=" flex-row flex-initial text-xs font-semibold justify-end text-gray-500">
-                        {chat.lastUpdatedAt}
+                  <div className="flex-1">
+                    <div className="flex justify-start">
+                      <div className="flex-1 text-sm font-semibold line-clamp-1 overflow-ellipsis break-all">
+                        {chat.members.find(
+                          (member) =>
+                            member.username !== userLoginDetail?.userName
+                        )?.username || ""}
                       </div>
                     </div>
-                    <span className="text-gray-500 text-xs line-clamp-1">
-                      {/* {message.lastestMessage} */} Lastest message
-                    </span>
+                    <div className="flex justify-start items-center">
+                      <span className="flex-1 text-gray-500 text-[10px] font-medium line-clamp-1 overflow-ellipsis break-all">
+                        {chat.latestMessage.message}
+                      </span>
+                      <div className="w-fit text-right text-[8px] font-bold justify-end text-gray-500">
+                        {formatChatTime(chat.latestMessage.time)}
+                      </div>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -439,25 +547,31 @@ export default function TinyChat() {
               {/* End of list user send message */}
             </div>
 
-            <div className="w-full flex flex-col justify-between flex-grow max-h-80 ">
+            {/* Chat Details, list messages */}
+            <div className="w-[60%] min-w-[220px] flex flex-col justify-between flex-grow max-h-80 ">
               <div
-                className="flex flex-col mt-2 px-1 h-80 overflow-y-auto scrollbar"
+                className="flex flex-col px-1 h-80 overflow-y-auto scrollbar"
                 ref={chatContainerRef}
                 onScroll={handleScroll}
               >
                 {/* Start new chat form */}
-                {newChatForm && !selectedMessage && (
-                  <form onSubmit={handleSubmitCreateChat}>
-                    <div className="flex flex-col items-center justify-center font-medium text-gray-600 text-xs">
-                      <input
-                        type="text"
-                        placeholder="Start new chat with..."
-                        className="py-1 px-1 border-2 border-gray-200 rounded-xl w-5/6 text-center h-8 text-xs"
+                {newChatForm && !selectedChat && (
+                  <form
+                    className="flex items-center justify-center"
+                    onSubmit={handleSubmitCreateChat}
+                  >
+                    <div className="font-medium text-gray-600 text-xs w-[95%] ">
+                      <SelectUserChat
+                        onSelect={(username: string) =>
+                          setUserNewChat(username)
+                        }
                       />
                     </div>
                   </form>
                 )}
-                {!selectedMessage && !newChatForm ? (
+                {/* End of Start new chat form */}
+                {!newChatForm && listMessageLoaded && <LoaderButton />}
+                {newChatForm && !selectedChat ? (
                   <>
                     <div className="flex flex-col items-center justify-center h-full w-full font-medium text-gray-600 text-xs">
                       <div>Please select a chat or start a new chat</div>
@@ -500,35 +614,36 @@ export default function TinyChat() {
                   </>
                 ) : (
                   <>
-                    {selectedMessage?.map((message) => (
+                    {isFetchPreviousMess && <LoaderButton />}
+                    {listMessage.map((chat) => (
                       <>
                         {/* Start detail message */}
-                        {message.isSender ? (
+                        {chat.user.id !== userLoginDetail?.id ? (
                           <>
                             {/* Message recieving */}
                             {/* Hover for display time of message*/}
                             <div
                               className=" flex justify-start mb-1 mr-10"
                               onMouseEnter={() =>
-                                startHoverTimer("timeMessage" + message.id)
+                                startHoverTimer("timeMessage" + chat.id)
                               }
                               onMouseLeave={() =>
-                                resetHoverTimer("timeMessage" + message.id)
+                                resetHoverTimer("timeMessage" + chat.id)
                               }
-                              key={message.id}
+                              key={chat.id}
                             >
                               <img
-                                src="https://source.unsplash.com/otT2199XwI8/600x600"
+                                src={chat.user.avatar}
                                 className="object-cover h-6 w-6 rounded-full"
                                 alt="Avatar"
                               />
                               <div className="relative ml-1 py-2 px-3 bg-gray-200 rounded-br-2xl rounded-tr-2xl rounded-tl-lg text-black text-sm">
-                                {message.message}
+                                {chat.message}
                                 <div
-                                  id={"timeMessage" + message.id}
+                                  id={"timeMessage" + chat.id}
                                   className="absolute rounded-lg px-1 py-[2px] font-normal top-1/2 transform -translate-y-1/2 -right-10 h-fit w-fit bg-gray-700 text-white opacity-75 text-sm hidden "
                                 >
-                                  {message.time}
+                                  {formatChatTime(chat.time)}
                                 </div>
                               </div>
                             </div>
@@ -540,24 +655,24 @@ export default function TinyChat() {
                             <div
                               className="flex justify-end mb-1 ml-10"
                               onMouseEnter={() =>
-                                startHoverTimer("timeMessage" + message.id)
+                                startHoverTimer("timeMessage" + chat.id)
                               }
                               onMouseLeave={() =>
-                                resetHoverTimer("timeMessage" + message.id)
+                                resetHoverTimer("timeMessage" + chat.id)
                               }
-                              key={message.id}
+                              key={chat.id}
                             >
                               <div className="relative mr-1 py-2 px-3 bg-gradient-to-r from-[#ffa703] to-[#FF7E06] rounded-bl-2xl rounded-tl-2xl rounded-tr-lg text-white text-sm">
-                                {message.message}
+                                {chat.message}
                                 <div
-                                  id={"timeMessage" + message.id}
+                                  id={"timeMessage" + chat.id}
                                   className="absolute rounded-lg px-1 py-[2px] font-normal top-1/2 transform -translate-y-1/2 -left-10 h-fit w-fit bg-gray-700 opacity-75 text-sm hidden "
                                 >
-                                  {message.time}
+                                  {formatChatTimeOnHover(chat.time)}
                                 </div>
                               </div>
                               <img
-                                src="https://source.unsplash.com/otT2199XwI8/600x600"
+                                src={chat.user.avatar}
                                 className="object-cover h-6 w-6 rounded-full"
                                 alt=""
                               />
@@ -569,12 +684,21 @@ export default function TinyChat() {
                   </>
                 )}
               </div>
-              <div className="flex py-2 mx-1 items-center bg-white sticky bottom-0">
+              <form
+                className="flex py-2 mx-1 items-center bg-white sticky bottom-0"
+                onSubmit={
+                  selectedChat
+                    ? handleSubmitSendMessage
+                    : handleSubmitCreateChat
+                }
+              >
                 <input
                   className="bg-white py-2 px-1 rounded-lg flex-grow text-xs"
                   style={{ width: "93%" }}
                   type="text"
                   placeholder="Type your message here..."
+                  value={messageSend}
+                  onChange={(message) => setMessageSend(message.target.value)}
                 />
                 <button className="w-6 h-6 rounded-full bg-gradient-to-r from-[#ffa703] to-[#FF7E06] flex items-center justify-center ml-1">
                   <svg
@@ -594,7 +718,7 @@ export default function TinyChat() {
                     />
                   </svg>
                 </button>
-              </div>
+              </form>
             </div>
           </div>
         </div>
