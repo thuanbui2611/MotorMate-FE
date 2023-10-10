@@ -1,18 +1,13 @@
-import {
-  HttpTransportType,
-  HubConnectionBuilder,
-  LogLevel,
-} from "@microsoft/signalr";
+import { HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import { useEffect, useRef, useState } from "react";
-import { set } from "react-hook-form";
 import { useAppDispatch, useAppSelector } from "../../app/store/ConfigureStore";
-import { Chat, Message, RequestCreateNewChat } from "../../app/models/Chat";
+import { Chat, Message } from "../../app/models/Chat";
 import {
   addListChat,
   addListMessage,
   loadListChat,
   loadListMessage,
-  resetListMessage,
+  setMetaDataMessage,
   setPageNumber,
 } from "./ChatSlice";
 import SelectUserChat from "../../app/components/SelectUserChat";
@@ -20,8 +15,8 @@ import {
   formatChatTime,
   formatChatTimeOnHover,
 } from "../../app/utils/formatChatTime";
-import { connect } from "http2";
 import LoaderButton from "../../app/components/LoaderButton";
+import { MetaData } from "../../app/models/Pagination";
 
 export default function TinyChat() {
   const [isFormVisible, setIsFormVisible] = useState(false);
@@ -37,9 +32,12 @@ export default function TinyChat() {
     useState<boolean>(false);
 
   const dispatch = useAppDispatch();
-  const { listChat, listMessage, pagination } = useAppSelector(
+  const { listChat, listMessage, metaData } = useAppSelector(
     (state) => state.chat
   );
+
+  const listUserMessage = listMessage.filter((m) => m.chatId === selectedChat);
+  const metaDataMessage = metaData?.find((m) => m.chatId === selectedChat);
 
   const userLogin = useAppSelector((state) => state.account.user);
   const userLoginDetail = useAppSelector((state) => state.account.userDetail);
@@ -72,7 +70,7 @@ export default function TinyChat() {
             setSelectedChat(result.payload.id);
           });
 
-          connection.on("LoadChats", (chats: Chat[]) => {
+          connection.on("LoadChats", (chats: Chat[], pagination: MetaData) => {
             dispatch(loadListChat(chats));
             setListChatLoaded(false);
           });
@@ -95,9 +93,16 @@ export default function TinyChat() {
   //Connect to Messagehub
   useEffect(() => {
     if (userLoginDetail && userLogin && selectedChat) {
+      // const { currentPage, pageSize } = metaDataMessage?.metaData!;
+      let pageNumber = 1;
+      let pageSize = 10;
+      if (metaDataMessage) {
+        pageNumber = metaDataMessage.metaData.currentPage;
+        pageSize = metaDataMessage.metaData.pageSize;
+      }
       const connection = new HubConnectionBuilder()
         .withUrl(
-          `https://motormate.azurewebsites.net/chat-details?chatId=${selectedChat}&pageNumber=${pagination.pageNumber}&pageSize=${pagination.pageSize}`,
+          `https://motormate.azurewebsites.net/chat-details?chatId=${selectedChat}&pageNumber=${pageNumber}&pageSize=${pageSize}`,
           {
             accessTokenFactory: () => `${userLogin?.token}`,
           }
@@ -114,11 +119,19 @@ export default function TinyChat() {
             dispatch(addListMessage(message));
           });
 
-          connection.on("LoadMessages", (chats: Message[]) => {
-            dispatch(loadListMessage(chats));
-            setIsFetchPreviousMess(false);
-            setListMessageLoaded(false);
-          });
+          connection.on(
+            "LoadMessages",
+            (chats: Message[], pagination: MetaData) => {
+              const metaData = {
+                chatId: chats[0].chatId,
+                metaData: pagination,
+              };
+              dispatch(setMetaDataMessage(metaData));
+              dispatch(loadListMessage(chats));
+              setIsFetchPreviousMess(false);
+              setListMessageLoaded(false);
+            }
+          );
           setConnectionChatDetailHub(connection);
         })
         .catch((error) =>
@@ -133,7 +146,12 @@ export default function TinyChat() {
           );
       };
     }
-  }, [dispatch, userLoginDetail, selectedChat, pagination.pageNumber]);
+  }, [
+    dispatch,
+    userLoginDetail,
+    selectedChat,
+    metaDataMessage?.metaData.currentPage,
+  ]);
 
   const handleSubmitSendMessage = async (event: any) => {
     try {
@@ -187,111 +205,11 @@ export default function TinyChat() {
   function checkOnlySpaces(str: string): boolean {
     return /^\s*$/.test(str);
   }
-  //Test data message
-  type MessageList = {
-    user: string;
-    lastestMessage: string;
-    time: string;
-  };
-  type MessageDetail = {
-    id: string;
-    user: string;
-    message: string;
-    time: string;
-    isSender: boolean;
-  };
-  const messageList: MessageList[] = [
-    {
-      user: "James",
-      lastestMessage: "Stuck with fuking bugs",
-      time: "22:05",
-    },
-
-    {
-      user: "Petter",
-      lastestMessage: "Hi there",
-      time: "23:00",
-    },
-  ];
-  const messageDetailJames: MessageDetail[] = [
-    {
-      id: "a",
-      user: "James",
-      message: "Hello",
-      time: "22:00",
-      isSender: true,
-    },
-    {
-      id: "b",
-      user: "Trevor",
-      message: "Hello there",
-      time: "22:01",
-      isSender: false,
-    },
-    {
-      id: "c",
-      user: "James",
-      message: "How are you?",
-      time: "22:02",
-      isSender: true,
-    },
-    {
-      id: "d",
-      user: "Trevor",
-      message: "Stuck with fuking bugs",
-      time: "22:05",
-      isSender: false,
-    },
-  ];
-  const messageDetailPetter: MessageDetail[] = [
-    {
-      id: "aa",
-      user: "Petter",
-      message: "Hello Trevor",
-      time: "22:00",
-      isSender: true,
-    },
-    {
-      id: "ab",
-      user: "Trevor",
-      message: "Hello pettterrrrr",
-      time: "22:01",
-      isSender: false,
-    },
-    {
-      id: "ac",
-      user: "Petter",
-      message: "Fixing that bug yet?",
-      time: "22:02",
-      isSender: true,
-    },
-    {
-      id: "ad",
-      user: "Trevor",
-      message: "What bugs? I don't know what you're talking about",
-      time: "22:05",
-      isSender: false,
-    },
-    {
-      id: "ae",
-      user: "Trevor",
-      message: "It's our outstanding feature",
-      time: "22:05",
-      isSender: false,
-    },
-    {
-      id: "af",
-      user: "Petter",
-      message: "Bruh...",
-      time: "22:06",
-      isSender: true,
-    },
-  ];
 
   const handleChatClick = (chatId: string) => {
     setNewChatForm(false);
     setListMessageLoaded(true);
-    dispatch(resetListMessage());
+    // dispatch(resetListMessage());
     setSelectedChat(chatId);
   };
   //End of test data message
@@ -326,9 +244,19 @@ export default function TinyChat() {
 
   const fetchPreviousMessages = (): void => {
     if (listMessage) {
-      console.log("fetching previous messages");
-      setIsFetchPreviousMess(true);
-      dispatch(setPageNumber(pagination.pageNumber + 1));
+      debugger;
+      if (
+        metaDataMessage &&
+        metaDataMessage.metaData.totalPageCount >
+          metaDataMessage.metaData.currentPage
+      ) {
+        setIsFetchPreviousMess(true);
+        const pagination = {
+          chatId: selectedChat,
+          pageNumber: metaDataMessage?.metaData.currentPage + 1,
+        };
+        dispatch(setPageNumber(pagination));
+      }
     }
   };
   // End of scroll on top to fetch previous message
@@ -615,7 +543,7 @@ export default function TinyChat() {
                 ) : (
                   <>
                     {isFetchPreviousMess && <LoaderButton />}
-                    {listMessage.map((chat) => (
+                    {listUserMessage.map((chat) => (
                       <>
                         {/* Start detail message */}
                         {chat.user.id !== userLoginDetail?.id ? (

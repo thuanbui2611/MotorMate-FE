@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from "react";
-import { User, UserDetail } from "../models/User";
+import { User } from "../models/User";
 import { useAppDispatch, useAppSelector } from "../store/ConfigureStore";
 import { signOut } from "../../pages/account/AccountSlice";
 import { Link } from "react-router-dom";
 
 interface Props {
-  user: UserDetail;
+  user: User;
 }
 
 export default function MenuItemUser({ user }: Props) {
@@ -72,8 +72,8 @@ export default function MenuItemUser({ user }: Props) {
         <img
           className="w-full h-full rounded-full"
           src={
-            user.picture
-              ? user.picture
+            user.avatar
+              ? user.avatar
               : "https://img.freepik.com/free-icon/user_318-563642.jpg?w=2000"
           }
           alt="user photo"
@@ -87,7 +87,7 @@ export default function MenuItemUser({ user }: Props) {
       >
         <div className="px-4 py-3">
           <span className="block text-sm text-gray-900 font-bold">
-            {user?.fullName}
+            {user?.name}
           </span>
           <span className="block text-sm  text-gray-500 truncate">
             {userFromToken?.role}
@@ -96,7 +96,7 @@ export default function MenuItemUser({ user }: Props) {
         <ul className="py-2" aria-labelledby="user-menu-button">
           <li>
             <Link
-              to={"/profile/" + user.userName}
+              to={"/profile/" + user.username}
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 "
             >
               Profile
@@ -112,7 +112,7 @@ export default function MenuItemUser({ user }: Props) {
           </li>
           <li>
             <Link
-              to={"/profile/" + user.userName + "/my-products"}
+              to={"/profile/" + user.username + "/my-products"}
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
             >
               My products

@@ -1,13 +1,14 @@
+import { MetaData } from "./Pagination";
+
 export interface Chat {
   id: string;
-  lastUpdatedAt: string;
   members: MemberOfChat[];
   latestMessage: Message;
 }
 
 export interface Message {
-  chatId?: string;
   id: string;
+  chatId: string;
   message: string;
   time: string;
   user: MemberOfChat;
@@ -28,4 +29,9 @@ export interface RequestCreateNewChat {
 export interface ChatPagination {
   pageNumber: number;
   pageSize: number;
+}
+
+export interface ChatMetaData{
+  chatId: string;
+  metaData: MetaData;
 }

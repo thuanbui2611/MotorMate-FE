@@ -1,3 +1,13 @@
+// export function convertToLocalDate(dateString: string):string {
+//   const date = new Date(dateString);
+//   const localDate = new Date(
+//     date.getTime() - date.getTimezoneOffset() * 60 * 1000
+//   );
+//   return(localDate);
+
+
+// }
+
 export function formatChatTime(dateTimeString: string): string {
   //UTC 0
   const date = new Date(dateTimeString);

@@ -11,7 +11,7 @@ export default function Header(props: Props) {
 
   const triggerMobileMenu = useRef<any>(null);
   const dropdownMobileMenu = useRef<any>(null);
-  const user = useAppSelector((state) => state.account.userDetail);
+  const userLogin = useAppSelector((state) => state.account.user);
 
   useEffect(() => {
     const handleResize = () => {
@@ -151,8 +151,8 @@ export default function Header(props: Props) {
         </Link>
 
         <div className="flex items-center md:order-2">
-          {user ? (
-            <MenuItemUser user={user} />
+          {userLogin ? (
+            <MenuItemUser user={userLogin} />
           ) : (
             <>
               <a className="button-login" href="/login">

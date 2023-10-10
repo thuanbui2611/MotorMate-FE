@@ -159,6 +159,7 @@ function setDataUserFromToken(decodedToken: any, userToken: string) {
     role: decodedToken[
       "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
     ],
+    avatar: decodedToken["Avatar"],
     token: userToken,
   };
   return user;
