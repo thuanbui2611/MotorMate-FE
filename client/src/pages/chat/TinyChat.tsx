@@ -21,7 +21,11 @@ import {
 } from "../../app/utils/formatChatTime";
 import LoaderButton from "../../app/components/LoaderButton";
 import { MetaData } from "../../app/models/Pagination";
-import { set } from "react-hook-form";
+
+type ActiveHub = {
+  chatId: string;
+  connection: HubConnection;
+};
 type messagePending = {
   chatId: string;
   content: string;
@@ -53,17 +57,18 @@ export default function TinyChat() {
 
   const userLogin = useAppSelector((state) => state.account.user);
   const userLoginDetail = useAppSelector((state) => state.account.userDetail);
-
   //Connect hub
   const [connectionMessagesHub, setConnectionMessagesHub] = useState<any>(null);
-  const [connectionChatDetailHub, setConnectionChatDetailHub] = useState<any>();
+  const [connectionChatDetailHub, setConnectionChatDetailHub] = useState<
+    ActiveHub[]
+  >([]);
 
   // Connect to ChatHub
   useEffect(() => {
     if (userLoginDetail && userLogin) {
       const connection = new HubConnectionBuilder()
         .withUrl(
-          `https://motormate.azurewebsites.net/messages?userId=${userLoginDetail?.id}&pageNumber=1&pageSize=10`,
+          `https://motormate.azurewebsites.net/messages?userId=${userLoginDetail?.id}&pageNumber=1&pageSize=100`,
           {
             accessTokenFactory: () => `${userLogin?.token}`,
           }
@@ -71,17 +76,17 @@ export default function TinyChat() {
         .withAutomaticReconnect()
         .configureLogging(LogLevel.Information)
         .build();
-
       connection
         .start()
         .then(() => {
-          console.log("Connected");
-          connection.on("ReceiveChat", (message: Chat) => {
-            const result = dispatch(addListChat(message));
-            setSelectedChat(result.payload.id);
+          connection.on("ReceiveChat", (chat: Chat) => {
+            debugger;
+            dispatch(addListChat(chat));
+            setSelectedChat(chat.id);
           });
 
           connection.on("LoadChats", (chats: Chat[], pagination: MetaData) => {
+            debugger;
             dispatch(loadListChat(chats));
             setListChatLoaded(false);
           });
@@ -104,7 +109,6 @@ export default function TinyChat() {
   //Connect to Messagehub
   useEffect(() => {
     if (userLoginDetail && userLogin && selectedChat) {
-      debugger;
       let pageNumber = 1;
       let pageSize = 10;
       if (metaDataMessage) {
@@ -113,6 +117,11 @@ export default function TinyChat() {
         }
         pageSize = metaDataMessage.metaData.pageSize;
       }
+
+      const existingConnection = connectionChatDetailHub.find(
+        (connection) => connection.chatId === selectedChat
+      );
+
       const connection = new HubConnectionBuilder()
         .withUrl(
           `https://motormate.azurewebsites.net/chat-details?chatId=${selectedChat}&pageNumber=${pageNumber}&pageSize=${pageSize}`,
@@ -123,18 +132,37 @@ export default function TinyChat() {
         .withAutomaticReconnect()
         .configureLogging(LogLevel.Information)
         .build();
+      if (!existingConnection) {
+        connection
+          .start()
+          .then(() => {
+            connection.on("ReceiveMessage", (message: Message) => {
+              debugger;
+              dispatch(addListMessage(message));
+              // setIsLoadListChat(true);
+              setMessagePending(undefined);
+              setIsScrollDown(true);
+            });
 
-      connection
-        .start()
-        .then(() => {
-          connection.on("ReceiveMessage", (message: Message) => {
-            dispatch(addListMessage(message));
-            setMessagePending(undefined);
-            setIsScrollDown(true);
-          });
-          debugger;
-          if (metaDataMessage) {
-            if (pageNumber !== prevUserPageNumReq?.pageNumber) {
+            if (metaDataMessage) {
+              if (pageNumber !== prevUserPageNumReq?.pageNumber) {
+                connection.on(
+                  "LoadMessages",
+                  (chats: Message[], pagination: MetaData) => {
+                    const metaData = {
+                      chatId: chats[0].chatId,
+                      metaData: pagination,
+                    };
+                    debugger;
+
+                    dispatch(setMetaDataMessage(metaData));
+                    dispatch(loadListMessage(chats));
+                  }
+                );
+              } else {
+                connection.on("LoadMessages", () => {});
+              }
+            } else {
               connection.on(
                 "LoadMessages",
                 (chats: Message[], pagination: MetaData) => {
@@ -146,39 +174,100 @@ export default function TinyChat() {
                   dispatch(loadListMessage(chats));
                 }
               );
-            } else {
-              connection.on(
-                "LoadMessages",
-                (chats: Message[], pagination: MetaData) => {}
-              );
             }
+            setListMessageLoaded(false);
+            // setIsFetchPreviousMess(false);
+            setConnectionChatDetailHub((prevConnection) => [
+              ...prevConnection,
+              { chatId: selectedChat, connection: connection },
+            ]);
+          })
+          .catch((error) =>
+            console.log("Error while establishing connection: " + error)
+          );
+      } else {
+        // if existing connection
+        if (metaDataMessage) {
+          //get new value with pagination
+          if (pageNumber !== prevUserPageNumReq?.pageNumber) {
+            setIsFetchPreviousMess(true);
+            existingConnection.connection
+              .stop()
+              .then(() => {
+                const updatedConnection = connection;
+                updatedConnection.start().then(() => {
+                  connection.on("ReceiveMessage", (message: Message) => {
+                    dispatch(addListMessage(message));
+                    // setIsLoadListChat(true);
+                    setMessagePending(undefined);
+                    setIsScrollDown(true);
+                  });
+
+                  updatedConnection.on(
+                    "LoadMessages",
+                    (chats: Message[], pagination: MetaData) => {
+                      const metaData = {
+                        chatId: chats[0].chatId,
+                        metaData: pagination,
+                      };
+                      dispatch(setMetaDataMessage(metaData));
+                      dispatch(loadListMessage(chats));
+                    }
+                  );
+
+                  setConnectionChatDetailHub((prev) => {
+                    const connections = [...prev];
+                    const index = connections.findIndex(
+                      (conn) => conn.chatId === selectedChat
+                    );
+                    if (index !== -1) {
+                      connections[index] = {
+                        chatId: selectedChat,
+                        connection: updatedConnection,
+                      };
+                    }
+                    return connections;
+                  });
+                });
+              })
+              .finally(() => {
+                setIsFetchPreviousMess(false);
+              })
+              .catch((error) =>
+                console.log("Error while update connection: " + error)
+              );
+            //
           } else {
-            connection.on(
+            existingConnection.connection.on(
               "LoadMessages",
-              (chats: Message[], pagination: MetaData) => {
-                const metaData = {
-                  chatId: chats[0].chatId,
-                  metaData: pagination,
-                };
-                dispatch(setMetaDataMessage(metaData));
-                dispatch(loadListMessage(chats));
-              }
+              (chats: Message[], pagination: MetaData) => {}
             );
           }
-          setListMessageLoaded(false);
-          setIsFetchPreviousMess(false);
-          setConnectionChatDetailHub(connection);
-        })
-        .catch((error) =>
-          console.log("Error while establishing connection: " + error)
-        );
+        } else {
+          existingConnection.connection.on(
+            "LoadMessages",
+            (chats: Message[], pagination: MetaData) => {
+              const metaData = {
+                chatId: chats[0].chatId,
+                metaData: pagination,
+              };
+              dispatch(setMetaDataMessage(metaData));
+              dispatch(loadListMessage(chats));
+            }
+          );
+        }
+        setListMessageLoaded(false);
+      }
 
       return () => {
-        connection
-          .stop()
-          .catch((error) =>
-            console.log("Error while stopping connection: " + error)
-          );
+        //stop when component unmount. Currently have not set limit for connection yet
+        // if (connectionMessagesHub.length > 10) {
+        //   connectionChatDetailHub.forEach((connection) => {
+        //     connection.connection.stop();
+        //   });
+        //   setConnectionChatDetailHub([]);
+        //   console.log("Stopping connection");
+        // }
       };
     }
   }, [
@@ -206,11 +295,15 @@ export default function TinyChat() {
           content: message,
         };
         setMessagePending(messPending);
-
         setIsScrollDown(true);
-        await connectionChatDetailHub.invoke("CreateMessageAsync", request);
 
-        // await connectionMessagesHub.invoke("OnConnectedAsync");
+        const connection = connectionChatDetailHub.find(
+          (connection) => connection.chatId === selectedChat
+        );
+        if (connection)
+          await connection.connection.invoke("CreateMessageAsync", request);
+
+        await connectionMessagesHub.invoke("OnConnectedAsync");
       }
     } catch (error) {
       console.log("Error when send mess: ", error);
@@ -233,7 +326,7 @@ export default function TinyChat() {
             message: message,
           },
         };
-
+        debugger;
         await connectionMessagesHub.invoke("CreateChatAsync", request);
       }
     } catch (error) {
@@ -296,6 +389,7 @@ export default function TinyChat() {
   };
 
   const fetchPreviousMessages = (): void => {
+    debugger;
     if (listMessage && !listMessageLoaded && !isFetchPreviousMess) {
       let currentPage = metaDataMessage?.metaData.currentPage;
       if (!currentPage) currentPage = 1;
@@ -439,7 +533,7 @@ export default function TinyChat() {
           </div>
           <div className="flex flex-row justify-between bg-white max-h-80">
             {/* List of chat */}
-            <div className="flex flex-col min-w-[150px] w-[40%] border-r-2  max-h-80 overflow-y-autoscrollbar ">
+            <div className="flex flex-col min-w-[150px] w-[40%] border-r-2  max-h-80 overflow-y-auto scrollbar">
               <div className="flex justify-between gap-1 border-b-2 py-2 px-1 h-11 sticky top-0 bg-white">
                 <input
                   type="text"

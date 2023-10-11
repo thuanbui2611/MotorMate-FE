@@ -6,6 +6,7 @@ import {
   Message,
 } from "../../app/models/Chat";
 import { MetaData } from "../../app/models/Pagination";
+import { esES } from "@mui/x-date-pickers";
 
 type PreviousPageNum = {
   chatId: string;
@@ -18,18 +19,6 @@ interface ChatState {
   pagination: ChatPagination;
   metaData: ChatMetaData[];
   previousPageNumRequest: PreviousPageNum[];
-}
-
-export function initMetaData() {
-  return {
-    chatId: "",
-    metaData: {
-      totalItemCount: 0,
-      totalPageCount: 0,
-      pageSize: 10,
-      currentPage: 1,
-    },
-  };
 }
 
 const initialState: ChatState = {
@@ -48,7 +37,14 @@ export const ChatSlice = createSlice({
   initialState,
   reducers: {
     addListChat: (state, action) => {
-      state.listChat.push(action.payload);
+      debugger;
+      const { id, latestMessage } = action.payload as Chat;
+      const isExisted = state.listChat.some((c) => c.id === id);
+      if (!isExisted) {
+        state.listChat.push(action.payload);
+      } else {
+        // state.listMessage.push(latestMessage);
+      }
     },
     loadListChat: (state, action) => {
       state.listChat = action.payload;
@@ -64,7 +60,6 @@ export const ChatSlice = createSlice({
       state.pagination.pageNumber = 1;
     },
     setMetaDataMessage: (state, action) => {
-      debugger;
       const data = action.payload as ChatMetaData;
       const metaDataModified: any = {
         chatId: data.chatId,
@@ -101,20 +96,11 @@ export const ChatSlice = createSlice({
       }
     },
     setPageNumber: (state, action) => {
-      debugger;
       const { chatId, pageNumber } = action.payload;
       const index = state.metaData?.findIndex((i) => i.chatId === chatId);
       if (index !== -1) {
         state.metaData![index].metaData.currentPage = pageNumber;
       }
-      //set prev request pageNumber
-      // const indexPreviousPageNum = state.previousPageNumRequest.findIndex(
-      //   (i) => i.chatId === chatId
-      // );
-      // if (indexPreviousPageNum !== -1) {
-      //   state.previousPageNumRequest[indexPreviousPageNum].pageNumber =
-      //     pageNumber - 1;
-      // }
     },
   },
 });

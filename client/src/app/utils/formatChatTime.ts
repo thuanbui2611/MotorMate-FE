@@ -5,7 +5,6 @@
 //   );
 //   return(localDate);
 
-
 // }
 
 export function formatChatTime(dateTimeString: string): string {
