@@ -1,16 +1,26 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { Chat, ChatMetaData, ChatPagination, Message } from "../../app/models/Chat";
+import {
+  Chat,
+  ChatMetaData,
+  ChatPagination,
+  Message,
+} from "../../app/models/Chat";
 import { MetaData } from "../../app/models/Pagination";
+
+type PreviousPageNum = {
+  chatId: string;
+  pageNumber: number;
+};
 
 interface ChatState {
   listChat: Chat[];
   listMessage: Message[];
   pagination: ChatPagination;
   metaData: ChatMetaData[];
+  previousPageNumRequest: PreviousPageNum[];
 }
 
-export function initMetaData()
-{
+export function initMetaData() {
   return {
     chatId: "",
     metaData: {
@@ -18,9 +28,8 @@ export function initMetaData()
       totalPageCount: 0,
       pageSize: 10,
       currentPage: 1,
-    }
-  }
-  
+    },
+  };
 }
 
 const initialState: ChatState = {
@@ -30,7 +39,8 @@ const initialState: ChatState = {
     pageNumber: 1,
     pageSize: 10,
   },
-  metaData: []
+  metaData: [],
+  previousPageNumRequest: [],
 };
 
 export const ChatSlice = createSlice({
@@ -53,27 +63,58 @@ export const ChatSlice = createSlice({
       state.listMessage = [];
       state.pagination.pageNumber = 1;
     },
-    // setPageNumber: (state, action) => {
-    //   state.pagination.pageNumber = action.payload;
-    // },
     setMetaDataMessage: (state, action) => {
-      const {chatId} = action.payload;
-      const index = state.metaData?.findIndex((i) => i.chatId === chatId)
-      if(index && index !== -1)
-      {
-        state.metaData![index].metaData = action.payload;
+      debugger;
+      const data = action.payload as ChatMetaData;
+      const metaDataModified: any = {
+        chatId: data.chatId,
+        metaData: {
+          totalItemCount: data.metaData.totalItemCount,
+          totalPageCount: data.metaData.totalPageCount,
+          pageSize: data.metaData.pageSize,
+        },
+      };
+      const index = state.metaData?.findIndex((i) => i.chatId === data.chatId);
+      if (index && index === -1) {
+        state.metaData.push(metaDataModified);
       } else {
-        state.metaData.push(action.payload);
-        const result = state.metaData;
+        state.metaData![index].metaData = {
+          totalItemCount: data.metaData.totalItemCount,
+          totalPageCount: data.metaData.totalPageCount,
+          pageSize: data.metaData.pageSize,
+          currentPage: [...state.metaData][index].metaData.currentPage,
+        } as MetaData;
+      }
+
+      //create prev request pageNumber
+      const indexPreviousPageNum = state.previousPageNumRequest.findIndex(
+        (i) => i.chatId === data.chatId
+      );
+      if (indexPreviousPageNum === -1) {
+        state.previousPageNumRequest.push({
+          chatId: data.chatId,
+          pageNumber: data.metaData.currentPage,
+        });
+      } else {
+        state.previousPageNumRequest[indexPreviousPageNum].pageNumber =
+          data.metaData.currentPage;
       }
     },
     setPageNumber: (state, action) => {
       debugger;
-      const {chatId, pageNumber} = action.payload;
-      const index = state.metaData?.findIndex(i => i.chatId === chatId);
-      if(index !== -1){
+      const { chatId, pageNumber } = action.payload;
+      const index = state.metaData?.findIndex((i) => i.chatId === chatId);
+      if (index !== -1) {
         state.metaData![index].metaData.currentPage = pageNumber;
       }
+      //set prev request pageNumber
+      // const indexPreviousPageNum = state.previousPageNumRequest.findIndex(
+      //   (i) => i.chatId === chatId
+      // );
+      // if (indexPreviousPageNum !== -1) {
+      //   state.previousPageNumRequest[indexPreviousPageNum].pageNumber =
+      //     pageNumber - 1;
+      // }
     },
   },
 });
@@ -85,6 +126,6 @@ export const {
   loadListMessage,
   setPageNumber,
   resetListMessage,
-  setMetaDataMessage
+  setMetaDataMessage,
 } = ChatSlice.actions;
 export default ChatSlice.reducer;

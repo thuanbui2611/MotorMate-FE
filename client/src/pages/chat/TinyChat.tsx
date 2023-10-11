@@ -1,4 +1,8 @@
-import { HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
+import {
+  HubConnection,
+  HubConnectionBuilder,
+  LogLevel,
+} from "@microsoft/signalr";
 import { useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/store/ConfigureStore";
 import { Chat, Message } from "../../app/models/Chat";
@@ -17,35 +21,42 @@ import {
 } from "../../app/utils/formatChatTime";
 import LoaderButton from "../../app/components/LoaderButton";
 import { MetaData } from "../../app/models/Pagination";
+import { set } from "react-hook-form";
+type messagePending = {
+  chatId: string;
+  content: string;
+};
 
 export default function TinyChat() {
   const [isFormVisible, setIsFormVisible] = useState(false);
   const [isFormClosing, setIsFormClosing] = useState(false);
-
   const [newChatForm, setNewChatForm] = useState(true);
   const [userNewChat, setUserNewChat] = useState<string | null>(null);
-  const [messageSend, setMessageSend] = useState<string>("");
   const [selectedChat, setSelectedChat] = useState<string | null>(null);
   const [listMessageLoaded, setListMessageLoaded] = useState<boolean>(false);
   const [listChatLoaded, setListChatLoaded] = useState<boolean>(true);
   const [isFetchPreviousMess, setIsFetchPreviousMess] =
     useState<boolean>(false);
+  const [messagePending, setMessagePending] = useState<messagePending>();
+  const [isScrollDown, setIsScrollDown] = useState(true);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const dispatch = useAppDispatch();
-  const { listChat, listMessage, metaData } = useAppSelector(
-    (state) => state.chat
-  );
+  const { listChat, listMessage, metaData, previousPageNumRequest } =
+    useAppSelector((state) => state.chat);
 
   const listUserMessage = listMessage.filter((m) => m.chatId === selectedChat);
   const metaDataMessage = metaData?.find((m) => m.chatId === selectedChat);
+  const prevUserPageNumReq = previousPageNumRequest?.find(
+    (p) => p.chatId === selectedChat
+  );
 
   const userLogin = useAppSelector((state) => state.account.user);
   const userLoginDetail = useAppSelector((state) => state.account.userDetail);
 
   //Connect hub
   const [connectionMessagesHub, setConnectionMessagesHub] = useState<any>(null);
-  const [connectionChatDetailHub, setConnectionChatDetailHub] =
-    useState<any>(null);
+  const [connectionChatDetailHub, setConnectionChatDetailHub] = useState<any>();
 
   // Connect to ChatHub
   useEffect(() => {
@@ -93,11 +104,13 @@ export default function TinyChat() {
   //Connect to Messagehub
   useEffect(() => {
     if (userLoginDetail && userLogin && selectedChat) {
-      // const { currentPage, pageSize } = metaDataMessage?.metaData!;
+      debugger;
       let pageNumber = 1;
       let pageSize = 10;
       if (metaDataMessage) {
-        pageNumber = metaDataMessage.metaData.currentPage;
+        if (metaDataMessage.metaData.currentPage) {
+          pageNumber = metaDataMessage.metaData.currentPage;
+        }
         pageSize = metaDataMessage.metaData.pageSize;
       }
       const connection = new HubConnectionBuilder()
@@ -114,24 +127,46 @@ export default function TinyChat() {
       connection
         .start()
         .then(() => {
-          console.log("Connected to messageHub");
           connection.on("ReceiveMessage", (message: Message) => {
             dispatch(addListMessage(message));
+            setMessagePending(undefined);
+            setIsScrollDown(true);
           });
-
-          connection.on(
-            "LoadMessages",
-            (chats: Message[], pagination: MetaData) => {
-              const metaData = {
-                chatId: chats[0].chatId,
-                metaData: pagination,
-              };
-              dispatch(setMetaDataMessage(metaData));
-              dispatch(loadListMessage(chats));
-              setIsFetchPreviousMess(false);
-              setListMessageLoaded(false);
+          debugger;
+          if (metaDataMessage) {
+            if (pageNumber !== prevUserPageNumReq?.pageNumber) {
+              connection.on(
+                "LoadMessages",
+                (chats: Message[], pagination: MetaData) => {
+                  const metaData = {
+                    chatId: chats[0].chatId,
+                    metaData: pagination,
+                  };
+                  dispatch(setMetaDataMessage(metaData));
+                  dispatch(loadListMessage(chats));
+                }
+              );
+            } else {
+              connection.on(
+                "LoadMessages",
+                (chats: Message[], pagination: MetaData) => {}
+              );
             }
-          );
+          } else {
+            connection.on(
+              "LoadMessages",
+              (chats: Message[], pagination: MetaData) => {
+                const metaData = {
+                  chatId: chats[0].chatId,
+                  metaData: pagination,
+                };
+                dispatch(setMetaDataMessage(metaData));
+                dispatch(loadListMessage(chats));
+              }
+            );
+          }
+          setListMessageLoaded(false);
+          setIsFetchPreviousMess(false);
           setConnectionChatDetailHub(connection);
         })
         .catch((error) =>
@@ -148,23 +183,34 @@ export default function TinyChat() {
     }
   }, [
     dispatch,
+    metaDataMessage?.metaData.currentPage,
     userLoginDetail,
     selectedChat,
-    metaDataMessage?.metaData.currentPage,
   ]);
 
   const handleSubmitSendMessage = async (event: any) => {
+    let message;
+    if (inputRef.current) {
+      message = inputRef.current.value;
+      inputRef.current.value = "";
+    }
     try {
-      if (messageSend && !checkOnlySpaces(messageSend)) {
+      if (message && !checkOnlySpaces(message)) {
         event.preventDefault();
         const request = {
-          message: messageSend,
+          message: message,
           senderId: userLoginDetail?.id,
         };
+        const messPending: messagePending = {
+          chatId: selectedChat!,
+          content: message,
+        };
+        setMessagePending(messPending);
 
+        setIsScrollDown(true);
         await connectionChatDetailHub.invoke("CreateMessageAsync", request);
-        setMessageSend("");
-        await connectionMessagesHub.invoke("OnConnectedAsync");
+
+        // await connectionMessagesHub.invoke("OnConnectedAsync");
       }
     } catch (error) {
       console.log("Error when send mess: ", error);
@@ -173,18 +219,22 @@ export default function TinyChat() {
 
   const handleSubmitCreateChat = async (event: any) => {
     try {
-      if (messageSend) {
+      let message;
+      if (inputRef.current) {
+        message = inputRef.current.value;
+        inputRef.current.value = "";
+      }
+      if (message) {
         event.preventDefault();
         const request = {
           members: [userLoginDetail?.userName, userNewChat],
           chatMessage: {
             userName: userLoginDetail?.userName,
-            message: messageSend,
+            message: message,
           },
         };
 
         await connectionMessagesHub.invoke("CreateChatAsync", request);
-        setMessageSend("");
       }
     } catch (error) {
       console.log("Error when create new chat", error);
@@ -208,17 +258,20 @@ export default function TinyChat() {
 
   const handleChatClick = (chatId: string) => {
     setNewChatForm(false);
-    setListMessageLoaded(true);
-    // dispatch(resetListMessage());
     setSelectedChat(chatId);
+    const isFetchedMessage = listMessage.some((m) => m.chatId === chatId);
+    if (!isFetchedMessage) setListMessageLoaded(true);
   };
   //End of test data message
   // Scroll to the bottom when open chat
   const chatContainerRef = useRef<HTMLDivElement>(null);
-
+  const messRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    scrollToBottom();
-  }, [selectedChat]);
+    if (messRef.current?.children.length! > 0 && isScrollDown) {
+      scrollToBottom();
+      setIsScrollDown(false);
+    }
+  }, [listUserMessage]);
 
   const scrollToBottom = (): void => {
     if (chatContainerRef.current) {
@@ -243,17 +296,17 @@ export default function TinyChat() {
   };
 
   const fetchPreviousMessages = (): void => {
-    if (listMessage) {
-      debugger;
+    if (listMessage && !listMessageLoaded && !isFetchPreviousMess) {
+      let currentPage = metaDataMessage?.metaData.currentPage;
+      if (!currentPage) currentPage = 1;
       if (
         metaDataMessage &&
-        metaDataMessage.metaData.totalPageCount >
-          metaDataMessage.metaData.currentPage
+        metaDataMessage.metaData.totalPageCount > currentPage
       ) {
         setIsFetchPreviousMess(true);
         const pagination = {
           chatId: selectedChat,
-          pageNumber: metaDataMessage?.metaData.currentPage + 1,
+          pageNumber: currentPage + 1,
         };
         dispatch(setPageNumber(pagination));
       }
@@ -437,7 +490,7 @@ export default function TinyChat() {
                   ${selectedChat === chat.id && "bg-gray-200"}
                   `}
                   onClick={() => handleChatClick(chat.id)}
-                  key={index}
+                  key={chat.id}
                 >
                   <div className="w-8 h-8 mr-1">
                     <img
@@ -543,72 +596,93 @@ export default function TinyChat() {
                 ) : (
                   <>
                     {isFetchPreviousMess && <LoaderButton />}
-                    {listUserMessage.map((chat) => (
-                      <>
-                        {/* Start detail message */}
-                        {chat.user.id !== userLoginDetail?.id ? (
-                          <>
-                            {/* Message recieving */}
-                            {/* Hover for display time of message*/}
-                            <div
-                              className=" flex justify-start mb-1 mr-10"
-                              onMouseEnter={() =>
-                                startHoverTimer("timeMessage" + chat.id)
-                              }
-                              onMouseLeave={() =>
-                                resetHoverTimer("timeMessage" + chat.id)
-                              }
-                              key={chat.id}
-                            >
-                              <img
-                                src={chat.user.avatar}
-                                className="object-cover h-6 w-6 rounded-full"
-                                alt="Avatar"
-                              />
-                              <div className="relative ml-1 py-2 px-3 bg-gray-200 rounded-br-2xl rounded-tr-2xl rounded-tl-lg text-black text-sm">
-                                {chat.message}
-                                <div
-                                  id={"timeMessage" + chat.id}
-                                  className="absolute rounded-lg px-1 py-[2px] font-normal top-1/2 transform -translate-y-1/2 -right-10 h-fit w-fit bg-gray-700 text-white opacity-75 text-sm hidden "
-                                >
-                                  {formatChatTime(chat.time)}
+                    <div ref={messRef}>
+                      {listUserMessage.map((chat) => (
+                        <>
+                          {/* Start detail message */}
+                          {chat.user.id !== userLoginDetail?.id ? (
+                            <>
+                              {/* Message recieving */}
+                              {/* Hover for display time of message*/}
+                              <div
+                                className=" flex justify-start mb-1 mr-10"
+                                onMouseEnter={() =>
+                                  startHoverTimer("timeMessage" + chat.id)
+                                }
+                                onMouseLeave={() =>
+                                  resetHoverTimer("timeMessage" + chat.id)
+                                }
+                                key={chat.id}
+                              >
+                                <img
+                                  src={chat.user.avatar}
+                                  className="object-cover h-6 w-6 rounded-full"
+                                  alt="Avatar"
+                                />
+                                <div className="relative ml-1 py-2 px-3 bg-gray-200 rounded-br-2xl rounded-tr-2xl rounded-tl-lg text-black text-sm">
+                                  {chat.message}
+                                  <div
+                                    id={"timeMessage" + chat.id}
+                                    className="absolute rounded-lg px-1 py-[2px] font-normal top-1/2 transform -translate-y-1/2 -right-10 h-fit w-fit bg-gray-700 text-white opacity-75 text-sm hidden "
+                                  >
+                                    {formatChatTime(chat.time)}
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                            {/* End detail message */}
-                          </>
-                        ) : (
-                          <>
-                            {/* Message sending */}
-                            <div
-                              className="flex justify-end mb-1 ml-10"
-                              onMouseEnter={() =>
-                                startHoverTimer("timeMessage" + chat.id)
-                              }
-                              onMouseLeave={() =>
-                                resetHoverTimer("timeMessage" + chat.id)
-                              }
-                              key={chat.id}
-                            >
-                              <div className="relative mr-1 py-2 px-3 bg-gradient-to-r from-[#ffa703] to-[#FF7E06] rounded-bl-2xl rounded-tl-2xl rounded-tr-lg text-white text-sm">
-                                {chat.message}
-                                <div
-                                  id={"timeMessage" + chat.id}
-                                  className="absolute rounded-lg px-1 py-[2px] font-normal top-1/2 transform -translate-y-1/2 -left-10 h-fit w-fit bg-gray-700 opacity-75 text-sm hidden "
-                                >
-                                  {formatChatTimeOnHover(chat.time)}
+                              {/* End detail message */}
+                            </>
+                          ) : (
+                            <>
+                              {/* Message sending */}
+                              <div
+                                className="flex justify-end mb-1 ml-10"
+                                onMouseEnter={() =>
+                                  startHoverTimer("timeMessage" + chat.id)
+                                }
+                                onMouseLeave={() =>
+                                  resetHoverTimer("timeMessage" + chat.id)
+                                }
+                                key={chat.id}
+                              >
+                                <div className="relative mr-1 py-2 px-3 bg-gradient-to-r from-[#ffa703] to-[#FF7E06] rounded-bl-2xl rounded-tl-2xl rounded-tr-lg text-white text-sm">
+                                  {chat.message}
+                                  <div
+                                    id={"timeMessage" + chat.id}
+                                    className="absolute rounded-lg px-1 py-[2px] font-normal top-1/2 transform -translate-y-1/2 -left-10 h-fit w-fit bg-gray-700 opacity-75 text-sm hidden "
+                                  >
+                                    {formatChatTimeOnHover(chat.time)}
+                                  </div>
                                 </div>
+                                <img
+                                  src={chat.user.avatar}
+                                  className="object-cover h-6 w-6 rounded-full"
+                                  alt=""
+                                />
+                              </div>
+                            </>
+                          )}
+                        </>
+                      ))}
+                    </div>
+
+                    {/* Message is pending to send */}
+                    {messagePending &&
+                      messagePending.chatId === selectedChat && (
+                        <>
+                          <>
+                            <div className="flex justify-end mb-1 ml-10">
+                              <div className="relative mr-1 py-2 px-3 bg-gradient-to-r opacity-50 from-[#ffa703] to-[#FF7E06] rounded-bl-2xl rounded-tl-2xl rounded-tr-lg text-white text-sm">
+                                {messagePending.content}
                               </div>
                               <img
-                                src={chat.user.avatar}
+                                src={userLogin?.avatar}
                                 className="object-cover h-6 w-6 rounded-full"
                                 alt=""
                               />
                             </div>
                           </>
-                        )}
-                      </>
-                    ))}
+                        </>
+                      )}
                   </>
                 )}
               </div>
@@ -625,8 +699,8 @@ export default function TinyChat() {
                   style={{ width: "93%" }}
                   type="text"
                   placeholder="Type your message here..."
-                  value={messageSend}
-                  onChange={(message) => setMessageSend(message.target.value)}
+                  // value={(messageSend)}
+                  ref={inputRef}
                 />
                 <button className="w-6 h-6 rounded-full bg-gradient-to-r from-[#ffa703] to-[#FF7E06] flex items-center justify-center ml-1">
                   <svg
