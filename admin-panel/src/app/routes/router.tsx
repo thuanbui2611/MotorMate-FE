@@ -19,6 +19,7 @@ import ModelVehicle from "../../pages/modelVehicle";
 import VehiclesPage from "../../pages/vehicles";
 import VehiclePending from "../../pages/vehicles/VehiclePending";
 import VehicleDenied from "../../pages/vehicles/VehicleDenied";
+import ColorPage from "../../pages/color";
 
 export const router = createBrowserRouter([
   {
@@ -35,6 +36,7 @@ export const router = createBrowserRouter([
           { path: "brand", element: <Brand /> },
           { path: "transactions", element: <Transactions /> },
           { path: "model-vehicles", element: <ModelVehicle /> },
+          { path: "colors", element: <ColorPage /> },
           { path: "vehicles", element: <VehiclesPage /> },
           { path: "vehicles/pending", element: <VehiclePending /> },
           { path: "vehicles/deny", element: <VehicleDenied /> },

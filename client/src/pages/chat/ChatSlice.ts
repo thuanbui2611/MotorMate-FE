@@ -7,29 +7,28 @@ import {
 } from "../../app/models/Chat";
 import { MetaData } from "../../app/models/Pagination";
 import { esES } from "@mui/x-date-pickers";
+import { HubConnection } from "@microsoft/signalr";
 
 type PreviousPageNum = {
   chatId: string;
   pageNumber: number;
 };
 
+type ActiveHub = {
+  chatId: string;
+  connection: HubConnection;
+};
+
 interface ChatState {
   listChat: Chat[];
   listMessage: Message[];
-  pagination: ChatPagination;
   metaData: ChatMetaData[];
-  previousPageNumRequest: PreviousPageNum[];
 }
 
 const initialState: ChatState = {
   listChat: [],
   listMessage: [],
-  pagination: {
-    pageNumber: 1,
-    pageSize: 10,
-  },
   metaData: [],
-  previousPageNumRequest: [],
 };
 
 export const ChatSlice = createSlice({
@@ -43,7 +42,10 @@ export const ChatSlice = createSlice({
       if (!isExisted) {
         state.listChat.push(action.payload);
       } else {
-        // state.listMessage.push(latestMessage);
+        const isConnected = state.listMessage.some((m) => m.chatId === id);
+        if (isConnected) {
+          state.listMessage.push(latestMessage);
+        }
       }
     },
     loadListChat: (state, action) => {
@@ -51,13 +53,34 @@ export const ChatSlice = createSlice({
     },
     addListMessage: (state, action) => {
       state.listMessage.push(action.payload);
+      // state.listMessage = [...state.listMessage, action.payload];
     },
     loadListMessage: (state, action) => {
-      state.listMessage = [...action.payload, ...state.listMessage];
+      //Check duplicate message id in listMessage then remove it, then add the updated action.payload to listMessage
+      const newListMessage = action.payload as Message[];
+      const existedListMessageOfChat = state.listMessage.filter(
+        (m) => m.chatId === newListMessage[0].chatId
+      );
+      //Remove duplicate message id in listMessage
+      existedListMessageOfChat.forEach((existedMess) => {
+        const index = newListMessage.findIndex((m) => m.id === existedMess.id);
+        if (index !== -1) {
+          newListMessage.splice(index, 1);
+        }
+      });
+
+      //Add the updated action.payload to listMessage
+      state.listMessage = [...newListMessage, ...state.listMessage];
     },
-    resetListMessage: (state) => {
+    deleteListMessageByChatId: (state, action) => {
+      const chatId = action.payload as string;
+      state.listMessage = state.listMessage.filter((m) => m.chatId !== chatId);
+    },
+    //
+    resetMessOfChat: (state) => {
+      //handle reset chat detail after remove connection
       state.listMessage = [];
-      state.pagination.pageNumber = 1;
+      state.metaData = [];
     },
     setMetaDataMessage: (state, action) => {
       const data = action.payload as ChatMetaData;
@@ -80,20 +103,6 @@ export const ChatSlice = createSlice({
           currentPage: [...state.metaData][index].metaData.currentPage,
         } as MetaData;
       }
-
-      //create prev request pageNumber
-      const indexPreviousPageNum = state.previousPageNumRequest.findIndex(
-        (i) => i.chatId === data.chatId
-      );
-      if (indexPreviousPageNum === -1) {
-        state.previousPageNumRequest.push({
-          chatId: data.chatId,
-          pageNumber: data.metaData.currentPage,
-        });
-      } else {
-        state.previousPageNumRequest[indexPreviousPageNum].pageNumber =
-          data.metaData.currentPage;
-      }
     },
     setPageNumber: (state, action) => {
       const { chatId, pageNumber } = action.payload;
@@ -111,7 +120,8 @@ export const {
   addListMessage,
   loadListMessage,
   setPageNumber,
-  resetListMessage,
+  resetMessOfChat,
   setMetaDataMessage,
+  deleteListMessageByChatId,
 } = ChatSlice.actions;
 export default ChatSlice.reducer;

@@ -7,13 +7,14 @@
 
 // }
 
-export function formatChatTime(dateTimeString: string): string {
+export function formatChatTime(dateTimeString: string) {
   //UTC 0
   const date = new Date(dateTimeString);
   //Get timezoneoffset of user and Convert to UTC of user
   const localDate = new Date(
     date.getTime() - date.getTimezoneOffset() * 60 * 1000
   );
+
   const timeDifference = Date.now() - localDate.getTime();
   const timeAgo = Math.abs(Math.floor(timeDifference / 1000));
 
@@ -23,27 +24,51 @@ export function formatChatTime(dateTimeString: string): string {
   } else if (timeAgo < 3600) {
     // Less than 1 hour
     const minutesAgo = Math.floor(timeAgo / 60);
-    return `${minutesAgo} minutes ago`;
+    if (minutesAgo === 1) {
+      return `a minute ago`;
+    } else {
+      return `${minutesAgo} minutes ago`;
+    }
   } else if (timeAgo < 86400) {
     // Less than 1 day
     const hoursAgo = Math.floor(timeAgo / 3600);
-    return `${hoursAgo} hours ago`;
+    if (hoursAgo === 1) {
+      return `an hour ago`;
+    } else {
+      return `${hoursAgo} hours ago`;
+    }
   } else if (timeAgo < 604800) {
     // Less than 1 week
     const daysAgo = Math.floor(timeAgo / 86400);
-    return `${daysAgo} days ago`;
+    if (daysAgo === 1) {
+      return `a day ago`;
+    } else {
+      return `${daysAgo} days ago`;
+    }
   } else if (timeAgo < 2592000) {
     // Less than 1 month
     const weeksAgo = Math.floor(timeAgo / 604800);
-    return `${weeksAgo} weeks ago`;
+    if (weeksAgo === 1) {
+      return `a week ago`;
+    } else {
+      return `${weeksAgo} weeks ago`;
+    }
   } else if (timeAgo < 31536000) {
     // Less than 1 year
     const monthsAgo = Math.floor(timeAgo / 2592000);
-    return `${monthsAgo} months ago`;
+    if (monthsAgo === 1) {
+      return `a month ago`;
+    } else {
+      return `${monthsAgo} months ago`;
+    }
   } else {
     // More than 1 year
     const yearsAgo = Math.floor(timeAgo / 31536000);
-    return `${yearsAgo} years ago`;
+    if (yearsAgo === 1) {
+      return `a year ago`;
+    } else {
+      return `${yearsAgo} years ago`;
+    }
   }
 }
 

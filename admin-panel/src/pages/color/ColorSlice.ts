@@ -7,35 +7,24 @@ import { FieldValues } from "react-hook-form";
 import agent from "../../app/api/agent";
 import { RootState } from "../../app/store/ConfigureStore";
 import { toast } from "react-toastify";
-import { MetaData } from "../../app/models/Pagination";
-import { Color, ColorParams } from "../../app/models/Color";
+import { Color } from "../../app/models/Color";
 
 interface ColorState {
   color: Color | null;
   colorLoaded: boolean;
-  colorParams: ColorParams;
-  metaData: MetaData | null;
 }
 
 const colorsAdapter = createEntityAdapter<Color>();
-
-function getAxiosParams(colorParams: ColorParams) {
-  const params = new URLSearchParams();
-  params.append("pageNumber", colorParams.pageNumber.toString());
-  params.append("pageSize", colorParams.pageSize.toString());
-  return params;
-}
 
 export const getColorsAsync = createAsyncThunk<
   Color[],
   void,
   { state: RootState }
 >("color/getColorsAsync", async (_, ThunkAPI) => {
-  const params = getAxiosParams(ThunkAPI.getState().color.colorParams);
   try {
-    const response = await agent.Color.list(params);
-    ThunkAPI.dispatch(setMetaData(response.metaData));
-    return response.items;
+    debugger;
+    const response = await agent.Color.all();
+    return response;
   } catch (error: any) {
     return ThunkAPI.rejectWithValue({ error: error.data });
   }
@@ -79,39 +68,13 @@ export const deleteColorAsync = createAsyncThunk(
   }
 );
 
-function initParams() {
-  return {
-    pageNumber: 1,
-    pageSize: 5,
-  };
-}
-
 export const ColorSlice = createSlice({
   name: "color",
   initialState: colorsAdapter.getInitialState<ColorState>({
     color: null,
     colorLoaded: false,
-    colorParams: initParams(),
-    metaData: null,
   }),
-  reducers: {
-    setColorParams: (state, action) => {
-      state.colorParams = { ...state.colorParams, ...action.payload };
-    },
-
-    resetColorParams: (state) => {
-      state.colorParams = initParams();
-    },
-
-    setMetaData: (state, action) => {
-      state.metaData = action.payload;
-    },
-
-    setPageNumber: (state, action) => {
-      state.colorLoaded = false;
-      state.colorParams = { ...state.colorParams, ...action.payload };
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(getColorsAsync.fulfilled, (state, action) => {
@@ -146,5 +109,4 @@ export const colorSelectors = colorsAdapter.getSelectors(
   (state: RootState) => state.color
 );
 
-export const { setColorParams, resetColorParams, setMetaData, setPageNumber } =
-  ColorSlice.actions;
+export const {} = ColorSlice.actions;

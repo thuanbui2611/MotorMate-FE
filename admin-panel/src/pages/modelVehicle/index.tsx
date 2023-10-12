@@ -1,16 +1,8 @@
 import { useState, useEffect } from "react";
-import { Collection } from "typescript";
 import Breadcrumb from "../../app/components/Breadcrumb";
 import ConfirmDeleteDialog from "../../app/components/ConfirmDeleteDialog";
 import Loader from "../../app/components/Loader";
 import { useAppSelector, useAppDispatch } from "../../app/store/ConfigureStore";
-import CollectionForm from "../collection/CollectionForm";
-import {
-  collectionSelectors,
-  deleteCollectionAsync,
-  getCollectionsAsync,
-  setCollectionParams,
-} from "../collection/CollectionSlice";
 import { ModelVehicle } from "../../app/models/ModelVehicle";
 import {
   deleteModelVehicleAsync,
@@ -92,9 +84,7 @@ export default function ModelVehiclePage() {
         <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
           <div className="flex justify-end">
             <button
-              onClick={() =>
-                handleSelectModelVehicle("Add a new model for vehicle")
-              }
+              onClick={() => handleSelectModelVehicle("Add Model")}
               type="button"
               className="flex items-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
             >
@@ -220,7 +210,7 @@ export default function ModelVehiclePage() {
                               className="  hover:text-primary hover:bg-primary/30 rounded-full "
                               onClick={() =>
                                 handleSelectModelVehicle(
-                                  "Edit Model of Vehicle",
+                                  "Edit Model",
                                   modelVehicle
                                 )
                               }

@@ -22,7 +22,6 @@ import {
 import agent from "../../app/api/agent";
 import { Color } from "../../app/models/Color";
 import Autocomplete from "@mui/material/Autocomplete";
-//
 import { Theme, useTheme } from "@mui/material/styles";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
@@ -32,10 +31,7 @@ import Chip from "@mui/material/Chip";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import LoaderButton from "../../app/components/LoaderButton";
-import { TextField } from "@mui/material";
 import FormAddColors from "../../app/components/FormAddColors";
-import { current } from "@reduxjs/toolkit";
-//
 
 interface Props {
   modelVehicle: ModelVehicle | null;
@@ -126,7 +122,6 @@ export default function CollectionForm({
         collectionId: data.collectionId,
         colorIds: selectedColors,
       };
-      console.log("Form data:", formData);
       if (modelVehicle) {
         await dispatch(updateModelVehicleAsync(formData));
       } else {
@@ -335,7 +330,10 @@ export default function CollectionForm({
                         MenuProps={MenuProps}
                       >
                         <MenuItem
-                          style={{ fontWeight: 600, backgroundColor: "#f0f0f0" }}
+                          style={{
+                            fontWeight: 600,
+                            backgroundColor: "#f0f0f0",
+                          }}
                           onClick={() => setAddColorDialog(true)}
                         >
                           Add new colors
@@ -379,6 +377,7 @@ export default function CollectionForm({
         </Card>
         {addColorDialog && (
           <FormAddColors
+            actionName="Add new color"
             isColorAdded={checkAddedColor}
             cancelForm={cancelAddNewColorForm}
           />

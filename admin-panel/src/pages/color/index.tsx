@@ -2,32 +2,36 @@ import { useSearchParams } from "react-router-dom";
 import Breadcrumb from "../../app/components/Breadcrumb";
 import Pagination from "../../app/components/Pagination";
 import { useAppDispatch, useAppSelector } from "../../app/store/ConfigureStore";
-import { colorSelectors, deleteColorAsync } from "./ColorSlice";
+import { colorSelectors, deleteColorAsync, getColorsAsync } from "./ColorSlice";
 import { Color } from "../../app/models/Color";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Loader from "../../app/components/Loader";
 import ConfirmDeleteDialog from "../../app/components/ConfirmDeleteDialog";
+import FormAddColors from "../../app/components/FormAddColors";
 
 export default function ColorPage() {
-  const [pageNumber, setPageNumber] = useSearchParams({ pageNumber: "" });
   const [confirmDeleteDiaglog, setConfirmDeleteDiaglog] = useState(false);
   const [actionName, setActionName] = useState(String);
   const [colorDeleted, setColorDeleted] = useState<Color>({} as Color);
   const [openEditForm, setOpenEditForm] = useState(false);
   const [selectedColor, setSelectedColor] = useState<Color | null>(null);
   const dispatch = useAppDispatch();
+
   const colors = useAppSelector(colorSelectors.selectAll);
-  const { colorLoaded, metaData, colorParams } = useAppSelector(
-    (state) => state.color
-  );
+  const { colorLoaded } = useAppSelector((state) => state.color);
+
+  useEffect(() => {
+    if (!colorLoaded) {
+      dispatch(getColorsAsync());
+    }
+  }, [dispatch]);
+
   const openConfirmDeleteDiaglog = (color: Color) => {
     setConfirmDeleteDiaglog((cur) => !cur);
     setColorDeleted(color);
   };
   const cancelConfirmDeleteDiaglog = () => setConfirmDeleteDiaglog(false);
-  if (!metaData) {
-    return <Loader />;
-  }
+
   async function handleDeleteColor(colorDeleted: Color) {
     await dispatch(deleteColorAsync(colorDeleted.id));
   }
@@ -44,7 +48,7 @@ export default function ColorPage() {
       <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
         <div className="flex justify-end">
           <button
-            //   onClick={() => handleSelectBrand("Add a new brand")}
+            onClick={() => handleSelectColor("Add new color")}
             type="button"
             className="flex items-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
           >
@@ -85,7 +89,7 @@ export default function ColorPage() {
                 </g>
               </g>
             </svg>
-            <span>Add new brand</span>
+            <span>Add new color</span>
           </button>
         </div>
         <div className="max-w-full overflow-x-auto">
@@ -98,9 +102,7 @@ export default function ColorPage() {
                 <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
                   Hex code
                 </th>
-                <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
-                  Status
-                </th>
+
                 <th className="py-4 px-4"></th>
               </tr>
             </thead>
@@ -116,9 +118,10 @@ export default function ColorPage() {
                   {colors.map((color) => (
                     <tr key={color.id}>
                       <td className="flex items-center border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
-                        <div className="h-12 w-12 rounded-md">
-                          {/* <img src={color.image.image} alt="logo" /> */}
-                        </div>
+                        <div
+                          className="h-12 w-12 rounded-md border border-blue-gray-200"
+                          style={{ backgroundColor: `${color.hexCode}` }}
+                        ></div>
                         <h5 className="ml-4 font-medium text-black dark:text-white">
                           {color.color}
                         </h5>
@@ -128,11 +131,7 @@ export default function ColorPage() {
                           {color.hexCode}
                         </h5>
                       </td>
-                      <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                        <p className="inline-flex rounded-full bg-success bg-opacity-10 py-1 px-3 text-sm font-medium text-success">
-                          Enable
-                        </p>
-                      </td>
+
                       <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                         <div className="flex items-center space-x-3.5">
                           <button
@@ -224,26 +223,17 @@ export default function ColorPage() {
             </tbody>
           </table>
         </div>
-        <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-center sm:justify-center">
-          <Pagination
-            metaData={metaData}
-            onPageChange={(page: number) => {
-              setPageNumber((prev) => {
-                prev.set("pageNumber", page.toString());
-                return prev;
-              });
-            }}
-            loading={colorLoaded}
-          />
-        </div>
       </div>
-      {/* {openEditForm && (
-          <BrandForm
-            brand={selectedBrand}
-            cancelEdit={cancelEditForm}
-            actionName={actionName}
-          />
-        )} */}
+      {openEditForm && (
+        <FormAddColors
+          actionName={actionName}
+          color={selectedColor}
+          cancelForm={() => {
+            setOpenEditForm(false);
+            setSelectedColor(null);
+          }}
+        />
+      )}
 
       {confirmDeleteDiaglog && (
         <ConfirmDeleteDialog

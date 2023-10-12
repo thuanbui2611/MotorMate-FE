@@ -9,6 +9,7 @@ import { Chat, Message } from "../../app/models/Chat";
 import {
   addListChat,
   addListMessage,
+  deleteListMessageByChatId,
   loadListChat,
   loadListMessage,
   setMetaDataMessage,
@@ -46,14 +47,12 @@ export default function TinyChat() {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const dispatch = useAppDispatch();
-  const { listChat, listMessage, metaData, previousPageNumRequest } =
-    useAppSelector((state) => state.chat);
+  const { listChat, listMessage, metaData } = useAppSelector(
+    (state) => state.chat
+  );
 
   const listUserMessage = listMessage.filter((m) => m.chatId === selectedChat);
   const metaDataMessage = metaData?.find((m) => m.chatId === selectedChat);
-  const prevUserPageNumReq = previousPageNumRequest?.find(
-    (p) => p.chatId === selectedChat
-  );
 
   const userLogin = useAppSelector((state) => state.account.user);
   const userLoginDetail = useAppSelector((state) => state.account.userDetail);
@@ -80,13 +79,11 @@ export default function TinyChat() {
         .start()
         .then(() => {
           connection.on("ReceiveChat", (chat: Chat) => {
-            debugger;
             dispatch(addListChat(chat));
             setSelectedChat(chat.id);
           });
 
           connection.on("LoadChats", (chats: Chat[], pagination: MetaData) => {
-            debugger;
             dispatch(loadListChat(chats));
             setListChatLoaded(false);
           });
@@ -117,7 +114,6 @@ export default function TinyChat() {
         }
         pageSize = metaDataMessage.metaData.pageSize;
       }
-
       const existingConnection = connectionChatDetailHub.find(
         (connection) => connection.chatId === selectedChat
       );
@@ -133,6 +129,21 @@ export default function TinyChat() {
         .configureLogging(LogLevel.Information)
         .build();
       if (!existingConnection) {
+        //Start new connection if not existing connection for that chat
+        //Stop a first connection if have more than 3 connection
+        if (connectionChatDetailHub.length >= 3) {
+          //stop connection and delete list message by chat Id in listMess state
+          connectionChatDetailHub[0].connection.stop();
+          dispatch(
+            deleteListMessageByChatId(connectionChatDetailHub[0].chatId)
+          );
+          //stop a first connection then remove it from list
+          setConnectionChatDetailHub((prev) => {
+            const connections = [...prev];
+            connections.shift();
+            return connections;
+          });
+        }
         connection
           .start()
           .then(() => {
@@ -143,62 +154,40 @@ export default function TinyChat() {
               setMessagePending(undefined);
               setIsScrollDown(true);
             });
-
-            if (metaDataMessage) {
-              if (pageNumber !== prevUserPageNumReq?.pageNumber) {
-                connection.on(
-                  "LoadMessages",
-                  (chats: Message[], pagination: MetaData) => {
-                    const metaData = {
-                      chatId: chats[0].chatId,
-                      metaData: pagination,
-                    };
-                    debugger;
-
-                    dispatch(setMetaDataMessage(metaData));
-                    dispatch(loadListMessage(chats));
-                  }
-                );
-              } else {
-                connection.on("LoadMessages", () => {});
+            connection.on(
+              "LoadMessages",
+              (chats: Message[], pagination: MetaData) => {
+                const metaData = {
+                  chatId: chats[0].chatId,
+                  metaData: pagination,
+                };
+                dispatch(setMetaDataMessage(metaData));
+                dispatch(loadListMessage(chats));
               }
-            } else {
-              connection.on(
-                "LoadMessages",
-                (chats: Message[], pagination: MetaData) => {
-                  const metaData = {
-                    chatId: chats[0].chatId,
-                    metaData: pagination,
-                  };
-                  dispatch(setMetaDataMessage(metaData));
-                  dispatch(loadListMessage(chats));
-                }
-              );
-            }
+            );
             setListMessageLoaded(false);
-            // setIsFetchPreviousMess(false);
+
             setConnectionChatDetailHub((prevConnection) => [
               ...prevConnection,
               { chatId: selectedChat, connection: connection },
             ]);
           })
           .catch((error) =>
-            console.log("Error while establishing connection: " + error)
+            console.log("Error while establishing new connection: " + error)
           );
       } else {
         // if existing connection
         if (metaDataMessage) {
           //get new value with pagination
-          if (pageNumber !== prevUserPageNumReq?.pageNumber) {
-            setIsFetchPreviousMess(true);
+          if (pageNumber <= metaDataMessage.metaData.totalPageCount) {
             existingConnection.connection
               .stop()
               .then(() => {
                 const updatedConnection = connection;
                 updatedConnection.start().then(() => {
                   connection.on("ReceiveMessage", (message: Message) => {
+                    debugger;
                     dispatch(addListMessage(message));
-                    // setIsLoadListChat(true);
                     setMessagePending(undefined);
                     setIsScrollDown(true);
                   });
@@ -212,6 +201,7 @@ export default function TinyChat() {
                       };
                       dispatch(setMetaDataMessage(metaData));
                       dispatch(loadListMessage(chats));
+                      setIsFetchPreviousMess(false);
                     }
                   );
 
@@ -230,14 +220,15 @@ export default function TinyChat() {
                   });
                 });
               })
-              .finally(() => {
-                setIsFetchPreviousMess(false);
-              })
+              // .finally(() => {
+              //   setIsFetchPreviousMess(false);
+              // })
               .catch((error) =>
                 console.log("Error while update connection: " + error)
               );
             //
           } else {
+            debugger;
             existingConnection.connection.on(
               "LoadMessages",
               (chats: Message[], pagination: MetaData) => {}
@@ -259,9 +250,16 @@ export default function TinyChat() {
         setListMessageLoaded(false);
       }
 
+      //Check if any connection close
+      // connectionChatDetailHub.forEach((connection) => {
+      //   connection.connection.onclose((error) =>
+      //     console.log(`Connection closed: ${connection}. Error: ${error} `)
+      //   );
+      // });
+
       return () => {
         //stop when component unmount. Currently have not set limit for connection yet
-        // if (connectionMessagesHub.length > 10) {
+        // if (connectionMessagesHub.length > 3) {
         //   connectionChatDetailHub.forEach((connection) => {
         //     connection.connection.stop();
         //   });
@@ -303,7 +301,7 @@ export default function TinyChat() {
         if (connection)
           await connection.connection.invoke("CreateMessageAsync", request);
 
-        await connectionMessagesHub.invoke("OnConnectedAsync");
+        // await connectionMessagesHub.invoke("OnConnectedAsync");
       }
     } catch (error) {
       console.log("Error when send mess: ", error);
@@ -326,7 +324,6 @@ export default function TinyChat() {
             message: message,
           },
         };
-        debugger;
         await connectionMessagesHub.invoke("CreateChatAsync", request);
       }
     } catch (error) {
@@ -353,6 +350,9 @@ export default function TinyChat() {
     setNewChatForm(false);
     setSelectedChat(chatId);
     const isFetchedMessage = listMessage.some((m) => m.chatId === chatId);
+    // const isFetchedMessage = connectionChatDetailHub.some(
+    //   (conn) => conn.chatId === chatId
+    // );
     if (!isFetchedMessage) setListMessageLoaded(true);
   };
   //End of test data message
@@ -389,7 +389,6 @@ export default function TinyChat() {
   };
 
   const fetchPreviousMessages = (): void => {
-    debugger;
     if (listMessage && !listMessageLoaded && !isFetchPreviousMess) {
       let currentPage = metaDataMessage?.metaData.currentPage;
       if (!currentPage) currentPage = 1;
@@ -719,7 +718,7 @@ export default function TinyChat() {
                                     id={"timeMessage" + chat.id}
                                     className="absolute rounded-lg px-1 py-[2px] font-normal top-1/2 transform -translate-y-1/2 -right-10 h-fit w-fit bg-gray-700 text-white opacity-75 text-sm hidden "
                                   >
-                                    {formatChatTime(chat.time)}
+                                    {formatChatTimeOnHover(chat.time)}
                                   </div>
                                 </div>
                               </div>
