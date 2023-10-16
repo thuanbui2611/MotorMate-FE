@@ -353,6 +353,7 @@ export default function TinyChat() {
     // const isFetchedMessage = connectionChatDetailHub.some(
     //   (conn) => conn.chatId === chatId
     // );
+    setIsScrollDown(true);
     if (!isFetchedMessage) setListMessageLoaded(true);
   };
   //End of test data message
