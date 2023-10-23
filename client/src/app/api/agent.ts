@@ -154,6 +154,11 @@ const User = {
   delete: (username: string) => requests.delete(`api/user/${username}`),
 };
 
+const Cart = {
+  getCartByUser: (userId: string) => requests.get(`api/cart/${userId}`),
+  addToCart: (values: {}) => requests.post("api/cart", values),
+};
+
 const agent = {
   Account,
   Brand,
@@ -162,6 +167,7 @@ const agent = {
   Color,
   Vehicle,
   User,
+  Cart,
 };
 
 export default agent;

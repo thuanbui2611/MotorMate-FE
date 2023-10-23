@@ -73,7 +73,7 @@ export default function TinyChat() {
           }
         )
         .withAutomaticReconnect()
-        .configureLogging(LogLevel.Information)
+        // .configureLogging(LogLevel.Information)
         .build();
       connection
         .start()
@@ -126,7 +126,7 @@ export default function TinyChat() {
           }
         )
         .withAutomaticReconnect()
-        .configureLogging(LogLevel.Information)
+        // .configureLogging(LogLevel.Information)
         .build();
       if (!existingConnection) {
         //Start new connection if not existing connection for that chat

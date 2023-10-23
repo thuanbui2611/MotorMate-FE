@@ -3,22 +3,22 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { store } from "../../app/store/ConfigureStore";
 import { Vehicle } from "../../app/models/Vehicle";
+import AddToCart from "../../app/components/AddToCart";
 interface Props {
   products: Vehicle[];
 }
 export default function ProductHomepage({ products }: Props) {
   const [currentSlide, setCurrentSlide] = useState(products[0].id);
-  const userLogin = store.getState().account.user;
+  const userLogin = store.getState().account.userDetail;
   const {
     carouselFragment,
-    slideToPrevItem, // go back to previous slide
-    slideToNextItem, // move to next slide
+    slideToPrevItem,
+    slideToNextItem,
     useListenToCustomEvent, //custom hook to listen event when the slide changes
   } = useSpringCarousel({
     autoplay: true,
-
-    itemsPerSlide: 3, // number of slides per view
-    withLoop: true, // will loop
+    itemsPerSlide: 3,
+    withLoop: true,
     initialStartingPosition: "center", // the active slide will be at the center
     gutter: 24, // to add the space between slides
     items: products.map((product) => {
@@ -52,24 +52,9 @@ export default function ProductHomepage({ products }: Props) {
                       src="https://purepng.com/public/uploads/large/purepng.com-motorcyclemotorcyclemotorbikebikecycleracing-bike-1701527509882zcnub.png"
                       alt="Image Book"
                     />
-                    <button
-                      className="absolute top-1 left-[5px] md:top-2 md:left-2"
-                      // onClick={handleAddItem}
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="currentColor"
-                        className="text-gray-200 hover:text-red-600 h-2 w-2 md:h-3 md:w-3 "
-                        viewBox="0 0 16 16"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"
-                        ></path>
-                      </svg>
-                    </button>
+                    <AddToCart userId={userLogin?.id} vehicleId={product.id} />
                     {userLogin &&
-                      userLogin.username.toLowerCase() ===
+                      userLogin.userName.toLowerCase() ===
                         product.owner.username.toLowerCase() && (
                         <span className="absolute top-2 right-2 font-semibold px-1 z-1 h-fit w-fit text-[12px] shadow-md rounded-sm bg-orange-based text-white flex items-center justify-center">
                           Owner
