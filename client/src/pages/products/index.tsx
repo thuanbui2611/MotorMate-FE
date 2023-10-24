@@ -50,6 +50,7 @@ export default function Products() {
     useState(true);
   const [loadingFetchBrandsFilter, setLoadingFetchBrandsFilter] =
     useState(true);
+  const [priceFilter, setPriceFilter] = useState<string | undefined>(undefined);
   const [paramsCompleted, setParamsCompleted] = useState(false);
 
   const products = useAppSelector(productSelectors.selectAll);
@@ -64,6 +65,7 @@ export default function Products() {
   const modelsParam = searchParams.get("Models");
   const collectionsParam = searchParams.get("Collections");
   const citiesParam = searchParams.get("Cities");
+  const isSortPriceDescParam = searchParams.get("IsSortPriceDesc");
 
   const cities = dataCityVN as City[];
 
@@ -227,6 +229,13 @@ export default function Products() {
       dispatch(setProductParams({ pageNumber: +pageNum }));
     }
   }, [pageNum, dispatch]);
+
+  useEffect(() => {
+    if (isSortPriceDescParam) {
+      setPriceFilter(isSortPriceDescParam);
+      dispatch(setProductParams({ IsSortPriceDesc: isSortPriceDescParam }));
+    }
+  }, [isSortPriceDescParam, dispatch]);
   //End of get valueFilter from url params and set selected
 
   useEffect(() => {
@@ -336,6 +345,15 @@ export default function Products() {
         return prev;
       });
     }
+  };
+
+  const handleFilterPriceChange = (event: SelectChangeEvent<string>) => {
+    const newValue = event.target.value;
+    setPriceFilter(newValue);
+    setSearchParams((prev) => {
+      prev.set("IsSortPriceDesc", newValue.toString());
+      return prev;
+    });
   };
   // End of handle change filter
 
@@ -529,16 +547,16 @@ export default function Products() {
                             <Select
                               labelId="demo-simple-select-autowidth-label"
                               id="demo-simple-select-autowidth"
-                              // value={priceFilter}
-                              // onChange={handleFilterByPriceChange}
+                              value={priceFilter}
+                              onChange={handleFilterPriceChange}
                               autoWidth
                               label="Age"
                             >
                               <MenuItem value="">
                                 <em>None</em>
                               </MenuItem>
-                              <MenuItem value={10}>Increasing</MenuItem>
-                              <MenuItem value={21}>Descreasing</MenuItem>
+                              <MenuItem value="true">Increasing</MenuItem>
+                              <MenuItem value="false">Descreasing</MenuItem>
                             </Select>
                           </FormControl>
                           {/* End Filter by price form */}

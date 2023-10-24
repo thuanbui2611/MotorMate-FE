@@ -4,6 +4,8 @@ module.exports = {
     "./public/index.html",
     "./src/**/*.{js,jsx,ts,tsx}",
     "./node_modules/flowbite/**/*.js",
+    "./@material-tailwind/react/components/**/*.{js,ts,jsx,tsx}",
+    "./@material-tailwind/react/theme/components/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {

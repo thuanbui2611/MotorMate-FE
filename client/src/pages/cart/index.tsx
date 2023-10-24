@@ -1,11 +1,37 @@
-import { useEffect } from "react";
-import { useAppSelector } from "../../app/store/ConfigureStore";
+import { useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "../../app/store/ConfigureStore";
 import Loading from "../../app/components/Loading";
 import { Link } from "react-router-dom";
+import { Vehicle } from "../../app/models/Cart";
+import ConfirmDeleteDialog from "../../app/components/ConfirmDeleteDialog";
+import { deleteItemInCartAsync } from "./CartSlice";
 
 export default function Cart() {
+  const [confirmDelete, setConfirmDelete] = useState<Boolean>(false);
+  const [vehicleDeleted, setVehicleDeleted] = useState<Vehicle>({} as Vehicle);
+
+  const dispatch = useAppDispatch();
+
+  const userLogin = useAppSelector((state) => state.account.userDetail);
   const { cart } = useAppSelector((state) => state.cart);
 
+  const openConfirmDeleteDialog = (vehicle: Vehicle) => {
+    setConfirmDelete(true);
+    setVehicleDeleted(vehicle);
+  };
+
+  const cancelConfirmDeleteDialog = () => setConfirmDelete(false);
+
+  const handleDeleteVehicle = async (vehicle: Vehicle) => {
+    if (userLogin) {
+      await dispatch(
+        deleteItemInCartAsync({
+          vehicleId: vehicle.vehicleId,
+          userId: userLogin.id,
+        })
+      );
+    }
+  };
   return !cart ? (
     <Loading />
   ) : (
@@ -16,28 +42,33 @@ export default function Cart() {
             <h2 className="mb-8 text-4xl font-bold ">Your Cart</h2>
             {/* Start cart */}
             {cart?.shops.map((shop) => (
-              <div className="p-6 mb-8 border bg-gray-50 ">
-                <div className=" w-fit mb-4 bg-slate-100 rounded p-2">
-                  <div className="flex items-center no-underline hover:underline text-black ">
-                    <label htmlFor="" className="flex items-center ">
-                      <input type="checkbox" className="w-4 h-4 mr-2" />
-                    </label>
-                    {/* img size 32x32 */}
-                    <img
-                      alt="Placeholder"
-                      className="block rounded-full h-8 w-8"
-                      src={require("../../app/assets/images/coverPage5.jpg")}
-                    />
-                    <a href="" className="ml-2 text-sm font-bold">
-                      {shop.lessorName}
-                    </a>
-                  </div>
+              <div className="p-6 mb-8 border bg-gray-50" key={shop.lessorId}>
+                <div className="flex items-center justify-start mb-4">
+                  <label className="flex items-center ">
+                    <input type="checkbox" className="w-4 h-4 mr-2" />
+                  </label>
+                  <Link
+                    to={"/profile/" + shop.lessorName}
+                    className=" w-fit rounded p-2"
+                  >
+                    <div className="flex items-center no-underline hover:underline text-black ">
+                      {/* img size 32x32 */}
+                      <img
+                        alt="Placeholder"
+                        className="block rounded-full h-8 w-8"
+                        src={shop.lessorImage}
+                      />
+                      <div className="ml-2 text-sm font-bold">
+                        {shop.lessorName}
+                      </div>
+                    </div>
+                  </Link>
                 </div>
 
                 <div className="max-w-full overflow-x-auto">
                   <table className="w-full table-auto">
                     <thead>
-                      <tr className="bg-gray-200 text-left text-sm md:text-base lg:text-lg font-bold">
+                      <tr className=" bg-gray-200 text-left text-sm md:text-base lg:text-lg font-bold">
                         <th className="py-4 px-4"></th>
                         <th className="min-w-[300px] py-4 px-4 text-black xl:pl-11">
                           Vehicle
@@ -127,9 +158,9 @@ export default function Cart() {
                                   </Link>
                                   <button
                                     className="hover:text-red-600 hover:bg-red-600/30 rounded-full p-1"
-                                    // onClick={() =>
-                                    //   openConfirmDeleteDiaglog(vehicle)
-                                    // }
+                                    onClick={() =>
+                                      openConfirmDeleteDialog(vehicle)
+                                    }
                                   >
                                     <svg
                                       className="fill-current"
@@ -191,6 +222,14 @@ export default function Cart() {
           </div>
         </div>
       </section>
+
+      {confirmDelete && (
+        <ConfirmDeleteDialog
+          objectName={vehicleDeleted?.licensePlate}
+          actionDelete={() => handleDeleteVehicle(vehicleDeleted)}
+          cancelDelete={cancelConfirmDeleteDialog}
+        />
+      )}
     </>
   );
 }

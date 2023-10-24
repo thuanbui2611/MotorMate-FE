@@ -6,6 +6,7 @@ export interface Cart {
 export interface Shop {
   lessorId: string;
   lessorName: string;
+  lessorImage: string;
   vehicles: Vehicle[];
 }
 

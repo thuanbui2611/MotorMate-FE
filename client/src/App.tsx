@@ -19,7 +19,6 @@ function App() {
   const dispatch = useAppDispatch();
 
   const initApp = useCallback(async () => {
-    debugger;
     try {
       if (!user?.token) {
         await dispatch(fetchUserFromToken());

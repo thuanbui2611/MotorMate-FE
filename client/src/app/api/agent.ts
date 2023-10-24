@@ -2,7 +2,6 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import { store } from "../store/ConfigureStore";
 import { PaginatedResponse } from "../models/Pagination";
-import { request } from "http";
 
 axios.defaults.baseURL = "https://motormate.azurewebsites.net/";
 axios.defaults.headers.post["Content-Type"] = "application/json";
@@ -157,6 +156,7 @@ const User = {
 const Cart = {
   getCartByUser: (userId: string) => requests.get(`api/cart/${userId}`),
   addToCart: (values: {}) => requests.post("api/cart", values),
+  deleteItem: (userId: string, vehicleId: string) => requests.delete(`api/cart/${userId}/${vehicleId}`)
 };
 
 const agent = {

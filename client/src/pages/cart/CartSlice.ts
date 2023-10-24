@@ -45,6 +45,21 @@ export const addToCartAsync = createAsyncThunk<Cart, {}>(
   }
 );
 
+export const deleteItemInCartAsync = createAsyncThunk(
+  "cart/deleteVehicleInCart",
+  async (data: {userId: string, vehicleId: string}) => {
+    try {
+      debugger;
+      await agent.Cart.deleteItem(data.userId, data.vehicleId);
+      toast.success("Remove vehicle from cart successfully!")
+      return data;
+    } catch (error: any) {
+      toast.error(error.data.message);
+      throw error;
+    }
+  }
+);
+
 export const CartSlice = createSlice({
   name: "cart",
   initialState,
@@ -65,32 +80,32 @@ export const CartSlice = createSlice({
       state.cartLoading = true;
     });
     builder.addCase(addToCartAsync.fulfilled, (state, action) => {
-      try {
-        debugger;
-        const { shops } = action.payload;
-        if (state.cart) {
-          const index = state.cart.shops.findIndex(
-            (x) => x.lessorId === shops[0].lessorId
-          );
-          if (index === -1) {
-            state.cart.shops.push(shops[0]);
-          } else {
-            state.cart.shops[index].vehicles = [
-              ...state.cart.shops[index].vehicles,
-              ...shops[0].vehicles,
-            ];
-          }
-          toast.success("Add to cart successfully");
-        } else {
-          state.cart = action.payload;
-          toast.success("Add to cart successfully");
-        }
-      } catch (error) {
-        console.log(error);
-      }
+        state.cart = action.payload;
+        toast.success("Add to cart successfully");
     });
     builder.addCase(addToCartAsync.rejected, (state, action) => {
       state.cartLoading = false;
+    });
+    builder.addCase(deleteItemInCartAsync.fulfilled, (state, action) => {
+      const {vehicleId} = action.payload;
+      if(state.cart){
+        debugger;
+        // state.cart.shops.forEach((shop) => {
+        //   const indexShop = state.cart!.shops.findIndex((s) => s.lessorId === shop.lessorId);
+        //   const indexVehicle = shop.vehicles.findIndex((v) => v.vehicleId === vehicleId);
+        //   if(indexVehicle !== -1 && indexShop !== -1){
+        //     state.cart?.shops[indexShop].vehicles.splice(indexVehicle, 1);
+        //   }
+        // })
+        state.cart.shops.forEach((shop) => {
+          const vehicleIndex = shop.vehicles.findIndex((v) => v.vehicleId === vehicleId);
+          if (vehicleIndex !== -1) {
+            shop.vehicles.splice(vehicleIndex, 1);
+          }
+        });
+        // Remove shops without vehicles
+        state.cart.shops = state.cart.shops.filter((shop) => shop.vehicles.length > 0);
+      }
     });
   },
 });
