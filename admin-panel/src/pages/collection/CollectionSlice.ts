@@ -60,8 +60,8 @@ export const updateCollectionAsync = createAsyncThunk<Collection, FieldValues>(
   "collection/updateCollectionAsync",
   async (data, ThunkAPI) => {
     try {
-      console.log("Updating collection...", data);
       const response = await agent.Collection.update(data.id, data);
+      ////////////////
       response.brand = data.brand;
       return response;
     } catch (error: any) {
@@ -74,7 +74,6 @@ export const deleteCollectionAsync = createAsyncThunk(
   "collection/deleteCollectionAsync",
   async (id: string) => {
     try {
-      console.log("Reach deleting... Id:", id);
       await agent.Collection.delete(id);
       toast.success("Delete collection successfully!");
       return id;

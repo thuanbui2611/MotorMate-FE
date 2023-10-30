@@ -52,7 +52,11 @@ export default function ProductHomepage({ products }: Props) {
                       src="https://purepng.com/public/uploads/large/purepng.com-motorcyclemotorcyclemotorbikebikecycleracing-bike-1701527509882zcnub.png"
                       alt="Image Book"
                     />
-                    <AddToCart userId={userLogin?.id} vehicleId={product.id} />
+                    <AddToCart
+                      userId={userLogin?.id}
+                      vehicleId={product.id}
+                      className="absolute cursor top-1 left-[5px] md:top-2 md:left-2 flex items-center justify-center text-white h-[1vw] w-[1vw] md:h-3 md:w-3 lg:h-4 lg:w-4"
+                    />
                     {userLogin &&
                       userLogin.userName.toLowerCase() ===
                         product.owner.username.toLowerCase() && (

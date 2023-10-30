@@ -18,3 +18,8 @@ export interface UserDetail {
   phoneNumber: string;
   dateOfBirth: string;
 }
+
+export interface UserParams {
+  pageNumber: number;
+  pageSize: number;
+}

@@ -8,7 +8,7 @@ interface Props {
 }
 
 export default function ProductList({ products }: Props) {
-  const userLogin = store.getState().account.user;
+  const userLogin = store.getState().account.userDetail;
   if (products.length === 0)
     return (
       <div className="h-20 w-full flex items-center justify-center font-bold">
@@ -22,7 +22,7 @@ export default function ProductList({ products }: Props) {
           <ProductCard
             key={product.id}
             product={product}
-            userLogin={userLogin || null}
+            userLogin={userLogin}
           />
         ))}
       </div>

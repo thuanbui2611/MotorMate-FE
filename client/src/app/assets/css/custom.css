@@ -245,8 +245,9 @@ body {
   font-size: 8px;
 }
 .icon {
-  width: 8px;
-  height: 8px;
+  width: 12px;
+  height: 12px;
+  margin-right: 4px;
 }
 .card-container span {
   margin-left: 2px;
@@ -255,9 +256,7 @@ body {
 .card-container button {
   font-size: 12px;
 }
-.icon {
-  margin-right: 4px;
-}
+
 @media (max-width: 1150px) {
   .card-container {
     width: 20vw;
@@ -288,12 +287,6 @@ body {
   .card-brand,
   .card-location {
     font-size: 1vw;
-  }
-
-  .icon {
-    margin-right: 2px;
-    width: 1vw;
-    height: 1vw;
   }
 
   .card-container span {

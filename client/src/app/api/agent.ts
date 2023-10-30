@@ -156,7 +156,25 @@ const User = {
 const Cart = {
   getCartByUser: (userId: string) => requests.get(`api/cart/${userId}`),
   addToCart: (values: {}) => requests.post("api/cart", values),
-  deleteItem: (userId: string, vehicleId: string) => requests.delete(`api/cart/${userId}/${vehicleId}`)
+  deleteItem: (userId: string, vehicleId: string) =>
+    requests.delete(`api/cart/${userId}/${vehicleId}`),
+};
+
+const Blog = {
+  list: (params: URLSearchParams) => requests.get("api/blog", params),
+  details: (id: string) => requests.get(`api/blog/${id}`),
+  create: (values: {}) => requests.post("api/blog", values),
+  update: (id: string, values: {}) => requests.put(`api/blog/${id}`, values),
+  delete: (id: string) => requests.delete(`api/blog/${id}`),
+};
+
+const Category = {
+  all: () => requests.get("api/blog/category"),
+  details: (id: string) => requests.get(`api/blog/category/${id}`),
+  create: (values: {}) => requests.post("api/blog/category", values),
+  update: (id: string, values: {}) =>
+    requests.put(`api/blog/category/${id}`, values),
+  delete: (id: string) => requests.delete(`api/blog/category/${id}`),
 };
 
 const agent = {
@@ -168,6 +186,8 @@ const agent = {
   Vehicle,
   User,
   Cart,
+  Blog,
+  Category,
 };
 
 export default agent;

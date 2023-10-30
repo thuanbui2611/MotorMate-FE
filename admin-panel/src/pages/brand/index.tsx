@@ -165,7 +165,6 @@ export default function BrandPage() {
                         <td className="flex items-center border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
                           <div className="h-12 w-12 rounded-md">
                             <img src={brand.image.image} alt="logo" />
-                            {/* <video src={brand.logo} autoPlay muted loop></video> */}
                           </div>
                           <h5 className="ml-4 font-medium text-black dark:text-white">
                             {brand.name}

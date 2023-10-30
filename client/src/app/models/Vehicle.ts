@@ -51,4 +51,5 @@ export interface VehicleParams {
   Models?: string[];
   Cities?: string[];
   IsSortPriceDesc: string | null;
+  Search: string | null;
 }

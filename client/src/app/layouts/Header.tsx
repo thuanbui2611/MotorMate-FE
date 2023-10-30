@@ -1,7 +1,5 @@
-import { useAppDispatch, useAppSelector } from "../store/ConfigureStore";
-
-import { signOut } from "../../pages/account/AccountSlice";
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { useAppSelector } from "../store/ConfigureStore";
+import { Link, useLocation } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import MenuItemUser from "../components/MenuItemUser";
 interface Props {}

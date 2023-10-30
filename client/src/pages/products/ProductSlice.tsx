@@ -43,9 +43,11 @@ function getAxiosParams(productParams: VehicleParams) {
       params.append("Cities", city);
     });
   }
-  debugger;
   if (productParams.IsSortPriceDesc) {
     params.append("IsSortPriceDesc", productParams.IsSortPriceDesc.toString());
+  }
+  if (productParams.Search) {
+    params.append("Search", productParams.Search);
   }
   return params;
 }
@@ -112,6 +114,7 @@ function initParams() {
     Models: [],
     Cities: [],
     IsSortPriceDesc: null,
+    Search: null,
   };
 }
 

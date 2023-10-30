@@ -8,6 +8,8 @@ import { VehicleSlice } from "../../pages/vehicles/VehicleSlice";
 import { ColorSlice } from "../../pages/color/ColorSlice";
 import { VehiclePendingSlice } from "../../pages/vehicles/VehiclePendingSlice";
 import { VehicleDeniedSlice } from "../../pages/vehicles/VehicleDeniedSlice";
+import { UserSlice } from "../../pages/users/UserSlice";
+import { BlogSlice } from "../../pages/blog/BlogSlice";
 
 export const store = configureStore({
   reducer: {
@@ -19,6 +21,8 @@ export const store = configureStore({
     vehiclePending: VehiclePendingSlice.reducer,
     vehicleDenied: VehicleDeniedSlice.reducer,
     color: ColorSlice.reducer,
+    user: UserSlice.reducer,
+    blog: BlogSlice.reducer,
   },
 });
 

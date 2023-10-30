@@ -4,30 +4,30 @@ import { Collection } from "../../app/models/Collection";
 import Pagination from "../../app/components/Pagination";
 import ConfirmDeleteDialog from "../../app/components/ConfirmDeleteDialog";
 import { useAppDispatch, useAppSelector } from "../../app/store/ConfigureStore";
-import {
-  collectionSelectors,
-  deleteCollectionAsync,
-  getCollectionsAsync,
-  setCollectionParams,
-} from "./CollectionSlice";
 import Loader from "../../app/components/Loader";
-import CollectionForm from "./CollectionForm";
 import { useSearchParams } from "react-router-dom";
+import {
+  deleteUserAsync,
+  getUsersAsync,
+  setUserParams,
+  userSelectors,
+} from "./UserSlice";
+import { UserDetail } from "../../app/models/User";
+import UserDetails from "./UserDetails";
+import UserForm from "./UserForm";
 
-export default function CollectionPage() {
+export default function UsersPage() {
   const [pageNumber, setPageNumber] = useSearchParams({ pageNumber: "" });
   const [actionName, setActionName] = useState(String);
   const [openEditForm, setOpenEditForm] = useState(false);
-  const [selectedCollection, setSelectedCollection] =
-    useState<Collection | null>(null);
+  const [selectedUser, setSelectedUser] = useState<UserDetail | null>(null);
   const [confirmDeleteDiaglog, setConfirmDeleteDiaglog] = useState(false);
-  const [collectionDeleted, setCollectionDeleted] = useState<Collection>(
-    {} as Collection
-  );
+  const [userDeleted, setUserDeleted] = useState<UserDetail>({} as UserDetail);
+  const [openDetails, setOpenDetails] = useState(false);
 
-  const collections = useAppSelector(collectionSelectors.selectAll);
-  const { collectionLoaded, metaData, collectionParams } = useAppSelector(
-    (state) => state.collection
+  const users = useAppSelector(userSelectors.selectAll);
+  const { userLoaded, metaData, userParams } = useAppSelector(
+    (state) => state.user
   );
   const dispatch = useAppDispatch();
 
@@ -39,53 +39,60 @@ export default function CollectionPage() {
         prev.delete("pageNumber");
         return prev;
       });
-      dispatch(setCollectionParams({ pageNumber: 1 }));
+      dispatch(setUserParams({ pageNumber: 1 }));
     } else {
-      dispatch(setCollectionParams({ pageNumber: +pageNum }));
+      dispatch(setUserParams({ pageNumber: +pageNum }));
     }
   }, [pageNum, dispatch]);
   //
 
-  const handleSelectCollection = (
-    actionName: string,
-    collection?: Collection
-  ) => {
+  const handleSelectUser = (actionName: string, user?: UserDetail) => {
     setOpenEditForm((cur) => !cur);
-    if (collection) {
-      setSelectedCollection(collection);
+    if (user) {
+      setSelectedUser(user);
     }
     setActionName(actionName);
   };
 
-  const cancelEditForm = () => {
-    setOpenEditForm((cur) => !cur);
-    setSelectedCollection(null);
+  const handleOpenDetails = (user: UserDetail) => {
+    setSelectedUser(user);
+    setOpenDetails((cur) => !cur);
   };
 
-  async function handleDeleteCollection(collectionDeleted: Collection) {
-    await dispatch(deleteCollectionAsync(collectionDeleted.id));
+  const cancelEditForm = () => {
+    setOpenEditForm((cur) => !cur);
+    setSelectedUser(null);
+  };
+
+  async function handleDeleteUser(userDeleted: UserDetail) {
+    //Delete image of user?
+    await dispatch(deleteUserAsync(userDeleted.id));
   }
-  const openConfirmDeleteDiaglog = (collection: Collection) => {
+  const openConfirmDeleteDiaglog = (user: UserDetail) => {
     setConfirmDeleteDiaglog((cur) => !cur);
-    setCollectionDeleted(collection);
+    setUserDeleted(user);
+  };
+  const cancelDetailsDialog = () => {
+    setSelectedUser(null);
+    setOpenDetails((cur) => !cur);
   };
   const cancelConfirmDeleteDiaglog = () => setConfirmDeleteDiaglog(false);
 
   useEffect(() => {
-    if (!collectionLoaded) {
-      dispatch(getCollectionsAsync());
+    if (!userLoaded) {
+      dispatch(getUsersAsync());
     }
-  }, [dispatch, collectionParams]);
+  }, [dispatch, userParams]);
   if (!metaData) {
     return <Loader />;
   } else
     return (
       <>
-        <Breadcrumb pageName="Collection" />
+        <Breadcrumb pageName="User" />
         <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
           <div className="flex justify-end">
             <button
-              onClick={() => handleSelectCollection("Add a new collection")}
+              onClick={() => handleSelectUser("Add a new user")}
               type="button"
               className="flex items-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
             >
@@ -131,25 +138,25 @@ export default function CollectionPage() {
               </svg>
               <span>Add new collection</span>
             </button>
-            {/* Test upload multiple images */}
-            {/* <div>
-              <input type="file" onChange={handleFileChange} multiple />
-              <button onClick={handleSubmit}>Submit</button>
-            </div> */}
-            {/* End of test upload multiple images */}
-            {/* Test delete multiple images */}
-            {/* <button onClick={handleDeleteImages}>Delete images</button> */}
-            {/* End of test delete multiple images */}
           </div>
           <div className="max-w-full overflow-x-auto">
             <table className="w-full table-auto">
               <thead>
                 <tr className=" bg-gray-2 text-left dark:bg-meta-4  font-bold">
-                  <th className="min-w-[220px] py-4 px-4 text-black dark:text-white xl:pl-11">
-                    Collection Name
+                  <th className="min-w-[250px] text-center py-4 px-4 text-black dark:text-white xl:pl-11">
+                    Full Name
                   </th>
                   <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
-                    Brand
+                    Username
+                  </th>
+                  <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
+                    Role
+                  </th>
+                  <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
+                    Email
+                  </th>
+                  <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
+                    PhoneNumber
                   </th>
                   <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
                     Profit
@@ -161,24 +168,51 @@ export default function CollectionPage() {
                 </tr>
               </thead>
               <tbody>
-                {collectionLoaded ? (
+                {userLoaded ? (
                   <tr>
-                    <td colSpan={4} className="text-center">
-                      <Loader className="h-70 " />
+                    <td colSpan={8} className="text-center">
+                      <Loader className="h-70" />
                     </td>
                   </tr>
                 ) : (
                   <>
-                    {collections.map((collection) => (
-                      <tr key={collection.id}>
+                    {users.map((user) => (
+                      <tr key={user.id}>
+                        <td className="py-5 px-4 pl-9 xl:pl-11">
+                          <div className="flex items-center h-full ">
+                            <div className="h-12 w-12 rounded-md">
+                              <img
+                                className="h-full w-full rounded-md object-cover"
+                                src={user.picture}
+                                alt="User image"
+                              />
+                            </div>
+                            <div className="ml-3 flex flex-col">
+                              <h5 className="font-medium text-black dark:text-white">
+                                {user.fullName}
+                              </h5>
+                              <p className="text-sm">role abc</p>
+                            </div>
+                          </div>
+                        </td>
                         <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                           <h5 className="font-medium text-black dark:text-white">
-                            {collection.name}
+                            {user.userName}
                           </h5>
                         </td>
                         <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                           <h5 className="font-medium text-black dark:text-white">
-                            {collection.brand.name}
+                            Role abc
+                          </h5>
+                        </td>
+                        <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                          <h5 className="font-medium text-black dark:text-white">
+                            {user.email}
+                          </h5>
+                        </td>
+                        <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                          <h5 className="font-medium text-black dark:text-white">
+                            {user.phoneNumber}
                           </h5>
                         </td>
                         <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
@@ -192,12 +226,31 @@ export default function CollectionPage() {
                         <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                           <div className="flex items-center space-x-3.5">
                             <button
+                              className="hover:text-primary"
+                              onClick={() => handleOpenDetails(user)}
+                            >
+                              <svg
+                                className="fill-current"
+                                width="18"
+                                height="18"
+                                viewBox="0 0 18 18"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  d="M8.99981 14.8219C3.43106 14.8219 0.674805 9.50624 0.562305 9.28124C0.47793 9.11249 0.47793 8.88749 0.562305 8.71874C0.674805 8.49374 3.43106 3.20624 8.99981 3.20624C14.5686 3.20624 17.3248 8.49374 17.4373 8.71874C17.5217 8.88749 17.5217 9.11249 17.4373 9.28124C17.3248 9.50624 14.5686 14.8219 8.99981 14.8219ZM1.85605 8.99999C2.4748 10.0406 4.89356 13.5562 8.99981 13.5562C13.1061 13.5562 15.5248 10.0406 16.1436 8.99999C15.5248 7.95936 13.1061 4.44374 8.99981 4.44374C4.89356 4.44374 2.4748 7.95936 1.85605 8.99999Z"
+                                  fill=""
+                                />
+                                <path
+                                  d="M9 11.3906C7.67812 11.3906 6.60938 10.3219 6.60938 9C6.60938 7.67813 7.67812 6.60938 9 6.60938C10.3219 6.60938 11.3906 7.67813 11.3906 9C11.3906 10.3219 10.3219 11.3906 9 11.3906ZM9 7.875C8.38125 7.875 7.875 8.38125 7.875 9C7.875 9.61875 8.38125 10.125 9 10.125C9.61875 10.125 10.125 9.61875 10.125 9C10.125 8.38125 9.61875 7.875 9 7.875Z"
+                                  fill=""
+                                />
+                              </svg>
+                            </button>
+                            <button
                               className="  hover:text-primary hover:bg-primary/30 rounded-full "
                               onClick={() =>
-                                handleSelectCollection(
-                                  "Edit Collection",
-                                  collection
-                                )
+                                handleSelectUser("Edit User", user)
                               }
                             >
                               <svg
@@ -240,9 +293,7 @@ export default function CollectionPage() {
                             </button>
                             <button
                               className="hover:text-red-600 hover:bg-red-600/30 rounded-full p-1"
-                              onClick={() =>
-                                openConfirmDeleteDiaglog(collection)
-                              }
+                              onClick={() => openConfirmDeleteDiaglog(user)}
                             >
                               <svg
                                 className="fill-current"
@@ -288,13 +339,16 @@ export default function CollectionPage() {
                   return prev;
                 });
               }}
-              loading={collectionLoaded}
+              loading={userLoaded}
             />
           </div>
         </div>
+        {openDetails && (
+          <UserDetails user={selectedUser} onClose={cancelDetailsDialog} />
+        )}
         {openEditForm && (
-          <CollectionForm
-            collection={selectedCollection}
+          <UserForm
+            user={selectedUser}
             cancelEdit={cancelEditForm}
             actionName={actionName}
           />
@@ -302,8 +356,8 @@ export default function CollectionPage() {
 
         {confirmDeleteDiaglog && (
           <ConfirmDeleteDialog
-            objectName={collectionDeleted.name}
-            actionDelete={() => handleDeleteCollection(collectionDeleted)}
+            objectName={userDeleted.userName}
+            actionDelete={() => handleDeleteUser(userDeleted)}
             cancelDelete={cancelConfirmDeleteDiaglog}
           />
         )}

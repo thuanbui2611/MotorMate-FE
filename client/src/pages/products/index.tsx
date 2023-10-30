@@ -51,6 +51,7 @@ export default function Products() {
   const [loadingFetchBrandsFilter, setLoadingFetchBrandsFilter] =
     useState(true);
   const [priceFilter, setPriceFilter] = useState<string | undefined>(undefined);
+  const [searchQuery, setSearchQuery] = useState<string>("");
   const [paramsCompleted, setParamsCompleted] = useState(false);
 
   const products = useAppSelector(productSelectors.selectAll);
@@ -66,7 +67,7 @@ export default function Products() {
   const collectionsParam = searchParams.get("Collections");
   const citiesParam = searchParams.get("Cities");
   const isSortPriceDescParam = searchParams.get("IsSortPriceDesc");
-
+  const searchQueryParam = searchParams.get("Search");
   const cities = dataCityVN as City[];
 
   // Get data for filter
@@ -234,8 +235,28 @@ export default function Products() {
     if (isSortPriceDescParam) {
       setPriceFilter(isSortPriceDescParam);
       dispatch(setProductParams({ IsSortPriceDesc: isSortPriceDescParam }));
+    } else {
+      setSearchParams((prev) => {
+        prev.delete("IsSortPriceDesc");
+        return prev;
+      });
+      dispatch(setProductParams({ IsSortPriceDesc: undefined }));
     }
   }, [isSortPriceDescParam, dispatch]);
+
+  useEffect(() => {
+    if (searchQueryParam) {
+      const querySearch = searchQueryParam.trim();
+      setSearchQuery(querySearch);
+      dispatch(setProductParams({ Search: querySearch }));
+    } else {
+      setSearchParams((prev) => {
+        prev.delete("IsSortPriceDesc");
+        return prev;
+      });
+      dispatch(setProductParams({ Search: undefined }));
+    }
+  }, [searchQueryParam, dispatch]);
   //End of get valueFilter from url params and set selected
 
   useEffect(() => {
@@ -348,13 +369,33 @@ export default function Products() {
   };
 
   const handleFilterPriceChange = (event: SelectChangeEvent<string>) => {
-    const newValue = event.target.value;
+    const newValue = event.target.value.trim();
     setPriceFilter(newValue);
     setSearchParams((prev) => {
       prev.set("IsSortPriceDesc", newValue.toString());
       return prev;
     });
   };
+  //search
+  const handleSearch = () => {
+    if (searchQuery) {
+      setSearchParams((prev) => {
+        prev.set("Search", searchQuery.trim());
+        return prev;
+      });
+    } else {
+      setSearchParams((prev) => {
+        prev.delete("Search");
+        return prev;
+      });
+    }
+  };
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      handleSearch();
+    }
+  };
+
   // End of handle change filter
 
   //Date picker
@@ -390,7 +431,7 @@ export default function Products() {
         </div>
 
         <div className="flex flex-wrap justify-center items-center w-full">
-          <section className="py-10 bg-gray-50 rounded-md">
+          <section className="py-10 bg-gray-50 rounded-md w-full md:w-[90%]">
             {/* max-w-7xl lg:py-6 md:px-6 */}
             <div className="px-4 py-4 mx-auto">
               <div className="flex flex-wrap mb-24">
@@ -527,9 +568,16 @@ export default function Products() {
                           className="inputSearch"
                           id="inputSearch"
                           placeholder="Search"
+                          value={searchQuery}
+                          onChange={(e) => setSearchQuery(e.target.value)}
+                          onKeyDown={handleKeyDown}
                         />
 
-                        <label htmlFor="input" className="labelforsearch">
+                        <label
+                          htmlFor="input"
+                          className="labelforsearch"
+                          onClick={() => handleSearch}
+                        >
                           <svg viewBox="0 0 512 512" className="searchIcon">
                             <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"></path>
                           </svg>

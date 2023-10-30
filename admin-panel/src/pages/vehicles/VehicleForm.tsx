@@ -21,10 +21,7 @@ import { Box, TextField } from "@mui/material";
 import SelectCityVN from "../../app/components/SelectCityVN";
 import { UserDetail } from "../../app/models/User";
 import { deleteImages, uploadImages } from "../../app/utils/Cloudinary";
-import {
-  addVehicleAsync,
-  updateVehicleAsync,
-} from "./VehicleSlice";
+import { addVehicleAsync, updateVehicleAsync } from "./VehicleSlice";
 import { useAppDispatch } from "../../app/store/ConfigureStore";
 import { ConvertDatetimeToDate } from "../../app/utils/ConvertDatetimeToDate";
 import { Image } from "../../app/models/Image";
@@ -79,8 +76,6 @@ export default function VehicleForm({
     register,
     reset,
     handleSubmit,
-    getValues,
-    setValue,
     formState: { isSubmitting, errors },
   } = useForm({
     mode: "all",
@@ -414,7 +409,7 @@ export default function VehicleForm({
           //Update images request to formData
           formData.images = resultUpload;
           //Update to vehicle approved or pending or deny
-          switch(vehicle.status.trim().toLowerCase()){
+          switch (vehicle.status.trim().toLowerCase()) {
             case "approved":
               await dispatch(updateVehicleAsync(formData));
               break;
@@ -423,7 +418,6 @@ export default function VehicleForm({
               break;
             case "deny":
               break;
-            
           }
           await dispatch(updateVehicleAsync(formData));
         }
@@ -489,7 +483,7 @@ export default function VehicleForm({
                             <img
                               className="h-full w-full rounded-md object-cover"
                               src={option.picture}
-                              alt="logo"
+                              alt="Avatar"
                             />
                           </div>
                           {option.userName}
@@ -508,7 +502,8 @@ export default function VehicleForm({
                                 <img
                                   className="h-6 w-6 rounded-full"
                                   src={selectedUser.picture}
-                                  alt="avatar"
+                                  alt="Avatar"
+                                  referrerPolicy="no-referrer"
                                 />
                               )}
                               {params.InputProps.startAdornment}

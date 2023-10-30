@@ -1,33 +1,31 @@
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../app/store/ConfigureStore";
+import Loader from "../../app/components/Loader";
 import Breadcrumb from "../../app/components/Breadcrumb";
-import { Collection } from "../../app/models/Collection";
+import { Blog } from "../../app/models/Blog";
+import {
+  blogSelectors,
+  deleteBlogAsync,
+  getBlogsAsync,
+  setBlogParams,
+} from "./BlogSlice";
 import Pagination from "../../app/components/Pagination";
 import ConfirmDeleteDialog from "../../app/components/ConfirmDeleteDialog";
-import { useAppDispatch, useAppSelector } from "../../app/store/ConfigureStore";
-import {
-  collectionSelectors,
-  deleteCollectionAsync,
-  getCollectionsAsync,
-  setCollectionParams,
-} from "./CollectionSlice";
-import Loader from "../../app/components/Loader";
-import CollectionForm from "./CollectionForm";
-import { useSearchParams } from "react-router-dom";
+import BlogForm from "./BlogForm";
 
-export default function CollectionPage() {
+export default function BlogPage() {
   const [pageNumber, setPageNumber] = useSearchParams({ pageNumber: "" });
   const [actionName, setActionName] = useState(String);
   const [openEditForm, setOpenEditForm] = useState(false);
-  const [selectedCollection, setSelectedCollection] =
-    useState<Collection | null>(null);
+  const [selectedBlog, setSelectedBlog] = useState<Blog | null>(null);
   const [confirmDeleteDiaglog, setConfirmDeleteDiaglog] = useState(false);
-  const [collectionDeleted, setCollectionDeleted] = useState<Collection>(
-    {} as Collection
-  );
+  const [blogDeleted, setBlogDeleted] = useState<Blog>({} as Blog);
+  const [openDetails, setOpenDetails] = useState(false);
 
-  const collections = useAppSelector(collectionSelectors.selectAll);
-  const { collectionLoaded, metaData, collectionParams } = useAppSelector(
-    (state) => state.collection
+  const blogs = useAppSelector(blogSelectors.selectAll);
+  const { blogLoaded, metaData, blogParams } = useAppSelector(
+    (state) => state.blog
   );
   const dispatch = useAppDispatch();
 
@@ -39,53 +37,60 @@ export default function CollectionPage() {
         prev.delete("pageNumber");
         return prev;
       });
-      dispatch(setCollectionParams({ pageNumber: 1 }));
+      dispatch(setBlogParams({ pageNumber: 1 }));
     } else {
-      dispatch(setCollectionParams({ pageNumber: +pageNum }));
+      dispatch(setBlogParams({ pageNumber: +pageNum }));
     }
   }, [pageNum, dispatch]);
   //
 
-  const handleSelectCollection = (
-    actionName: string,
-    collection?: Collection
-  ) => {
+  const handleSelectBlog = (actionName: string, user?: Blog) => {
     setOpenEditForm((cur) => !cur);
-    if (collection) {
-      setSelectedCollection(collection);
+    if (user) {
+      setSelectedBlog(user);
     }
     setActionName(actionName);
   };
 
-  const cancelEditForm = () => {
-    setOpenEditForm((cur) => !cur);
-    setSelectedCollection(null);
+  const handleOpenDetails = (user: Blog) => {
+    setSelectedBlog(user);
+    setOpenDetails((cur) => !cur);
   };
 
-  async function handleDeleteCollection(collectionDeleted: Collection) {
-    await dispatch(deleteCollectionAsync(collectionDeleted.id));
+  const cancelEditForm = () => {
+    setOpenEditForm((cur) => !cur);
+    setSelectedBlog(null);
+  };
+
+  async function handleDeleteUser(blogDeleted: Blog) {
+    //Delete image of blog?
+    await dispatch(deleteBlogAsync(blogDeleted.id));
   }
-  const openConfirmDeleteDiaglog = (collection: Collection) => {
+  const openConfirmDeleteDiaglog = (blog: Blog) => {
     setConfirmDeleteDiaglog((cur) => !cur);
-    setCollectionDeleted(collection);
+    setBlogDeleted(blog);
+  };
+  const cancelDetailsDialog = () => {
+    setSelectedBlog(null);
+    setOpenDetails((cur) => !cur);
   };
   const cancelConfirmDeleteDiaglog = () => setConfirmDeleteDiaglog(false);
 
   useEffect(() => {
-    if (!collectionLoaded) {
-      dispatch(getCollectionsAsync());
+    if (!blogLoaded) {
+      dispatch(getBlogsAsync());
     }
-  }, [dispatch, collectionParams]);
+  }, [dispatch, blogParams]);
   if (!metaData) {
     return <Loader />;
   } else
     return (
       <>
-        <Breadcrumb pageName="Collection" />
+        <Breadcrumb pageName="Blog" />
         <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
           <div className="flex justify-end">
             <button
-              onClick={() => handleSelectCollection("Add a new collection")}
+              onClick={() => handleSelectBlog("Add a new blog")}
               type="button"
               className="flex items-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
             >
@@ -131,28 +136,22 @@ export default function CollectionPage() {
               </svg>
               <span>Add new collection</span>
             </button>
-            {/* Test upload multiple images */}
-            {/* <div>
-              <input type="file" onChange={handleFileChange} multiple />
-              <button onClick={handleSubmit}>Submit</button>
-            </div> */}
-            {/* End of test upload multiple images */}
-            {/* Test delete multiple images */}
-            {/* <button onClick={handleDeleteImages}>Delete images</button> */}
-            {/* End of test delete multiple images */}
           </div>
           <div className="max-w-full overflow-x-auto">
             <table className="w-full table-auto">
               <thead>
                 <tr className=" bg-gray-2 text-left dark:bg-meta-4  font-bold">
-                  <th className="min-w-[220px] py-4 px-4 text-black dark:text-white xl:pl-11">
-                    Collection Name
+                  <th className="min-w-[250px] text-center py-4 px-4 text-black dark:text-white xl:pl-11">
+                    Title
                   </th>
                   <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
-                    Brand
+                    Category
                   </th>
                   <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
-                    Profit
+                    Author
+                  </th>
+                  <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
+                    Created At
                   </th>
                   <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
                     Status
@@ -161,7 +160,7 @@ export default function CollectionPage() {
                 </tr>
               </thead>
               <tbody>
-                {collectionLoaded ? (
+                {blogLoaded ? (
                   <tr>
                     <td colSpan={4} className="text-center">
                       <Loader className="h-70 " />
@@ -169,35 +168,73 @@ export default function CollectionPage() {
                   </tr>
                 ) : (
                   <>
-                    {collections.map((collection) => (
-                      <tr key={collection.id}>
+                    {blogs.map((blog) => (
+                      <tr key={blog.id}>
+                        <td className="py-5 px-4 pl-9 xl:pl-11">
+                          <div className="flex items-center h-full ">
+                            <div className="h-12 w-12 rounded-md">
+                              <img
+                                className="h-full w-full rounded-md object-cover"
+                                src={blog.image.imageUrl}
+                                alt="User image"
+                              />
+                            </div>
+                            <div className="ml-3 flex flex-col">
+                              <h5 className="font-medium text-black dark:text-white">
+                                {blog.title}
+                              </h5>
+                            </div>
+                          </div>
+                        </td>
                         <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                           <h5 className="font-medium text-black dark:text-white">
-                            {collection.name}
+                            {blog.category.name}
                           </h5>
                         </td>
                         <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                           <h5 className="font-medium text-black dark:text-white">
-                            {collection.brand.name}
+                            {blog.author.username}
                           </h5>
                         </td>
                         <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                          <p className="text-meta-3 ">10.000</p>
+                          <h5 className="font-medium text-black dark:text-white">
+                            {blog.createdAt}
+                          </h5>
                         </td>
-                        <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                          <p className="inline-flex rounded-full bg-success bg-opacity-10 py-1 px-3 text-sm font-medium text-success">
-                            Enable
-                          </p>
-                        </td>
+
+                        {/* <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                            <p className="inline-flex rounded-full bg-success bg-opacity-10 py-1 px-3 text-sm font-medium text-success">
+                              Enable
+                            </p>
+                          </td> */}
                         <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                           <div className="flex items-center space-x-3.5">
                             <button
+                              className="hover:text-primary"
+                              onClick={() => handleOpenDetails(blog)}
+                            >
+                              <svg
+                                className="fill-current"
+                                width="18"
+                                height="18"
+                                viewBox="0 0 18 18"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  d="M8.99981 14.8219C3.43106 14.8219 0.674805 9.50624 0.562305 9.28124C0.47793 9.11249 0.47793 8.88749 0.562305 8.71874C0.674805 8.49374 3.43106 3.20624 8.99981 3.20624C14.5686 3.20624 17.3248 8.49374 17.4373 8.71874C17.5217 8.88749 17.5217 9.11249 17.4373 9.28124C17.3248 9.50624 14.5686 14.8219 8.99981 14.8219ZM1.85605 8.99999C2.4748 10.0406 4.89356 13.5562 8.99981 13.5562C13.1061 13.5562 15.5248 10.0406 16.1436 8.99999C15.5248 7.95936 13.1061 4.44374 8.99981 4.44374C4.89356 4.44374 2.4748 7.95936 1.85605 8.99999Z"
+                                  fill=""
+                                />
+                                <path
+                                  d="M9 11.3906C7.67812 11.3906 6.60938 10.3219 6.60938 9C6.60938 7.67813 7.67812 6.60938 9 6.60938C10.3219 6.60938 11.3906 7.67813 11.3906 9C11.3906 10.3219 10.3219 11.3906 9 11.3906ZM9 7.875C8.38125 7.875 7.875 8.38125 7.875 9C7.875 9.61875 8.38125 10.125 9 10.125C9.61875 10.125 10.125 9.61875 10.125 9C10.125 8.38125 9.61875 7.875 9 7.875Z"
+                                  fill=""
+                                />
+                              </svg>
+                            </button>
+                            <button
                               className="  hover:text-primary hover:bg-primary/30 rounded-full "
                               onClick={() =>
-                                handleSelectCollection(
-                                  "Edit Collection",
-                                  collection
-                                )
+                                handleSelectBlog("Edit Blog", blog)
                               }
                             >
                               <svg
@@ -240,9 +277,7 @@ export default function CollectionPage() {
                             </button>
                             <button
                               className="hover:text-red-600 hover:bg-red-600/30 rounded-full p-1"
-                              onClick={() =>
-                                openConfirmDeleteDiaglog(collection)
-                              }
+                              onClick={() => openConfirmDeleteDiaglog(blog)}
                             >
                               <svg
                                 className="fill-current"
@@ -288,13 +323,16 @@ export default function CollectionPage() {
                   return prev;
                 });
               }}
-              loading={collectionLoaded}
+              loading={blogLoaded}
             />
           </div>
         </div>
+        {/* {openDetails && (
+            <BlogDetails blog={selectedBlog} onClose={cancelDetailsDialog} />
+          )} */}
         {openEditForm && (
-          <CollectionForm
-            collection={selectedCollection}
+          <BlogForm
+            blog={selectedBlog}
             cancelEdit={cancelEditForm}
             actionName={actionName}
           />
@@ -302,8 +340,8 @@ export default function CollectionPage() {
 
         {confirmDeleteDiaglog && (
           <ConfirmDeleteDialog
-            objectName={collectionDeleted.name}
-            actionDelete={() => handleDeleteCollection(collectionDeleted)}
+            objectName={blogDeleted.title}
+            actionDelete={() => handleDeleteUser(blogDeleted)}
             cancelDelete={cancelConfirmDeleteDiaglog}
           />
         )}

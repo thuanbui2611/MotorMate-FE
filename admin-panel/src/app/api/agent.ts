@@ -148,6 +148,23 @@ const User = {
   delete: (username: string) => requests.delete(`api/user/${username}`),
 };
 
+const Blog = {
+  list: (params: URLSearchParams) => requests.get("api/blog", params),
+  details: (id: string) => requests.get(`api/blog/${id}`),
+  create: (values: {}) => requests.post("api/blog", values),
+  update: (id: string, values: {}) => requests.put(`api/blog/${id}`, values),
+  delete: (id: string) => requests.delete(`api/blog/${id}`),
+};
+
+const Category = {
+  all: () => requests.get("api/blog/category"),
+  details: (id: string) => requests.get(`api/blog/category/${id}`),
+  create: (values: {}) => requests.post("api/blog/category", values),
+  update: (id: string, values: {}) =>
+    requests.put(`api/blog/category/${id}`, values),
+  delete: (id: string) => requests.delete(`api/blog/category/${id}`),
+};
+
 const agent = {
   Account,
   Brand,
@@ -156,6 +173,8 @@ const agent = {
   Color,
   Vehicle,
   User,
+  Blog,
+  Category,
 };
 
 export default agent;

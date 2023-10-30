@@ -46,12 +46,17 @@ export default function BrandForm({ brand, cancelEdit, actionName }: Props) {
   const dispatch = useAppDispatch();
 
   const handleImageChange = (e: any) => {
-    setImageUploaded(e.target.files[0]);
-    setImageReview({
-      name: e.target.files[0].name,
-      url: URL.createObjectURL(e.target.files[0]),
-    });
-    setDeleteCurrentImage(false);
+    const file = e.target.files[0];
+    if (!file.type.startsWith("image/")) {
+      toast.error("Accept only image file");
+    } else {
+      setImageUploaded(file);
+      setImageReview({
+        name: file.name,
+        url: URL.createObjectURL(file),
+      });
+      setDeleteCurrentImage(false);
+    }
   };
 
   async function submitForm(data: FieldValues) {
@@ -113,33 +118,11 @@ export default function BrandForm({ brand, cancelEdit, actionName }: Props) {
           <form onSubmit={handleSubmit(submitForm)}>
             <CardBody className="flex flex-col gap-4 overflow-y-auto max-h-[600px]">
               <AppTextInput control={control} name="name" label="Brand name" />
-              <p className="font">Logo:</p>
-              <div className="mb-8">
-                <input
-                  type="file"
-                  name="logo"
-                  id="file"
-                  className="sr-only"
-                  onChange={handleImageChange}
-                />
-                <label
-                  htmlFor="file"
-                  className="relative flex min-h-[200px] items-center justify-center rounded-md border border-dashed border-[#e0e0e0] p-12 text-center hover:bg-graydark/5"
-                >
-                  <div>
-                    <span className="mb-2 block text-xl font-semibold text-[#07074D]">
-                      Drop image here
-                    </span>
-                    <span className="mb-2 block text-base font-medium text-[#6B7280]">
-                      Or
-                    </span>
-                    <span className="inline-flex rounded border border-[#e0e0e0] py-2 px-7 text-base font-medium text-[#07074D]">
-                      Browse
-                    </span>
-                  </div>
-                </label>
-              </div>
-              {imageReview && (
+              <label className="block mb-2 text-sm font-semibold text-black">
+                Logo:
+              </label>
+
+              {imageReview ? (
                 <div className="mb-5 rounded-md bg-[#F5F7FB] py-4 px-8">
                   <div className="flex items-center justify-between">
                     <span className="truncate pr-3 text-base font-medium text-[#07074D]">
@@ -150,6 +133,7 @@ export default function BrandForm({ brand, cancelEdit, actionName }: Props) {
                       onClick={() => {
                         setImageReview(null);
                         setImageUploaded(null);
+                        setDeleteCurrentImage(true);
                       }}
                     >
                       <svg
@@ -181,6 +165,36 @@ export default function BrandForm({ brand, cancelEdit, actionName }: Props) {
                     alt="Logo brand preview"
                   />
                 </div>
+              ) : (
+                //Upload image
+                <>
+                  <div className="mb-8">
+                    <input
+                      type="file"
+                      name="logo"
+                      id="file"
+                      className="sr-only"
+                      onChange={handleImageChange}
+                      accept="image/*"
+                    />
+                    <label
+                      htmlFor="file"
+                      className="relative flex min-h-[200px] items-center justify-center rounded-md border border-dashed border-[#e0e0e0] p-12 text-center hover:bg-graydark/5"
+                    >
+                      <div>
+                        <span className="mb-2 block text-xl font-semibold text-[#07074D]">
+                          Drop image here
+                        </span>
+                        <span className="mb-2 block text-base font-medium text-[#6B7280]">
+                          Or
+                        </span>
+                        <span className="inline-flex rounded border border-[#e0e0e0] py-2 px-7 text-base font-medium text-[#07074D]">
+                          Browse
+                        </span>
+                      </div>
+                    </label>
+                  </div>
+                </>
               )}
 
               {brand?.image && !deleteCurrentImage && !imageReview && (
