@@ -17,6 +17,7 @@ import VehicleDenied from "../../pages/vehicles/VehicleDenied";
 import ColorPage from "../../pages/color";
 import UsersPage from "../../pages/users";
 import BlogPage from "../../pages/blog";
+import BlogCategory from "../../pages/blogCategory/BlogCategory";
 
 export const router = createBrowserRouter([
   {
@@ -39,6 +40,7 @@ export const router = createBrowserRouter([
           { path: "users", element: <UsersPage /> },
           { path: "profile", element: <Profile /> },
           { path: "blog", element: <BlogPage /> },
+          { path: "blog/category", element: <BlogCategory /> },
 
           { path: "tables", element: <Tables /> },
           { path: "settings", element: <Settings /> },

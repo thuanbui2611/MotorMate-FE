@@ -91,7 +91,7 @@ export default function UsersPage() {
         <Breadcrumb pageName="User" />
         <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
           <div className="flex justify-end">
-            <button
+            {/* <button
               onClick={() => handleSelectUser("Add a new user")}
               type="button"
               className="flex items-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
@@ -136,8 +136,8 @@ export default function UsersPage() {
                   </g>
                 </g>
               </svg>
-              <span>Add new collection</span>
-            </button>
+              <span>Add new User</span>
+            </button> */}
           </div>
           <div className="max-w-full overflow-x-auto">
             <table className="w-full table-auto">
@@ -183,7 +183,7 @@ export default function UsersPage() {
                             <div className="h-12 w-12 rounded-md">
                               <img
                                 className="h-full w-full rounded-md object-cover"
-                                src={user.picture}
+                                src={user.image.imageUrl}
                                 alt="User image"
                               />
                             </div>
@@ -197,7 +197,7 @@ export default function UsersPage() {
                         </td>
                         <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                           <h5 className="font-medium text-black dark:text-white">
-                            {user.userName}
+                            {user.username}
                           </h5>
                         </td>
                         <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
@@ -247,50 +247,7 @@ export default function UsersPage() {
                                 />
                               </svg>
                             </button>
-                            <button
-                              className="  hover:text-primary hover:bg-primary/30 rounded-full "
-                              onClick={() =>
-                                handleSelectUser("Edit User", user)
-                              }
-                            >
-                              <svg
-                                className="fill-current"
-                                width="18px"
-                                height="18px"
-                                viewBox="0 -0.5 21 21"
-                                version="1.1"
-                                xmlns="http://www.w3.org/2000/svg"
-                                xmlnsXlink="http://www.w3.org/1999/xlink"
-                                fill="none"
-                              >
-                                <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-                                <g
-                                  id="SVGRepo_tracerCarrier"
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                ></g>
-                                <g id="SVGRepo_iconCarrier">
-                                  <defs> </defs>
-                                  <g id="Page-1" fill="none" fillRule="evenodd">
-                                    <g
-                                      id="Dribbble-Light-Preview"
-                                      transform="translate(-339.000000, -360.000000)"
-                                      fill="#000000"
-                                    >
-                                      <g
-                                        id="icons"
-                                        transform="translate(56.000000, 160.000000)"
-                                      >
-                                        <path
-                                          d="M283,220 L303.616532,220 L303.616532,218.042095 L283,218.042095 L283,220 Z M290.215786,213.147332 L290.215786,210.51395 L296.094591,205.344102 L298.146966,207.493882 L292.903151,213.147332 L290.215786,213.147332 Z M299.244797,202.64513 L301.059052,204.363191 L299.645788,205.787567 L297.756283,203.993147 L299.244797,202.64513 Z M304,204.64513 L299.132437,200 L288.154133,209.687714 L288.154133,215.105237 L293.78657,215.105237 L304,204.64513 Z"
-                                          className="fill-current"
-                                        ></path>
-                                      </g>
-                                    </g>
-                                  </g>
-                                </g>
-                              </svg>
-                            </button>
+
                             <button
                               className="hover:text-red-600 hover:bg-red-600/30 rounded-full p-1"
                               onClick={() => openConfirmDeleteDiaglog(user)}
@@ -356,7 +313,7 @@ export default function UsersPage() {
 
         {confirmDeleteDiaglog && (
           <ConfirmDeleteDialog
-            objectName={userDeleted.userName}
+            objectName={userDeleted.username}
             actionDelete={() => handleDeleteUser(userDeleted)}
             cancelDelete={cancelConfirmDeleteDiaglog}
           />

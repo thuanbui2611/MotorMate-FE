@@ -1,7 +1,7 @@
 import { UserDetail } from "../models/User";
 
 interface Props {
-  userDetail: UserDetail | undefined;
+  userDetail: UserDetail | null;
 }
 
 export default function ProfileInfo({ userDetail }: Props) {
@@ -19,7 +19,7 @@ export default function ProfileInfo({ userDetail }: Props) {
             <div className="relative">
               <img
                 className="object-cover w-40 h-40 ml-0 -mb-16 rounded-full md:ml-4 lg:ml-12 lg:-mb-24 lg:w-60 lg:h-60"
-                src={userDetail?.picture}
+                src={userDetail?.image.imageUrl}
                 alt="Cover image profile"
               />
               <label

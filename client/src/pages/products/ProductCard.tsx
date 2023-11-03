@@ -19,7 +19,7 @@ export default function ProductCard({ product, userLogin }: Props) {
       >
         <div className="relative bg-white">
           {userLogin &&
-            userLogin.userName.toLowerCase() ===
+            userLogin.username.toLowerCase() ===
               product.owner.username.toLowerCase() && (
               <span className="absolute top-0 right-0 font-semibold px-1 z-1 h-fit w-fit text-[12px] shadow-md rounded-sm bg-orange-based text-white flex items-center justify-center">
                 Owner

@@ -8,7 +8,6 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import { Vehicle } from "../../app/models/Vehicle";
-import { ConvertDatetimeToDate } from "../../app/utils/ConvertDatetimeToDate";
 import { LoadingButton } from "@mui/lab";
 import { useState } from "react";
 import { useAppDispatch } from "../../app/store/ConfigureStore";
@@ -17,6 +16,7 @@ import agent from "../../app/api/agent";
 import { addVehicle, removeVehicle } from "./VehicleSlice";
 import { addVehicleDenied, removeVehicleDenied } from "./VehicleDeniedSlice";
 import { toast } from "react-toastify";
+import { ConvertDatetimeToDisplay } from "../../app/utils/ConvertDatetimeToDate";
 
 interface Props {
   vehicle: Vehicle | null;
@@ -119,7 +119,7 @@ export default function VehicleDetails({ vehicle, onClose }: Props) {
                     <div className="flex items-start justify-start flex-shrink-0">
                       <div className="flex items-center justify-center w-full pb-6 space-x-4 md:justify-start">
                         <img
-                          src="https://i.postimg.cc/RhQYkKYk/pexels-italo-melo-2379005.jpg"
+                          src={vehicle?.owner.picture}
                           className="object-cover w-16 h-16 rounded-md inline-block relative object-center shadow-lg shadow-blue-gray-500/40"
                           alt="avatar"
                         />
@@ -223,7 +223,7 @@ export default function VehicleDetails({ vehicle, onClose }: Props) {
                               Purchase date:
                             </p>
                             <p className="ml-1 text-base leading-4 text-black break-all">
-                              {ConvertDatetimeToDate(vehicle!.purchaseDate)}
+                              {ConvertDatetimeToDisplay(vehicle!.purchaseDate)}
                             </p>
                           </div>
                         </div>
@@ -256,7 +256,7 @@ export default function VehicleDetails({ vehicle, onClose }: Props) {
                                 Insurance expiration:
                               </p>
                               <p className="ml-1 text-base leading-4 text-black break-all">
-                                {ConvertDatetimeToDate(
+                                {ConvertDatetimeToDisplay(
                                   vehicle!.insuranceExpiry
                                 )}
                               </p>

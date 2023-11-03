@@ -108,18 +108,16 @@ export default function ImagesCarousel({ imagesList, openImage }: Props) {
                       stroke="#fcfcfc"
                       strokeWidth="2.52"
                     >
-                      {" "}
                       <polygon
                         fillRule="evenodd"
                         points="13.933,1 34,21.068 14.431,40.637 9.498,35.704 24.136,21.068 9,5.933 "
-                      ></polygon>{" "}
+                      ></polygon>
                     </g>
                     <g id="SVGRepo_iconCarrier">
-                      {" "}
                       <polygon
                         fillRule="evenodd"
                         points="13.933,1 34,21.068 14.431,40.637 9.498,35.704 24.136,21.068 9,5.933 "
-                      ></polygon>{" "}
+                      ></polygon>
                     </g>
                   </svg>
                 </a>
@@ -142,18 +140,16 @@ export default function ImagesCarousel({ imagesList, openImage }: Props) {
                       stroke="#fcfcfc"
                       strokeWidth="2.52"
                     >
-                      {" "}
                       <polygon
                         fillRule="evenodd"
                         points="13.933,1 34,21.068 14.431,40.637 9.498,35.704 24.136,21.068 9,5.933 "
-                      ></polygon>{" "}
+                      ></polygon>
                     </g>
                     <g id="SVGRepo_iconCarrier">
-                      {" "}
                       <polygon
                         fillRule="evenodd"
                         points="13.933,1 34,21.068 14.431,40.637 9.498,35.704 24.136,21.068 9,5.933 "
-                      ></polygon>{" "}
+                      ></polygon>
                     </g>
                   </svg>
                 </a>

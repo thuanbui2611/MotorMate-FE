@@ -21,7 +21,7 @@ export interface MemberOfChat {
 export interface RequestCreateNewChat {
   members: string[];
   chatMessage: {
-    userName: string;
+    username: string;
     message: string;
   };
 }
@@ -31,7 +31,7 @@ export interface ChatPagination {
   pageSize: number;
 }
 
-export interface ChatMetaData{
+export interface ChatMetaData {
   chatId: string;
   metaData: MetaData;
 }

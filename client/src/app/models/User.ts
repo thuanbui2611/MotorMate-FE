@@ -5,7 +5,6 @@ export interface User {
   role: string;
   avatar: string;
   token?: string;
-
 }
 
 export interface UserDetail {
@@ -13,10 +12,15 @@ export interface UserDetail {
   firstName: string;
   lastName: string;
   fullName: string;
-  userName: string;
-  picture: string;
+  username: string;
+  image: Image;
   email: string;
   address: string;
   phoneNumber: string;
   dateOfBirth: string;
+}
+
+export interface Image {
+  imageUrl: string;
+  publicId: string;
 }

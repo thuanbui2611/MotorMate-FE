@@ -1,15 +1,25 @@
 import { useState } from "react";
 import AdsReviewProduct from "../../app/components/AdsReviewProduct";
 import ImageReview from "../../app/components/ImageReview";
+import { SlideshowLightbox } from "lightbox.js-react";
+import "lightbox.js-react/dist/index.css";
 
 export default function ReviewProduct() {
-  const [openImage, setOpenImage] = useState(false);
-  const handleOpenImage = () => setOpenImage((cur: any) => !cur);
+  const images = [
+    {
+      src: "https://source.unsplash.com/sQZ_A17cufs/549x711",
+    },
+    {
+      src: "https://source.unsplash.com/rsAeSMzOX9Y/768x512",
+    },
+    {
+      src: "https://source.unsplash.com/Z6SXt1v5tP8/768x512",
+    },
+    {
+      src: "https://source.unsplash.com/sQZ_A17cufs/549x711",
+    },
+  ];
 
-  const imgURL =
-    "https://i.ibb.co/xfg5T5T/sam-moqadam-kvmds-Tr-GOBM-unsplash-removebg-preview-1.png";
-  const imgURL2 =
-    "https://images.unsplash.com/photo-1485470733090-0aae1788d5af?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2717&q=80";
   return (
     <>
       {/* Ads */}
@@ -135,26 +145,20 @@ export default function ReviewProduct() {
                     and cotton, are popular, as are lighter colors in wood and
                     metal.
                   </p>
-                  <div className="mt-6 flex flex-row justify-start items-start space-x-4">
-                    <button
-                      className="h-20 w-20 md:h-40 md:w-44 py-1 px-1 bg-gray-100 flex items-center justify-center"
-                      onClick={handleOpenImage}
+                  <div className="mt-6 flex justify-start items-start space-x-4 max-w-full overflow-auto">
+                    <SlideshowLightbox
+                      className="flex gap-4 h-20 w-full"
+                      showThumbnails={true}
                     >
-                      <img src={imgURL} className="mx-auto" />
-                    </button>
-                    <button
-                      className="py-1 px-2 bg-gray-100 h-40 w-44 flex items-center justify-center"
-                      onClick={handleOpenImage}
-                    >
-                      <img src={imgURL2} className="mx-auto" />
-                    </button>
+                      {images.map((image, index) => (
+                        <img
+                          className="rounded h-full w-full border border-gray-300 shadow-md"
+                          src={image.src || undefined}
+                          key={index}
+                        />
+                      ))}
+                    </SlideshowLightbox>
                   </div>
-                  {openImage && (
-                    <ImageReview
-                      src={imgURL2 as string}
-                      onClose={handleOpenImage}
-                    />
-                  )}
                 </div>
               </div>
             </div>

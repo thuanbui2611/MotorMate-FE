@@ -67,44 +67,6 @@ export const getProductsAsync = createAsyncThunk<
   }
 });
 
-export const addProductAsync = createAsyncThunk<Vehicle, FieldValues>(
-  "product/addProductAsync",
-  async (data, ThunkAPI) => {
-    try {
-      const response = await agent.Vehicle.create(data);
-      return response;
-    } catch (error: any) {
-      return ThunkAPI.rejectWithValue({ error: error.data });
-    }
-  }
-);
-
-export const updateProductAsync = createAsyncThunk<Vehicle, FieldValues>(
-  "product/updateProductAsync",
-  async (data, ThunkAPI) => {
-    try {
-      const response = await agent.Vehicle.update(data.id, data);
-      return response;
-    } catch (error: any) {
-      return ThunkAPI.rejectWithValue({ error: error.data });
-    }
-  }
-);
-
-export const deleteProductAsync = createAsyncThunk(
-  "product/deleteProductAsync",
-  async (id: string) => {
-    try {
-      await agent.Vehicle.delete(id);
-      toast.success("Delete product successfully!");
-      return id;
-    } catch (error: any) {
-      toast.error(error.data.message);
-      throw error;
-    }
-  }
-);
-
 function initParams() {
   return {
     pageNumber: 1,
@@ -161,20 +123,6 @@ export const ProductSlice = createSlice({
         console.log("Get products rejected: ", action);
         state.productLoaded = false;
       });
-
-    builder.addCase(addProductAsync.fulfilled, (state, action) => {
-      toast.success("Add product successfully!");
-      productsAdapter.addOne(state, action.payload);
-    });
-
-    builder.addCase(updateProductAsync.fulfilled, (state, action) => {
-      toast.success("Update product successfully!");
-      productsAdapter.upsertOne(state, action.payload);
-    });
-
-    builder.addCase(deleteProductAsync.fulfilled, (state, action) => {
-      productsAdapter.removeOne(state, action.payload);
-    });
   },
 });
 

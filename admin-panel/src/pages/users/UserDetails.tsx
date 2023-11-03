@@ -49,7 +49,7 @@ export default function UserDetails({ user, onClose }: Props) {
               variant="h3"
               className="text-center py-4 text-white rounded-sm "
             >
-              Vehicle Detail
+              User Detail
             </Typography>
           </CardHeader>
           <CardBody className=" max-h-[35rem] lg:max-h-[40rem] overflow-auto scrollbar p-0">
@@ -60,7 +60,7 @@ export default function UserDetails({ user, onClose }: Props) {
                     <div className="flex items-start justify-start flex-shrink-0">
                       <div className="flex items-center justify-center w-full pb-6 space-x-4 md:justify-start">
                         <img
-                          src={user?.picture}
+                          src={user?.image.imageUrl}
                           className="object-cover w-16 h-16 rounded-md inline-block relative object-center shadow-lg shadow-blue-gray-500/40"
                           alt="avatar"
                         />
@@ -97,7 +97,7 @@ export default function UserDetails({ user, onClose }: Props) {
                               Username:
                             </p>
                             <p className="ml-1 text-base leading-4 text-black break-all">
-                              {user?.userName}
+                              {user?.username}
                             </p>
                           </div>
                           <div className="flex justify-center items-center">
@@ -113,7 +113,9 @@ export default function UserDetails({ user, onClose }: Props) {
                               Phone number:
                             </p>
                             <p className="ml-1 text-base leading-4 text-black break-all">
-                              {user?.phoneNumber}
+                              {user?.phoneNumber
+                                ? user?.phoneNumber
+                                : "No phone number"}
                             </p>
                           </div>
                           <div className="flex justify-center items-center">
@@ -121,15 +123,9 @@ export default function UserDetails({ user, onClose }: Props) {
                               Date of birth:
                             </p>
                             <p className="ml-1 text-base leading-4 text-black break-all">
-                              {user?.dateOfBirth}
-                            </p>
-                          </div>
-                          <div className="flex justify-center items-center">
-                            <p className="text-sm leading-5 text-black font-bold">
-                              User:
-                            </p>
-                            <p className="ml-1 text-base leading-4 text-black break-all">
-                              {user?.address}
+                              {user?.dateOfBirth
+                                ? user?.dateOfBirth
+                                : "No date of birth"}
                             </p>
                           </div>
                         </div>
@@ -162,7 +158,7 @@ export default function UserDetails({ user, onClose }: Props) {
                                 Insurance expiration:
                               </p>
                               <p className="ml-1 text-base leading-4 text-black break-all">
-                                {/* {ConvertDatetimeToDate(
+                                {/* {ConvertDatetimeToDisplay(
                                   vehicle!.insuranceExpiry
                                 )} */}
                               </p>

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import agent from "../../app/api/agent";
 import ReviewProduct from "./ReviewProduct";
 import ProductSuggested from "./ProductSuggested";
@@ -43,7 +43,7 @@ export default function ProductDetails() {
     <>
       {/* <!-- Features --> */}
       <div className="container my-12 mx-auto px-4 md:px-12">
-        <div className="relative p-6 md:p-16">
+        <div className="relative p-6 md:p-16 shadow-lg rounded-xl">
           {/* <!-- Grid --> */}
           <div className="relative z-10 lg:grid lg:grid-cols-12 lg:gap-16 lg:items-center">
             <div className="mb-10 lg:mb-0 lg:col-span-6 lg:col-start-7 lg:order-2 lg:mr-10">
@@ -319,22 +319,23 @@ export default function ProductDetails() {
           </div>
           {/* End Background Color */}
         </div>
-        <div className="flex bg-gray-100 mt-10 w-fit ">
-          <div className="flex text-center items-center text-gray-500 md:pr-2 ">
+        {/* Shop information */}
+        <div className="flex bg-white border border-gray-200 mt-10 w-fit rounded-2xl shadow-lg mx-auto">
+          <div className="flex text-center justify-center items-center text-gray-500 md:pr-2 ">
             <div className="flex justify-center items-center w-20 h-20 pl-2 md:w-32 md:h-32">
               <img
-                className="mx-auto my-auto rounded-full"
-                src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/jese-leos.png"
-                alt="Jese Avatar"
+                className="mx-auto my-auto rounded-full shadow-lg"
+                src={product.owner.picture}
+                alt="Shop Avatar"
               />
             </div>
 
-            <div className=" w-3/4 flex flex-col text-left">
-              <div>
-                <h3 className="ml-3 mb-1 text-base font-medium md:text-2xl md:font-bold tracking-tight text-gray-900">
-                  <a href="#">Jese Leos</a>
-                </h3>
-              </div>
+            <div className="w-fit inline-flex flex-col text-left">
+              <h3 className="mx-3 mb-1 text-base font-medium md:text-2xl md:font-bold tracking-tight text-gray-900">
+                <Link to={"/profile/" + product.owner.username}>
+                  {product.owner.name}
+                </Link>
+              </h3>
 
               <div className="flex">
                 <button className="flex ml-3 md:mt-4 bg-orange-200 hover:bg-orange-400 text-black py-1 px-1 rounded-full">
@@ -423,14 +424,23 @@ export default function ProductDetails() {
               </div>
             </div>
           </div>
-          <div className="md:w-2/3 grid grid-cols-1 gap-1 items-center pr-2 border-l-2">
-            <div className="font-medium text-xs md:text-base ml-2 md:ml-3">
-              Product:
-              <span className="ml-1 text-orange-based ">2</span>
+          <div className="flex flex-col p-2 md:p-4 gap-2 md:gap-3 justify-center items-start border-l-2">
+            <div className="flex-col md:flex md:gap-2">
+              <div className="font-medium text-xs md:text-base">
+                Product:
+                <span className="ml-1 text-orange-based">2</span>
+              </div>
+              <div className="mt-2 md:mt-0 font-medium text-xs md:text-base">
+                Member since:
+                <span className="ml-1 text-orange-based">01/01/2023</span>
+              </div>
             </div>
-            <div className="font-medium text-xs md:text-base ml-2 md:ml-3">
-              Member since:
-              <span className="ml-1 text-orange-based ">24-08-2023</span>
+
+            <div className="font-medium text-xs md:text-base">
+              Address:
+              <span className="ml-1 text-orange-based">
+                {product.owner.address}
+              </span>
             </div>
           </div>
         </div>

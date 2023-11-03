@@ -13,7 +13,6 @@ import Pagination from "../../app/components/Pagination";
 import { Vehicle } from "../../app/models/Vehicle";
 import VehicleForm from "./VehicleForm";
 import ConfirmDeleteDialog from "../../app/components/ConfirmDeleteDialog";
-import { ConvertDatetimeToDate } from "../../app/utils/ConvertDatetimeToDate";
 import VehicleDetails from "./VehicleDetails";
 import { deleteImages } from "../../app/utils/Cloudinary";
 import { useSearchParams } from "react-router-dom";
@@ -27,6 +26,7 @@ import { ModelVehicle } from "../../app/models/ModelVehicle";
 import LoaderButton from "../../app/components/LoaderButton";
 import dataCityVN from "./../../app/data/dataCityVN.json";
 import SelectPageSize from "../../app/components/SelectPageSize";
+import { ConvertDatetimeToDisplay } from "../../app/utils/ConvertDatetimeToDate";
 
 export default function VehiclesPage() {
   const [searchParams, setSearchParams] = useSearchParams({});
@@ -622,7 +622,9 @@ export default function VehiclesPage() {
 
                           <td className="py-5 px-4">
                             <p className="text-black dark:text-white">
-                              {ConvertDatetimeToDate(vehicle.insuranceExpiry)}
+                              {ConvertDatetimeToDisplay(
+                                vehicle.insuranceExpiry
+                              )}
                             </p>
                           </td>
                           <td className="py-5 px-4">

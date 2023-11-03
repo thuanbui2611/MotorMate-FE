@@ -21,7 +21,7 @@ export default function BlogDetails() {
       .finally(() => setLoading(false));
   }, []);
 
-  if (!blog) return <NotFound />;
+  if (!blog && !loading) return <NotFound />;
   return loading ? (
     <Loading />
   ) : (

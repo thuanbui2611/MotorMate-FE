@@ -22,6 +22,7 @@ import Profile from "../../pages/profile";
 import BlogPage from "../../pages/blog";
 import BlogDetails from "../../pages/blog/BlogDetails";
 import MyProducts from "../../pages/profile/MyProducts";
+import ProfileDetails from "../components/ProfileDetails";
 
 export const router = createBrowserRouter([
   {
@@ -32,9 +33,15 @@ export const router = createBrowserRouter([
         element: <DefaultLayout />,
         children: [
           { path: "", element: <HomePage /> },
-          { path: "profile/:username/", element: <Profile /> },
-          { path: "profile/:username/settings", element: <SettingProfile /> },
-          { path: "profile/:username/my-products", element: <MyProducts /> },
+          {
+            path: "profile/:username/",
+            element: <Profile />,
+            children: [
+              { path: "", element: <ProfileDetails /> },
+              { path: "settings", element: <SettingProfile /> },
+              { path: "my-products", element: <MyProducts /> },
+            ],
+          },
           { path: "about", element: <About /> },
           { path: "contact", element: <Contact /> },
           { path: "blog", element: <BlogPage /> },
@@ -45,7 +52,6 @@ export const router = createBrowserRouter([
           { path: "payment", element: <Payment /> },
           { path: "bill", element: <Bill /> },
           { path: "my-orders", element: <Orders /> },
-          { path: "profile-setting", element: <SettingProfile /> },
           { path: "my-cart", element: <Cart /> },
           { path: "server-error", element: <ServerErrors /> },
         ],

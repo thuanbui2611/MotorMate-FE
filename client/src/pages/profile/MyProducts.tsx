@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { UserDetail } from "../../app/models/User";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import agent from "../../app/api/agent";
 import HeaderProfile from "../../app/components/HeaderProfile";
 import { Vehicle } from "../../app/models/Vehicle";
@@ -9,16 +9,19 @@ import {
   useAppDispatch,
   useAppSelector,
 } from "../../app/store/ConfigureStore";
-import { productSelectors } from "../products/ProductSlice";
-import { ConvertDatetimeToDate } from "../../app/utils/ConvertDatetimeToDate";
-import Pagination from "../../app/components/Pagination";
-import { getProductsOfUserAsync, profileSelectors } from "./ProfileSlice";
+import { ConvertDatetimeToDisplay } from "../../app/utils/ConvertDatetimeToDisplay";
+import {
+  deleteProductAsync,
+  getProductsOfUserAsync,
+  profileSelectors,
+} from "./ProfileSlice";
 import { toast } from "react-toastify";
+import VehicleForm from "./VehicleForm";
+import ConfirmDeleteDialog from "../../app/components/ConfirmDeleteDialog";
+import { deleteImages } from "../../app/utils/Cloudinary";
+import LoaderButton from "../../app/components/LoaderButton";
 
 export default function MyProducts() {
-  const [userDetail, setUserDetail] = useState<UserDetail>();
-  const [loading, setLoading] = useState(true);
-  const { username } = useParams();
   const [actionName, setActionName] = useState(String);
   const [selectedVehicle, setSelectedVehicle] = useState<Vehicle | null>(null);
   const [openEditForm, setOpenEditForm] = useState(false);
@@ -26,38 +29,29 @@ export default function MyProducts() {
   const [vehicleDeleted, setVehicleDeleted] = useState<Vehicle>({} as Vehicle);
   const [openDetails, setOpenDetails] = useState(false);
 
-  const productsOfUser = useAppSelector(profileSelectors.selectAll);
-  const { productOfUserLoaded } = useAppSelector((state) => state.profile);
-  const userLogin = store.getState().account.user;
-  const vehicles = productsOfUser.filter(
-    (product) =>
-      product.owner.username.trim().toLowerCase() ===
-      userLogin?.username.trim().toLowerCase()
+  const { productOfUserLoaded, profileUserLoaded, profileUser } =
+    useAppSelector((state) => state.profile);
+  const userLogin = useAppSelector((state) => state.account.userDetail);
+  debugger;
+  const myProducts = useAppSelector(profileSelectors.selectAll).filter(
+    (p) => p.owner.username.toLowerCase() === userLogin?.username.toLowerCase()
   );
 
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   useEffect(() => {
-    //Fetch user
-    if (userLogin?.username) {
-      agent.Account.getDetailsByUserName(userLogin?.username)
-        .then((user) => setUserDetail(user))
-        .catch((error) => console.log(error))
-        .finally(() => setLoading(false));
-    } else {
-      toast.error("You must login to view this page");
-      // navigate(-1);
+    debugger;
+    if (!userLogin) {
+      toast.error("Please login to continue");
+      navigate("/login");
+    } else if (myProducts.length === 0 && !productOfUserLoaded) {
+      dispatch(getProductsOfUserAsync(userLogin!.id));
     }
-  }, []);
-
-  useEffect(() => {
-    if (userDetail && !productOfUserLoaded) {
-      dispatch(getProductsOfUserAsync(userDetail!.id));
-    }
-  }, [dispatch, userDetail]);
+  }, [dispatch]);
 
   const handleSelectVehicle = (actionName: string, vehicle?: Vehicle) => {
-    setOpenEditForm((cur) => !cur);
+    debugger;
+    setOpenEditForm(true);
     if (vehicle) {
       setSelectedVehicle(vehicle);
     }
@@ -68,12 +62,21 @@ export default function MyProducts() {
     setSelectedVehicle(vehicle);
     setOpenDetails((cur) => !cur);
   };
-
+  async function handleDeleteVehicle(vehicleDeleted: Vehicle) {
+    debugger;
+    if (vehicleDeleted.images) {
+      await deleteImages(vehicleDeleted.images);
+    }
+    await dispatch(deleteProductAsync(vehicleDeleted.id));
+  }
   const openConfirmDeleteDiaglog = (vehicle: Vehicle) => {
     setConfirmDeleteDiaglog((cur) => !cur);
     setVehicleDeleted(vehicle);
   };
-
+  const cancelEditForm = () => {
+    setOpenEditForm((cur) => !cur);
+    setSelectedVehicle(null);
+  };
   const cancelDetailsDialog = () => {
     setSelectedVehicle(null);
     setOpenDetails((cur) => !cur);
@@ -83,53 +86,57 @@ export default function MyProducts() {
 
   return (
     <>
-      <HeaderProfile userDetail={userDetail} />
       <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
         <div className="flex justify-end">
-          <button
-            onClick={() => handleSelectVehicle("Add new Vehicle")}
-            type="button"
-            className="flex items-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-          >
-            <svg
-              className="h-5 w-5 mr-2"
-              viewBox="0 0 21.00 21.00"
-              version="1.1"
-              xmlns="http://www.w3.org/2000/svg"
-              xmlnsXlink="http://www.w3.org/1999/xlink"
-              fill="#ffffff"
-              stroke="#ffffff"
+          {userLogin && (
+            <button
+              onClick={() => handleSelectVehicle("Add new Vehicle")}
+              type="button"
+              className="flex items-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
             >
-              <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-              <g
-                id="SVGRepo_tracerCarrier"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              ></g>
-              <g id="SVGRepo_iconCarrier">
+              <svg
+                className="h-5 w-5 mr-2"
+                viewBox="0 0 21.00 21.00"
+                version="1.1"
+                xmlns="http://www.w3.org/2000/svg"
+                xmlnsXlink="http://www.w3.org/1999/xlink"
+                fill="#ffffff"
+                stroke="#ffffff"
+              >
+                <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
                 <g
-                  id="Page-1"
-                  strokeWidth="0.00021000000000000004"
-                  fill="none"
-                  fillRule="evenodd"
-                >
+                  id="SVGRepo_tracerCarrier"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                ></g>
+                <g id="SVGRepo_iconCarrier">
                   <g
-                    id="Dribbble-Light-Preview"
-                    transform="translate(-419.000000, -520.000000)"
-                    fill="#ffffff"
+                    id="Page-1"
+                    strokeWidth="0.00021000000000000004"
+                    fill="none"
+                    fillRule="evenodd"
                   >
-                    <g id="icons" transform="translate(56.000000, 160.000000)">
-                      <path
-                        d="M374.55,369 L377.7,369 L377.7,371 L374.55,371 L374.55,374 L372.45,374 L372.45,371 L369.3,371 L369.3,369 L372.45,369 L372.45,366 L374.55,366 L374.55,369 Z M373.5,378 C368.86845,378 365.1,374.411 365.1,370 C365.1,365.589 368.86845,362 373.5,362 C378.13155,362 381.9,365.589 381.9,370 C381.9,374.411 378.13155,378 373.5,378 L373.5,378 Z M373.5,360 C367.70085,360 363,364.477 363,370 C363,375.523 367.70085,380 373.5,380 C379.29915,380 384,375.523 384,370 C384,364.477 379.29915,360 373.5,360 L373.5,360 Z"
-                        id="plus_circle-[#ffffff]"
-                      ></path>
+                    <g
+                      id="Dribbble-Light-Preview"
+                      transform="translate(-419.000000, -520.000000)"
+                      fill="#ffffff"
+                    >
+                      <g
+                        id="icons"
+                        transform="translate(56.000000, 160.000000)"
+                      >
+                        <path
+                          d="M374.55,369 L377.7,369 L377.7,371 L374.55,371 L374.55,374 L372.45,374 L372.45,371 L369.3,371 L369.3,369 L372.45,369 L372.45,366 L374.55,366 L374.55,369 Z M373.5,378 C368.86845,378 365.1,374.411 365.1,370 C365.1,365.589 368.86845,362 373.5,362 C378.13155,362 381.9,365.589 381.9,370 C381.9,374.411 378.13155,378 373.5,378 L373.5,378 Z M373.5,360 C367.70085,360 363,364.477 363,370 C363,375.523 367.70085,380 373.5,380 C379.29915,380 384,375.523 384,370 C384,364.477 379.29915,360 373.5,360 L373.5,360 Z"
+                          id="plus_circle-[#ffffff]"
+                        ></path>
+                      </g>
                     </g>
                   </g>
                 </g>
-              </g>
-            </svg>
-            <span>Add new vehicle</span>
-          </button>
+              </svg>
+              <span>Add new vehicle</span>
+            </button>
+          )}
         </div>
         <div className="flex overflow-auto scrollbar max-h-[333px] justify-center items-center">
           <div className="flex flex-wrap space-x-2 space-y-2 justify-start items-center mb-2 w-full">
@@ -230,7 +237,6 @@ export default function MyProducts() {
                 <th className="min-w-[220px] py-4 px-4 text-black xl:pl-11">
                   Vehicle Name
                 </th>
-                <th className="min-w-[150px] py-4 px-4 text-black">Owner</th>
                 <th className="min-w-[120px] py-4 px-4 text-black">
                   License Plate
                 </th>
@@ -247,12 +253,13 @@ export default function MyProducts() {
               </tr>
             </thead>
             <tbody>
-              {vehicles.length === 0 ? (
+              {productOfUserLoaded && <LoaderButton />}
+              {!productOfUserLoaded && myProducts.length === 0 ? (
                 <tr className="text-center h-20 flex items-center justify-center w-full">
                   No Items Found.
                 </tr>
               ) : (
-                vehicles.map((vehicle) => (
+                myProducts.map((vehicle) => (
                   <tr
                     key={vehicle.id}
                     className="dark:border-strokedark border-[#eee] border-b"
@@ -276,12 +283,6 @@ export default function MyProducts() {
                         </div>
                       </div>
                     </td>
-
-                    <td className="py-5 px-4">
-                      <p className="text-black font-normal ">
-                        {vehicle.owner.username}
-                      </p>
-                    </td>
                     <td className="py-5 px-4">
                       <p className="text-black font-normal">
                         {vehicle.licensePlate}
@@ -289,7 +290,7 @@ export default function MyProducts() {
                     </td>
                     <td className="py-5 px-4">
                       <p className="text-black font-normal">
-                        {ConvertDatetimeToDate(vehicle.insuranceExpiry)}
+                        {ConvertDatetimeToDisplay(vehicle.insuranceExpiry)}
                       </p>
                     </td>
                     <td className="py-5 px-4">
@@ -311,9 +312,10 @@ export default function MyProducts() {
                     </td>
                     <td className="py-5 px-4">
                       <div className="flex items-center space-x-3.5">
-                        <button
+                        <Link
+                          to={"/product-detail/" + vehicle.id}
                           className="hover:text-primary"
-                          onClick={() => handleOpenDetails(vehicle)}
+                          // onClick={() => handleOpenDetails(vehicle)}
                         >
                           <svg
                             className="fill-current"
@@ -332,7 +334,7 @@ export default function MyProducts() {
                               fill=""
                             />
                           </svg>
-                        </button>
+                        </Link>
                         <button
                           className="  hover:text-primary hover:bg-primary/30 rounded-full "
                           onClick={() =>
@@ -433,22 +435,23 @@ export default function MyProducts() {
             vehicle={selectedVehicle}
             onClose={cancelDetailsDialog}
           />
-        )}
-        {openEditForm && (
-          <VehicleForm
-            vehicle={selectedVehicle}
-            cancelEdit={cancelEditForm}
-            actionName={actionName}
-          />
-        )}
-
-        {confirmDeleteDiaglog && (
-          <ConfirmDeleteDialog
-            objectName={vehicleDeleted.licensePlate}
-            actionDelete={() => handleDeleteVehicle(vehicleDeleted)}
-            cancelDelete={cancelConfirmDeleteDialog}
-          />
         )} */}
+      {openEditForm && (
+        <VehicleForm
+          vehicle={selectedVehicle}
+          cancelForm={cancelEditForm}
+          actionName={actionName}
+          userLoggedIn={userLogin}
+        />
+      )}
+
+      {confirmDeleteDiaglog && (
+        <ConfirmDeleteDialog
+          objectName={vehicleDeleted.licensePlate}
+          actionDelete={() => handleDeleteVehicle(vehicleDeleted)}
+          cancelDelete={cancelConfirmDeleteDialog}
+        />
+      )}
     </>
   );
 }

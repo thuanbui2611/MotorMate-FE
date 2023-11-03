@@ -28,7 +28,6 @@ import {
   getProductsAsync,
   productSelectors,
   setProductParams,
-  updateProductAsync,
 } from "./ProductSlice";
 import LoaderButton from "../../app/components/LoaderButton";
 import Pagination from "../../app/components/Pagination";

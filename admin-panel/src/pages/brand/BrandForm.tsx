@@ -68,7 +68,7 @@ export default function BrandForm({ brand, cancelEdit, actionName }: Props) {
         publicId: brand?.image.publicId || null,
       };
       if (imageUploaded) {
-        let getImage = await uploadImage(imageUploaded as any);
+        let getImage = await uploadImage(imageUploaded);
         if (getImage) {
           formData.imageUrl = getImage.image;
           formData.publicId = getImage.publicId;
@@ -78,7 +78,6 @@ export default function BrandForm({ brand, cancelEdit, actionName }: Props) {
         formData.imageUrl = null;
         formData.publicId = null;
       }
-      console.log("Form data:", formData);
       if (brand) {
         if (imageUploaded || deleteCurrentImage) {
           await deleteImage(brand.image.publicId);

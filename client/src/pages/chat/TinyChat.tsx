@@ -318,9 +318,9 @@ export default function TinyChat() {
       if (message) {
         event.preventDefault();
         const request = {
-          members: [userLoginDetail?.userName, userNewChat],
+          members: [userLoginDetail?.username, userNewChat],
           chatMessage: {
-            userName: userLoginDetail?.userName,
+            username: userLoginDetail?.username,
             message: message,
           },
         };
@@ -489,7 +489,7 @@ export default function TinyChat() {
                             .find((chat) => chat.id === selectedChat)
                             ?.members.find(
                               (member) =>
-                                member.username !== userLoginDetail?.userName
+                                member.username !== userLoginDetail?.username
                             )?.avatar || ""
                         }
                       />
@@ -500,7 +500,7 @@ export default function TinyChat() {
                         .find((chat) => chat.id === selectedChat)
                         ?.members.find(
                           (member) =>
-                            member.username !== userLoginDetail?.userName
+                            member.username !== userLoginDetail?.username
                         )?.username || ""}
                     </p>
                   </>
@@ -591,7 +591,7 @@ export default function TinyChat() {
                       src={
                         chat.members.find(
                           (member) =>
-                            member.username !== userLoginDetail?.userName
+                            member.username !== userLoginDetail?.username
                         )?.avatar || ""
                       }
                       className="object-cover w-full h-full rounded-full shadow-md"
@@ -603,7 +603,7 @@ export default function TinyChat() {
                       <div className="flex-1 text-sm font-semibold line-clamp-1 overflow-ellipsis break-all">
                         {chat.members.find(
                           (member) =>
-                            member.username !== userLoginDetail?.userName
+                            member.username !== userLoginDetail?.username
                         )?.username || ""}
                       </div>
                     </div>

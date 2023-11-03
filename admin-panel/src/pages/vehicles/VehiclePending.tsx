@@ -1,7 +1,6 @@
 import Breadcrumb from "../../app/components/Breadcrumb";
 import ConfirmDeleteDialog from "../../app/components/ConfirmDeleteDialog";
 import { Vehicle } from "../../app/models/Vehicle";
-import { ConvertDatetimeToDate } from "../../app/utils/ConvertDatetimeToDate";
 import { useAppDispatch, useAppSelector } from "../../app/store/ConfigureStore";
 import { useEffect, useState } from "react";
 import Pagination from "../../app/components/Pagination";
@@ -16,6 +15,7 @@ import {
   vehiclePendingSelectors,
 } from "./VehiclePendingSlice";
 import LoaderButton from "../../app/components/LoaderButton";
+import { ConvertDatetimeToDisplay } from "../../app/utils/ConvertDatetimeToDate";
 
 export default function VehiclePending() {
   const [actionName, setActionName] = useState(String);
@@ -219,7 +219,9 @@ export default function VehiclePending() {
                           </td>
                           <td className="py-5 px-4">
                             <p className="text-black dark:text-white">
-                              {ConvertDatetimeToDate(vehicle.insuranceExpiry)}
+                              {ConvertDatetimeToDisplay(
+                                vehicle.insuranceExpiry
+                              )}
                             </p>
                           </td>
                           <td className="py-5 px-4">

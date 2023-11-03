@@ -13,6 +13,9 @@ import { UserDetail } from "../../app/models/User";
 import { FieldValues, useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { deleteImage, uploadImage } from "../../app/utils/Cloudinary";
+import { addUserAsync, updateUserAsync } from "./UserSlice";
+import { useAppDispatch } from "../../app/store/ConfigureStore";
 
 interface Props {
   user: UserDetail | null;
@@ -37,6 +40,8 @@ export default function UserForm({ user, cancelEdit, actionName }: Props) {
   } = useForm({
     mode: "all",
   });
+
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (user) {
@@ -63,7 +68,39 @@ export default function UserForm({ user, cancelEdit, actionName }: Props) {
 
   async function submitForm(data: FieldValues) {
     try {
-    } catch (error) {}
+      const formData = {
+        username: user?.username,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        address: data.address,
+        phoneNumber: data.phoneNumber,
+        image: user?.image || null,
+        dateOfBirth: data.dateOfBirth,
+      };
+      if (imageUploaded) {
+        let getImage = await uploadImage(imageUploaded);
+        if (getImage && getImage.image && getImage.publicId) {
+          formData.image = {
+            imageUrl: getImage.image,
+            publicId: getImage.publicId,
+          };
+        }
+      }
+      if (deleteCurrentImage) {
+        formData.image = null;
+      }
+      console.log("FormData: ", formData);
+      if (user) {
+        if (imageUploaded || deleteCurrentImage) {
+          await deleteImage(user.image.publicId);
+        }
+        await dispatch(updateUserAsync(formData));
+      } else {
+        // await dispatch(addUserAsync(formData));
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
   return (
     <>
@@ -88,7 +125,7 @@ export default function UserForm({ user, cancelEdit, actionName }: Props) {
                 <div className="relative drop-shadow-2">
                   <img
                     className="h-full w-full rounded-full"
-                    src={imageReview ? imageReview.url : user?.picture}
+                    src={imageReview ? imageReview.url : user?.image.imageUrl}
                     alt="profile"
                   />
                   <label

@@ -3,11 +3,10 @@ import { useAppDispatch, useAppSelector } from "../../app/store/ConfigureStore";
 import { blogSelectors, getBlogsAsync, setBlogParams } from "./BlogSlice";
 import { useEffect } from "react";
 import Loading from "../../app/components/Loading";
-import { ConvertDatetimeToDate } from "../../app/utils/ConvertDatetimeToDate";
 import Pagination from "../../app/components/Pagination";
+import { ConvertDatetimeToDisplay } from "../../app/utils/ConvertDatetimeToDate";
 
 export default function BlogPage() {
-  const renderItem = ["1", "2", "3", "4", "5"];
   const [pageNumber, setPageNumber] = useSearchParams({ pageNumber: "" });
 
   const blogs = useAppSelector(blogSelectors.selectAll);
@@ -195,7 +194,7 @@ export default function BlogPage() {
                         </svg>
                       </div> */}
                       <div className="bg-gray-200 px-3 py-1 rounded-full text-xs font-medium text-gray-800 hidden md:block">
-                        {ConvertDatetimeToDate(blog.createdAt)}
+                        {ConvertDatetimeToDisplay(blog.createdAt)}
                       </div>
                     </div>
                     <h3 className="font-black text-gray-800 lg:text-3xl text-xl group-hover:text-orange-based">

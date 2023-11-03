@@ -55,8 +55,8 @@ axios.interceptors.response.use(
         toast.error((data as any).message);
         break;
       case 500:
-        console.log("Catch 500");
-        toast.error((data as any).message);
+        console.log("Catch 500: ", error.response);
+        toast.error(`${error.response?.statusText}`);
         // navigate("/server-error", {
         //   state: { error: data },
         // });

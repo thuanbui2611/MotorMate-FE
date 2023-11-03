@@ -31,7 +31,7 @@ export default function SelectUserChat({ onSelect }: Props) {
   ) => {
     setSelectedUser(newValue);
     if (newValue) {
-      onSelect(newValue?.userName);
+      onSelect(newValue?.username);
     }
   };
 
@@ -47,7 +47,7 @@ export default function SelectUserChat({ onSelect }: Props) {
           disablePortal
           value={selectedUser}
           options={users}
-          getOptionLabel={(option) => option.userName}
+          getOptionLabel={(option) => option.username}
           onChange={(event, newValue) => handleUserChange(event, newValue)}
           noOptionsText="No users found"
           renderOption={(props, option) => (
@@ -62,11 +62,11 @@ export default function SelectUserChat({ onSelect }: Props) {
                 <div className="h-8 w-8 rounded-md mr-2 ">
                   <img
                     className="h-full w-full rounded-md object-cover"
-                    src={option.picture}
+                    src={option.image.imageUrl}
                     alt="logo"
                   />
                 </div>
-                <div className="flex-1 line-clamp-1">{option.userName}</div>
+                <div className="flex-1 line-clamp-1">{option.username}</div>
               </div>
             </Box>
           )}
@@ -85,7 +85,7 @@ export default function SelectUserChat({ onSelect }: Props) {
                       <div className="h-6 w-6 flex justify-center items-center">
                         <img
                           className="h-full w-full rounded-full mb-[1px]"
-                          src={selectedUser.picture}
+                          src={selectedUser.image.imageUrl}
                           alt="avatar"
                         />
                       </div>

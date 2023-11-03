@@ -13,6 +13,7 @@ import {
 import Pagination from "../../app/components/Pagination";
 import ConfirmDeleteDialog from "../../app/components/ConfirmDeleteDialog";
 import BlogForm from "./BlogForm";
+import { ConvertDatetimeToDisplay } from "../../app/utils/ConvertDatetimeToDate";
 
 export default function BlogPage() {
   const [pageNumber, setPageNumber] = useSearchParams({ pageNumber: "" });
@@ -134,7 +135,7 @@ export default function BlogPage() {
                   </g>
                 </g>
               </svg>
-              <span>Add new collection</span>
+              <span>Add new blog</span>
             </button>
           </div>
           <div className="max-w-full overflow-x-auto">
@@ -198,7 +199,7 @@ export default function BlogPage() {
                         </td>
                         <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                           <h5 className="font-medium text-black dark:text-white">
-                            {blog.createdAt}
+                            {ConvertDatetimeToDisplay(blog.createdAt)}
                           </h5>
                         </td>
 
@@ -209,9 +210,13 @@ export default function BlogPage() {
                           </td> */}
                         <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                           <div className="flex items-center space-x-3.5">
-                            <button
+                            <a
                               className="hover:text-primary"
-                              onClick={() => handleOpenDetails(blog)}
+                              // onClick={() => handleOpenDetails(blog)}
+                              href={
+                                "https://motormate.vercel.app/blog/" + blog.id
+                              }
+                              target="_blank"
                             >
                               <svg
                                 className="fill-current"
@@ -230,7 +235,7 @@ export default function BlogPage() {
                                   fill=""
                                 />
                               </svg>
-                            </button>
+                            </a>
                             <button
                               className="  hover:text-primary hover:bg-primary/30 rounded-full "
                               onClick={() =>

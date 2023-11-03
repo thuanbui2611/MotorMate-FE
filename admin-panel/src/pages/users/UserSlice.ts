@@ -57,7 +57,7 @@ export const updateUserAsync = createAsyncThunk<UserDetail, FieldValues>(
   "user/updateUserAsync",
   async (data, ThunkAPI) => {
     try {
-      const response = await agent.User.update(data.id, data);
+      const response = await agent.User.update(data.username, data);
       return response;
     } catch (error: any) {
       return ThunkAPI.rejectWithValue({ error: error.data });

@@ -57,7 +57,6 @@ export const updateBrandAsync = createAsyncThunk<Brand, FieldValues>(
   "brand/updateBrandAsync",
   async (data, ThunkAPI) => {
     try {
-      console.log("Updating brand...", data);
       const response = await agent.Brand.update(data.id, data);
       return response;
     } catch (error: any) {
@@ -70,7 +69,6 @@ export const deleteBrandAsync = createAsyncThunk(
   "brand/deleteBrandAsync",
   async (id: string) => {
     try {
-      console.log("Reach deleting... Id:", id);
       await agent.Brand.delete(id);
       toast.success("Delete brand successfully!");
       return id;

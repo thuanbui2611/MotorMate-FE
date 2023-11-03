@@ -3,7 +3,6 @@ import {
   Dialog,
   Card,
   CardHeader,
-  CardBody,
   CardFooter,
   Typography,
 } from "@material-tailwind/react";
@@ -14,7 +13,7 @@ import { Brand, Collection } from "../../app/models/Brand";
 import { ModelVehicle } from "../../app/models/ModelVehicle";
 import { Color } from "../../app/models/Color";
 import agent from "../../app/api/agent";
-import { FieldValues, set, useForm } from "react-hook-form";
+import { FieldValues, useForm } from "react-hook-form";
 import { Location } from "../../app/models/Address";
 import AppTextInput from "../../app/components/AppTextInput";
 import { Box, TextField } from "@mui/material";
@@ -23,12 +22,12 @@ import { UserDetail } from "../../app/models/User";
 import { deleteImages, uploadImages } from "../../app/utils/Cloudinary";
 import { addVehicleAsync, updateVehicleAsync } from "./VehicleSlice";
 import { useAppDispatch } from "../../app/store/ConfigureStore";
-import { ConvertDatetimeToDate } from "../../app/utils/ConvertDatetimeToDate";
 import { Image } from "../../app/models/Image";
 import { LoadingButton } from "@mui/lab";
 import { toast } from "react-toastify";
 import LoaderButton from "../../app/components/LoaderButton";
 import { updateVehiclePendingAsync } from "./VehiclePendingSlice";
+import { ConvertDatetimeToDisplay } from "../../app/utils/ConvertDatetimeToDate";
 interface Props {
   vehicle: Vehicle | null;
   cancelEdit: () => void;
@@ -100,10 +99,10 @@ export default function VehicleForm({
   useEffect(() => {
     if (vehicle) {
       const vehicleDetails = { ...vehicle };
-      vehicleDetails.insuranceExpiry = ConvertDatetimeToDate(
+      vehicleDetails.insuranceExpiry = ConvertDatetimeToDisplay(
         vehicleDetails.insuranceExpiry
       );
-      vehicleDetails.purchaseDate = ConvertDatetimeToDate(
+      vehicleDetails.purchaseDate = ConvertDatetimeToDisplay(
         vehicleDetails.purchaseDate
       );
       reset(vehicleDetails);
@@ -468,7 +467,7 @@ export default function VehicleForm({
                     disablePortal
                     value={selectedUser}
                     options={users}
-                    getOptionLabel={(option) => option.userName}
+                    getOptionLabel={(option) => option.username}
                     onChange={(event, newValue) =>
                       handleUserChange(event, newValue)
                     }
@@ -482,11 +481,11 @@ export default function VehicleForm({
                           <div className="h-12 w-12 rounded-md mr-2">
                             <img
                               className="h-full w-full rounded-md object-cover"
-                              src={option.picture}
+                              src={option.image.imageUrl}
                               alt="Avatar"
                             />
                           </div>
-                          {option.userName}
+                          {option.username}
                         </div>
                       </Box>
                     )}
@@ -501,7 +500,7 @@ export default function VehicleForm({
                               {selectedUser && (
                                 <img
                                   className="h-6 w-6 rounded-full"
-                                  src={selectedUser.picture}
+                                  src={selectedUser.image.imageUrl}
                                   alt="Avatar"
                                   referrerPolicy="no-referrer"
                                 />

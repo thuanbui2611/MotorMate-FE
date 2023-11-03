@@ -58,7 +58,7 @@ export default function ProductHomepage({ products }: Props) {
                       className="absolute cursor top-1 left-[5px] md:top-2 md:left-2 flex items-center justify-center text-white h-[1vw] w-[1vw] md:h-3 md:w-3 lg:h-4 lg:w-4"
                     />
                     {userLogin &&
-                      userLogin.userName.toLowerCase() ===
+                      userLogin.username.toLowerCase() ===
                         product.owner.username.toLowerCase() && (
                         <span className="absolute top-2 right-2 font-semibold px-1 z-1 h-fit w-fit text-[12px] shadow-md rounded-sm bg-orange-based text-white flex items-center justify-center">
                           Owner

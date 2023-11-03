@@ -11,20 +11,18 @@ import agent from "../../app/api/agent";
 import { useAppDispatch } from "../../app/store/ConfigureStore";
 import { Image } from "../../app/models/Image";
 import { Vehicle } from "../../app/models/Vehicle";
-import { ConvertDatetimeToDate } from "../../app/utils/ConvertDatetimeToDate";
+import { ConvertDatetimeToDisplay } from "../../app/utils/ConvertDatetimeToDisplay";
 import { toast } from "react-toastify";
 import { deleteImages, uploadImages } from "../../app/utils/Cloudinary";
 import { Box, TextField } from "@mui/material";
-import {
-  updateProductAsync,
-  addProductAsync,
-} from "./../products/ProductSlice";
 import LoaderButton from "../../app/components/LoaderButton";
 import AppTextInput from "../../app/components/AppTextInput";
 import { LoadingButton } from "@mui/lab";
+import { addProductAsync, updateProductAsync } from "./ProfileSlice";
 interface Props {
   vehicle: Vehicle | null;
-  userLoggedIn: UserDetail | undefined;
+  userLoggedIn: UserDetail | null;
+  actionName: string;
   cancelForm: () => void;
 }
 type ImageFile = {
@@ -32,6 +30,7 @@ type ImageFile = {
   url: string | null;
 };
 export default function VehicleForm({
+  actionName,
   vehicle,
   userLoggedIn,
   cancelForm,
@@ -70,7 +69,6 @@ export default function VehicleForm({
     null
   );
 
-  const [loadingFetchOwner, setLoadingFetchOwner] = useState(true);
   const [loadingFetchBrand, setLoadingFetchBrand] = useState(true);
   const [loadingFetchModel, setLoadingFetchModel] = useState(false);
 
@@ -93,10 +91,10 @@ export default function VehicleForm({
   useEffect(() => {
     if (vehicle) {
       const vehicleDetails = { ...vehicle };
-      vehicleDetails.insuranceExpiry = ConvertDatetimeToDate(
+      vehicleDetails.insuranceExpiry = ConvertDatetimeToDisplay(
         vehicleDetails.insuranceExpiry
       );
-      vehicleDetails.purchaseDate = ConvertDatetimeToDate(
+      vehicleDetails.purchaseDate = ConvertDatetimeToDisplay(
         vehicleDetails.purchaseDate
       );
       reset(vehicleDetails);
@@ -410,7 +408,7 @@ export default function VehicleForm({
           onSubmit={handleSubmit(submitForm)}
         >
           <div className="border-b-2 border-neutral-100 border-opacity-100 mb-5 pb-5">
-            <p className="text-center text-4xl ">Add a vehicle</p>
+            <p className="text-center text-4xl ">{actionName}</p>
             <button
               type="button"
               onClick={onClose}
