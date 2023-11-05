@@ -403,10 +403,10 @@ export default function HomePage() {
               <div className="text-center ">
                 <div className="relative flex flex-col items-center">
                   <div className="absolute hidden md:block left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-[100px] text-gray-400 font-bold opacity-10">
-                    RENTING
+                    LESSEES
                   </div>
                   <h1 className=" text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-blue-500">
-                    Renting motorcycles
+                    Lessees
                   </h1>
                   <div className="flex w-20 mt-1 mb-10 overflow-hidden rounded">
                     <div className="flex-1 h-2 bg-blue-200"></div>
@@ -457,12 +457,33 @@ export default function HomePage() {
                   </div>
                   <div className="relative z-20 p-4">
                     <p className="mb-2 text-base lg:text-lg font-bold text-black ">
-                      Find your "Motormate"
+                      Research and Choose
                     </p>
-                    <p className="text-gray-700 text-sm lg:text-base font-medium">
-                      Make sure you have selected the vehicle in the right
-                      location!
-                    </p>
+                    <div className="flex mb-[2px]">
+                      <p className="w-2 text-gray-700 text-sm lg:text-base font-medium">
+                        1.
+                      </p>
+                      <p className="text-gray-700 text-sm lg:text-base font-medium ml-2">
+                        Research and select a reputable motorcycle rental
+                        company.
+                      </p>
+                    </div>
+                    <div className="flex mb-[2px]">
+                      <p className="w-2 text-gray-700 text-sm lg:text-base font-medium">
+                        2.
+                      </p>
+                      <p className="text-gray-700 text-sm lg:text-base font-medium ml-2">
+                        Consider factors like bike types, rates, and reviews.
+                      </p>
+                    </div>
+                    <div className="flex">
+                      <p className="w-2 text-gray-700 text-sm lg:text-base font-medium">
+                        3.
+                      </p>
+                      <p className="text-gray-700 text-sm lg:text-base font-medium ml-2">
+                        Confirm availability and make your reservation.
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -498,12 +519,34 @@ export default function HomePage() {
                   </div>
                   <div className="relative z-20 p-6">
                     <p className="mb-2 text-base lg:text-lg font-bold text-black">
-                      Fill and check your information
+                      Reservation Details
                     </p>
-                    <p className="text-gray-700 text-sm lg:text-base font-medium">
-                      Choose the number of days you want to rent and fill
-                      neccessary information.
-                    </p>
+                    <div className="flex mb-[2px]">
+                      <p className="w-2 text-gray-700 text-sm lg:text-base font-medium">
+                        1.
+                      </p>
+                      <p className="text-gray-700 text-sm lg:text-base font-medium ml-2">
+                        Provide your personal info, rental dates, and motorcycle
+                        preference.
+                      </p>
+                    </div>
+                    <div className="flex mb-[2px]">
+                      <p className="w-2 text-gray-700 text-sm lg:text-base font-medium">
+                        2.
+                      </p>
+                      <p className="text-gray-700 text-sm lg:text-base font-medium ml-2">
+                        Discuss additional services like insurance and
+                        equipment.
+                      </p>
+                    </div>
+                    <div className="flex">
+                      <p className="w-2 text-gray-700 text-sm lg:text-base font-medium">
+                        3.
+                      </p>
+                      <p className="text-gray-700 text-sm lg:text-base font-medium ml-2">
+                        Understand the terms and conditions before confirming.
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -539,12 +582,33 @@ export default function HomePage() {
                   </div>
                   <div className="relative z-20 p-6">
                     <p className="mb-2 text-base lg:text-lg font-bold text-black">
-                      Payment
+                      Pick Up and Return
                     </p>
-                    <p className="text-gray-700 text-sm lg:text-base font-medium">
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      veniam libero facilis minus reprehenderit.
-                    </p>
+                    <div className="flex mb-[2px]">
+                      <p className="w-2 text-gray-700 text-sm lg:text-base font-medium">
+                        1.
+                      </p>
+                      <p className="text-gray-700 text-sm lg:text-base font-medium ml-2">
+                        Inspect the motorcycle for damage before leaving.
+                      </p>
+                    </div>
+                    <div className="flex mb-[2px]">
+                      <p className="w-2 text-gray-700 text-sm lg:text-base font-medium">
+                        2.
+                      </p>
+                      <p className="text-gray-700 text-sm lg:text-base font-medium ml-2">
+                        Complete the payment and deposit process.
+                      </p>
+                    </div>
+                    <div className="flex">
+                      <p className="w-2 text-gray-700 text-sm lg:text-base font-medium">
+                        3.
+                      </p>
+                      <p className="text-gray-700 text-sm lg:text-base font-medium ml-2">
+                        Return the bike in the same condition to avoid
+                        additional charges.
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -611,14 +675,35 @@ export default function HomePage() {
                   <div className="absolute inline-block w-4 overflow-hidden -translate-y-1/2 top-7 -left-4">
                     <div className="h-10 origin-top-right transform -rotate-45 bg-white  drop-shadow-lg"></div>
                   </div>
-                  <div className="relative z-20 p-4">
+                  <div className="relative flex flex-col z-20 p-4">
                     <p className="mb-2 text-base lg:text-lg font-bold text-black ">
-                      Register
+                      Prepare Your Motorcycle(s)
                     </p>
-                    <p className="text-gray-700 text-sm lg:text-base font-medium">
-                      Register your motorcycle on our website and wait for the
-                      approval.
-                    </p>
+                    <div className="flex">
+                      <p className="w-2 text-gray-700 text-sm lg:text-base font-medium">
+                        1.
+                      </p>
+                      <p className="text-gray-700 text-sm lg:text-base font-medium ml-2">
+                        Ensure your motorcycle is in good working condition.
+                      </p>
+                    </div>
+                    <div className="flex">
+                      <p className="w-2 text-gray-700 text-sm lg:text-base font-medium">
+                        2.
+                      </p>
+                      <p className="text-gray-700 text-sm lg:text-base font-medium ml-2">
+                        Perform necessary maintenance and safety checks.
+                      </p>
+                    </div>
+                    <div className="flex">
+                      <p className="w-2 text-gray-700 text-sm lg:text-base font-medium">
+                        3.
+                      </p>
+                      <p className="text-gray-700 text-sm lg:text-base font-medium ml-2">
+                        Consider providing safety gear like helmets and gloves
+                        for renters.
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -654,12 +739,35 @@ export default function HomePage() {
                   </div>
                   <div className="relative z-20 p-6">
                     <p className="mb-2 text-base lg:text-lg font-bold text-black">
-                      Fill and check your information
+                      Set Up Your Rental Business
                     </p>
-                    <p className="text-gray-700 text-sm lg:text-base font-medium">
-                      Choose the number of days you want to rent and fill
-                      neccessary information.
-                    </p>
+                    <div className="flex mb-[2px]">
+                      <p className="w-2 text-gray-700 text-sm lg:text-base font-medium">
+                        1.
+                      </p>
+                      <p className="text-gray-700 text-sm lg:text-base font-medium ml-2">
+                        Register your business and obtain any necessary
+                        licenses.
+                      </p>
+                    </div>
+                    <div className="flex mb-[2px]">
+                      <p className="w-2 text-gray-700 text-sm lg:text-base font-medium">
+                        2.
+                      </p>
+                      <p className="text-gray-700 text-sm lg:text-base font-medium ml-2">
+                        Create rental agreements outlining terms, conditions,
+                        and insurance coverage.
+                      </p>
+                    </div>
+                    <div className="flex">
+                      <p className="w-2 text-gray-700 text-sm lg:text-base font-medium">
+                        3.
+                      </p>
+                      <p className="text-gray-700 text-sm lg:text-base font-medium ml-2">
+                        Set competitive rental rates and decide on deposit
+                        requirements.
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -695,12 +803,35 @@ export default function HomePage() {
                   </div>
                   <div className="relative z-20 p-6">
                     <p className="mb-2 text-base lg:text-lg font-bold text-black">
-                      Payment
+                      Market and Manage Rentals
                     </p>
-                    <p className="text-gray-700 text-sm lg:text-base font-medium">
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      veniam libero facilis minus reprehenderit.
-                    </p>
+                    <div className="flex mb-[2px]">
+                      <p className="w-2 text-gray-700 text-sm lg:text-base font-medium">
+                        1.
+                      </p>
+                      <p className="text-gray-700 text-sm lg:text-base font-medium ml-2">
+                        Advertise your rental services online and in local
+                        communities.
+                      </p>
+                    </div>
+                    <div className="flex mb-[2px]">
+                      <p className="w-2 text-gray-700 text-sm lg:text-base font-medium">
+                        2.
+                      </p>
+                      <p className="text-gray-700 text-sm lg:text-base font-medium ml-2">
+                        Screen potential renters, verify their licenses, and
+                        maintain records.
+                      </p>
+                    </div>
+                    <div className="flex">
+                      <p className="w-2 text-gray-700 text-sm lg:text-base font-medium">
+                        3.
+                      </p>
+                      <p className="text-gray-700 text-sm lg:text-base font-medium ml-2">
+                        Offer excellent customer service, assist with pick-up,
+                        and address any issues promptly.
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -732,7 +863,7 @@ export default function HomePage() {
                 alt="Helene Avatar"
               />
               <h3 className="mb-1 text-2xl font-bold tracking-tight text-gray-900 ">
-                <a href="#">Helene Engels</a>
+                <a href="#">Doan Thanh Dung</a>
               </h3>
               <p>CTO/Co-founder</p>
               <ul className="flex justify-center mt-4 space-x-4">
@@ -805,7 +936,7 @@ export default function HomePage() {
                 alt="Leslie Avatar"
               />
               <h3 className="mb-1 text-2xl font-bold tracking-tight text-gray-900 ">
-                <a href="#">Leslie Livingston</a>
+                <a href="#">Trinh Tuong Anh</a>
               </h3>
               <p>Graphic Designer</p>
               <ul className="flex justify-center mt-4 space-x-4">
@@ -878,7 +1009,7 @@ export default function HomePage() {
                 alt="Joseph Avatar"
               />
               <h3 className="mb-1 text-2xl font-bold tracking-tight text-gray-900 ">
-                <a href="#">Joseph Mcfall</a>
+                <a href="#">Bui Cong Thuan</a>
               </h3>
               <p>Sales</p>
               <ul className="flex justify-center mt-4 space-x-4">

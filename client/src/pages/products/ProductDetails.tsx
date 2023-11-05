@@ -9,6 +9,7 @@ import { Vehicle } from "../../app/models/Vehicle";
 import "lightbox.js-react/dist/index.css";
 import { SlideshowLightbox } from "lightbox.js-react";
 import ImagesCarousel from "../../app/components/ImagesCarousel";
+import { useAppSelector } from "../../app/store/ConfigureStore";
 
 export default function ProductDetails() {
   const { id } = useParams<{ id: string }>();
@@ -16,6 +17,8 @@ export default function ProductDetails() {
   const [loading, setLoading] = useState(true);
   const [openImage, setOpenImage] = useState<number>();
   const [openSlideShow, setOpenSlideShow] = useState(false);
+
+  const userLogin = useAppSelector((state) => state.account.userDetail);
 
   useEffect(() => {
     window.scrollTo(0, 0); // Scroll to the top of the page
@@ -38,7 +41,7 @@ export default function ProductDetails() {
   }, [openImage]);
 
   if (loading) return <Loading />;
-  if (!product) return <NotFound />;
+  if (!product || product.isLocked) return <NotFound />;
   return (
     <>
       {/* <!-- Features --> */}
@@ -234,12 +237,16 @@ export default function ProductDetails() {
                     <span className="title-font font-medium text-2xl text-gray-900">
                       ${product.price}
                     </span>
-                    <a
-                      href={"/check-out/" + product.id}
-                      className="flex ml-auto text-white bg-orange-based border-0 py-2 px-6 focus:outline-none hover:bg-orange-600 rounded"
+                    <Link
+                      to={"/check-out/" + product.id}
+                      className={`flex ml-auto text-white bg-orange-based border-0 py-2 px-6 focus:outline-none hover:bg-orange-600 rounded ${
+                        product.owner.ownerId === userLogin?.id &&
+                        " pointer-events-none bg-gray-400"
+                      }`}
                     >
                       Rent now
-                    </a>
+                    </Link>
+
                     <button className="rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4">
                       <svg
                         fill="currentColor"
@@ -253,6 +260,11 @@ export default function ProductDetails() {
                       </svg>
                     </button>
                   </div>
+                  {product.owner.ownerId === userLogin?.id && (
+                    <p className="text-right font-normal text-red-600 text-xs md:text-sm">
+                      You can not rent your own product!
+                    </p>
+                  )}
                 </div>
               </nav>
               {/* <!-- End Tab Navs --> */}

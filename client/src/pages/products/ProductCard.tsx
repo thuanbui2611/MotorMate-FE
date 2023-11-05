@@ -11,13 +11,15 @@ interface Props {
 }
 
 export default function ProductCard({ product, userLogin }: Props) {
-  return (
+  return product.isLocked ? (
+    <></>
+  ) : (
     <>
       <Link
         to={"/product-detail/" + product.id}
         className="hover:brightness-90 border border-gray-300 bg-white rounded-md w-full shadow-lg"
       >
-        <div className="relative bg-white">
+        <div className="relative bg-white rounded-md rounded-b-none">
           {userLogin &&
             userLogin.username.toLowerCase() ===
               product.owner.username.toLowerCase() && (
@@ -80,13 +82,16 @@ export default function ProductCard({ product, userLogin }: Props) {
               </g>
             </svg>
             <p className="text-xs uppercase text-gray-600 dark:text-gray-400">
-              {product.specifications.brandName}
+              {product.city.replace(/Thành Phố |Tỉnh /g, "")}
             </p>
           </div>
-          <div className="flex items-center justify-between mb-2">
-            <h3 className="text-xl font-medium  line-clamp-1">
+          <div className="flex-col items-center justify-between">
+            <h3 className="text-xl font-semibold line-clamp-1">
               {product.specifications.modelName}
             </h3>
+            <h2 className=" text-gray-700 font-semibold">
+              {product.specifications.brandName}
+            </h2>
           </div>
           <ul className="flex pb-1">
             <li>

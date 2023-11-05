@@ -11,7 +11,6 @@ import agent from "../../app/api/agent";
 import { useAppDispatch } from "../../app/store/ConfigureStore";
 import { Image } from "../../app/models/Image";
 import { Vehicle } from "../../app/models/Vehicle";
-import { ConvertDatetimeToDisplay } from "../../app/utils/ConvertDatetimeToDisplay";
 import { toast } from "react-toastify";
 import { deleteImages, uploadImages } from "../../app/utils/Cloudinary";
 import { Box, TextField } from "@mui/material";
@@ -19,6 +18,7 @@ import LoaderButton from "../../app/components/LoaderButton";
 import AppTextInput from "../../app/components/AppTextInput";
 import { LoadingButton } from "@mui/lab";
 import { addProductAsync, updateProductAsync } from "./ProfileSlice";
+import { ConvertDatetimeToDisplay } from "../../app/utils/ConvertDatetimeToDate";
 interface Props {
   vehicle: Vehicle | null;
   userLoggedIn: UserDetail | null;

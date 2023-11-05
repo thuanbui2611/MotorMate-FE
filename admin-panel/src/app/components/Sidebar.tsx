@@ -388,13 +388,13 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                               xmlns="http://www.w3.org/2000/svg"
                               fill="#ffffff"
                               stroke="#ffffff"
-                              stroke-width="31.744"
+                              strokeWidth="31.744"
                             >
-                              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                              <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
                               <g
                                 id="SVGRepo_tracerCarrier"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
                               ></g>
                               <g id="SVGRepo_iconCarrier">
                                 <path
@@ -721,11 +721,11 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
                   >
-                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                    <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
                     <g
                       id="SVGRepo_tracerCarrier"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                     ></g>
                     <g id="SVGRepo_iconCarrier">
                       <path
@@ -813,7 +813,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                           ></g>
                           <g id="SVGRepo_iconCarrier">
                             <defs>
-                              <style>{`.cls-1{fill:none;stroke:#ffffff;stroke-miterlimit:10;stroke-width:1.92px;}`}</style>
+                              <style>{`.cls-1{fill:none;stroke:#ffffff;stroke-miterlimit:10;strokeWidth:1.92px;}`}</style>
                             </defs>
                             <g id="roll_brush" data-name="roll brush">
                               <line
