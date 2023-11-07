@@ -88,7 +88,7 @@ export default function Cart() {
                       </Link>
                     </div>
 
-                    <div className="max-w-full overflow-x-auto">
+                    <div className="max-w-full overflow-x-auto scrollbar">
                       <table className="w-full table-auto">
                         <thead>
                           <tr className=" bg-gray-200 text-left text-sm md:text-base lg:text-lg font-bold">
