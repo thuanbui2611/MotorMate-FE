@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import LoaderButton from "./LoaderButton";
 import agent from "../api/agent";
 import { Box, Paper, TextField } from "@mui/material";
+import { useAppDispatch, useAppSelector } from "../store/ConfigureStore";
+import { setStartChatToUser } from "../../pages/chat/ChatSlice";
 
 interface Props {
   onSelect: (user: string) => void;
@@ -12,6 +14,9 @@ export default function SelectUserChat({ onSelect }: Props) {
   const [users, setUsers] = useState<UserDetail[]>([]);
   const [selectedUser, setSelectedUser] = useState<UserDetail | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+
+  const { startChatToUser } = useAppSelector((state) => state.chat);
+  const dispatch = useAppDispatch();
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -24,6 +29,20 @@ export default function SelectUserChat({ onSelect }: Props) {
     };
     fetchUsers();
   }, []);
+
+  // Start chat to user on click message user button
+  useEffect(() => {
+    if (startChatToUser && !loading) {
+      const userSelected =
+        users.find(
+          (user) =>
+            user.username.toLowerCase() === startChatToUser.toLowerCase()
+        ) || null;
+      setSelectedUser(userSelected);
+      if (userSelected) onSelect(userSelected.username);
+      dispatch(setStartChatToUser(null));
+    }
+  }, [startChatToUser, loading]);
 
   const handleUserChange = (
     event: React.SyntheticEvent<Element, Event>,

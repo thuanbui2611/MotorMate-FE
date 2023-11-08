@@ -1,4 +1,3 @@
-import { Product } from "../../app/models/Product";
 import { Vehicle } from "../../app/models/Vehicle";
 import { store } from "../../app/store/ConfigureStore";
 import ProductCard from "./ProductCard";

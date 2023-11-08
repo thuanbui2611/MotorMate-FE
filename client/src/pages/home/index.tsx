@@ -384,489 +384,377 @@ export default function HomePage() {
 
       <BlogList />
 
-      <div className="flex justify-center">
-        <hr className="w-1/4"></hr>
-      </div>
-      <div className="mx-auto mb-8 text-center">
-        <h2 className=" my-4 text-4xl tracking-tight font-extrabold text-gray-900 ">
-          Procedures
-        </h2>
-        <p className="font-light text-gray-500 sm:text-xl ">
-          Explore the whole collection of open-source web components and
-          elements built with the utility classes from Tailwind
-        </p>
-      </div>
-      <div className="flex-col lg:flex lg:flex-row px-4 pt-10 sm:px-6 lg:px-8 lg:py-0 mx-auto">
-        <section className="items-center pt-8 bg-gray-100  font-poppins md:pr-10 border max-h-fit lg:mr-4 mb-4">
-          <div className="block justify-center max-w-2xl px-4 py-4 mx-auto lg:py-8 md:px-6">
-            <div className="max-w-xl mx-auto">
-              <div className="text-center ">
-                <div className="relative flex flex-col items-center">
-                  <div className="absolute hidden md:block left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-[100px] text-gray-400 font-bold opacity-10">
-                    LESSEES
-                  </div>
-                  <h1 className=" text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-blue-500">
-                    Lessees
-                  </h1>
-                  <div className="flex w-20 mt-1 mb-10 overflow-hidden rounded">
-                    <div className="flex-1 h-2 bg-blue-200"></div>
-                    <div className="flex-1 h-2 bg-blue-400"></div>
-                    <div className="flex-1 h-2 bg-blue-600"></div>
-                  </div>
-                </div>
-                <p className="mb-16 text-sm lg:text-base text-center text-gray-500">
-                  Make sure that you have a valid motorcycle license and a valid
-                  ID card.
-                </p>
-              </div>
-            </div>
-            <div className="w-full mx-auto lg:max-w-3xl">
-              <div className="relative flex justify-between">
-                <div className="hidden w-16 py-3 md:block ">
-                  <h2 className="text-lg font-bold text-gray-700 text-right">
-                    Step 1
-                  </h2>
-                </div>
-                <div className="absolute inline-block w-24 py-3 left-16 -top-12 md:hidden">
-                  <h2 className="text-base font-bold text-gray-700">Step 1</h2>
-                </div>
-                <div className="flex flex-col items-center w-10 mr-4 md:w-16">
-                  <div>
-                    <div className="flex items-center justify-center w-10 h-10 border border-blue-500 rounded-full ">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
-                        fill="currentColor"
-                        className="w-4 h-4 text-blue-500   bi bi-building"
-                        viewBox="0 0 16 16"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M14.763.075A.5.5 0 0 1 15 .5v15a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5V14h-1v1.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V10a.5.5 0 0 1 .342-.474L6 7.64V4.5a.5.5 0 0 1 .276-.447l8-4a.5.5 0 0 1 .487.022zM6 8.694 1 10.36V15h5V8.694zM7 15h2v-1.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5V15h2V1.309l-7 3.5V15z"
-                        ></path>
-                        <path d="M2 11h1v1H2v-1zm2 0h1v1H4v-1zm-2 2h1v1H2v-1zm2 0h1v1H4v-1zm4-4h1v1H8V9zm2 0h1v1h-1V9zm-2 2h1v1H8v-1zm2 0h1v1h-1v-1zm2-2h1v1h-1V9zm0 2h1v1h-1v-1zM8 7h1v1H8V7zm2 0h1v1h-1V7zm2 0h1v1h-1V7zM8 5h1v1H8V5zm2 0h1v1h-1V5zm2 0h1v1h-1V5zm0-2h1v1h-1V3z"></path>
-                      </svg>
+      <section className="mt-10">
+        <div className="mx-auto mb-4 text-center">
+          <h2 className="text-4xl lg:text-6xl tracking-tight font-extrabold procedure-title">
+            Procedure
+          </h2>
+        </div>
+        <div className="flex justify-center">
+          <hr className="w-[20%] lg:w-[200px]"></hr>
+        </div>
+
+        <div className="flex justify-center">
+          <hr className="w-[10%] mt-2 lg:w-[140px]"></hr>
+        </div>
+        <div className="flex-col px-4 pt-10 sm:px-6 lg:px-8 lg:py-0 mx-auto justify-center items-start">
+          <section className="mx-auto max-w-screen-xl mb-8">
+            <div className="flex flex-col md:flex-row justify-center w-fit px-4 py-4 mx-auto lg:py-8 md:px-6">
+              <div className="flex items-center justify-center w-fit mx-auto">
+                <div className="text-center">
+                  <div className="relative flex flex-col items-center">
+                    <div className="absolute hidden md:block left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-[100px] text-white font-bold opacity-10">
+                      LESSEES
+                    </div>
+                    <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-blue-500">
+                      Lessees
+                    </h1>
+                    <div className="flex w-20 mt-1 mb-4 overflow-hidden rounded">
+                      <div className="flex-1 h-2 bg-blue-200"></div>
+                      <div className="flex-1 h-2 bg-blue-400"></div>
+                      <div className="flex-1 h-2 bg-blue-600"></div>
                     </div>
                   </div>
-                  <div className="w-px h-full bg-blue-300"></div>
-                </div>
-                <div className="relative flex-1 mb-16 bg-white rounded shadow md:mb-8 ">
-                  <div className="absolute inline-block w-4 overflow-hidden -translate-y-1/2 top-7 -left-4">
-                    <div className="h-10 origin-top-right transform -rotate-45 bg-white  drop-shadow-lg"></div>
-                  </div>
-                  <div className="relative z-20 p-4">
-                    <p className="mb-2 text-base lg:text-lg font-bold text-black ">
-                      Research and Choose
-                    </p>
-                    <div className="flex mb-[2px]">
-                      <p className="w-2 text-gray-700 text-sm lg:text-base font-medium">
-                        1.
-                      </p>
-                      <p className="text-gray-700 text-sm lg:text-base font-medium ml-2">
-                        Research and select a reputable motorcycle rental
-                        company.
-                      </p>
-                    </div>
-                    <div className="flex mb-[2px]">
-                      <p className="w-2 text-gray-700 text-sm lg:text-base font-medium">
-                        2.
-                      </p>
-                      <p className="text-gray-700 text-sm lg:text-base font-medium ml-2">
-                        Consider factors like bike types, rates, and reviews.
-                      </p>
-                    </div>
-                    <div className="flex">
-                      <p className="w-2 text-gray-700 text-sm lg:text-base font-medium">
-                        3.
-                      </p>
-                      <p className="text-gray-700 text-sm lg:text-base font-medium ml-2">
-                        Confirm availability and make your reservation.
-                      </p>
-                    </div>
-                  </div>
+                  <p className="mb-4 text-sm lg:text-base text-center text-white">
+                    Make sure that you have a valid motorcycle license and a
+                    valid ID card.
+                  </p>
                 </div>
               </div>
-              <div className="relative flex justify-between">
-                <div className="hidden w-16 py-3 md:block ">
-                  <h2 className="text-lg font-bold text-gray-700 text-right">
-                    Step 2
-                  </h2>
-                </div>
-                <div className="absolute inline-block w-24 py-3 left-16 -top-12 md:hidden ">
-                  <h2 className="text-base font-bold text-gray-700 ">Step 2</h2>
-                </div>
-                <div className="flex flex-col items-center w-10 mr-4 md:w-16">
-                  <div>
-                    <div className="flex items-center justify-center w-10 h-10 border border-blue-500 rounded-full">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
-                        fill="currentColor"
-                        className="w-4 h-4 text-blue-500   bi bi-globe"
-                        viewBox="0 0 16 16"
-                      >
-                        <path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm7.5-6.923c-.67.204-1.335.82-1.887 1.855A7.97 7.97 0 0 0 5.145 4H7.5V1.077zM4.09 4a9.267 9.267 0 0 1 .64-1.539 6.7 6.7 0 0 1 .597-.933A7.025 7.025 0 0 0 2.255 4H4.09zm-.582 3.5c.03-.877.138-1.718.312-2.5H1.674a6.958 6.958 0 0 0-.656 2.5h2.49zM4.847 5a12.5 12.5 0 0 0-.338 2.5H7.5V5H4.847zM8.5 5v2.5h2.99a12.495 12.495 0 0 0-.337-2.5H8.5zM4.51 8.5a12.5 12.5 0 0 0 .337 2.5H7.5V8.5H4.51zm3.99 0V11h2.653c.187-.765.306-1.608.338-2.5H8.5zM5.145 12c.138.386.295.744.468 1.068.552 1.035 1.218 1.65 1.887 1.855V12H5.145zm.182 2.472a6.696 6.696 0 0 1-.597-.933A9.268 9.268 0 0 1 4.09 12H2.255a7.024 7.024 0 0 0 3.072 2.472zM3.82 11a13.652 13.652 0 0 1-.312-2.5h-2.49c.062.89.291 1.733.656 2.5H3.82zm6.853 3.472A7.024 7.024 0 0 0 13.745 12H11.91a9.27 9.27 0 0 1-.64 1.539 6.688 6.688 0 0 1-.597.933zM8.5 12v2.923c.67-.204 1.335-.82 1.887-1.855.173-.324.33-.682.468-1.068H8.5zm3.68-1h2.146c.365-.767.594-1.61.656-2.5h-2.49a13.65 13.65 0 0 1-.312 2.5zm2.802-3.5a6.959 6.959 0 0 0-.656-2.5H12.18c.174.782.282 1.623.312 2.5h2.49zM11.27 2.461c.247.464.462.98.64 1.539h1.835a7.024 7.024 0 0 0-3.072-2.472c.218.284.418.598.597.933zM10.855 4a7.966 7.966 0 0 0-.468-1.068C9.835 1.897 9.17 1.282 8.5 1.077V4h2.355z"></path>
-                      </svg>
+              <div className="w-full flex-col mx-auto lg:max-w-3xl">
+                <div className="relative flex justify-between">
+                  <div className="flex flex-col items-center w-10 mr-4 md:w-16">
+                    <div>
+                      <div className="flex items-center justify-center w-10 h-10 border border-blue-500 text-blue-500 font-bold rounded-full">
+                        1
+                      </div>
                     </div>
+                    <div className="w-px h-full bg-blue-500"></div>
                   </div>
-                  <div className="w-px h-full bg-blue-300"></div>
-                </div>
-                <div className="relative flex-1 mb-16 bg-white rounded shadow md:mb-8 ">
-                  <div className="absolute inline-block w-4 overflow-hidden -translate-y-1/2 top-7 -left-4">
-                    <div className="h-10 origin-top-right transform -rotate-45 bg-white  drop-shadow-lg"></div>
-                  </div>
-                  <div className="relative z-20 p-6">
-                    <p className="mb-2 text-base lg:text-lg font-bold text-black">
-                      Reservation Details
-                    </p>
-                    <div className="flex mb-[2px]">
-                      <p className="w-2 text-gray-700 text-sm lg:text-base font-medium">
-                        1.
-                      </p>
-                      <p className="text-gray-700 text-sm lg:text-base font-medium ml-2">
-                        Provide your personal info, rental dates, and motorcycle
-                        preference.
-                      </p>
+                  <div className="relative flex-1 bg-white rounded shadow mb-8 ">
+                    <div className="absolute inline-block w-4 overflow-hidden -translate-y-1/2 top-7 -left-4">
+                      <div className="h-10 origin-top-right transform -rotate-45 bg-white drop-shadow-lg"></div>
                     </div>
-                    <div className="flex mb-[2px]">
-                      <p className="w-2 text-gray-700 text-sm lg:text-base font-medium">
-                        2.
+                    <div className="relative z-20 p-4">
+                      <p className="mb-2 text-base lg:text-lg font-bold text-black ">
+                        Research and Choose
                       </p>
-                      <p className="text-gray-700 text-sm lg:text-base font-medium ml-2">
-                        Discuss additional services like insurance and
-                        equipment.
-                      </p>
-                    </div>
-                    <div className="flex">
-                      <p className="w-2 text-gray-700 text-sm lg:text-base font-medium">
-                        3.
-                      </p>
-                      <p className="text-gray-700 text-sm lg:text-base font-medium ml-2">
-                        Understand the terms and conditions before confirming.
-                      </p>
+                      <div className="flex mb-[2px]">
+                        <p className="w-2 text-gray-700 text-sm lg:text-base font-medium">
+                          1.
+                        </p>
+                        <p className="text-gray-700 text-sm lg:text-base font-medium ml-2">
+                          Research and select a reputable motorcycle rental
+                          company.
+                        </p>
+                      </div>
+                      <div className="flex mb-[2px]">
+                        <p className="w-2 text-gray-700 text-sm lg:text-base font-medium">
+                          2.
+                        </p>
+                        <p className="text-gray-700 text-sm lg:text-base font-medium ml-2">
+                          Consider factors like bike types, rates, and reviews.
+                        </p>
+                      </div>
+                      <div className="flex">
+                        <p className="w-2 text-gray-700 text-sm lg:text-base font-medium">
+                          3.
+                        </p>
+                        <p className="text-gray-700 text-sm lg:text-base font-medium ml-2">
+                          Confirm availability and make your reservation.
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div className="relative flex justify-between">
-                <div className="hidden w-16 py-3 md:block ">
-                  <h2 className="text-lg font-bold text-gray-700 text-right">
-                    Step 3
-                  </h2>
-                </div>
-                <div className="absolute inline-block w-24 py-3 left-16 -top-12 md:hidden ">
-                  <h2 className="text-base font-bold text-gray-700 ">Step 3</h2>
-                </div>
-                <div className="flex flex-col items-center w-10 mr-4 md:w-16">
-                  <div>
-                    <div className="flex items-center justify-center w-10 h-10 border border-blue-500 rounded-full ">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
-                        fill="currentColor"
-                        className="w-4 h-4 text-blue-500   bi bi-code-slash"
-                        viewBox="0 0 16 16"
-                      >
-                        <path d="M10.478 1.647a.5.5 0 1 0-.956-.294l-4 13a.5.5 0 0 0 .956.294l4-13zM4.854 4.146a.5.5 0 0 1 0 .708L1.707 8l3.147 3.146a.5.5 0 0 1-.708.708l-3.5-3.5a.5.5 0 0 1 0-.708l3.5-3.5a.5.5 0 0 1 .708 0zm6.292 0a.5.5 0 0 0 0 .708L14.293 8l-3.147 3.146a.5.5 0 0 0 .708.708l3.5-3.5a.5.5 0 0 0 0-.708l-3.5-3.5a.5.5 0 0 0-.708 0z"></path>
-                      </svg>
+                <div className="relative flex justify-between">
+                  <div className="flex flex-col items-center w-10 mr-4 md:w-16">
+                    <div>
+                      <div className="flex items-center justify-center w-10 h-10 border text-blue-500 font-bold border-blue-500 rounded-full">
+                        2
+                      </div>
+                    </div>
+                    <div className="w-px h-full bg-blue-500"></div>
+                  </div>
+                  <div className="relative flex-1 bg-white rounded shadow mb-8 ">
+                    <div className="absolute inline-block w-4 overflow-hidden -translate-y-1/2 top-7 -left-4">
+                      <div className="h-10 origin-top-right transform -rotate-45 bg-white  drop-shadow-lg"></div>
+                    </div>
+                    <div className="relative z-20 p-6">
+                      <p className="mb-2 text-base lg:text-lg font-bold text-black">
+                        Reservation Details
+                      </p>
+                      <div className="flex mb-[2px]">
+                        <p className="w-2 text-gray-700 text-sm lg:text-base font-medium">
+                          1.
+                        </p>
+                        <p className="text-gray-700 text-sm lg:text-base font-medium ml-2">
+                          Provide your personal info, rental dates, and
+                          motorcycle preference.
+                        </p>
+                      </div>
+                      <div className="flex mb-[2px]">
+                        <p className="w-2 text-gray-700 text-sm lg:text-base font-medium">
+                          2.
+                        </p>
+                        <p className="text-gray-700 text-sm lg:text-base font-medium ml-2">
+                          Discuss additional services like insurance and
+                          equipment.
+                        </p>
+                      </div>
+                      <div className="flex">
+                        <p className="w-2 text-gray-700 text-sm lg:text-base font-medium">
+                          3.
+                        </p>
+                        <p className="text-gray-700 text-sm lg:text-base font-medium ml-2">
+                          Understand the terms and conditions before confirming.
+                        </p>
+                      </div>
                     </div>
                   </div>
-                  <div className="w-px h-full bg-blue-300"></div>
                 </div>
-                <div className="relative flex-1 mb-16 bg-white rounded shadow md:mb-8 ">
-                  <div className="absolute inline-block w-4 overflow-hidden -translate-y-1/2 top-7 -left-4">
-                    <div className="h-10 origin-top-right transform -rotate-45 bg-white  drop-shadow-lg"></div>
+                <div className="relative flex justify-between">
+                  <div className="flex flex-col items-center w-10 mr-4 md:w-16">
+                    <div>
+                      <div className="flex items-center justify-center w-10 h-10 border border-blue-500 rounded-full text-blue-500 font-bold ">
+                        3
+                      </div>
+                    </div>
+                    <div className="w-px h-full bg-blue-500"></div>
                   </div>
-                  <div className="relative z-20 p-6">
-                    <p className="mb-2 text-base lg:text-lg font-bold text-black">
-                      Pick Up and Return
-                    </p>
-                    <div className="flex mb-[2px]">
-                      <p className="w-2 text-gray-700 text-sm lg:text-base font-medium">
-                        1.
-                      </p>
-                      <p className="text-gray-700 text-sm lg:text-base font-medium ml-2">
-                        Inspect the motorcycle for damage before leaving.
-                      </p>
+                  <div className="relative flex-1 bg-white rounded shadow mb-8 ">
+                    <div className="absolute inline-block w-4 overflow-hidden -translate-y-1/2 top-7 -left-4">
+                      <div className="h-10 origin-top-right transform -rotate-45 bg-white  drop-shadow-lg"></div>
                     </div>
-                    <div className="flex mb-[2px]">
-                      <p className="w-2 text-gray-700 text-sm lg:text-base font-medium">
-                        2.
+                    <div className="relative z-20 p-6">
+                      <p className="mb-2 text-base lg:text-lg font-bold text-black">
+                        Pick Up and Return
                       </p>
-                      <p className="text-gray-700 text-sm lg:text-base font-medium ml-2">
-                        Complete the payment and deposit process.
-                      </p>
-                    </div>
-                    <div className="flex">
-                      <p className="w-2 text-gray-700 text-sm lg:text-base font-medium">
-                        3.
-                      </p>
-                      <p className="text-gray-700 text-sm lg:text-base font-medium ml-2">
-                        Return the bike in the same condition to avoid
-                        additional charges.
-                      </p>
+                      <div className="flex mb-[2px]">
+                        <p className="w-2 text-gray-700 text-sm lg:text-base font-medium">
+                          1.
+                        </p>
+                        <p className="text-gray-700 text-sm lg:text-base font-medium ml-2">
+                          Inspect the motorcycle for damage before leaving.
+                        </p>
+                      </div>
+                      <div className="flex mb-[2px]">
+                        <p className="w-2 text-gray-700 text-sm lg:text-base font-medium">
+                          2.
+                        </p>
+                        <p className="text-gray-700 text-sm lg:text-base font-medium ml-2">
+                          Complete the payment and deposit process.
+                        </p>
+                      </div>
+                      <div className="flex">
+                        <p className="w-2 text-gray-700 text-sm lg:text-base font-medium">
+                          3.
+                        </p>
+                        <p className="text-gray-700 text-sm lg:text-base font-medium ml-2">
+                          Return the bike in the same condition to avoid
+                          additional charges.
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </section>
-        <section className="items-center py-8 bg-gray-100 font-poppins md:pr-10 border max-h-fit">
-          <div className="block justify-center max-w-2xl px-4 py-4 mx-auto lg:py-8 md:px-6">
-            <div className="max-w-xl mx-auto">
-              <div className="text-center ">
-                <div className="relative flex flex-col items-center">
-                  <div className="absolute hidden md:block left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-[100px] text-gray-400 font-bold opacity-10">
-                    Lessor
-                  </div>
-                  <h1 className="text-5xl font-bold leading-tight text-blue-500">
-                    Lessor
-                  </h1>
-                  <div className="flex w-20 mt-1 mb-10 overflow-hidden rounded">
-                    <div className="flex-1 h-2 bg-blue-200"></div>
-                    <div className="flex-1 h-2 bg-blue-400"></div>
-                    <div className="flex-1 h-2 bg-blue-600"></div>
-                  </div>
-                </div>
-                <p className="mb-16 text-base text-center text-gray-500">
-                  Make sure that you have a valid motorcycle license and a valid
-                  ID card.
-                </p>
-              </div>
-            </div>
-            <div className="w-full mx-auto lg:max-w-3xl">
-              <div className="relative flex justify-between">
-                <div className="hidden w-16 py-3 md:block ">
-                  <h2 className="text-lg font-bold text-gray-700 text-right">
-                    Step 1
-                  </h2>
-                </div>
-                <div className="absolute inline-block w-24 py-3 left-16 -top-12 md:hidden">
-                  <h2 className="text-base font-medium text-gray-700">
-                    Step 1
-                  </h2>
-                </div>
-                <div className="flex flex-col items-center w-10 mr-4 md:w-16">
-                  <div>
-                    <div className="flex items-center justify-center w-10 h-10 border border-blue-500 rounded-full ">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
-                        fill="currentColor"
-                        className="w-4 h-4 text-blue-500   bi bi-building"
-                        viewBox="0 0 16 16"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M14.763.075A.5.5 0 0 1 15 .5v15a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5V14h-1v1.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V10a.5.5 0 0 1 .342-.474L6 7.64V4.5a.5.5 0 0 1 .276-.447l8-4a.5.5 0 0 1 .487.022zM6 8.694 1 10.36V15h5V8.694zM7 15h2v-1.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5V15h2V1.309l-7 3.5V15z"
-                        ></path>
-                        <path d="M2 11h1v1H2v-1zm2 0h1v1H4v-1zm-2 2h1v1H2v-1zm2 0h1v1H4v-1zm4-4h1v1H8V9zm2 0h1v1h-1V9zm-2 2h1v1H8v-1zm2 0h1v1h-1v-1zm2-2h1v1h-1V9zm0 2h1v1h-1v-1zM8 7h1v1H8V7zm2 0h1v1h-1V7zm2 0h1v1h-1V7zM8 5h1v1H8V5zm2 0h1v1h-1V5zm2 0h1v1h-1V5zm0-2h1v1h-1V3z"></path>
-                      </svg>
+          </section>
+
+          <section className="mx-auto max-w-screen-xl">
+            <div className="flex flex-col md:flex-row justify-center w-fit px-4 py-4 mx-auto lg:py-8 md:px-6">
+              <div className="flex items-center justify-center w-fit mx-auto">
+                <div className="text-center">
+                  <div className="relative flex flex-col items-center">
+                    <div className="absolute hidden md:block left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-[100px] text-white font-bold opacity-10">
+                      LESSORS
+                    </div>
+                    <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-blue-500">
+                      Lessors
+                    </h1>
+                    <div className="flex w-20 mt-1 mb-4 overflow-hidden rounded">
+                      <div className="flex-1 h-2 bg-blue-200"></div>
+                      <div className="flex-1 h-2 bg-blue-400"></div>
+                      <div className="flex-1 h-2 bg-blue-600"></div>
                     </div>
                   </div>
-                  <div className="w-px h-full bg-blue-300"></div>
-                </div>
-                <div className="relative flex-1 mb-16 bg-white rounded shadow md:mb-8 ">
-                  <div className="absolute inline-block w-4 overflow-hidden -translate-y-1/2 top-7 -left-4">
-                    <div className="h-10 origin-top-right transform -rotate-45 bg-white  drop-shadow-lg"></div>
-                  </div>
-                  <div className="relative flex flex-col z-20 p-4">
-                    <p className="mb-2 text-base lg:text-lg font-bold text-black ">
-                      Prepare Your Motorcycle(s)
-                    </p>
-                    <div className="flex">
-                      <p className="w-2 text-gray-700 text-sm lg:text-base font-medium">
-                        1.
-                      </p>
-                      <p className="text-gray-700 text-sm lg:text-base font-medium ml-2">
-                        Ensure your motorcycle is in good working condition.
-                      </p>
-                    </div>
-                    <div className="flex">
-                      <p className="w-2 text-gray-700 text-sm lg:text-base font-medium">
-                        2.
-                      </p>
-                      <p className="text-gray-700 text-sm lg:text-base font-medium ml-2">
-                        Perform necessary maintenance and safety checks.
-                      </p>
-                    </div>
-                    <div className="flex">
-                      <p className="w-2 text-gray-700 text-sm lg:text-base font-medium">
-                        3.
-                      </p>
-                      <p className="text-gray-700 text-sm lg:text-base font-medium ml-2">
-                        Consider providing safety gear like helmets and gloves
-                        for renters.
-                      </p>
-                    </div>
-                  </div>
+                  <p className="mb-4 text-sm lg:text-base text-center text-white">
+                    Make sure that you have a valid motorcycle license and a
+                    valid ID card.
+                  </p>
                 </div>
               </div>
-              <div className="relative flex justify-between">
-                <div className="hidden w-16 py-3 md:block ">
-                  <h2 className="text-lg font-bold text-gray-700 text-right">
-                    Step 2
-                  </h2>
-                </div>
-                <div className="absolute inline-block w-24 py-3 left-16 -top-12 md:hidden ">
-                  <h2 className="text-base font-bold text-gray-700 ">Step 2</h2>
-                </div>
-                <div className="flex flex-col items-center w-10 mr-4 md:w-16">
-                  <div>
-                    <div className="flex items-center justify-center w-10 h-10 border border-blue-500 rounded-full ">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
-                        fill="currentColor"
-                        className="w-4 h-4 text-blue-500 bi bi-globe"
-                        viewBox="0 0 16 16"
-                      >
-                        <path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm7.5-6.923c-.67.204-1.335.82-1.887 1.855A7.97 7.97 0 0 0 5.145 4H7.5V1.077zM4.09 4a9.267 9.267 0 0 1 .64-1.539 6.7 6.7 0 0 1 .597-.933A7.025 7.025 0 0 0 2.255 4H4.09zm-.582 3.5c.03-.877.138-1.718.312-2.5H1.674a6.958 6.958 0 0 0-.656 2.5h2.49zM4.847 5a12.5 12.5 0 0 0-.338 2.5H7.5V5H4.847zM8.5 5v2.5h2.99a12.495 12.495 0 0 0-.337-2.5H8.5zM4.51 8.5a12.5 12.5 0 0 0 .337 2.5H7.5V8.5H4.51zm3.99 0V11h2.653c.187-.765.306-1.608.338-2.5H8.5zM5.145 12c.138.386.295.744.468 1.068.552 1.035 1.218 1.65 1.887 1.855V12H5.145zm.182 2.472a6.696 6.696 0 0 1-.597-.933A9.268 9.268 0 0 1 4.09 12H2.255a7.024 7.024 0 0 0 3.072 2.472zM3.82 11a13.652 13.652 0 0 1-.312-2.5h-2.49c.062.89.291 1.733.656 2.5H3.82zm6.853 3.472A7.024 7.024 0 0 0 13.745 12H11.91a9.27 9.27 0 0 1-.64 1.539 6.688 6.688 0 0 1-.597.933zM8.5 12v2.923c.67-.204 1.335-.82 1.887-1.855.173-.324.33-.682.468-1.068H8.5zm3.68-1h2.146c.365-.767.594-1.61.656-2.5h-2.49a13.65 13.65 0 0 1-.312 2.5zm2.802-3.5a6.959 6.959 0 0 0-.656-2.5H12.18c.174.782.282 1.623.312 2.5h2.49zM11.27 2.461c.247.464.462.98.64 1.539h1.835a7.024 7.024 0 0 0-3.072-2.472c.218.284.418.598.597.933zM10.855 4a7.966 7.966 0 0 0-.468-1.068C9.835 1.897 9.17 1.282 8.5 1.077V4h2.355z"></path>
-                      </svg>
+              <div className="w-full flex-col mx-auto lg:max-w-3xl">
+                <div className="relative flex justify-between">
+                  <div className="flex flex-col items-center w-10 mr-4 md:w-16">
+                    <div>
+                      <div className="flex items-center justify-center w-10 h-10 border border-blue-500 rounded-full text-blue-500 font-bold">
+                        1
+                      </div>
                     </div>
+                    <div className="w-px h-full bg-blue-500"></div>
                   </div>
-                  <div className="w-px h-full bg-blue-300"></div>
-                </div>
-                <div className="relative flex-1 mb-16 bg-white rounded shadow md:mb-8 ">
-                  <div className="absolute inline-block w-4 overflow-hidden -translate-y-1/2 top-7 -left-4">
-                    <div className="h-10 origin-top-right transform -rotate-45 bg-white  drop-shadow-lg"></div>
-                  </div>
-                  <div className="relative z-20 p-6">
-                    <p className="mb-2 text-base lg:text-lg font-bold text-black">
-                      Set Up Your Rental Business
-                    </p>
-                    <div className="flex mb-[2px]">
-                      <p className="w-2 text-gray-700 text-sm lg:text-base font-medium">
-                        1.
-                      </p>
-                      <p className="text-gray-700 text-sm lg:text-base font-medium ml-2">
-                        Register your business and obtain any necessary
-                        licenses.
-                      </p>
+                  <div className="relative flex-1 bg-white rounded shadow mb-8 ">
+                    <div className="absolute inline-block w-4 overflow-hidden -translate-y-1/2 top-7 -left-4">
+                      <div className="h-10 origin-top-right transform -rotate-45 bg-white drop-shadow-lg"></div>
                     </div>
-                    <div className="flex mb-[2px]">
-                      <p className="w-2 text-gray-700 text-sm lg:text-base font-medium">
-                        2.
+                    <div className="relative z-20 p-4">
+                      <p className="mb-2 text-base lg:text-lg font-bold text-black ">
+                        Prepare Your Motorcycle(s)
                       </p>
-                      <p className="text-gray-700 text-sm lg:text-base font-medium ml-2">
-                        Create rental agreements outlining terms, conditions,
-                        and insurance coverage.
-                      </p>
-                    </div>
-                    <div className="flex">
-                      <p className="w-2 text-gray-700 text-sm lg:text-base font-medium">
-                        3.
-                      </p>
-                      <p className="text-gray-700 text-sm lg:text-base font-medium ml-2">
-                        Set competitive rental rates and decide on deposit
-                        requirements.
-                      </p>
+                      <div className="flex mb-[2px]">
+                        <p className="w-2 text-gray-700 text-sm lg:text-base font-medium">
+                          1.
+                        </p>
+                        <p className="text-gray-700 text-sm lg:text-base font-medium ml-2">
+                          Ensure your motorcycle is in good working condition.
+                        </p>
+                      </div>
+                      <div className="flex mb-[2px]">
+                        <p className="w-2 text-gray-700 text-sm lg:text-base font-medium">
+                          2.
+                        </p>
+                        <p className="text-gray-700 text-sm lg:text-base font-medium ml-2">
+                          Perform necessary maintenance and safety checks.
+                        </p>
+                      </div>
+                      <div className="flex">
+                        <p className="w-2 text-gray-700 text-sm lg:text-base font-medium">
+                          3.
+                        </p>
+                        <p className="text-gray-700 text-sm lg:text-base font-medium ml-2">
+                          Consider providing safety gear like helmets and gloves
+                          for renters.
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div className="relative flex justify-between">
-                <div className="hidden w-16 py-3 md:block ">
-                  <h2 className="text-lg font-bold text-gray-700 text-right">
-                    Step 3
-                  </h2>
-                </div>
-                <div className="absolute inline-block w-24 py-3 left-16 -top-12 md:hidden ">
-                  <h2 className="text-base font-bold text-gray-700 ">Step 3</h2>
-                </div>
-                <div className="flex flex-col items-center w-10 mr-4 md:w-16">
-                  <div>
-                    <div className="flex items-center justify-center w-10 h-10 border border-blue-500 rounded-full ">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
-                        fill="currentColor"
-                        className="w-4 h-4 text-blue-500   bi bi-code-slash"
-                        viewBox="0 0 16 16"
-                      >
-                        <path d="M10.478 1.647a.5.5 0 1 0-.956-.294l-4 13a.5.5 0 0 0 .956.294l4-13zM4.854 4.146a.5.5 0 0 1 0 .708L1.707 8l3.147 3.146a.5.5 0 0 1-.708.708l-3.5-3.5a.5.5 0 0 1 0-.708l3.5-3.5a.5.5 0 0 1 .708 0zm6.292 0a.5.5 0 0 0 0 .708L14.293 8l-3.147 3.146a.5.5 0 0 0 .708.708l3.5-3.5a.5.5 0 0 0 0-.708l-3.5-3.5a.5.5 0 0 0-.708 0z"></path>
-                      </svg>
+                <div className="relative flex justify-between">
+                  <div className="flex flex-col items-center w-10 mr-4 md:w-16">
+                    <div>
+                      <div className="flex items-center justify-center w-10 h-10 border border-blue-500 rounded-full text-blue-500 font-bold">
+                        2
+                      </div>
+                    </div>
+                    <div className="w-px h-full bg-blue-500"></div>
+                  </div>
+                  <div className="relative flex-1 bg-white rounded shadow mb-8 ">
+                    <div className="absolute inline-block w-4 overflow-hidden -translate-y-1/2 top-7 -left-4">
+                      <div className="h-10 origin-top-right transform -rotate-45 bg-white drop-shadow-lg"></div>
+                    </div>
+                    <div className="relative z-20 p-6">
+                      <p className="mb-2 text-base lg:text-lg font-bold text-black">
+                        Set Up Your Rental Business
+                      </p>
+                      <div className="flex mb-[2px]">
+                        <p className="w-2 text-gray-700 text-sm lg:text-base font-medium">
+                          1.
+                        </p>
+                        <p className="text-gray-700 text-sm lg:text-base font-medium ml-2">
+                          Register your business and obtain any necessary
+                          licenses.
+                        </p>
+                      </div>
+                      <div className="flex mb-[2px]">
+                        <p className="w-2 text-gray-700 text-sm lg:text-base font-medium">
+                          2.
+                        </p>
+                        <p className="text-gray-700 text-sm lg:text-base font-medium ml-2">
+                          Create rental agreements outlining terms, conditions,
+                          and insurance coverage.
+                        </p>
+                      </div>
+                      <div className="flex">
+                        <p className="w-2 text-gray-700 text-sm lg:text-base font-medium">
+                          3.
+                        </p>
+                        <p className="text-gray-700 text-sm lg:text-base font-medium ml-2">
+                          Set competitive rental rates and decide on deposit
+                          requirements.
+                        </p>
+                      </div>
                     </div>
                   </div>
-                  <div className="w-px h-full bg-blue-300"></div>
                 </div>
-                <div className="relative flex-1 mb-16 bg-white rounded shadow md:mb-8 ">
-                  <div className="absolute inline-block w-4 overflow-hidden -translate-y-1/2 top-7 -left-4">
-                    <div className="h-10 origin-top-right transform -rotate-45 bg-white  drop-shadow-lg"></div>
+                <div className="relative flex justify-between">
+                  <div className="flex flex-col items-center w-10 mr-4 md:w-16">
+                    <div>
+                      <div className="flex items-center justify-center w-10 h-10 border border-blue-500 rounded-full text-blue-500 font-bold">
+                        3
+                      </div>
+                    </div>
+                    <div className="w-px h-full bg-blue-500"></div>
                   </div>
-                  <div className="relative z-20 p-6">
-                    <p className="mb-2 text-base lg:text-lg font-bold text-black">
-                      Market and Manage Rentals
-                    </p>
-                    <div className="flex mb-[2px]">
-                      <p className="w-2 text-gray-700 text-sm lg:text-base font-medium">
-                        1.
-                      </p>
-                      <p className="text-gray-700 text-sm lg:text-base font-medium ml-2">
-                        Advertise your rental services online and in local
-                        communities.
-                      </p>
+                  <div className="relative flex-1 bg-white rounded shadow mb-8 ">
+                    <div className="absolute inline-block w-4 overflow-hidden -translate-y-1/2 top-7 -left-4">
+                      <div className="h-10 origin-top-right transform -rotate-45 bg-white  drop-shadow-lg"></div>
                     </div>
-                    <div className="flex mb-[2px]">
-                      <p className="w-2 text-gray-700 text-sm lg:text-base font-medium">
-                        2.
+                    <div className="relative z-20 p-6">
+                      <p className="mb-2 text-base lg:text-lg font-bold text-black">
+                        Market and Manage Rentals
                       </p>
-                      <p className="text-gray-700 text-sm lg:text-base font-medium ml-2">
-                        Screen potential renters, verify their licenses, and
-                        maintain records.
-                      </p>
-                    </div>
-                    <div className="flex">
-                      <p className="w-2 text-gray-700 text-sm lg:text-base font-medium">
-                        3.
-                      </p>
-                      <p className="text-gray-700 text-sm lg:text-base font-medium ml-2">
-                        Offer excellent customer service, assist with pick-up,
-                        and address any issues promptly.
-                      </p>
+                      <div className="flex mb-[2px]">
+                        <p className="w-2 text-gray-700 text-sm lg:text-base font-medium">
+                          1.
+                        </p>
+                        <p className="text-gray-700 text-sm lg:text-base font-medium ml-2">
+                          Advertise your rental services online and in local
+                          communities.
+                        </p>
+                      </div>
+                      <div className="flex mb-[2px]">
+                        <p className="w-2 text-gray-700 text-sm lg:text-base font-medium">
+                          2.
+                        </p>
+                        <p className="text-gray-700 text-sm lg:text-base font-medium ml-2">
+                          Screen potential renters, verify their licenses, and
+                          maintain records.
+                        </p>
+                      </div>
+                      <div className="flex">
+                        <p className="w-2 text-gray-700 text-sm lg:text-base font-medium">
+                          3.
+                        </p>
+                        <p className="text-gray-700 text-sm lg:text-base font-medium ml-2">
+                          Offer excellent customer service, assist with pick-up,
+                          and address any issues promptly.
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </section>
-      </div>
+          </section>
+        </div>
+      </section>
 
       {/* Our team */}
-      <section className="bg-white ">
+      <section>
         <div className="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-10 lg:px-6">
-          <div className="flex justify-center">
-            <hr className="w-1/4"></hr>
-          </div>
           <div className="mx-auto mb-8 max-w-screen-sm lg:mb-16">
-            <h2 className=" my-4 text-4xl tracking-tight font-extrabold text-gray-900 ">
+            <h2 className="mb-4 text-2xl md:text-4xl lg:text-6xl tracking-tight font-extrabold text-gradient">
               Our team
             </h2>
-            <p className="font-light text-gray-500 sm:text-xl ">
+            <p className="font-light text-gray-500 sm:text-xl">
               Explore the whole collection of open-source web components and
               elements built with the utility classes from Tailwind
             </p>
           </div>
           <div className="grid gap-8 lg:gap-0 md:grid-cols-3 ">
-            <div className="text-center text-gray-500 ">
+            <div className="flex flex-col items-center justify-center ">
               <img
                 className="mx-auto mb-4 w-36 h-36 rounded-full"
                 src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/helene-engels.png"
                 alt="Helene Avatar"
               />
-              <h3 className="mb-1 text-2xl font-bold tracking-tight text-gray-900 ">
+              <h3 className="mb-1 text-2xl font-bold tracking-tight text-gradient ">
                 <a href="#">Doan Thanh Dung</a>
               </h3>
-              <p>CTO/Co-founder</p>
-              <ul className="flex justify-center mt-4 space-x-4">
+              <p className="text-white">CTO/Co-founder</p>
+              <ul className="flex items-center justify-center mt-4 space-x-4 bg-white rounded-2xl px-2 py-1 w-fit">
                 <li>
                   <a href="#" className="text-[#39569c] hover:text-gray-900 ">
                     <svg
@@ -887,11 +775,19 @@ export default function HomePage() {
                   <a href="#" className="text-[#00acee] hover:text-gray-900 ">
                     <svg
                       className="w-6 h-6"
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
-                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      x="0px"
+                      y="0px"
+                      viewBox="0 0 48 48"
                     >
-                      <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
+                      <path
+                        fill="#0288D1"
+                        d="M42,37c0,2.762-2.238,5-5,5H11c-2.761,0-5-2.238-5-5V11c0-2.762,2.239-5,5-5h26c2.762,0,5,2.238,5,5V37z"
+                      ></path>
+                      <path
+                        fill="#FFF"
+                        d="M12 19H17V36H12zM14.485 17h-.028C12.965 17 12 15.888 12 14.499 12 13.08 12.995 12 14.514 12c1.521 0 2.458 1.08 2.486 2.499C17 15.887 16.035 17 14.485 17zM36 36h-5v-9.099c0-2.198-1.225-3.698-3.192-3.698-1.501 0-2.313 1.012-2.707 1.99C24.957 25.543 25 26.511 25 27v9h-5V19h5v2.616C25.721 20.5 26.85 19 29.738 19c3.578 0 6.261 2.25 6.261 7.274L36 36 36 36z"
+                      ></path>
                     </svg>
                   </a>
                 </li>
@@ -911,35 +807,19 @@ export default function HomePage() {
                     </svg>
                   </a>
                 </li>
-                <li>
-                  <a href="#" className="text-[#ea4c89] hover:text-gray-900 ">
-                    <svg
-                      className="w-6 h-6"
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
-                      aria-hidden="true"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10c5.51 0 10-4.48 10-10S17.51 2 12 2zm6.605 4.61a8.502 8.502 0 011.93 5.314c-.281-.054-3.101-.629-5.943-.271-.065-.141-.12-.293-.184-.445a25.416 25.416 0 00-.564-1.236c3.145-1.28 4.577-3.124 4.761-3.362zM12 3.475c2.17 0 4.154.813 5.662 2.148-.152.216-1.443 1.941-4.48 3.08-1.399-2.57-2.95-4.675-3.189-5A8.687 8.687 0 0112 3.475zm-3.633.803a53.896 53.896 0 013.167 4.935c-3.992 1.063-7.517 1.04-7.896 1.04a8.581 8.581 0 014.729-5.975zM3.453 12.01v-.26c.37.01 4.512.065 8.775-1.215.25.477.477.965.694 1.453-.109.033-.228.065-.336.098-4.404 1.42-6.747 5.303-6.942 5.629a8.522 8.522 0 01-2.19-5.705zM12 20.547a8.482 8.482 0 01-5.239-1.8c.152-.315 1.888-3.656 6.703-5.337.022-.01.033-.01.054-.022a35.318 35.318 0 011.823 6.475 8.4 8.4 0 01-3.341.684zm4.761-1.465c-.086-.52-.542-3.015-1.659-6.084 2.679-.423 5.022.271 5.314.369a8.468 8.468 0 01-3.655 5.715z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </a>
-                </li>
               </ul>
             </div>
-            <div className="text-center text-gray-500 ">
+            <div className="flex flex-col items-center justify-center">
               <img
                 className="mx-auto mb-4 w-36 h-36 rounded-full"
                 src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/thomas-lean.png"
                 alt="Leslie Avatar"
               />
-              <h3 className="mb-1 text-2xl font-bold tracking-tight text-gray-900 ">
+              <h3 className="mb-1 text-2xl font-bold tracking-tight text-gradient ">
                 <a href="#">Trinh Tuong Anh</a>
               </h3>
-              <p>Graphic Designer</p>
-              <ul className="flex justify-center mt-4 space-x-4">
+              <p className="text-white">Graphic Designer</p>
+              <ul className="flex items-center justify-center mt-4 space-x-4 bg-white rounded-2xl px-2 py-1 w-fit">
                 <li>
                   <a href="#" className="text-[#39569c] hover:text-gray-900 ">
                     <svg
@@ -960,11 +840,19 @@ export default function HomePage() {
                   <a href="#" className="text-[#00acee] hover:text-gray-900 ">
                     <svg
                       className="w-6 h-6"
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
-                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      x="0px"
+                      y="0px"
+                      viewBox="0 0 48 48"
                     >
-                      <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
+                      <path
+                        fill="#0288D1"
+                        d="M42,37c0,2.762-2.238,5-5,5H11c-2.761,0-5-2.238-5-5V11c0-2.762,2.239-5,5-5h26c2.762,0,5,2.238,5,5V37z"
+                      ></path>
+                      <path
+                        fill="#FFF"
+                        d="M12 19H17V36H12zM14.485 17h-.028C12.965 17 12 15.888 12 14.499 12 13.08 12.995 12 14.514 12c1.521 0 2.458 1.08 2.486 2.499C17 15.887 16.035 17 14.485 17zM36 36h-5v-9.099c0-2.198-1.225-3.698-3.192-3.698-1.501 0-2.313 1.012-2.707 1.99C24.957 25.543 25 26.511 25 27v9h-5V19h5v2.616C25.721 20.5 26.85 19 29.738 19c3.578 0 6.261 2.25 6.261 7.274L36 36 36 36z"
+                      ></path>
                     </svg>
                   </a>
                 </li>
@@ -979,22 +867,6 @@ export default function HomePage() {
                       <path
                         fillRule="evenodd"
                         d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="text-[#ea4c89] hover:text-gray-900 ">
-                    <svg
-                      className="w-6 h-6"
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
-                      aria-hidden="true"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10c5.51 0 10-4.48 10-10S17.51 2 12 2zm6.605 4.61a8.502 8.502 0 011.93 5.314c-.281-.054-3.101-.629-5.943-.271-.065-.141-.12-.293-.184-.445a25.416 25.416 0 00-.564-1.236c3.145-1.28 4.577-3.124 4.761-3.362zM12 3.475c2.17 0 4.154.813 5.662 2.148-.152.216-1.443 1.941-4.48 3.08-1.399-2.57-2.95-4.675-3.189-5A8.687 8.687 0 0112 3.475zm-3.633.803a53.896 53.896 0 013.167 4.935c-3.992 1.063-7.517 1.04-7.896 1.04a8.581 8.581 0 014.729-5.975zM3.453 12.01v-.26c.37.01 4.512.065 8.775-1.215.25.477.477.965.694 1.453-.109.033-.228.065-.336.098-4.404 1.42-6.747 5.303-6.942 5.629a8.522 8.522 0 01-2.19-5.705zM12 20.547a8.482 8.482 0 01-5.239-1.8c.152-.315 1.888-3.656 6.703-5.337.022-.01.033-.01.054-.022a35.318 35.318 0 011.823 6.475 8.4 8.4 0 01-3.341.684zm4.761-1.465c-.086-.52-.542-3.015-1.659-6.084 2.679-.423 5.022.271 5.314.369a8.468 8.468 0 01-3.655 5.715z"
                         clipRule="evenodd"
                       />
                     </svg>
@@ -1002,17 +874,17 @@ export default function HomePage() {
                 </li>
               </ul>
             </div>
-            <div className="text-center text-gray-500 ">
+            <div className="flex flex-col items-center justify-center ">
               <img
                 className="mx-auto mb-4 w-36 h-36 rounded-full"
                 src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/joseph-mcfall.png"
                 alt="Joseph Avatar"
               />
-              <h3 className="mb-1 text-2xl font-bold tracking-tight text-gray-900 ">
+              <h3 className="mb-1 text-2xl font-bold tracking-tight text-gradient ">
                 <a href="#">Bui Cong Thuan</a>
               </h3>
-              <p>Sales</p>
-              <ul className="flex justify-center mt-4 space-x-4">
+              <p className="text-white">Sales</p>
+              <ul className="flex items-center justify-center mt-4 space-x-4 bg-white rounded-2xl px-2 py-1 w-fit">
                 <li>
                   <a href="#" className="text-[#39569c] hover:text-gray-900 ">
                     <svg
@@ -1033,11 +905,19 @@ export default function HomePage() {
                   <a href="#" className="text-[#00acee] hover:text-gray-900 ">
                     <svg
                       className="w-6 h-6"
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
-                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      x="0px"
+                      y="0px"
+                      viewBox="0 0 48 48"
                     >
-                      <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
+                      <path
+                        fill="#0288D1"
+                        d="M42,37c0,2.762-2.238,5-5,5H11c-2.761,0-5-2.238-5-5V11c0-2.762,2.239-5,5-5h26c2.762,0,5,2.238,5,5V37z"
+                      ></path>
+                      <path
+                        fill="#FFF"
+                        d="M12 19H17V36H12zM14.485 17h-.028C12.965 17 12 15.888 12 14.499 12 13.08 12.995 12 14.514 12c1.521 0 2.458 1.08 2.486 2.499C17 15.887 16.035 17 14.485 17zM36 36h-5v-9.099c0-2.198-1.225-3.698-3.192-3.698-1.501 0-2.313 1.012-2.707 1.99C24.957 25.543 25 26.511 25 27v9h-5V19h5v2.616C25.721 20.5 26.85 19 29.738 19c3.578 0 6.261 2.25 6.261 7.274L36 36 36 36z"
+                      ></path>
                     </svg>
                   </a>
                 </li>
@@ -1052,22 +932,6 @@ export default function HomePage() {
                       <path
                         fillRule="evenodd"
                         d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="text-[#ea4c89] hover:text-gray-900 ">
-                    <svg
-                      className="w-6 h-6"
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
-                      aria-hidden="true"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10c5.51 0 10-4.48 10-10S17.51 2 12 2zm6.605 4.61a8.502 8.502 0 011.93 5.314c-.281-.054-3.101-.629-5.943-.271-.065-.141-.12-.293-.184-.445a25.416 25.416 0 00-.564-1.236c3.145-1.28 4.577-3.124 4.761-3.362zM12 3.475c2.17 0 4.154.813 5.662 2.148-.152.216-1.443 1.941-4.48 3.08-1.399-2.57-2.95-4.675-3.189-5A8.687 8.687 0 0112 3.475zm-3.633.803a53.896 53.896 0 013.167 4.935c-3.992 1.063-7.517 1.04-7.896 1.04a8.581 8.581 0 014.729-5.975zM3.453 12.01v-.26c.37.01 4.512.065 8.775-1.215.25.477.477.965.694 1.453-.109.033-.228.065-.336.098-4.404 1.42-6.747 5.303-6.942 5.629a8.522 8.522 0 01-2.19-5.705zM12 20.547a8.482 8.482 0 01-5.239-1.8c.152-.315 1.888-3.656 6.703-5.337.022-.01.033-.01.054-.022a35.318 35.318 0 011.823 6.475 8.4 8.4 0 01-3.341.684zm4.761-1.465c-.086-.52-.542-3.015-1.659-6.084 2.679-.423 5.022.271 5.314.369a8.468 8.468 0 01-3.655 5.715z"
                         clipRule="evenodd"
                       />
                     </svg>

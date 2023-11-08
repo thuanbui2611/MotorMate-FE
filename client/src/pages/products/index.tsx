@@ -1,8 +1,6 @@
 import { useState, useEffect } from "react";
-import { Product } from "../../app/models/Product";
 import * as React from "react";
 import { useAppDispatch, useAppSelector } from "../../app/store/ConfigureStore";
-import { Theme, useTheme } from "@mui/material/styles";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";

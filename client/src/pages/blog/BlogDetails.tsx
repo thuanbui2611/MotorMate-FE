@@ -26,7 +26,7 @@ export default function BlogDetails() {
     <Loading />
   ) : (
     <>
-      <div className="mt-6 bg-gray-50">
+      <div className="bg-gray-50">
         <div className=" px-5 md:px-10 py-6 mx-auto">
           <div className="max-w-screen-2xl px-2 md:px-10 py-6 mx-auto bg-gray-50">
             <div className="flex items-center justify-start mt-4 mb-4">

@@ -19,6 +19,8 @@ export default function ProductHomepage({ products }: Props) {
     autoplay: true,
     itemsPerSlide: 3,
     withLoop: true,
+    slideToNextItem: true,
+    slideToPrevItem: true,
     initialStartingPosition: "center", // the active slide will be at the center
     gutter: 24, // to add the space between slides
     items: products.map((product) => {

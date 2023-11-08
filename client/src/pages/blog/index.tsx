@@ -135,7 +135,7 @@ export default function BlogPage() {
         </div>
       </section>
       {/* end of card blog */}
-      <section className="bg-white dark:bg-gray-900">
+      <section className="bg-white ">
         <div className="container px-6 py-10 mx-auto">
           <h1 className="text-3xl font-semibold text-gray-800 capitalize lg:text-4xl dark:text-white">
             Blog
@@ -225,8 +225,8 @@ export default function BlogPage() {
           </div>
         </div>
       </section>
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-4 mb-12">
-        <article>
+      <section className="flex items-center justify-center px-4 sm:px-6 lg:px-4 pb-12 bg-white w-full h-fit">
+        <article className="max-w-7xl ">
           {/* <h2 className="text-2xl font-extrabold text-black">News</h2> */}
           <section className="mt-6 grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-x-6 gap-y-8">
             <article

@@ -30,7 +30,6 @@ export default function Profile() {
   return (
     <>
       <HeaderProfile userDetail={profileUser} />
-      {/* <ProfileDetails/> */}
       <Outlet />
     </>
   );

@@ -12,6 +12,7 @@ import {
   deleteListMessageByChatId,
   loadListChat,
   loadListMessage,
+  setIsOpenChat,
   setMetaDataMessage,
   setPageNumber,
 } from "./ChatSlice";
@@ -33,7 +34,7 @@ type messagePending = {
 };
 
 export default function TinyChat() {
-  const [isFormVisible, setIsFormVisible] = useState(false);
+  // const [isFormVisible, setIsFormVisible] = useState(false);
   const [isFormClosing, setIsFormClosing] = useState(false);
   const [newChatForm, setNewChatForm] = useState(true);
   const [userNewChat, setUserNewChat] = useState<string | null>(null);
@@ -47,9 +48,8 @@ export default function TinyChat() {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const dispatch = useAppDispatch();
-  const { listChat, listMessage, metaData } = useAppSelector(
-    (state) => state.chat
-  );
+  const { listChat, listMessage, metaData, isOpenChat, startChatToUser } =
+    useAppSelector((state) => state.chat);
 
   const listUserMessage = listMessage.filter((m) => m.chatId === selectedChat);
   const metaDataMessage = metaData?.find((m) => m.chatId === selectedChat);
@@ -332,13 +332,15 @@ export default function TinyChat() {
   };
 
   //End of connect hub
-  const handleIconClick = () => {
-    setIsFormVisible(true);
+  const handleIconChatClick = () => {
+    // setIsFormVisible(true);
+    dispatch(setIsOpenChat(true));
   };
 
   const handleCloseClick = () => {
     setIsFormClosing(true);
-    setIsFormVisible(false);
+    // setIsFormVisible(false);
+    dispatch(setIsOpenChat(false));
     setIsFormClosing(false);
   };
 
@@ -440,9 +442,9 @@ export default function TinyChat() {
 
   return (
     <>
-      {!isFormVisible && (
+      {!isOpenChat && (
         <div className="fixed bottom-0 right-0 p-5 z-50">
-          <button className="chatBtn" onClick={handleIconClick}>
+          <button className="chatBtn" onClick={handleIconChatClick}>
             <svg
               height="1.6em"
               fill="white"
@@ -461,7 +463,7 @@ export default function TinyChat() {
         </div>
       )}
 
-      {isFormVisible && (
+      {isOpenChat && (
         <div
           className={`container md:min-w-[400px] overflow-auto mx-auto rounded-lg border-2 md:w-1/3 md:max-h-96 md:max-w-lg fixed bottom-0 right-0 z-50 bg-white py-1
         ${isFormClosing ? "animate-fade-out" : "animate-fade-in"}

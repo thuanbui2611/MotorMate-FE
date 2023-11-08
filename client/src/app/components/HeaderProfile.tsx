@@ -7,7 +7,7 @@ interface Props {
 export default function ProfileInfo({ userDetail }: Props) {
   return (
     <>
-      <section className="pb-12">
+      <section className="bg-white pb-12">
         <div className="relative mb-20 h-96 bg-color-header flex justify-center items-center ">
           <img
             className="object-cover w-full h-full max-w-[1900px]"

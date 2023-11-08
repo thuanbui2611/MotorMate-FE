@@ -438,6 +438,44 @@ body {
 }
 
 /* End of Our Features */
+/* Procedure */
+/* .bg-home-procedure {
+  background-image: url("../images/cover/bg-home-features.png");
+  background-size: cover;
+  background-position: center;
+  max-height: 1024px;
+} */
+.bg-container {
+  background-image: url("../images/cover/bg-home-products.png");
+  background-repeat: repeat-y;
+  background-size: cover;
+  background-position: center;
+  max-height: 1024px;
+  overflow-y: auto;
+}
+@media (max-width: 768px) {
+  .bg-container {
+    background-size: 100% 100%;
+  }
+}
+body {
+  scrollbar-width: none; /* For Firefox */
+  -ms-overflow-style: none; /* For Internet Explorer and Edge */
+}
+
+/* Hide the default scrollbar for Chrome and Safari */
+body::-webkit-scrollbar {
+  width: 0;
+  background: transparent;
+}
+
+.procedure-title {
+  background: #1320d9;
+  background: linear-gradient(to bottom, #2533ff 30%, #5974ff 55%, #ffffff 92%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+/* End of procedure */
 /* .product-card {
   width: fit-content;
   height: fit-content;

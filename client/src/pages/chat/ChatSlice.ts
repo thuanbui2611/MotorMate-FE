@@ -1,27 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
-import {
-  Chat,
-  ChatMetaData,
-  ChatPagination,
-  Message,
-} from "../../app/models/Chat";
+import { Chat, ChatMetaData, Message } from "../../app/models/Chat";
 import { MetaData } from "../../app/models/Pagination";
-import { esES } from "@mui/x-date-pickers";
-import { HubConnection } from "@microsoft/signalr";
-
-type PreviousPageNum = {
-  chatId: string;
-  pageNumber: number;
-};
-
-type ActiveHub = {
-  chatId: string;
-  connection: HubConnection;
-};
 
 interface ChatState {
   listChat: Chat[];
   listMessage: Message[];
+  isOpenChat: boolean;
+  startChatToUser: string | null;
   metaData: ChatMetaData[];
 }
 
@@ -29,6 +14,8 @@ const initialState: ChatState = {
   listChat: [],
   listMessage: [],
   metaData: [],
+  startChatToUser: null,
+  isOpenChat: false,
 };
 
 export const ChatSlice = createSlice({
@@ -36,7 +23,6 @@ export const ChatSlice = createSlice({
   initialState,
   reducers: {
     addListChat: (state, action) => {
-      debugger;
       const { id, latestMessage } = action.payload as Chat;
       const isExisted = state.listChat.some((c) => c.id === id);
       if (!isExisted) {
@@ -111,6 +97,12 @@ export const ChatSlice = createSlice({
         state.metaData![index].metaData.currentPage = pageNumber;
       }
     },
+    setIsOpenChat: (state, action) => {
+      state.isOpenChat = action.payload;
+    },
+    setStartChatToUser: (state, action) => {
+      state.startChatToUser = action.payload;
+    },
   },
 });
 
@@ -123,5 +115,7 @@ export const {
   resetMessOfChat,
   setMetaDataMessage,
   deleteListMessageByChatId,
+  setIsOpenChat,
+  setStartChatToUser,
 } = ChatSlice.actions;
 export default ChatSlice.reducer;

@@ -2,19 +2,27 @@ import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/store/ConfigureStore";
 import Loading from "../../app/components/Loading";
 import { Link, useNavigate } from "react-router-dom";
-import { Vehicle } from "../../app/models/Cart";
+import { Shop, Vehicle } from "../../app/models/Cart";
 import ConfirmDeleteDialog from "../../app/components/ConfirmDeleteDialog";
-import { deleteItemInCartAsync } from "./CartSlice";
+import {
+  addRemoveSelectedVehicle,
+  addSelectAllVehicles,
+  deleteItemInCartAsync,
+  removeAllVehiclesInShop,
+} from "./CartSlice";
 import { toast } from "react-toastify";
 
 export default function Cart() {
   const [confirmDelete, setConfirmDelete] = useState<Boolean>(false);
   const [vehicleDeleted, setVehicleDeleted] = useState<Vehicle>({} as Vehicle);
-
+  // const [selectAllVehiclesShop, setSelectAllVehiclesShop] = useState<string[]>(
+  //   []
+  // );
+  // const [selectedVehicles, setSelectedVehicles] = useState<Vehicle[]>([]);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const userLogin = useAppSelector((state) => state.account.userDetail);
-  const { cart } = useAppSelector((state) => state.cart);
+  const { cart, selectedVehicles } = useAppSelector((state) => state.cart);
 
   useEffect(() => {
     if (!userLogin) {
@@ -44,6 +52,39 @@ export default function Cart() {
       }
     }
   };
+  const handleClickItem = (
+    event: React.MouseEvent<HTMLTableRowElement, MouseEvent>,
+    vehicleId: string
+  ) => {
+    const target = event.target as HTMLElement;
+    const isInputClicked =
+      target.tagName === "INPUT" || target.parentElement?.tagName === "LABEL";
+    // Exclude the first <td> with the input checkbox from triggering the onClick event
+    if (!isInputClicked) {
+      navigate("/product-detail/" + vehicleId);
+    }
+  };
+
+  const handleSelectShopChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    shop: Shop
+  ) => {
+    const checked = event.target.checked;
+    if (checked) {
+      dispatch(addSelectAllVehicles(shop));
+    } else {
+      dispatch(removeAllVehiclesInShop(shop));
+    }
+  };
+
+  const handleSelectVehicleChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    vehicle: Vehicle,
+    shop: Shop
+  ) => {
+    dispatch(addRemoveSelectedVehicle({ vehicle, shop }));
+  };
+
   return !cart ? (
     <Loading />
   ) : (
@@ -68,7 +109,21 @@ export default function Cart() {
                   >
                     <div className="flex items-center justify-start mb-4">
                       <label className="flex items-center ">
-                        <input type="checkbox" className="w-4 h-4 mr-2" />
+                        <input
+                          type="checkbox"
+                          className="w-4 h-4 mr-2"
+                          checked={
+                            selectedVehicles.some(
+                              (s) => s.lessorId === shop.lessorId
+                            ) &&
+                            selectedVehicles.some(
+                              (v) => v.vehicles.length === shop.vehicles.length
+                            )
+                          }
+                          onChange={(event) =>
+                            handleSelectShopChange(event, shop)
+                          }
+                        />
                       </label>
                       <Link
                         to={"/profile/" + shop.lessorName}
@@ -113,13 +168,29 @@ export default function Cart() {
                             {shop.vehicles.map((vehicle) => (
                               <tr
                                 key={vehicle.vehicleId}
-                                className="border-[#eee] border-b"
+                                className="border-[#eee] border-b cursor-pointer hover:bg-gray-100"
+                                onClick={(event) =>
+                                  handleClickItem(event, vehicle.vehicleId)
+                                }
                               >
                                 <td>
                                   <label className="flex items-center ml-1 ">
                                     <input
                                       type="checkbox"
                                       className="w-4 h-4 mr-2"
+                                      checked={selectedVehicles.some((shop) =>
+                                        shop.vehicles.some(
+                                          (v) =>
+                                            v.vehicleId === vehicle.vehicleId
+                                        )
+                                      )}
+                                      onChange={(event) =>
+                                        handleSelectVehicleChange(
+                                          event,
+                                          vehicle,
+                                          shop
+                                        )
+                                      }
                                     />
                                   </label>
                                 </td>
@@ -157,30 +228,6 @@ export default function Cart() {
                                 <td className="py-5 px-4">
                                   <div className="flex flex-col items-center justify-start space-y-2">
                                     <div className="flex items-center justify-center space-x-2">
-                                      <Link
-                                        to={
-                                          "/product-detail/" + vehicle.vehicleId
-                                        }
-                                        className="hover:text-blue-600 hover:bg-blue-200 rounded-full p-1"
-                                      >
-                                        <svg
-                                          className="fill-current"
-                                          width="18"
-                                          height="18"
-                                          viewBox="0 0 18 18"
-                                          fill="none"
-                                          xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                          <path
-                                            d="M8.99981 14.8219C3.43106 14.8219 0.674805 9.50624 0.562305 9.28124C0.47793 9.11249 0.47793 8.88749 0.562305 8.71874C0.674805 8.49374 3.43106 3.20624 8.99981 3.20624C14.5686 3.20624 17.3248 8.49374 17.4373 8.71874C17.5217 8.88749 17.5217 9.11249 17.4373 9.28124C17.3248 9.50624 14.5686 14.8219 8.99981 14.8219ZM1.85605 8.99999C2.4748 10.0406 4.89356 13.5562 8.99981 13.5562C13.1061 13.5562 15.5248 10.0406 16.1436 8.99999C15.5248 7.95936 13.1061 4.44374 8.99981 4.44374C4.89356 4.44374 2.4748 7.95936 1.85605 8.99999Z"
-                                            fill=""
-                                          />
-                                          <path
-                                            d="M9 11.3906C7.67812 11.3906 6.60938 10.3219 6.60938 9C6.60938 7.67813 7.67812 6.60938 9 6.60938C10.3219 6.60938 11.3906 7.67813 11.3906 9C11.3906 10.3219 10.3219 11.3906 9 11.3906ZM9 7.875C8.38125 7.875 7.875 8.38125 7.875 9C7.875 9.61875 8.38125 10.125 9 10.125C9.61875 10.125 10.125 9.61875 10.125 9C10.125 8.38125 9.61875 7.875 9 7.875Z"
-                                            fill=""
-                                          />
-                                        </svg>
-                                      </Link>
                                       <button
                                         className="hover:text-red-600 hover:bg-red-600/30 rounded-full p-1"
                                         onClick={() =>

@@ -9,7 +9,9 @@ import { Vehicle } from "../../app/models/Vehicle";
 import "lightbox.js-react/dist/index.css";
 import { SlideshowLightbox } from "lightbox.js-react";
 import ImagesCarousel from "../../app/components/ImagesCarousel";
-import { useAppSelector } from "../../app/store/ConfigureStore";
+import { useAppDispatch, useAppSelector } from "../../app/store/ConfigureStore";
+import { setIsOpenChat, setStartChatToUser } from "../chat/ChatSlice";
+import AddToCart from "../../app/components/AddToCart";
 
 export default function ProductDetails() {
   const { id } = useParams<{ id: string }>();
@@ -18,7 +20,10 @@ export default function ProductDetails() {
   const [openImage, setOpenImage] = useState<number>();
   const [openSlideShow, setOpenSlideShow] = useState(false);
 
+  const [productsSuggested, setProductsSuggested] = useState<Vehicle[]>([]);
+
   const userLogin = useAppSelector((state) => state.account.userDetail);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     window.scrollTo(0, 0); // Scroll to the top of the page
@@ -29,6 +34,8 @@ export default function ProductDetails() {
       .then((product) => setProduct(product))
       .catch((error) => console.log(error))
       .finally(() => setLoading(false));
+
+    agent.Vehicle.all().then((product) => setProductsSuggested(product));
   }, [id]);
 
   const handleOpenImage = (index: number) => {
@@ -40,13 +47,19 @@ export default function ProductDetails() {
     }
   }, [openImage]);
 
+  const handleClickChat = (userId: any) => {
+    dispatch(setIsOpenChat(true));
+    dispatch(setStartChatToUser(userId));
+  };
+
   if (loading) return <Loading />;
   if (!product || product.isLocked) return <NotFound />;
+
   return (
     <>
       {/* <!-- Features --> */}
-      <div className="container my-12 mx-auto px-4 md:px-12">
-        <div className="relative p-6 md:p-16 shadow-lg rounded-xl">
+      <div className="mx-auto w-full bg-white">
+        <div className="relative p-6 md:p-16 shadow-lg rounded-xl mx-4 md:mx-36 mt-12">
           {/* <!-- Grid --> */}
           <div className="relative z-10 lg:grid lg:grid-cols-12 lg:gap-16 lg:items-center">
             <div className="mb-10 lg:mb-0 lg:col-span-6 lg:col-start-7 lg:order-2 lg:mr-10">
@@ -234,8 +247,8 @@ export default function ProductDetails() {
                   </div>
                   <hr></hr>
                   <div className="flex pt-5">
-                    <span className="title-font font-medium text-2xl text-gray-900">
-                      ${product.price}
+                    <span className="title-font font-medium text-2xl text-green-500">
+                      {product.price.toLocaleString()} VND
                     </span>
                     <Link
                       to={"/check-out/" + product.id}
@@ -248,16 +261,11 @@ export default function ProductDetails() {
                     </Link>
 
                     <button className="rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4">
-                      <svg
-                        fill="currentColor"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        className="w-5 h-5"
-                        viewBox="0 0 24 24"
-                      >
-                        <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path>
-                      </svg>
+                      <AddToCart
+                        className="h-7 w-7"
+                        userId={userLogin?.id}
+                        vehicleId={product.id}
+                      />
                     </button>
                   </div>
                   {product.owner.ownerId === userLogin?.id && (
@@ -324,7 +332,7 @@ export default function ProductDetails() {
           <div className="absolute inset-0 grid grid-cols-12 w-full h-full">
             <div
               style={{
-                zIndex: -1,
+                zIndex: 1,
               }}
               className="col-span-full lg:col-span-7 lg:col-start-6 bg-gray-100 w-full h-5/6 rounded-xl sm:h-3/4 lg:h-full dark:bg-white/[.075]"
             ></div>
@@ -350,7 +358,10 @@ export default function ProductDetails() {
               </h3>
 
               <div className="flex">
-                <button className="flex ml-3 md:mt-4 bg-orange-200 hover:bg-orange-400 text-black py-1 px-1 rounded-full">
+                <button
+                  className="flex ml-3 md:mt-4 bg-orange-200 hover:bg-orange-400 text-black py-1 px-1 rounded-full"
+                  onClick={() => handleClickChat(product.owner.username)}
+                >
                   <svg
                     viewBox="0 0 24 24"
                     fill="#ffffff"

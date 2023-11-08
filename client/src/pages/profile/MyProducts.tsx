@@ -40,7 +40,6 @@ export default function MyProducts() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   useEffect(() => {
-    debugger;
     if (!userLogin) {
       toast.error("Please login to continue");
       navigate("/login");
@@ -50,7 +49,6 @@ export default function MyProducts() {
   }, [dispatch]);
 
   const handleSelectVehicle = (actionName: string, vehicle?: Vehicle) => {
-    debugger;
     setOpenEditForm(true);
     if (vehicle) {
       setSelectedVehicle(vehicle);

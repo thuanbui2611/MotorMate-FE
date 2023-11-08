@@ -1,24 +1,23 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { Cart } from "../../app/models/Cart";
+import { Cart, Shop, Vehicle } from "../../app/models/Cart";
 import agent from "../../app/api/agent";
 import { toast } from "react-toastify";
-import { useAppSelector } from "../../app/store/ConfigureStore";
-
 interface CartState {
   cart: Cart | null;
   cartLoading: boolean;
+  selectedVehicles: Shop[];
 }
 
 const initialState: CartState = {
   cart: null,
   cartLoading: false,
+  selectedVehicles: [],
 };
 
 export const getCartAsync = createAsyncThunk<Cart, string>(
   "cart/getCart",
   async (userId, thunkAPI) => {
     try {
-      debugger;
       const cart = await agent.Cart.getCartByUser(userId);
       return cart;
     } catch (error) {
@@ -49,9 +48,7 @@ export const deleteItemInCartAsync = createAsyncThunk(
   "cart/deleteVehicleInCart",
   async (data: { userId: string; vehicleId: string }) => {
     try {
-      debugger;
       await agent.Cart.deleteItem(data.userId, data.vehicleId);
-
       return data;
     } catch (error: any) {
       toast.error(error.data.message);
@@ -63,7 +60,68 @@ export const deleteItemInCartAsync = createAsyncThunk(
 export const CartSlice = createSlice({
   name: "cart",
   initialState,
-  reducers: {},
+  reducers: {
+    addRemoveSelectedVehicle: (state, action) => {
+      debugger;
+      const { shop, vehicle } = action.payload;
+      const indexShop = state.selectedVehicles.findIndex(
+        (s) => s.lessorId === shop.lessorId
+      );
+      if (indexShop !== -1) {
+        //Add new vehicle to shop
+        const selectedVehiclesInShop =
+          state.selectedVehicles[indexShop].vehicles;
+        const indexVehicle = selectedVehiclesInShop.findIndex(
+          (v) => v.vehicleId === vehicle.vehicleId
+        );
+        if (indexVehicle !== -1) {
+          // Vehicle already selected, remove it
+          if (selectedVehiclesInShop.length > 1) {
+            // Shop have more than 1 vehicle, remove vehicle only
+            state.selectedVehicles[indexShop].vehicles.splice(indexVehicle, 1);
+          } else {
+            // Shop have only 1 vehicle, remove shop
+            state.selectedVehicles.splice(indexShop, 1);
+          }
+        } else {
+          // Vehicle not selected, add it
+          state.selectedVehicles[indexShop].vehicles.push(vehicle);
+        }
+      } else {
+        //Add new shop with selected vehicle
+        const addShop: Shop = {
+          lessorId: shop.lessorId,
+          lessorName: shop.lessorName,
+          lessorImage: shop.lessorImage,
+          vehicles: [vehicle],
+        };
+        state.selectedVehicles.push(addShop);
+      }
+    },
+    addSelectAllVehicles: (state, action) => {
+      const shop: Shop = action.payload;
+      const indexShop = state.selectedVehicles.findIndex(
+        (s) => s.lessorId === shop.lessorId
+      );
+      if (indexShop !== -1) {
+        // Add new vehicles to shop
+        state.selectedVehicles[indexShop].vehicles = [...shop.vehicles];
+      } else {
+        //Add new shop with selected vehicles
+        state.selectedVehicles.push(shop);
+      }
+    },
+    removeAllVehiclesInShop: (state, action) => {
+      debugger;
+      const shop: Shop = action.payload;
+      const indexShop = state.selectedVehicles.findIndex(
+        (s) => s.lessorId === shop.lessorId
+      );
+      if (indexShop !== -1) {
+        state.selectedVehicles.splice(indexShop, 1);
+      }
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(getCartAsync.pending, (state, action) => {
       state.cartLoading = true;
@@ -105,4 +163,8 @@ export const CartSlice = createSlice({
   },
 });
 
-export const {} = CartSlice.actions;
+export const {
+  addRemoveSelectedVehicle,
+  addSelectAllVehicles,
+  removeAllVehiclesInShop,
+} = CartSlice.actions;
