@@ -51,4 +51,5 @@ export interface VehicleParams {
   Collections?: string[];
   Models?: string[];
   Cities?: string[];
+  Search: string | null;
 }

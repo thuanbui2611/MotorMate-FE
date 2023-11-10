@@ -1,13 +1,40 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SelectCityVN from "../../app/components/SelectCityVN";
 import ProcessingBar from "../../app/components/ProcessingBar";
 import { Location } from "../../app/models/Address";
+import { useAppSelector } from "../../app/store/ConfigureStore";
+import { Link } from "react-router-dom";
+import { Vehicle } from "../../app/models/Cart";
+import "../../app/assets/css/payment_btn.css";
 
 export default function Checkout() {
-  //Select option Payment Method
   const [selectedPaymentOption, setSelectedPaymentOption] =
     useState("cashOnDelivery");
   const [location, setLocation] = useState<Location | null>(null);
+
+  const [deliveryOption, setDeliveryOption] = useState("");
+  const [totalVehicleCount, setTotalVehicleCount] = useState<number>(0);
+  const [totalPayment, setTotalPayment] = useState<number>(0);
+  const { selectedVehicles } = useAppSelector((state) => state.cart);
+
+  useEffect(() => {
+    let total = 0;
+    selectedVehicles.forEach((shop) => {
+      shop.vehicles.forEach((vehicle: Vehicle) => {
+        total += +vehicle.price;
+      });
+    });
+    setTotalPayment(total);
+
+    let count = 0;
+    selectedVehicles.forEach((shop) => {
+      shop.vehicles.forEach((vehicle: Vehicle) => {
+        count += 1;
+      });
+    });
+    setTotalVehicleCount(count);
+  }, [selectedVehicles]);
+  //Select option Payment Method
   const handlePaymentOptionChange = (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -16,7 +43,6 @@ export default function Checkout() {
   //End of select option Payment Method
 
   //Select option delivery
-  const [deliveryOption, setDeliveryOption] = useState("");
   const handleDeliveryOptionChange = (
     e: React.ChangeEvent<HTMLSelectElement>
   ) => {
@@ -29,59 +55,8 @@ export default function Checkout() {
   };
   return (
     <>
-      <section className="pt-12 pb-24 bg-gray-100 overflow-hidden">
+      <section className="pt-12 pb-24 bg-gray-100">
         <div className="container px-4 mx-auto">
-          {/* <ul className="flex flex-wrap items-center mb-10 xl:mb-0">
-            <li className="mr-6">
-              <a
-                className="flex items-center text-sm font-medium text-gray-400 hover:text-gray-500"
-                href="#"
-              >
-                <span>Home</span>
-                <svg
-                  className="ml-6"
-                  width="4"
-                  height="7"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M0.150291 0.898704C-0.0500975 0.692525 -0.0500975 0.359292 0.150291 0.154634C0.35068 -0.0507836 0.674443 -0.0523053 0.874831 0.154634L3.7386 3.12787C3.93899 3.33329 3.93899 3.66576 3.7386 3.8727L0.874832 6.84594C0.675191 7.05135 0.35068 7.05135 0.150292 6.84594C-0.0500972 6.63976 -0.0500972 6.30652 0.150292 6.10187L2.49888 3.49914L0.150291 0.898704Z"
-                    fill="currentColor"
-                  ></path>
-                </svg>
-              </a>
-            </li>
-            <li className="mr-6">
-              <a
-                className="flex items-center text-sm font-medium text-gray-400 hover:text-gray-500"
-                href="#"
-              >
-                <span>Store</span>
-                <svg
-                  className="ml-6"
-                  width="4"
-                  height="7"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M0.150291 0.898704C-0.0500975 0.692525 -0.0500975 0.359292 0.150291 0.154634C0.35068 -0.0507836 0.674443 -0.0523053 0.874831 0.154634L3.7386 3.12787C3.93899 3.33329 3.93899 3.66576 3.7386 3.8727L0.874832 6.84594C0.675191 7.05135 0.35068 7.05135 0.150292 6.84594C-0.0500972 6.63976 -0.0500972 6.30652 0.150292 6.10187L2.49888 3.49914L0.150291 0.898704Z"
-                    fill="currentColor"
-                  ></path>
-                </svg>
-              </a>
-            </li>
-            <li>
-              <a
-                className="text-sm font-medium text-indigo-500 hover:text-indigo-600"
-                href="#"
-              >
-                Your cart
-              </a>
-            </li>
-          </ul> */}
-
           <ProcessingBar processing="checkout" />
 
           {/* <div className="pb-9 mb-7 text-center border-b border-black border-opacity-5">
@@ -89,8 +64,11 @@ export default function Checkout() {
               Checkout
             </h2>
           </div> */}
-          <div className="flex flex-wrap -mx-4 mb-14 xl:mb-24 pt-10">
-            <div className=" w-full md:w-8/12 lg:w-2/4 px-4 mb-14 md:mb-0">
+          <div className="flex flex-wrap -mx-4 mb-14 justify-center items-center lg:items-start xl:mb-24 pt-10">
+            <div className=" w-full lg:w-2/4 px-4 mb-14 md:mb-0">
+              <h2 className="mb-7 text-3xl font-heading font-bold">
+                Your information
+              </h2>
               <div className="py-12 px-8 md:pl-6 md:pr-16 bg-white rounded-3xl">
                 <div className="pb-4 border-b border-gray-200 border-opacity-30">
                   <div className="max-w-lg mx-auto">
@@ -350,156 +328,82 @@ export default function Checkout() {
                 </div> */}
               </div>
             </div>
-            <div className=" w-full md:w-8/12 lg:w-2/4 px-4 mb-14 md:mb-0">
+            <div className="w-full lg:w-2/4 px-4 mb-14 md:mb-0">
               <div>
-                <h2 className="mb-7 lg:mt-6 text-3xl font-heading font-medium">
-                  Order summary
+                <h2 className="mb-7 text-3xl font-heading font-bold">
+                  Order summary ({totalVehicleCount} vehicles)
                 </h2>
-                <div className=" max-h-[20vw] scrollbar overflow-y-auto mb-5 border border-gray-200 rounded">
-                  <div className="p-10 mb-8 bg-white rounded-md shadow sm:flex sm:items-center xl:py-5 xl:px-12">
-                    <a href="#" className="mr-6 md:mr-12">
-                      <img
-                        className=" w-full lg:w-[80px] h-[200px] lg:h-[80px]  object-cover  mx-auto mb-6 sm:mb-0 "
-                        src="https://i.postimg.cc/YS2pPP8k/white-denim-jacket-front-view-streetwear-fashion.jpg "
-                        alt="dress"
-                      />
-                    </a>
-                    <div>
-                      <a
-                        className="inline-block mb-1 text-lg font-medium hover:underline dark:text-gray-400"
-                        href="#"
+                <div className="flex flex-col items-center justify-start max-h-[600px] lg:max-h-[30vw] scrollbar overflow-y-auto mb-5 border border-gray-300 rounded shadow-sm">
+                  {/* List of products */}
+                  {selectedVehicles.map((shop) => (
+                    <div className="flex flex-col w-fit h-fit">
+                      <Link
+                        to={"/profile/" + shop.lessorName}
+                        className=" w-fit rounded p-2 mb-2"
                       >
-                        White jacket for men
-                      </a>
-                      <div className="flex flex-wrap">
-                        <p className="mr-4 text-sm font-medium">
-                          <span className="font-medium dark:text-gray-400">
-                            Color:
-                          </span>
-                          <span className="ml-2 text-gray-400 dark:text-gray-400">
-                            Silver
-                          </span>
-                        </p>
-                        <p className="mr-4 text-sm font-medium">
-                          <span className="font-medium dark:text-gray-400">
-                            Size:
-                          </span>
-                          <span className="ml-2 text-gray-400 dark:text-gray-400">
-                            medium
-                          </span>
-                        </p>
-                        <p className="mr-4 text-sm font-medium">
-                          <span className="font-medium dark:text-gray-400">
-                            Style:
-                          </span>
-                          <span className="ml-2 text-gray-400 dark:text-gray-400">
-                            Uk minimal design
-                          </span>
-                        </p>
-                        <p className="text-sm font-medium dark:text-gray-400">
-                          <span>Qty:</span>
-                          <span className="ml-2 text-gray-400">1</span>
-                        </p>
-                      </div>
+                        <div className="flex items-center no-underline hover:underline text-black ">
+                          <img
+                            alt="Placeholder"
+                            className="block rounded-full h-8 w-8"
+                            src={shop.lessorImage}
+                          />
+                          <div className="ml-2 text-sm font-bold">
+                            {shop.lessorName}
+                          </div>
+                        </div>
+                      </Link>
+                      {shop.vehicles.map((vehicle) => (
+                        <div className="flex flex-col sm:flex-row p-5 mb-8 bg-white rounded-md shadow items-center mx-10">
+                          <div className="w-fit h-full mr-4">
+                            <img
+                              className="w-[40vw] h-[40vw] mb-4 sm:mb-0 sm:w-full sm:h-full lg:w-[140px] lg:h-[100px] object-cover mx-auto rounded-md"
+                              src={vehicle.image}
+                              alt="vehicle image"
+                            />
+                          </div>
+                          <div className="w-full flex-col justify-center items-center">
+                            <a
+                              className="inline-block mb-1 text-lg font-bold hover:underline"
+                              href="#"
+                            >
+                              {vehicle.vehicleName}
+                            </a>
+                            <div className="flex flex-col sm:flex-row sm:flex-wrap gap-1">
+                              <p className="mr-4 text-sm font-medium">
+                                <span className="font-semibold">Color:</span>
+                                <span className="ml-2 text-gray-800">
+                                  {vehicle.color}
+                                </span>
+                              </p>
+                              <p className="mr-4 text-sm font-medium">
+                                <span className="font-semibold">Brand:</span>
+                                <span className="ml-2 text-gray-800">
+                                  Honda
+                                </span>
+                              </p>
+                              <p className="mr-4 text-sm font-medium">
+                                <span className="font-semibold">
+                                  License plates:
+                                </span>
+                                <span className="ml-2 text-gray-800">
+                                  {vehicle.licensePlate}
+                                </span>
+                              </p>
+                              <p className="text-sm font-semibold">
+                                <span>Price:</span>
+                                <span className="ml-2 text-green-500">
+                                  {vehicle.price.toLocaleString()} VND
+                                </span>
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
                     </div>
-                  </div>
-                  <div className="p-10 mb-8 bg-white rounded-md shadow sm:flex sm:items-center xl:py-5 xl:px-12">
-                    <a href="#" className="mr-6 md:mr-12">
-                      <img
-                        className=" w-full lg:w-[80px] h-[200px] lg:h-[80px]  object-cover  mx-auto mb-6 sm:mb-0 "
-                        src="https://i.postimg.cc/YS2pPP8k/white-denim-jacket-front-view-streetwear-fashion.jpg "
-                        alt="dress"
-                      />
-                    </a>
-                    <div>
-                      <a
-                        className="inline-block mb-1 text-lg font-medium hover:underline dark:text-gray-400"
-                        href="#"
-                      >
-                        White jacket for men
-                      </a>
-                      <div className="flex flex-wrap">
-                        <p className="mr-4 text-sm font-medium">
-                          <span className="font-medium dark:text-gray-400">
-                            Color:
-                          </span>
-                          <span className="ml-2 text-gray-400 dark:text-gray-400">
-                            Silver
-                          </span>
-                        </p>
-                        <p className="mr-4 text-sm font-medium">
-                          <span className="font-medium dark:text-gray-400">
-                            Size:
-                          </span>
-                          <span className="ml-2 text-gray-400 dark:text-gray-400">
-                            medium
-                          </span>
-                        </p>
-                        <p className="mr-4 text-sm font-medium">
-                          <span className="font-medium dark:text-gray-400">
-                            Style:
-                          </span>
-                          <span className="ml-2 text-gray-400 dark:text-gray-400">
-                            Uk minimal design
-                          </span>
-                        </p>
-                        <p className="text-sm font-medium dark:text-gray-400">
-                          <span>Qty:</span>
-                          <span className="ml-2 text-gray-400">1</span>
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="p-10 mb-8 bg-white rounded-md shadow sm:flex sm:items-center xl:py-5 xl:px-12">
-                    <a href="#" className="mr-6 md:mr-12">
-                      <img
-                        className=" w-full lg:w-[80px] h-[200px] lg:h-[80px]  object-cover  mx-auto mb-6 sm:mb-0 "
-                        src="https://i.postimg.cc/YS2pPP8k/white-denim-jacket-front-view-streetwear-fashion.jpg "
-                        alt="dress"
-                      />
-                    </a>
-                    <div>
-                      <a
-                        className="inline-block mb-1 text-lg font-medium hover:underline dark:text-gray-400"
-                        href="#"
-                      >
-                        White jacket for men
-                      </a>
-                      <div className="flex flex-wrap">
-                        <p className="mr-4 text-sm font-medium">
-                          <span className="font-medium dark:text-gray-400">
-                            Color:
-                          </span>
-                          <span className="ml-2 text-gray-400 dark:text-gray-400">
-                            Silver
-                          </span>
-                        </p>
-                        <p className="mr-4 text-sm font-medium">
-                          <span className="font-medium dark:text-gray-400">
-                            Size:
-                          </span>
-                          <span className="ml-2 text-gray-400 dark:text-gray-400">
-                            medium
-                          </span>
-                        </p>
-                        <p className="mr-4 text-sm font-medium">
-                          <span className="font-medium dark:text-gray-400">
-                            Style:
-                          </span>
-                          <span className="ml-2 text-gray-400 dark:text-gray-400">
-                            Uk minimal design
-                          </span>
-                        </p>
-                        <p className="text-sm font-medium dark:text-gray-400">
-                          <span>Qty:</span>
-                          <span className="ml-2 text-gray-400">1</span>
-                        </p>
-                      </div>
-                    </div>
-                  </div>
+                  ))}
                 </div>
 
-                <div className="flex items-center w-1/2 justify-between py-4 px-10 mb-3 leading-8 bg-white bg-opacity-50 font-heading font-medium rounded-3xl">
+                {/* <div className="flex items-center w-1/2 justify-between py-4 px-10 mb-3 leading-8 bg-white bg-opacity-50 font-heading font-medium rounded-3xl">
                   <span>Subtotal</span>
                   <span className="flex items-center text-xl">
                     <span className="mr-2 text-base">$</span>
@@ -512,15 +416,14 @@ export default function Checkout() {
                     <span className="mr-2 text-base">$</span>
                     <span>10,00</span>
                   </span>
-                </div>
+                </div> */}
                 <div className="flex items-center w-1/2 justify-between py-4 px-10 mb-10 leading-8 bg-white font-heading font-medium rounded-3xl">
-                  <span>Total</span>
-                  <span className="flex items-center text-xl text-blue-500">
-                    <span className="mr-2 text-base">$</span>
-                    <span>720,70</span>
+                  <span className="font-bold">Total</span>
+                  <span className="flex items-center text-xl text-green-500 font-semibold">
+                    <span>{totalPayment.toLocaleString()} VND</span>
                   </span>
                 </div>
-                <div className="flex">
+                {/* <div className="flex">
                   <h4
                     className=" mb-4 text-xl font-heading font-medium mr-3"
                     style={{ marginTop: "2px" }}
@@ -539,24 +442,52 @@ export default function Checkout() {
                       Apply
                     </a>
                   </div>
+                </div> */}
+                <div className="flex items-center justify-between w-1/2 h-fit">
+                  <Link
+                    className="block py-4 px-5 w-fit text-base leading-6 font-bold tracking-tighter font-heading text-center bg-red-100 hover:bg-red-200 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-xl"
+                    to="/my-cart"
+                  >
+                    Back to cart
+                  </Link>
+                  <Link
+                    to="/payment"
+                    className="container-paymentBTN border border-[#80ea69] shadow-sm shadow-[#73c661] "
+                  >
+                    <div className="left-side">
+                      <div className="card">
+                        <div className="card-line"></div>
+                        <div className="buttons"></div>
+                      </div>
+                      <div className="post">
+                        <div className="post-line"></div>
+                        <div className="screen">
+                          <div className="dollar">$</div>
+                        </div>
+                        <div className="numbers"></div>
+                        <div className="numbers-line2"></div>
+                      </div>
+                    </div>
+                    <div className="right-side">
+                      <div className="new">Check out</div>
+                      <svg
+                        viewBox="0 0 440 440"
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="arrow"
+                      >
+                        <path
+                          fill="#06bf44"
+                          data-old_color="#000000"
+                          className="active-path"
+                          data-original="#000000"
+                          d="M345.441 248.292L151.154 442.573c-12.359 12.365-32.397 12.365-44.75 0-12.354-12.354-12.354-32.391 0-44.744L278.318 225.92 106.409 54.017c-12.354-12.359-12.354-32.394 0-44.748 12.354-12.359 32.391-12.359 44.75 0l194.287 194.284c6.177 6.18 9.262 14.271 9.262 22.366 0 8.099-3.091 16.196-9.267 22.373z"
+                        ></path>
+                      </svg>
+                    </div>
+                  </Link>
                 </div>
-
-                <a
-                  className="inline-block w-1/2 py-5 lg:py-3 px-10 text-lg leading-6 lg:leading-7 text-white font-medium tracking-tighter font-heading text-center bg-blue-500 hover:bg-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-xl"
-                  href="/payment"
-                >
-                  Checkout
-                </a>
               </div>
             </div>
-          </div>
-          <div className="md:w-96">
-            <a
-              className="block py-5 px-10 w-full text-xl leading-6 font-medium tracking-tighter font-heading text-center bg-white hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-xl"
-              href="#"
-            >
-              Back to shop
-            </a>
           </div>
         </div>
       </section>

@@ -8,7 +8,7 @@ import {
 } from "@material-tailwind/react";
 import { Vehicle } from "../../app/models/Vehicle";
 import Autocomplete from "@mui/material/Autocomplete";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { Brand, Collection } from "../../app/models/Brand";
 import { ModelVehicle } from "../../app/models/ModelVehicle";
 import { Color } from "../../app/models/Color";
@@ -66,6 +66,7 @@ export default function VehicleForm({
   const [selectedLocation, setSelectedLocation] = useState<Location | null>(
     null
   );
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [loadingFetchOwner, setLoadingFetchOwner] = useState(true);
   const [loadingFetchBrand, setLoadingFetchBrand] = useState(true);
@@ -255,6 +256,10 @@ export default function VehicleForm({
 
       return files;
     });
+    //reset input
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
     console.log("Files change:", files);
     console.log("Selected file:", selectedFiles);
   };
@@ -848,6 +853,7 @@ export default function VehicleForm({
                     className="sr-only"
                     onChange={handleImageChange}
                     accept="image/*"
+                    ref={fileInputRef}
                     multiple
                   />
                   <label
@@ -921,6 +927,7 @@ export default function VehicleForm({
                       className="sr-only"
                       onChange={handleImageChange}
                       accept="image/*"
+                      ref={fileInputRef}
                       multiple
                     />
                     <label

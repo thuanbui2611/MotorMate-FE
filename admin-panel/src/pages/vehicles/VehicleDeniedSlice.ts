@@ -13,7 +13,7 @@ import { toast } from "react-toastify";
 interface VehicleState {
   vehiclesDenied: Vehicle | null;
   vehiclesDeniedLoaded: boolean;
-  vehiclesDeniedParams: VehicleParams;
+  vehiclesParams: VehicleParams;
   metaData: MetaData | null;
 }
 
@@ -43,6 +43,9 @@ function getAxiosParams(vehicleParams: VehicleParams) {
       params.append("Cities", city);
     });
   }
+  if (vehicleParams.Search) {
+    params.append("Search", vehicleParams.Search);
+  }
 
   return params;
 }
@@ -52,7 +55,9 @@ export const getVehiclesDeniedAsync = createAsyncThunk<
   void,
   { state: RootState }
 >("vehiclesDenied/getVehiclesDeniedAsync", async (_, ThunkAPI) => {
-  const params = getAxiosParams(ThunkAPI.getState().vehicle.vehicleParams);
+  const params = getAxiosParams(
+    ThunkAPI.getState().vehicleDenied.vehiclesParams
+  );
   try {
     const response = await agent.Vehicle.listVehicleByStatus(params, "denied");
     ThunkAPI.dispatch(setMetaData(response.metaData));
@@ -96,6 +101,7 @@ function initParams() {
     Collections: [],
     Models: [],
     Cities: [],
+    Search: null,
   };
 }
 
@@ -104,7 +110,7 @@ export const VehicleDeniedSlice = createSlice({
   initialState: vehiclesDeniedAdapter.getInitialState<VehicleState>({
     vehiclesDenied: null,
     vehiclesDeniedLoaded: false,
-    vehiclesDeniedParams: initParams(),
+    vehiclesParams: initParams(),
     metaData: null,
   }),
   reducers: {
@@ -115,21 +121,21 @@ export const VehicleDeniedSlice = createSlice({
       vehiclesDeniedAdapter.removeOne(state, action.payload);
     },
     setVehicleDeniedParams: (state, action) => {
-      state.vehiclesDeniedParams = {
-        ...state.vehiclesDeniedParams,
+      state.vehiclesParams = {
+        ...state.vehiclesParams,
         ...action.payload,
       };
     },
     resetVehicleDeniedParams: (state) => {
-      state.vehiclesDeniedParams = initParams();
+      state.vehiclesParams = initParams();
     },
     setMetaData: (state, action) => {
       state.metaData = action.payload;
     },
     setPageNumber: (state, action) => {
       state.vehiclesDeniedLoaded = false;
-      state.vehiclesDeniedParams = {
-        ...state.vehiclesDeniedParams,
+      state.vehiclesParams = {
+        ...state.vehiclesParams,
         ...action.payload,
       };
     },

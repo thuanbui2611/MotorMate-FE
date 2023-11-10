@@ -11,7 +11,7 @@ import { Brand } from "../../app/models/Brand";
 import { useForm, FieldValues, set } from "react-hook-form";
 import { useAppDispatch } from "../../app/store/ConfigureStore";
 import AppTextInput from "../../app/components/AppTextInput";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { addBrandAsync, updateBrandAsync } from "./BrandSlice";
 import { toast } from "react-toastify";
 import { LoadingButton } from "@mui/lab";
@@ -38,6 +38,7 @@ export default function BrandForm({ brand, cancelEdit, actionName }: Props) {
     url: string;
   } | null>(null);
   const [deleteCurrentImage, setDeleteCurrentImage] = useState<boolean>(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (brand) reset(brand);
@@ -56,6 +57,10 @@ export default function BrandForm({ brand, cancelEdit, actionName }: Props) {
         url: URL.createObjectURL(file),
       });
       setDeleteCurrentImage(false);
+    }
+
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
     }
   };
 
@@ -175,6 +180,7 @@ export default function BrandForm({ brand, cancelEdit, actionName }: Props) {
                       className="sr-only"
                       onChange={handleImageChange}
                       accept="image/*"
+                      ref={fileInputRef}
                     />
                     <label
                       htmlFor="file"

@@ -53,13 +53,6 @@ export default function ProfileDetails() {
             <div className="md:flex no-wrap md:-mx-2 ">
               <div className="w-full md:w-3/12 md:mx-2">
                 <div className="bg-white p-3 border-t-4 border-green-400 ">
-                  <div className="image overflow-hidden">
-                    <img
-                      className="h-auto w-full mx-auto"
-                      src="https://lavinephotography.com.au/wp-content/uploads/2017/01/PROFILE-Photography-112.jpg"
-                      alt=""
-                    />
-                  </div>
                   <p className="text-gray-900 font-bold text-xl leading-8 my-1">
                     About
                   </p>
@@ -169,15 +162,15 @@ export default function ProfileDetails() {
               </div>
 
               <div className="w-full md:w-9/12 mx-2 bg-white">
-                <div className="flex justify-between">
-                  <p className=" text-black p-5 font-bold text-2xl ">
-                    Motor for rent:
-                  </p>
+                <div className="flex justify-between items-center m-10 mb-0">
+                  <h2 className="text-2xl md:text-4xl lg:text-5xl tracking-tight font-extrabold text-gradient">
+                    Motorcycle for rent:
+                  </h2>
                   {userLogin?.username === profileUser?.username && (
                     <button
                       onClick={handleAddVehicle}
                       type="button"
-                      className="flex items-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                      className="flex items-center w-fit h-fit text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
                     >
                       <svg
                         className="h-5 w-5 mr-2"
@@ -226,8 +219,15 @@ export default function ProfileDetails() {
                   )}
                 </div>
 
-                <div className="mx-10 py-5">
-                  <ProductCarousel userLogin={userLogin} products={products} />
+                <div className="mx-10">
+                  {products.length > 0 ? (
+                    <ProductCarousel
+                      userLogin={userLogin}
+                      products={products}
+                    />
+                  ) : (
+                    <>No Vehicles</>
+                  )}
                 </div>
               </div>
             </div>

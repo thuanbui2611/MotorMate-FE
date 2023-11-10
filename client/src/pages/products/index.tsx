@@ -572,7 +572,7 @@ export default function Products() {
 
                         <label
                           htmlFor="input"
-                          className="labelforsearch"
+                          className="labelforsearch cursor-pointer"
                           onClick={() => handleSearch}
                         >
                           <svg viewBox="0 0 512 512" className="searchIcon">

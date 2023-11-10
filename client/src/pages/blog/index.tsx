@@ -38,7 +38,7 @@ export default function BlogPage() {
   return !metaData ? (
     <Loading />
   ) : (
-    <>
+    <div>
       {/* Hero section */}
       <section className="relative py-32 lg:py-36 bg-white">
         <div className="mx-auto lg:max-w-7xl w-full px-5 sm:px-10 md:px-12 lg:px-5 flex flex-col lg:flex-row gap-10 lg:gap-12">
@@ -289,6 +289,6 @@ export default function BlogPage() {
           </section>
         </article>
       </section>
-    </>
+    </div>
   );
 }

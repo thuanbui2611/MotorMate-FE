@@ -75,6 +75,18 @@ export const updateProductAsync = createAsyncThunk<Vehicle, FieldValues>(
   }
 );
 
+export const updateProfileAsync = createAsyncThunk<UserDetail, FieldValues>(
+  "profile/updateProfileAsync",
+  async (data, ThunkAPI) => {
+    try {
+      const response = await agent.User.update(data.username, data);
+      return response;
+    } catch (error: any) {
+      return ThunkAPI.rejectWithValue({ error: error.data });
+    }
+  }
+);
+
 export const deleteProductAsync = createAsyncThunk(
   "profile/deleteProductAsync",
   async (id: string) => {
@@ -145,6 +157,10 @@ export const ProfileSlice = createSlice({
 
     builder.addCase(deleteProductAsync.fulfilled, (state, action) => {
       profileAdapter.removeOne(state, action.payload);
+    });
+    builder.addCase(updateProfileAsync.fulfilled, (state, action) => {
+      toast.success("Update profile successfully!");
+      state.profileUser = action.payload;
     });
   },
 });

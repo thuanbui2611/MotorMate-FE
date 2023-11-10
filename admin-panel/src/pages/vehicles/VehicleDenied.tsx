@@ -16,8 +16,18 @@ import {
 } from "./VehicleDeniedSlice";
 import LoaderButton from "../../app/components/LoaderButton";
 import { ConvertDatetimeToDisplay } from "../../app/utils/ConvertDatetimeToDate";
+import { City } from "../../app/models/Address";
+import { Brand } from "../../app/models/Brand";
+import { Collection } from "../../app/models/Collection";
+import { ModelVehicle } from "../../app/models/ModelVehicle";
+import dataCityVN from "./../../app/data/dataCityVN.json";
+import agent from "../../app/api/agent";
+import { useSearchParams } from "react-router-dom";
+import Autocomplete from "@mui/material/Autocomplete";
+import { TextField } from "@mui/material";
 
 export default function VehiclePending() {
+  const [searchParams, setSearchParams] = useSearchParams({});
   const [actionName, setActionName] = useState(String);
   const [selectedVehicle, setSelectedVehicle] = useState<Vehicle | null>(null);
   const [openEditForm, setOpenEditForm] = useState(false);
@@ -25,16 +35,342 @@ export default function VehiclePending() {
   const [vehicleDeleted, setVehicleDeleted] = useState<Vehicle>({} as Vehicle);
   const [openDetails, setOpenDetails] = useState(false);
 
+  const [selectedCities, setSelectedCities] = useState<City[]>([]);
+  const [brands, setBrands] = useState<Brand[]>([]);
+  const [selectedBrands, setSelectedBrands] = useState<Brand[]>([]);
+  const [collections, setCollections] = useState<Collection[]>([]);
+  const [selectedCollections, setSelectedCollections] = useState<Collection[]>(
+    []
+  );
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [models, setModels] = useState<ModelVehicle[]>([]);
+  const [selectedModels, setSelectedModels] = useState<ModelVehicle[]>([]);
+  const [loadingFetchModelsFilter, setLoadingFetchModelsFilter] =
+    useState(true);
+  const [loadingFetchCollectionsFilter, setLoadingFetchCollectionsFilter] =
+    useState(true);
+  const [loadingFetchBrandsFilter, setLoadingFetchBrandsFilter] =
+    useState(true);
+  const [paramsCompleted, setParamsCompleted] = useState(false);
+
   const vehiclesDenied = useAppSelector(vehicleDeniedSelectors.selectAll);
-  const { vehiclesDeniedLoaded, metaData, vehiclesDeniedParams } =
-    useAppSelector((state) => state.vehicleDenied);
+  const { vehiclesDeniedLoaded, metaData, vehiclesParams } = useAppSelector(
+    (state) => state.vehicleDenied
+  );
   const dispatch = useAppDispatch();
+
+  //Get params value from url
+  const pageNum = searchParams.get("pageNumber");
+  const brandsParam = searchParams.get("Brands");
+  const modelsParam = searchParams.get("Models");
+  const collectionsParam = searchParams.get("Collections");
+  const citiesParam = searchParams.get("Cities");
+  const searchQueryParam = searchParams.get("Search");
+  const cities = dataCityVN as City[];
+
+  // Get data for filter
+  useEffect(() => {
+    //get brands data
+    agent.Brand.all()
+      .then((data) => {
+        setBrands(data);
+        setLoadingFetchBrandsFilter(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching brands for filter:", error);
+      });
+    //get collections data
+    agent.Collection.all()
+      .then((data) => {
+        setCollections(data);
+        setLoadingFetchCollectionsFilter(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching collections for filter", error);
+      });
+    //get models data
+    agent.ModelVehicle.all()
+      .then((data) => {
+        setModels(data);
+        setLoadingFetchModelsFilter(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching models for filter", error);
+      });
+  }, []);
+  // End of Get data for filter
+  //Get valueFilter from url params, then set selected filterValue and request (dispatch).
+  useEffect(() => {
+    if (
+      models.length > 0 &&
+      collections.length > 0 &&
+      brands.length > 0 &&
+      cities.length > 0
+    ) {
+      //Model filter
+      if (modelsParam !== "") {
+        if (modelsParam) {
+          const modelsFiltered = modelsParam.split("%2C");
+          const modelsSelected = models.filter((model) =>
+            modelsFiltered.includes(model.name)
+          );
+          setSelectedModels(modelsSelected);
+          dispatch(setVehicleDeniedParams({ Models: modelsFiltered }));
+        } else {
+          dispatch(setVehicleDeniedParams({ Models: [] }));
+          setSelectedModels([]);
+        }
+      } else {
+        setSearchParams((prev) => {
+          prev.delete("Models");
+          return prev;
+        });
+      }
+      //Collection filter
+      if (collectionsParam !== "") {
+        if (collectionsParam) {
+          const collectionsFiltered = collectionsParam.split("%2C");
+          const collectionsSelected = collections.filter((collection) =>
+            collectionsFiltered.includes(collection.name)
+          );
+          setSelectedCollections(collectionsSelected);
+          dispatch(
+            setVehicleDeniedParams({ Collections: collectionsFiltered })
+          );
+        } else {
+          dispatch(setVehicleDeniedParams({ Collections: [] }));
+          setSelectedCollections([]);
+        }
+      } else {
+        setSearchParams((prev) => {
+          prev.delete("Collections");
+          return prev;
+        });
+      }
+      //Brand filter
+      if (brandsParam !== "") {
+        if (brandsParam) {
+          const brandsFiltered = brandsParam.split("%2C");
+          const brandsSelected = brands.filter((brand) =>
+            brandsFiltered.includes(brand.name)
+          );
+          setSelectedBrands(brandsSelected);
+          dispatch(setVehicleDeniedParams({ Brands: brandsFiltered }));
+        } else {
+          dispatch(setVehicleDeniedParams({ Brands: [] }));
+          setSelectedBrands([]);
+        }
+      } else {
+        setSearchParams((prev) => {
+          prev.delete("Brands");
+          return prev;
+        });
+      }
+      //City filter
+      if (citiesParam !== "") {
+        if (citiesParam) {
+          const citiesFiltered = citiesParam.split("%2C");
+          const citiesSelected = cities.filter((city) =>
+            citiesFiltered.includes(city.Name)
+          );
+          setSelectedCities(citiesSelected);
+          dispatch(setVehicleDeniedParams({ Cities: citiesFiltered }));
+        } else {
+          dispatch(setVehicleDeniedParams({ Cities: [] }));
+          setSelectedCities([]);
+        }
+      } else {
+        setSearchParams((prev) => {
+          prev.delete("Cities");
+          return prev;
+        });
+        dispatch(setVehicleDeniedParams({ Cities: [] }));
+      }
+      setParamsCompleted(true);
+    } else
+      switch (true) {
+        case models === null || typeof models === "undefined":
+          console.log("models is null or undefined");
+          setParamsCompleted(true);
+          break;
+        case collections === null || typeof collections === "undefined":
+          console.log("collections is null or undefined");
+          setParamsCompleted(true);
+          break;
+        case brands === null || typeof brands === "undefined":
+          console.log("brands is null or undefined");
+          setParamsCompleted(true);
+          break;
+        case cities === null || typeof cities === "undefined":
+          console.log("cities is null or undefined");
+          setParamsCompleted(true);
+          break;
+        default:
+      }
+  }, [
+    modelsParam,
+    models,
+    citiesParam,
+    cities,
+    brandsParam,
+    brands,
+    collectionsParam,
+    collections,
+  ]);
+  // End of Get valueFilter from url params, then set selected filterValue and request (dispatch).
+
+  useEffect(() => {
+    if (!pageNum || pageNum === "1") {
+      setSearchParams((prev) => {
+        prev.delete("pageNumber");
+        return prev;
+      });
+      dispatch(setVehicleDeniedParams({ pageNumber: 1 }));
+    } else {
+      dispatch(setVehicleDeniedParams({ pageNumber: +pageNum }));
+    }
+  }, [pageNum, dispatch]);
+  //End of get valueFilter from url params and set selected
+
+  useEffect(() => {
+    if (searchQueryParam) {
+      const querySearch = searchQueryParam.trim();
+      setSearchQuery(querySearch);
+      dispatch(setVehicleDeniedParams({ Search: querySearch }));
+    } else {
+      dispatch(setVehicleDeniedParams({ Search: undefined }));
+    }
+  }, [searchQueryParam, dispatch]);
+
+  // Handle change filter
+  const handleSelectCollectionChange = (
+    event: React.SyntheticEvent<Element, Event>,
+    newValue: Collection[]
+  ) => {
+    // set to url params
+    if (newValue.length > 0) {
+      const collectionsFiltered = newValue?.map(
+        (collection) => collection.name
+      );
+      if (searchParams.get("Collections")) {
+        setSearchParams((prev) => {
+          prev.set("Collections", collectionsFiltered?.join("%2C") || "");
+          return prev;
+        });
+      } else {
+        setSearchParams((prev) => {
+          prev.append("Collections", collectionsFiltered?.join("%2C") || "");
+          return prev;
+        });
+      }
+    } else {
+      setSearchParams((prev) => {
+        prev.delete("Collections");
+        return prev;
+      });
+    }
+  };
+  const handleSelectModelChange = (
+    event: React.SyntheticEvent<Element, Event>,
+    newValue: ModelVehicle[]
+  ) => {
+    // set to url params
+    if (newValue.length > 0) {
+      const modelsFiltered = newValue?.map((model) => model.name);
+      if (searchParams.get("Models")) {
+        setSearchParams((prev) => {
+          prev.set("Models", modelsFiltered?.join("%2C") || "");
+          return prev;
+        });
+      } else {
+        setSearchParams((prev) => {
+          prev.append("Models", modelsFiltered?.join("%2C") || "");
+          return prev;
+        });
+      }
+    } else {
+      setSearchParams((prev) => {
+        prev.delete("Models");
+        return prev;
+      });
+    }
+  };
+  const handleSelectCityChange = (
+    event: React.SyntheticEvent<Element, Event>,
+    newValue: City[]
+  ) => {
+    if (newValue.length > 0) {
+      const citiesFiltered = newValue?.map((city) => city.Name);
+      if (searchParams.get("Cities")) {
+        setSearchParams((prev) => {
+          prev.set("Cities", citiesFiltered?.join("%2C") || "");
+          return prev;
+        });
+      } else {
+        setSearchParams((prev) => {
+          prev.append("Cities", citiesFiltered?.join("%2C") || "");
+          return prev;
+        });
+      }
+    } else {
+      setSearchParams((prev) => {
+        prev.delete("Cities");
+        return prev;
+      });
+    }
+  };
+  const handleSelectBrandChange = (
+    event: React.SyntheticEvent<Element, Event>,
+    newValue: Brand[]
+  ) => {
+    // set to url params
+    if (newValue.length > 0) {
+      const brandsFiltered = newValue?.map((brand) => brand.name);
+      if (searchParams.get("Brands")) {
+        setSearchParams((prev) => {
+          prev.set("Brands", brandsFiltered?.join("%2C") || "");
+          return prev;
+        });
+      } else {
+        setSearchParams((prev) => {
+          prev.append("Brands", brandsFiltered?.join("%2C") || "");
+          return prev;
+        });
+      }
+    } else {
+      setSearchParams((prev) => {
+        prev.delete("Brands");
+        return prev;
+      });
+    }
+  };
+  // End of handle change filter
+
+  const handleSearch = () => {
+    if (searchQuery) {
+      setSearchParams((prev) => {
+        prev.set("Search", searchQuery.trim());
+        return prev;
+      });
+    } else {
+      setSearchParams((prev) => {
+        prev.delete("Search");
+        return prev;
+      });
+    }
+  };
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      handleSearch();
+    }
+  };
+  // End of filter
 
   useEffect(() => {
     if (!vehiclesDeniedLoaded) {
       dispatch(getVehiclesDeniedAsync());
     }
-  }, [dispatch, vehiclesDeniedParams]);
+  }, [dispatch, vehiclesParams, paramsCompleted]);
 
   const handleSelectVehicle = (actionName: string, vehicle?: Vehicle) => {
     setOpenEditForm((cur) => !cur);
@@ -45,10 +381,12 @@ export default function VehiclePending() {
   };
 
   async function handleDeleteVehicle(vehicleDeleted: Vehicle) {
-    if (vehicleDeleted.images) {
+    const response = await dispatch(
+      deleteVehicleDeniedAsync(vehicleDeleted.id)
+    );
+    if (response.meta.requestStatus === "fulfilled" && vehicleDeleted.images) {
       await deleteImages(vehicleDeleted.images);
     }
-    await dispatch(deleteVehicleDeniedAsync(vehicleDeleted.id));
   }
 
   const cancelEditForm = () => {
@@ -80,11 +418,47 @@ export default function VehiclePending() {
       <>
         <Breadcrumb pageName="Vehicles Denied" />
         <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
-          <div className="flex justify-end">
+          <div className="flex flex-col md:flex-row justify-between">
+            <div className="flex items-center ml-2 order-2 md:order-1">
+              <label htmlFor="simple-search" className="sr-only">
+                Search
+              </label>
+              <div className="w-full">
+                <input
+                  type="text"
+                  className="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="Search..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                />
+              </div>
+              <button
+                onClick={handleSearch}
+                className="p-2.5 ml-2 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              >
+                <svg
+                  className="w-4 h-4"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+                  />
+                </svg>
+                <span className="sr-only">Search</span>
+              </button>
+            </div>
             <button
               onClick={() => handleSelectVehicle("Add new Vehicle")}
               type="button"
-              className="flex items-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+              className="flex order-1 ml-auto md:order-2 w-fit text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
             >
               <svg
                 className="h-5 w-5 mr-2"
@@ -128,6 +502,102 @@ export default function VehiclePending() {
               </svg>
               <span>Add new vehicle</span>
             </button>
+          </div>
+          <div className="flex overflow-auto scrollbar max-h-[333px] justify-center items-center">
+            <div className="flex flex-wrap space-x-2 space-y-2 justify-start items-center mb-2 w-full">
+              <div className="max-w-[25%] min-w-[220px] flex-1  ml-2 mt-2">
+                {/* Filter city */}
+                {!cities ? (
+                  <LoaderButton />
+                ) : (
+                  <Autocomplete
+                    className="bg-white rounded-md"
+                    fullWidth={true}
+                    size="small"
+                    multiple={true}
+                    disablePortal
+                    value={selectedCities}
+                    options={cities}
+                    getOptionLabel={(option) => option.Name}
+                    onChange={(event, newValue) =>
+                      handleSelectCityChange(event, newValue)
+                    }
+                    renderInput={(params) => (
+                      <TextField {...params} placeholder="Cities" />
+                    )}
+                  />
+                )}
+              </div>
+              <div className="max-w-[25%] min-w-[170px] flex-1">
+                {/* Filter by models */}
+                {loadingFetchModelsFilter ? (
+                  <LoaderButton />
+                ) : (
+                  <Autocomplete
+                    className="bg-white rounded-md"
+                    fullWidth={true}
+                    size="small"
+                    multiple={true}
+                    disablePortal
+                    value={selectedModels}
+                    options={models}
+                    getOptionLabel={(option) => option.name}
+                    onChange={(event, newValue) =>
+                      handleSelectModelChange(event, newValue)
+                    }
+                    renderInput={(params) => (
+                      <TextField {...params} placeholder="Models" />
+                    )}
+                  />
+                )}
+              </div>
+              <div className="max-w-[25%] min-w-[170px] flex-1">
+                {/* Filter by collections */}
+                {loadingFetchCollectionsFilter ? (
+                  <LoaderButton />
+                ) : (
+                  <Autocomplete
+                    className="bg-white rounded-md"
+                    fullWidth={true}
+                    size="small"
+                    multiple={true}
+                    disablePortal
+                    value={selectedCollections}
+                    options={collections}
+                    getOptionLabel={(option) => option.name}
+                    onChange={(event, newValue) =>
+                      handleSelectCollectionChange(event, newValue)
+                    }
+                    renderInput={(params) => (
+                      <TextField {...params} placeholder="Collections" />
+                    )}
+                  />
+                )}
+              </div>
+              <div className="max-w-[25%] min-w-[170px] flex-1">
+                {/* Filter by brands */}
+                {loadingFetchBrandsFilter ? (
+                  <LoaderButton />
+                ) : (
+                  <Autocomplete
+                    className="bg-white rounded-md"
+                    fullWidth={true}
+                    size="small"
+                    multiple={true}
+                    disablePortal
+                    value={selectedBrands}
+                    options={brands}
+                    getOptionLabel={(option) => option.name}
+                    onChange={(event, newValue) =>
+                      handleSelectBrandChange(event, newValue)
+                    }
+                    renderInput={(params) => (
+                      <TextField {...params} placeholder="Brands" />
+                    )}
+                  />
+                )}
+              </div>
+            </div>
           </div>
           <div className="max-w-full overflow-x-auto scrollbar">
             <table className="w-full table-auto">

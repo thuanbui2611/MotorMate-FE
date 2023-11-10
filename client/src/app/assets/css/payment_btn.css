@@ -50,13 +50,13 @@
 .arrow {
   width: 10px;
   height: 10px;
-  margin-top: 2px;
-  margin-right: 10px;
-  margin-left: 7px;
+  margin-top: 1px;
+  margin-right: 8px;
+  margin-left: 6px;
 }
 
 .new {
-  font-size: 14px;
+  font-size: 16px;
   font-family: "Lexend Deca", sans-serif;
   margin-left: 10px;
   font-weight: bold;

@@ -61,11 +61,10 @@ export default function MyProducts() {
     setOpenDetails((cur) => !cur);
   };
   async function handleDeleteVehicle(vehicleDeleted: Vehicle) {
-    debugger;
-    if (vehicleDeleted.images) {
+    const response = await dispatch(deleteProductAsync(vehicleDeleted.id));
+    if (response.meta.requestStatus === "fulfilled" && vehicleDeleted.images) {
       await deleteImages(vehicleDeleted.images);
     }
-    await dispatch(deleteProductAsync(vehicleDeleted.id));
   }
   const openConfirmDeleteDiaglog = (vehicle: Vehicle) => {
     setConfirmDeleteDiaglog((cur) => !cur);
@@ -228,24 +227,32 @@ export default function MyProducts() {
             </div>
           </div>
         </div>
-        <div className="max-w-full overflow-x-auto scrollbar">
+        <div className="max-w-full overflow-x-auto scrollbar rounded-lg border-gray-300 border shadow-md mb-5">
           <table className="w-full table-auto">
             <thead>
-              <tr className="bg-gray-200 text-left font-bold">
-                <th className="min-w-[220px] py-4 px-4 text-black xl:pl-11">
+              <tr className="bg-gray-100 text-left font-bold">
+                <th className="min-w-[220px] py-4 px-4 text-black xl:pl-11 border-b-2 border-gray-200">
                   Vehicle Name
                 </th>
-                <th className="min-w-[120px] py-4 px-4 text-black">
+                <th className="min-w-[120px] py-4 px-4 text-black border-b-2 border-gray-200">
                   License Plate
                 </th>
-                <th className="min-w-[120px] py-4 px-4 text-black">
+                <th className="min-w-[120px] py-4 px-4 text-black border-b-2 border-gray-200">
                   Insurance Expiry
                 </th>
-                <th className="min-w-[120px] py-4 px-4 text-black">Location</th>
-                <th className="min-w-[120px] py-4 px-4 text-black">Price</th>
-                <th className="min-w-[120px] py-4 px-4 text-black">Profit</th>
-                <th className="min-w-[120px] py-4 px-4 text-black">Status</th>
-                <th className="py-4 px-4">
+                <th className="min-w-[120px] py-4 px-4 text-black border-b-2 border-gray-200">
+                  Location
+                </th>
+                <th className="min-w-[120px] py-4 px-4 text-black border-b-2 border-gray-200">
+                  Price
+                </th>
+                <th className="min-w-[120px] py-4 px-4 text-black border-b-2 border-gray-200">
+                  Profit
+                </th>
+                <th className="min-w-[120px] py-4 px-4 text-black border-b-2 border-gray-200">
+                  Status
+                </th>
+                <th className="py-4 px-4  border-b-2 border-gray-200">
                   {/* <SelectPageSize onSelectPageSize={handleSelectPageSize} /> */}
                 </th>
               </tr>

@@ -43,6 +43,9 @@ function getAxiosParams(vehicleParams: VehicleParams) {
       params.append("Cities", city);
     });
   }
+  if (vehicleParams.Search) {
+    params.append("Search", vehicleParams.Search);
+  }
 
   return params;
 }
@@ -125,6 +128,7 @@ function initParams() {
     Collections: [],
     Models: [],
     Cities: [],
+    Search: null,
   };
 }
 

@@ -23,6 +23,7 @@ import BlogPage from "../../pages/blog";
 import BlogDetails from "../../pages/blog/BlogDetails";
 import MyProducts from "../../pages/profile/MyProducts";
 import ProfileDetails from "../components/ProfileDetails";
+import OrderDetail from "../../pages/order/OrderDetail";
 
 export const router = createBrowserRouter([
   {
@@ -52,6 +53,7 @@ export const router = createBrowserRouter([
           { path: "payment", element: <Payment /> },
           { path: "bill", element: <Bill /> },
           { path: "my-orders", element: <Orders /> },
+          { path: "my-orders/:id", element: <OrderDetail /> },
           { path: "my-cart", element: <Cart /> },
           { path: "server-error", element: <ServerErrors /> },
         ],

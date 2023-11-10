@@ -37,6 +37,8 @@ export default function VehiclesPage() {
   const [confirmDeleteDiaglog, setConfirmDeleteDiaglog] = useState(false);
   const [vehicleDeleted, setVehicleDeleted] = useState<Vehicle>({} as Vehicle);
   const [openDetails, setOpenDetails] = useState(false);
+  //Filter
+
   const [selectedCities, setSelectedCities] = useState<City[]>([]);
   const [brands, setBrands] = useState<Brand[]>([]);
   const [selectedBrands, setSelectedBrands] = useState<Brand[]>([]);
@@ -44,6 +46,7 @@ export default function VehiclesPage() {
   const [selectedCollections, setSelectedCollections] = useState<Collection[]>(
     []
   );
+  const [searchQuery, setSearchQuery] = useState<string>("");
   const [models, setModels] = useState<ModelVehicle[]>([]);
   const [selectedModels, setSelectedModels] = useState<ModelVehicle[]>([]);
   const [loadingFetchModelsFilter, setLoadingFetchModelsFilter] =
@@ -53,6 +56,7 @@ export default function VehiclesPage() {
   const [loadingFetchBrandsFilter, setLoadingFetchBrandsFilter] =
     useState(true);
   const [paramsCompleted, setParamsCompleted] = useState(false);
+  //End of filter
   const [isLockLoading, setIsLockLoading] = useState(false);
 
   const vehicles = useAppSelector(vehicleSelectors.selectAll);
@@ -66,7 +70,7 @@ export default function VehiclesPage() {
   const modelsParam = searchParams.get("Models");
   const collectionsParam = searchParams.get("Collections");
   const citiesParam = searchParams.get("Cities");
-
+  const searchQueryParam = searchParams.get("Search");
   const cities = dataCityVN as City[];
 
   // Get data for filter
@@ -232,10 +236,14 @@ export default function VehiclesPage() {
   //End of get valueFilter from url params and set selected
 
   useEffect(() => {
-    if (!vehicleLoaded && paramsCompleted) {
-      dispatch(getVehiclesAsync());
+    if (searchQueryParam) {
+      const querySearch = searchQueryParam.trim();
+      setSearchQuery(querySearch);
+      dispatch(setVehicleParams({ Search: querySearch }));
+    } else {
+      dispatch(setVehicleParams({ Search: undefined }));
     }
-  }, [dispatch, vehicleParams, paramsCompleted]);
+  }, [searchQueryParam, dispatch]);
 
   // Handle change filter
   const handleSelectCollectionChange = (
@@ -341,6 +349,32 @@ export default function VehiclesPage() {
   };
   // End of handle change filter
 
+  const handleSearch = () => {
+    if (searchQuery) {
+      setSearchParams((prev) => {
+        prev.set("Search", searchQuery.trim());
+        return prev;
+      });
+    } else {
+      setSearchParams((prev) => {
+        prev.delete("Search");
+        return prev;
+      });
+    }
+  };
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      handleSearch();
+    }
+  };
+  // End of filter
+
+  useEffect(() => {
+    if (!vehicleLoaded && paramsCompleted) {
+      dispatch(getVehiclesAsync());
+    }
+  }, [dispatch, vehicleParams, paramsCompleted]);
+
   const handleSelectVehicle = (actionName: string, vehicle?: Vehicle) => {
     setOpenEditForm((cur) => !cur);
     if (vehicle) {
@@ -350,10 +384,10 @@ export default function VehiclesPage() {
   };
 
   async function handleDeleteVehicle(vehicleDeleted: Vehicle) {
-    if (vehicleDeleted.images) {
+    const response = await dispatch(deleteVehicleAsync(vehicleDeleted.id));
+    if (response.meta.requestStatus === "fulfilled" && vehicleDeleted.images) {
       await deleteImages(vehicleDeleted.images);
     }
-    await dispatch(deleteVehicleAsync(vehicleDeleted.id));
   }
 
   const cancelEditForm = () => {
@@ -396,11 +430,47 @@ export default function VehiclesPage() {
       <>
         <Breadcrumb pageName="Vehicles" />
         <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
-          <div className="flex justify-end">
+          <div className="flex flex-col md:flex-row justify-between">
+            <div className="flex items-center ml-2 order-2 md:order-1">
+              <label htmlFor="simple-search" className="sr-only">
+                Search
+              </label>
+              <div className="w-full">
+                <input
+                  type="text"
+                  className="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="Search..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                />
+              </div>
+              <button
+                onClick={handleSearch}
+                className="p-2.5 ml-2 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              >
+                <svg
+                  className="w-4 h-4"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+                  />
+                </svg>
+                <span className="sr-only">Search</span>
+              </button>
+            </div>
             <button
               onClick={() => handleSelectVehicle("Add new Vehicle")}
               type="button"
-              className="flex items-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+              className="flex order-1 ml-auto md:order-2 w-fit text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
             >
               <svg
                 className="h-5 w-5 mr-2"
@@ -608,9 +678,62 @@ export default function VehiclesPage() {
                                 />
                               </div>
                               <div className="ml-3 flex flex-col">
-                                <h5 className="font-medium text-black dark:text-white">
-                                  {vehicle.specifications.modelName}
-                                </h5>
+                                <div className="flex">
+                                  <h5 className="font-medium text-black dark:text-white">
+                                    {vehicle.specifications.modelName}
+                                  </h5>
+                                  <a
+                                    className="bg-blue-500 bg-opacity-20 rounded-full w-4 h-4 ml-1 hover:bg-opacity-50 p-[2px]"
+                                    href={
+                                      "https://motormate.vercel.app/product-detail/" +
+                                      vehicle.id
+                                    }
+                                    target="_blank"
+                                  >
+                                    <svg
+                                      className="w-full h-full "
+                                      fill="#0683d0"
+                                      viewBox="0 0 36 36"
+                                      version="1.1"
+                                      preserveAspectRatio="xMidYMid meet"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      xmlnsXlink="http://www.w3.org/1999/xlink"
+                                      stroke="#009dff"
+                                      stroke-width="0.00036"
+                                    >
+                                      <g
+                                        id="SVGRepo_bgCarrier"
+                                        stroke-width="0"
+                                      ></g>
+                                      <g
+                                        id="SVGRepo_tracerCarrier"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke="#CCCCCC"
+                                        stroke-width="0.36"
+                                      ></g>
+                                      <g id="SVGRepo_iconCarrier">
+                                        <title>pop-out-line</title>
+                                        <path
+                                          className="clr-i-outline clr-i-outline-path-1"
+                                          d="M27,33H5a2,2,0,0,1-2-2V9A2,2,0,0,1,5,7H15V9H5V31H27V21h2V31A2,2,0,0,1,27,33Z"
+                                        ></path>
+                                        <path
+                                          className="clr-i-outline clr-i-outline-path-2"
+                                          d="M18,3a1,1,0,0,0,0,2H29.59L15.74,18.85a1,1,0,1,0,1.41,1.41L31,6.41V18a1,1,0,0,0,2,0V3Z"
+                                        ></path>
+                                        <rect
+                                          x="0"
+                                          y="0"
+                                          width="36"
+                                          height="36"
+                                          fill-opacity="0"
+                                        ></rect>{" "}
+                                      </g>
+                                    </svg>
+                                  </a>
+                                </div>
+
                                 <p className="text-sm">
                                   {vehicle.specifications.color}
                                 </p>

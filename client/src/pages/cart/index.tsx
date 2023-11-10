@@ -15,10 +15,6 @@ import { toast } from "react-toastify";
 export default function Cart() {
   const [confirmDelete, setConfirmDelete] = useState<Boolean>(false);
   const [vehicleDeleted, setVehicleDeleted] = useState<Vehicle>({} as Vehicle);
-  // const [selectAllVehiclesShop, setSelectAllVehiclesShop] = useState<string[]>(
-  //   []
-  // );
-  // const [selectedVehicles, setSelectedVehicles] = useState<Vehicle[]>([]);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const userLogin = useAppSelector((state) => state.account.userDetail);
@@ -59,8 +55,10 @@ export default function Cart() {
     const target = event.target as HTMLElement;
     const isInputClicked =
       target.tagName === "INPUT" || target.parentElement?.tagName === "LABEL";
-    // Exclude the first <td> with the input checkbox from triggering the onClick event
-    if (!isInputClicked) {
+    const isSvgClicked =
+      target.tagName === "svg" || target.parentElement?.tagName === "svg";
+    // Exclude the first <td> with the input checkbox or the last <td> with the svg from triggering the onClick event
+    if (!isInputClicked && !isSvgClicked) {
       navigate("/product-detail/" + vehicleId);
     }
   };
@@ -89,10 +87,16 @@ export default function Cart() {
     <Loading />
   ) : (
     <>
-      <section className="pt-24 bg-gray-100 min-h-screen">
+      <section
+        className={`bg-gray-100 h-fit ${
+          cart.shops.length === 0 && "min-h-screen"
+        }`}
+      >
         <div className="px-4 py-6 mx-auto max-w-7xl lg:py-4 md:px-6">
           <div>
-            <h2 className="mb-8 text-4xl font-bold ">Your Cart</h2>
+            <h2 className="text-center my-6 text-2xl md:text-4xl lg:text-5xl tracking-tight font-extrabold text-gradient">
+              My Cart
+            </h2>
             {/* Start cart */}
             {cart.shops.length === 0 ? (
               <div className="flex items-center justify-center text-center text-xl font-semibold text-orange-based brightness-90">
@@ -146,7 +150,7 @@ export default function Cart() {
                     <div className="max-w-full overflow-x-auto scrollbar">
                       <table className="w-full table-auto">
                         <thead>
-                          <tr className=" bg-gray-200 text-left text-sm md:text-base lg:text-lg font-bold">
+                          <tr className=" bg-gray-200/50 text-left text-sm md:text-base lg:text-lg font-bold">
                             <th className="py-4 px-4"></th>
                             <th className="min-w-[300px] py-4 px-4 text-black xl:pl-11">
                               Vehicle
@@ -277,24 +281,6 @@ export default function Cart() {
             {/* End cart */}
           </div>
         </div>
-        {/* <div className="sticky bottom-0 flex flex-col items-center justify-center ">
-          <div className="bg-gray-200 flex flex-col items-center justify-center mt-5 p-3">
-            <div className="flex justify-end">
-              <p className="mr-2 font-bold text-black text-2xl">
-                Total payment:
-              </p>
-              <p className="font-bold text-blue-500 text-2xl mr-2">10000000</p>
-            </div>
-            <div className="mt-3 flex justify-center">
-              <a
-                href="/check-out/1"
-                className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500"
-              >
-                Checkout
-              </a>
-            </div>
-          </div>
-        </div> */}
       </section>
 
       {confirmDelete && (

@@ -6,6 +6,8 @@ import { Link } from "react-router-dom";
 import BlogList from "./BlogList";
 import { Vehicle } from "../../app/models/Vehicle";
 
+import "../../app/assets/css/defaultScrollbar.css";
+
 export default function HomePage() {
   const [products, setProducts] = useState<Vehicle[]>([]);
   const [loading, setLoading] = useState(true);
@@ -886,7 +888,11 @@ export default function HomePage() {
               <p className="text-white">Sales</p>
               <ul className="flex items-center justify-center mt-4 space-x-4 bg-white rounded-2xl px-2 py-1 w-fit">
                 <li>
-                  <a href="#" className="text-[#39569c] hover:text-gray-900 ">
+                  <a
+                    href="https://www.facebook.com/BC.Thuan2611"
+                    target="_blank"
+                    className="text-[#39569c] hover:text-gray-900 "
+                  >
                     <svg
                       className="w-6 h-6"
                       fill="currentColor"
@@ -902,7 +908,11 @@ export default function HomePage() {
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="text-[#00acee] hover:text-gray-900 ">
+                  <a
+                    href="https://www.linkedin.com/in/thuan2611"
+                    target="_blank"
+                    className="text-[#00acee] hover:text-gray-900"
+                  >
                     <svg
                       className="w-6 h-6"
                       xmlns="http://www.w3.org/2000/svg"
@@ -922,7 +932,11 @@ export default function HomePage() {
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="text-gray-900 hover:text-gray-900  ">
+                  <a
+                    href="https://github.com/thuanbui2611"
+                    target="_blank"
+                    className="text-gray-900 hover:text-gray-900  "
+                  >
                     <svg
                       className="w-6 h-6"
                       fill="currentColor"

@@ -15,6 +15,7 @@ import {
 import { UserDetail } from "../../app/models/User";
 import UserDetails from "./UserDetails";
 import UserForm from "./UserForm";
+import { deleteImage } from "../../app/utils/Cloudinary";
 
 export default function UsersPage() {
   const [pageNumber, setPageNumber] = useSearchParams({ pageNumber: "" });
@@ -65,8 +66,13 @@ export default function UsersPage() {
   };
 
   async function handleDeleteUser(userDeleted: UserDetail) {
-    //Delete image of user?
-    await dispatch(deleteUserAsync(userDeleted.id));
+    const response = await dispatch(deleteUserAsync(userDeleted.username));
+    if (
+      response.meta.requestStatus === "fulfilled" &&
+      userDeleted.image.publicId
+    ) {
+      await deleteImage(userDeleted.image.publicId);
+    }
   }
   const openConfirmDeleteDiaglog = (user: UserDetail) => {
     setConfirmDeleteDiaglog((cur) => !cur);

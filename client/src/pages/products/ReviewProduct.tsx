@@ -1,6 +1,4 @@
-import { useState } from "react";
 import AdsReviewProduct from "../../app/components/AdsReviewProduct";
-import ImageReview from "../../app/components/ImageReview";
 import { SlideshowLightbox } from "lightbox.js-react";
 import "lightbox.js-react/dist/index.css";
 
@@ -34,7 +32,7 @@ export default function ReviewProduct() {
             </p>
           </div>
           {/* Review Start */}
-          <div className="w-full flex justify-start items-start flex-col bg-gray-50 p-3">
+          <div className="w-full flex justify-start items-start flex-col bg-gray-50 p-3 rounded-2xl">
             <div className="mx-2">
               <div className="md:block">
                 <div className="mt-6 flex justify-start items-center flex-row space-x-2.5">

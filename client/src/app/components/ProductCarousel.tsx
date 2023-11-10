@@ -29,32 +29,28 @@ export default function ProductCarousel({ products, userLogin }: Props) {
     };
   }, []);
 
-  const {
-    carouselFragment,
-    slideToPrevItem,
-    slideToNextItem,
-    useListenToCustomEvent, //custom hook to listen event when the slide changes
-  } = useSpringCarousel({
-    autoplay: true,
-    slideToNextItem: true,
-    slideToPrevItem: true,
-    itemsPerSlide:
-      products.length < itemsPerSlide ? products.length : itemsPerSlide,
-    withLoop: true,
-    gutter: 24, // to add the space between slides
-    items: products.map((product) => {
-      return {
-        ...products,
-        renderItem: (
-          <ProductCard
-            key={product.id}
-            product={product}
-            userLogin={userLogin}
-          />
-        ),
-      };
-    }),
-  });
+  const { carouselFragment, slideToPrevItem, slideToNextItem } =
+    useSpringCarousel({
+      autoplay: true,
+      slideToNextItem: true,
+      slideToPrevItem: true,
+      itemsPerSlide:
+        products.length < itemsPerSlide ? products.length : itemsPerSlide,
+      withLoop: true,
+      gutter: 24,
+      items: products.map((product) => {
+        return {
+          ...products,
+          renderItem: (
+            <ProductCard
+              key={product.id}
+              product={product}
+              userLogin={userLogin}
+            />
+          ),
+        };
+      }),
+    });
   return (
     <div className=" py-6 md:py-8 lg:py-10 relative">
       <button

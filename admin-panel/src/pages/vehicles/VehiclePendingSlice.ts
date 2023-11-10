@@ -13,7 +13,7 @@ import { toast } from "react-toastify";
 interface VehicleState {
   vehiclesPending: Vehicle | null;
   vehiclesPendingLoaded: boolean;
-  vehiclesPendingParams: VehicleParams;
+  vehiclesParams: VehicleParams;
   metaData: MetaData | null;
 }
 
@@ -43,7 +43,9 @@ function getAxiosParams(vehicleParams: VehicleParams) {
       params.append("Cities", city);
     });
   }
-
+  if (vehicleParams.Search) {
+    params.append("Search", vehicleParams.Search);
+  }
   return params;
 }
 
@@ -52,7 +54,11 @@ export const getVehiclesPendingAsync = createAsyncThunk<
   void,
   { state: RootState }
 >("vehiclesPending/getVehiclesPendingAsync", async (_, ThunkAPI) => {
-  const params = getAxiosParams(ThunkAPI.getState().vehicle.vehicleParams);
+  const params = getAxiosParams(
+    ThunkAPI.getState().vehiclePending.vehiclesParams
+  );
+  debugger;
+  console.log(params);
   try {
     const response = await agent.Vehicle.listVehicleByStatus(params, "pending");
     ThunkAPI.dispatch(setMetaData(response.metaData));
@@ -96,6 +102,7 @@ function initParams() {
     Collections: [],
     Models: [],
     Cities: [],
+    Search: null,
   };
 }
 
@@ -104,7 +111,7 @@ export const VehiclePendingSlice = createSlice({
   initialState: vehiclesPendingAdapter.getInitialState<VehicleState>({
     vehiclesPending: null,
     vehiclesPendingLoaded: false,
-    vehiclesPendingParams: initParams(),
+    vehiclesParams: initParams(),
     metaData: null,
   }),
   reducers: {
@@ -115,21 +122,21 @@ export const VehiclePendingSlice = createSlice({
       vehiclesPendingAdapter.removeOne(state, action.payload);
     },
     setVehiclePendingParams: (state, action) => {
-      state.vehiclesPendingParams = {
-        ...state.vehiclesPendingParams,
+      state.vehiclesParams = {
+        ...state.vehiclesParams,
         ...action.payload,
       };
     },
     resetVehiclePendingParams: (state) => {
-      state.vehiclesPendingParams = initParams();
+      state.vehiclesParams = initParams();
     },
     setMetaData: (state, action) => {
       state.metaData = action.payload;
     },
     setPageNumber: (state, action) => {
       state.vehiclesPendingLoaded = false;
-      state.vehiclesPendingParams = {
-        ...state.vehiclesPendingParams,
+      state.vehiclesParams = {
+        ...state.vehiclesParams,
         ...action.payload,
       };
     },

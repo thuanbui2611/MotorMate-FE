@@ -62,10 +62,13 @@ export default function BrandPage() {
   };
 
   async function handleDeleteBrand(brandDeleted: Brand) {
-    if (brandDeleted.image.publicId) {
+    const response = await dispatch(deleteBrandAsync(brandDeleted.id));
+    if (
+      response.meta.requestStatus === "fulfilled" &&
+      brandDeleted.image.publicId
+    ) {
       await deleteImage(brandDeleted.image.publicId);
     }
-    await dispatch(deleteBrandAsync(brandDeleted.id));
   }
   const openConfirmDeleteDiaglog = (brand: Brand) => {
     setConfirmDeleteDiaglog((cur) => !cur);

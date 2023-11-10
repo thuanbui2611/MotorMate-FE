@@ -15,7 +15,7 @@ export default function ProductCard({ product, userLogin }: Props) {
     <>
       <Link
         to={"/product-detail/" + product.id}
-        className="hover:brightness-90 border border-gray-300 bg-white rounded-md w-full shadow-lg"
+        className="hover:brightness-90 border border-gray-300 bg-white rounded-md max-w-[19rem] w-full shadow-lg"
       >
         <div className="relative bg-white rounded-md rounded-b-none">
           {userLogin &&

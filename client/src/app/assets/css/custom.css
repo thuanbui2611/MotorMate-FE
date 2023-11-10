@@ -279,6 +279,8 @@ body {
     font-size: 8px;
   }
   .icon {
+    width: 10px;
+    height: 10px;
     margin-right: 2px;
   }
 }
@@ -308,6 +310,11 @@ body {
 
   .card-container button {
     font-size: 1.1vw;
+  }
+  .icon {
+    width: 1vw;
+    height: 1vw;
+    margin-bottom: 0.5vw;
   }
 }
 
@@ -457,16 +464,6 @@ body {
   .bg-container {
     background-size: 100% 100%;
   }
-}
-body {
-  scrollbar-width: none; /* For Firefox */
-  -ms-overflow-style: none; /* For Internet Explorer and Edge */
-}
-
-/* Hide the default scrollbar for Chrome and Safari */
-body::-webkit-scrollbar {
-  width: 0;
-  background: transparent;
 }
 
 .procedure-title {
@@ -1250,7 +1247,6 @@ p {
 }
 
 .labelforsearch {
-  cursor: text;
   padding: 0px 12px;
 }
 

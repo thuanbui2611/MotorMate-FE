@@ -1,0 +1,29 @@
+/* body {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+body::-webkit-scrollbar {
+  width: 0;
+  background: transparent;
+}
+
+body.hide-scrollbar {
+  scrollbar-width: none;
+} */
+
+/* For Firefox */
+body.hide-scrollbar {
+  scrollbar-width: none;
+}
+
+/* For Internet Explorer and Edge */
+body.hide-scrollbar {
+  -ms-overflow-style: none;
+}
+
+/* Hide the default scrollbar for Chrome and Safari */
+body.hide-scrollbar::-webkit-scrollbar {
+  width: 0;
+  background: transparent;
+}

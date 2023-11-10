@@ -7,8 +7,6 @@ import { MetaData } from "../../app/models/Pagination";
 import { Vehicle, VehicleParams } from "../../app/models/Vehicle";
 import { RootState } from "../../app/store/ConfigureStore";
 import agent from "../../app/api/agent";
-import { FieldValues } from "react-hook-form";
-import { toast } from "react-toastify";
 
 interface ProductState {
   product: Vehicle | null;
