@@ -1091,11 +1091,6 @@ p {
   height: 100%;
 }
 
-.inputForm .input {
-  margin-top: -5px;
-  padding: 4px 0 0 10px;
-}
-
 .input:focus {
   outline: none;
 }
@@ -1184,9 +1179,7 @@ p {
     align-items: center;
     justify-content: center;
   }
-  .inputForm .input {
-    margin-top: 0px;
-  }
+
   .button-submit {
     width: 400px;
   }

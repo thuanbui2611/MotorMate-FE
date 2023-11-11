@@ -84,13 +84,15 @@ export default function ForgotPassword() {
                 </svg>
                 <TextField
                   type="email"
-                  variant="standard"
+                  variant="outlined"
                   size="small"
                   margin="normal"
+                  style={{ marginTop: 0, marginBottom: 0 }}
                   sx={{
                     width: "90%",
-                    paddingLeft: "10px",
-                    margin: "auto",
+                    padding: 0,
+                    border: "none",
+                    fontSize: "25px",
                     "& .MuiInputBase-root": {
                       height: "25px", // Adjusted height for mobile view
                     },
@@ -99,6 +101,12 @@ export default function ForgotPassword() {
                         height: "37px", // Adjusted height for computer view
                       },
                     },
+                    "& .MuiOutlinedInput-input": {
+                      boxShadow: "none",
+                      padding: "3px 0 0 10px",
+                      marginBottom: "7px",
+                    },
+                    "& fieldset": { border: "none" },
                   }}
                   placeholder="Your Email"
                   className="input"

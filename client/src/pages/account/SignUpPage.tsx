@@ -104,13 +104,15 @@ export default function SignUpPage() {
                 </svg>
                 <TextField
                   type="text"
-                  variant="standard"
+                  variant="outlined"
                   size="small"
                   margin="normal"
+                  style={{ marginTop: 0, marginBottom: 0 }}
                   sx={{
                     width: "90%",
-                    paddingLeft: "10px",
-                    margin: "auto",
+                    padding: 0,
+                    border: "none",
+                    fontSize: "25px",
                     "& .MuiInputBase-root": {
                       height: "25px", // Adjusted height for mobile view
                     },
@@ -119,6 +121,12 @@ export default function SignUpPage() {
                         height: "37px", // Adjusted height for computer view
                       },
                     },
+                    "& .MuiOutlinedInput-input": {
+                      boxShadow: "none",
+                      padding: "3px 0 0 10px",
+                      marginBottom: "7px",
+                    },
+                    "& fieldset": { border: "none" },
                   }}
                   placeholder="Your first name"
                   className="input"
@@ -163,13 +171,15 @@ export default function SignUpPage() {
                 </svg>
                 <TextField
                   type="text"
-                  variant="standard"
+                  variant="outlined"
                   size="small"
                   margin="normal"
+                  style={{ marginTop: 0, marginBottom: 0 }}
                   sx={{
                     width: "90%",
-                    paddingLeft: "10px",
-                    margin: "auto",
+                    padding: 0,
+                    border: "none",
+                    fontSize: "25px",
                     "& .MuiInputBase-root": {
                       height: "25px", // Adjusted height for mobile view
                     },
@@ -178,8 +188,14 @@ export default function SignUpPage() {
                         height: "37px", // Adjusted height for computer view
                       },
                     },
+                    "& .MuiOutlinedInput-input": {
+                      boxShadow: "none",
+                      padding: "3px 0 0 10px",
+                      marginBottom: "7px",
+                    },
+                    "& fieldset": { border: "none" },
                   }}
-                  placeholder="Your first name"
+                  placeholder="Your last name"
                   className="input"
                   {...register("lastName", {
                     required: "Last name is required",
@@ -222,13 +238,15 @@ export default function SignUpPage() {
                 </svg>
                 <TextField
                   type="text"
-                  variant="standard"
+                  variant="outlined"
                   size="small"
                   margin="normal"
+                  style={{ marginTop: 0, marginBottom: 0 }}
                   sx={{
                     width: "90%",
-                    paddingLeft: "10px",
-                    margin: "auto",
+                    padding: 0,
+                    border: "none",
+                    fontSize: "25px",
                     "& .MuiInputBase-root": {
                       height: "25px", // Adjusted height for mobile view
                     },
@@ -237,6 +255,12 @@ export default function SignUpPage() {
                         height: "37px", // Adjusted height for computer view
                       },
                     },
+                    "& .MuiOutlinedInput-input": {
+                      boxShadow: "none",
+                      padding: "3px 0 0 10px",
+                      marginBottom: "7px",
+                    },
+                    "& fieldset": { border: "none" },
                   }}
                   placeholder="Your Username"
                   className="input"
@@ -267,13 +291,15 @@ export default function SignUpPage() {
                 </svg>
                 <TextField
                   type="email"
-                  variant="standard"
+                  variant="outlined"
                   size="small"
                   margin="normal"
+                  style={{ marginTop: 0, marginBottom: 0 }}
                   sx={{
                     width: "90%",
-                    paddingLeft: "10px",
-                    margin: "auto",
+                    padding: 0,
+                    border: "none",
+                    fontSize: "25px",
                     "& .MuiInputBase-root": {
                       height: "25px", // Adjusted height for mobile view
                     },
@@ -282,6 +308,12 @@ export default function SignUpPage() {
                         height: "37px", // Adjusted height for computer view
                       },
                     },
+                    "& .MuiOutlinedInput-input": {
+                      boxShadow: "none",
+                      padding: "3px 0 0 10px",
+                      marginBottom: "7px",
+                    },
+                    "& fieldset": { border: "none" },
                   }}
                   placeholder="Your Email"
                   className="input"
@@ -311,13 +343,15 @@ export default function SignUpPage() {
                 </svg>
                 <TextField
                   type="password"
-                  variant="standard"
+                  variant="outlined"
                   size="small"
                   margin="normal"
+                  style={{ marginTop: 0, marginBottom: 0 }}
                   sx={{
                     width: "90%",
-                    paddingLeft: "10px",
-                    margin: "auto",
+                    padding: 0,
+                    border: "none",
+                    fontSize: "25px",
                     "& .MuiInputBase-root": {
                       height: "25px", // Adjusted height for mobile view
                     },
@@ -326,6 +360,12 @@ export default function SignUpPage() {
                         height: "37px", // Adjusted height for computer view
                       },
                     },
+                    "& .MuiOutlinedInput-input": {
+                      boxShadow: "none",
+                      padding: "3px 0 0 10px",
+                      marginBottom: "7px",
+                    },
+                    "& fieldset": { border: "none" },
                   }}
                   placeholder="Your Password"
                   className="input"
@@ -351,13 +391,15 @@ export default function SignUpPage() {
                 </svg>
                 <TextField
                   type="password"
-                  variant="standard"
+                  variant="outlined"
                   size="small"
                   margin="normal"
+                  style={{ marginTop: 0, marginBottom: 0 }}
                   sx={{
                     width: "90%",
-                    paddingLeft: "10px",
-                    margin: "auto",
+                    padding: 0,
+                    border: "none",
+                    fontSize: "25px",
                     "& .MuiInputBase-root": {
                       height: "25px", // Adjusted height for mobile view
                     },
@@ -366,6 +408,12 @@ export default function SignUpPage() {
                         height: "37px", // Adjusted height for computer view
                       },
                     },
+                    "& .MuiOutlinedInput-input": {
+                      boxShadow: "none",
+                      padding: "3px 0 0 10px",
+                      marginBottom: "7px",
+                    },
+                    "& fieldset": { border: "none" },
                   }}
                   placeholder="Your Confirm Password"
                   className="input"
@@ -410,13 +458,15 @@ export default function SignUpPage() {
                 </svg>
                 <TextField
                   type="tel"
-                  variant="standard"
+                  variant="outlined"
                   size="small"
                   margin="normal"
+                  style={{ marginTop: 0, marginBottom: 0 }}
                   sx={{
                     width: "90%",
-                    paddingLeft: "10px",
-                    margin: "auto",
+                    padding: 0,
+                    border: "none",
+                    fontSize: "25px",
                     "& .MuiInputBase-root": {
                       height: "25px", // Adjusted height for mobile view
                     },
@@ -425,6 +475,12 @@ export default function SignUpPage() {
                         height: "37px", // Adjusted height for computer view
                       },
                     },
+                    "& .MuiOutlinedInput-input": {
+                      boxShadow: "none",
+                      padding: "3px 0 0 10px",
+                      marginBottom: "7px",
+                    },
+                    "& fieldset": { border: "none" },
                   }}
                   placeholder="Your Phone Number"
                   className="input"

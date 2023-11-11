@@ -12,7 +12,7 @@ interface AccountState {
 
 const initialState: AccountState = {
   user: null,
-  userDetail: null
+  userDetail: null,
 };
 
 export const signInUser = createAsyncThunk<User, FieldValues>(
@@ -103,6 +103,22 @@ export const accountSlice = createSlice({
         throw new Error("No valid token found, please login again!");
       }
     },
+    updateUser: (state, action) => {
+      debugger;
+      const userUpdated: UserDetail = action.payload;
+      state.userDetail = action.payload;
+
+      const dataUpdate: User = {
+        username: userUpdated.username,
+        name: userUpdated.fullName,
+        email: userUpdated.email,
+        role: userUpdated.roles[0],
+        avatar: userUpdated.image.imageUrl,
+        token: state.user?.token,
+      };
+
+      state.user = dataUpdate;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchUserFromToken.rejected, (state, action) => {
@@ -112,12 +128,12 @@ export const accountSlice = createSlice({
     });
 
     builder
-    .addCase(getUserDetails.fulfilled, (state, action) => {
-      state.userDetail = action.payload;
-    })
-    .addCase(getUserDetails.rejected, (state, action) => {
-      console.log("Auth user fail")
-    })
+      .addCase(getUserDetails.fulfilled, (state, action) => {
+        state.userDetail = action.payload;
+      })
+      .addCase(getUserDetails.rejected, (state, action) => {
+        console.log("Auth user fail");
+      });
 
     builder.addMatcher(
       isAnyOf(
@@ -138,8 +154,6 @@ export const accountSlice = createSlice({
         console.log(action.payload);
       }
     );
-
-    
   },
 });
 
@@ -165,4 +179,4 @@ function setDataUserFromToken(decodedToken: any, userToken: string) {
   return user;
 }
 
-export const { signOut, setUser } = accountSlice.actions;
+export const { signOut, setUser, updateUser } = accountSlice.actions;

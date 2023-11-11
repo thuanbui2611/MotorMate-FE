@@ -14,7 +14,7 @@ import { FieldValues, useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { deleteImage, uploadImage } from "../../app/utils/Cloudinary";
-import { addUserAsync, updateUserAsync } from "./UserSlice";
+import { updateUserAsync } from "./UserSlice";
 import { useAppDispatch } from "../../app/store/ConfigureStore";
 
 interface Props {
@@ -46,6 +46,7 @@ export default function UserForm({ user, cancelEdit, actionName }: Props) {
   useEffect(() => {
     if (user) {
       reset(user);
+      setValue("dateOfBirth", user.dateOfBirth?.substring(0, 10));
     }
   }, [reset, setValue, user]);
 
@@ -193,7 +194,7 @@ export default function UserForm({ user, cancelEdit, actionName }: Props) {
                 control={control}
                 label="Address"
                 {...register("address", {
-                  required: "Username is required",
+                  required: "Address is required",
                   pattern: {
                     value:
                       /^(?!.*[<>])(?!.*<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>)(?!.*\b(xss|XSS)\b).*$/i,

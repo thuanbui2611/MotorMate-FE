@@ -459,6 +459,12 @@ export default function Products() {
                           <TextField
                             {...params}
                             placeholder="Filter by Cities"
+                            sx={{
+                              border: "none",
+                              "& .MuiOutlinedInput-input": {
+                                boxShadow: "none",
+                              },
+                            }}
                           />
                         )}
                       />
@@ -489,6 +495,12 @@ export default function Products() {
                         renderInput={(params) => (
                           <TextField
                             {...params}
+                            sx={{
+                              border: "none",
+                              "& .MuiOutlinedInput-input": {
+                                boxShadow: "none",
+                              },
+                            }}
                             placeholder="Filter by Brands"
                           />
                         )}
@@ -519,7 +531,16 @@ export default function Products() {
                           handleSelectCollectionChange(event, newValue)
                         }
                         renderInput={(params) => (
-                          <TextField {...params} placeholder="Collections" />
+                          <TextField
+                            {...params}
+                            sx={{
+                              border: "none",
+                              "& .MuiOutlinedInput-input": {
+                                boxShadow: "none",
+                              },
+                            }}
+                            placeholder="Collections"
+                          />
                         )}
                       />
                     )}
@@ -548,7 +569,16 @@ export default function Products() {
                           handleSelectModelChange(event, newValue)
                         }
                         renderInput={(params) => (
-                          <TextField {...params} placeholder="Models" />
+                          <TextField
+                            {...params}
+                            sx={{
+                              border: "none",
+                              "& .MuiOutlinedInput-input": {
+                                boxShadow: "none",
+                              },
+                            }}
+                            placeholder="Models"
+                          />
                         )}
                       />
                     )}
@@ -568,6 +598,7 @@ export default function Products() {
                           value={searchQuery}
                           onChange={(e) => setSearchQuery(e.target.value)}
                           onKeyDown={handleKeyDown}
+                          style={{ boxShadow: "none" }}
                         />
 
                         <label

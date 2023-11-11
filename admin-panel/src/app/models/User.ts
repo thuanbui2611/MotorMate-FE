@@ -3,6 +3,7 @@ export interface User {
   name: string;
   email: string;
   role: string;
+  avatar: string;
   token?: string;
 }
 
@@ -17,6 +18,8 @@ export interface UserDetail {
   address: string;
   phoneNumber: string;
   dateOfBirth: string;
+  createdDate: string;
+  roles: string[];
 }
 
 export interface Image {

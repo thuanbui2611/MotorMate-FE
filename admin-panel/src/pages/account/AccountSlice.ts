@@ -3,14 +3,16 @@ import { FieldValues } from "react-hook-form";
 import jwt_decode from "jwt-decode";
 import { toast } from "react-toastify";
 import agent from "../../app/api/agent";
-import { User } from "../../app/models/User";
+import { User, UserDetail } from "../../app/models/User";
 
 interface AccountState {
   user: User | null;
+  userDetail: UserDetail | null;
 }
 
 const initialState: AccountState = {
   user: null,
+  userDetail: null,
 };
 
 export const signInUser = createAsyncThunk<User, FieldValues>(
@@ -62,22 +64,22 @@ export const fetchUserFromToken = createAsyncThunk<User>(
   }
 );
 
-// export const getUserDetails = createAsyncThunk<User>(
-//   "account/getUserDetails",
-//   async (_, thunkAPI) => {
-//     try {
-//       const user = await agent.Account.userDetail();
-//       return user;
-//     } catch (error) {
-//       return thunkAPI.rejectWithValue({ error: (error as any).data });
-//     }
-//   },
-//   {
-//     condition: () => {
-//       if (!localStorage.getItem("user")) return false;
-//     },
-//   }
-// );
+export const getUserDetails = createAsyncThunk<UserDetail>(
+  "account/getUserDetails",
+  async (_, thunkAPI) => {
+    try {
+      const user = await agent.Account.userDetail();
+      return user;
+    } catch (error) {
+      return thunkAPI.rejectWithValue({ error: (error as any).data });
+    }
+  },
+  {
+    condition: () => {
+      if (!localStorage.getItem("user")) return false;
+    },
+  }
+);
 
 export const AccountSlice = createSlice({
   name: "account",
@@ -108,6 +110,14 @@ export const AccountSlice = createSlice({
       localStorage.removeItem("user");
       toast.error(action.error.message);
     });
+
+    builder
+      .addCase(getUserDetails.fulfilled, (state, action) => {
+        state.userDetail = action.payload;
+      })
+      .addCase(getUserDetails.rejected, (state, action) => {
+        console.log("Auth user fail");
+      });
 
     builder.addMatcher(
       isAnyOf(
@@ -147,6 +157,7 @@ function setDataUserFromToken(decodedToken: any, userToken: string) {
     role: decodedToken[
       "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
     ],
+    avatar: decodedToken["Avatar"],
     token: userToken,
   };
   return user;

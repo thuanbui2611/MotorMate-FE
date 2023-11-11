@@ -18,6 +18,8 @@ export interface UserDetail {
   address: string;
   phoneNumber: string;
   dateOfBirth: string;
+  createdDate: string;
+  roles: string[];
 }
 
 export interface Image {

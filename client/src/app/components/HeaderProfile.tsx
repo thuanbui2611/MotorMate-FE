@@ -6,6 +6,7 @@ import { FieldValues } from "react-hook-form";
 import { useAppDispatch, useAppSelector } from "../store/ConfigureStore";
 import { updateProfileAsync } from "../../pages/profile/ProfileSlice";
 import { useParams } from "react-router-dom";
+import { updateUser } from "../../pages/account/AccountSlice";
 
 interface Props {
   profileUser: UserDetail | null;
@@ -63,7 +64,10 @@ export default function ProfileInfo({ profileUser }: Props) {
           dataOfBirth: userLogin?.dateOfBirth,
         };
         console.log(formData);
-        await dispatch(updateProfileAsync(formData));
+        const response = await dispatch(updateProfileAsync(formData));
+        if (response.meta.requestStatus === "fulfilled") {
+          dispatch(updateUser(response.payload));
+        }
       }
     } catch (error: any) {
       toast.error("Error: " + error.message);

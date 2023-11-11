@@ -436,6 +436,7 @@ export default function BlogForm({ blog, cancelEdit, actionName }: Props) {
                 Content:
               </label>
               <ReactQuill
+                className=" pb-16"
                 value={content}
                 onChange={(data) => setContent(data)}
                 theme="snow"
@@ -444,7 +445,7 @@ export default function BlogForm({ blog, cancelEdit, actionName }: Props) {
                 style={{ height: 500 }}
               />
             </CardBody>
-            <CardFooter className="pt-0 flex flex-row justify-between gap-10">
+            <CardFooter className="pt-0 flex flex-row justify-center gap-10">
               <LoadingButton
                 className="bg-gradient-to-tr from-light-blue-600 to-light-blue-400 text-white shadow-md shadow-light-blue-500/20 hover:shadow-lg hover:shadow-light-blue-500/40 active:opacity-[0.85]"
                 loading={isSubmitting}

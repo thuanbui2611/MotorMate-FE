@@ -26,31 +26,18 @@ export default function BlogComment() {
                   className="w-full px-4 py-3 bg-transparent rounded-lg border-none"
                   multiline
                   sx={{
+                    border: "none",
+                    "& .MuiOutlinedInput-input": {
+                      boxShadow: "none",
+                    },
                     "& fieldset": { border: "none" },
-                    "&:hover": {
-                      outline: "none",
-                    },
-                    "&:active": {
-                      outline: "none",
-                    },
                   }}
                   placeholder="Write your comment"
                   maxRows={3}
-                  variant="standard"
-                  InputProps={{
-                    disableUnderline: true,
-                    style: {
-                      outline: "none",
-                      boxShadow: "none",
-                    },
-                    inputProps: { "data-gramm": "false" },
-                  }}
+                  variant="outlined"
                 />
 
-                <button
-                  className="flex ml-3 text-white justify-center items-center h-8 w-8 rounded-full outline-none relative overflow-hidden border duration-300 ease-linear
-                                after:absolute after:inset-x-0 after:aspect-square after:scale-0 after:opacity-70 after:origin-center after:duration-300 after:ease-linear after:rounded-full after:top-0 after:left-0 after:bg-color-header hover:after:opacity-100 hover:after:scale-[2.5]  bg-gradient-to-r from-[#FF6003] to-[#FF7E06] border-transparent hover:border-[#172554]"
-                >
+                <button className="flex ml-3 text-white justify-center items-center h-8 w-8 rounded-full bg-gradient-to-r from-[#FF6003] to-[#FF7E06] hover:brightness-90">
                   <span className="flex relative">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"

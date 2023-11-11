@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { useAppSelector } from "../store/ConfigureStore";
+import { useAppDispatch, useAppSelector } from "../store/ConfigureStore";
+import { signOut } from "../../pages/account/AccountSlice";
 
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -9,6 +10,7 @@ const DropdownUser = () => {
   const dropdown = useRef<any>(null);
 
   const user = useAppSelector((state) => state.account.user);
+  const dispatch = useAppDispatch();
 
   // close on click outside
   useEffect(() => {
@@ -158,7 +160,10 @@ const DropdownUser = () => {
             </Link>
           </li>
         </ul>
-        <button className="flex items-center gap-3.5 py-4 px-6 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base">
+        <button
+          className="flex items-center gap-3.5 py-4 px-6 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+          onClick={() => dispatch(signOut())}
+        >
           <svg
             className="fill-current"
             width="22"
