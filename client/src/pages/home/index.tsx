@@ -384,9 +384,11 @@ export default function HomePage() {
         </div>
       </section>
 
-      <BlogList />
+      <section className="">
+        <BlogList />
+      </section>
 
-      <section className="mt-10">
+      <section className="pt-10">
         <div className="mx-auto mb-4 text-center">
           <h2 className="text-4xl lg:text-6xl tracking-tight font-extrabold procedure-title">
             Procedure
@@ -478,9 +480,9 @@ export default function HomePage() {
                     </div>
                     <div className="w-px h-full bg-[#ff7e06]"></div>
                   </div>
-                  <div className="relative flex-1 bg-white rounded shadow mb-8 ">
+                  <div className="relative flex-1 bg-[#242424] border boder-2 border-[#ff7e06] rounded shadow mb-8">
                     <div className="absolute inline-block w-4 overflow-hidden -translate-y-1/2 top-7 -left-4">
-                      <div className="h-10 origin-top-right transform -rotate-45 bg-white  drop-shadow-lg"></div>
+                      <div className="h-10 origin-top-right transform -rotate-45 bg-[#242424] border boder-2 border-[#ff7e06] drop-shadow-lg"></div>
                     </div>
                     <div className="relative z-20 p-6">
                       <p className="mb-2 text-base lg:text-lg font-bold text-black">

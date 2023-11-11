@@ -240,7 +240,8 @@ body {
 }
 
 /* Product Homepage */
-.bg-home-product {
+/* DUNDON - Disable for continious scroll */
+/* .bg-home-product {
   background-image: url("../images/cover/bg-home-products.png");
   background-size: cover;
   background-position: center;
@@ -251,7 +252,7 @@ body {
   .bg-home-product {
     background-size: 100% 100%;
   }
-}
+} */
 
 /* Product Homepage card */
 .card-location,
@@ -340,12 +341,13 @@ body {
 }
 
 /* Our Features  */
-.bg-home-features {
+/* DUNDON - Disable for continious scroll */
+/* .bg-home-features {
   background-image: url("../images/cover/bg-home-features.png");
   background-size: cover;
   background-position: center;
   max-height: 1024px;
-}
+} */
 
 @media (max-width: 768px) {
   .bg-home-features {
