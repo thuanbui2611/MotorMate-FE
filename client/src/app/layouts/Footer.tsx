@@ -75,7 +75,7 @@ export default function Footer() {
                   >
                     Careers
                   </a>{" "}
-                  <span className="inline ml-1 text-xs bg-blue-700 text-white py-1 px-2 rounded-md">
+                  <span className="inline ml-1 text-xs bg-[#ff7e06] text-white py-1 px-2 rounded-md">
                     We're hiring
                   </span>
                 </p>
@@ -109,7 +109,7 @@ export default function Footer() {
                     />
                   </div>
                   <a
-                    className="w-full sm:w-auto whitespace-nowrap inline-flex justify-center items-center gap-x-3 text-center bg-blue-600 hover:bg-blue-700 border border-transparent text-white font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 focus:ring-offset-white transition py-3 px-4"
+                    className="w-full sm:w-auto whitespace-nowrap inline-flex justify-center items-center gap-x-3 text-center bg-[#ff7e06] hover:bg-[#ff7e06] border border-transparent text-white font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-[#ff7e06] focus:ring-offset-2 focus:ring-offset-white transition py-3 px-4"
                     href="#"
                   >
                     Subscribe
