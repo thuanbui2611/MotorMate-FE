@@ -749,7 +749,7 @@ export default function HomePage() {
             <div className="flex flex-col items-center justify-center ">
               <img
                 className="mx-auto mb-4 w-36 h-36 rounded-full"
-                src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/helene-engels.png"
+                src="https://media.licdn.com/dms/image/D5603AQGL4DJp1mWePg/profile-displayphoto-shrink_400_400/0/1694859124370?e=1704931200&v=beta&t=9qOFtmIqDfudcbhER6y0jpDeheZ0GkQfOv7vef18HOw"
                 alt="Helene Avatar"
               />
               <h3 className="mb-1 text-2xl font-bold tracking-tight text-gradient ">
@@ -758,7 +758,11 @@ export default function HomePage() {
               <p className="text-white">CTO/Co-founder</p>
               <ul className="flex items-center justify-center mt-4 space-x-4 bg-white rounded-2xl px-2 py-1 w-fit">
                 <li>
-                  <a href="#" className="text-[#39569c] hover:text-gray-900 ">
+                  <a
+                    href="https://www.facebook.com/DTN.AML"
+                    target="_blank"
+                    className="text-[#39569c] hover:text-gray-900 "
+                  >
                     <svg
                       className="w-6 h-6"
                       fill="currentColor"
@@ -774,7 +778,11 @@ export default function HomePage() {
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="text-[#00acee] hover:text-gray-900 ">
+                  <a
+                    href="https://www.linkedin.com/in/dung-doan-thanh"
+                    target="_blank"
+                    className="text-[#00acee] hover:text-gray-900"
+                  >
                     <svg
                       className="w-6 h-6"
                       xmlns="http://www.w3.org/2000/svg"
@@ -794,7 +802,11 @@ export default function HomePage() {
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="text-gray-900 hover:text-gray-900  ">
+                  <a
+                    href="https://github.com/DungDoan3001"
+                    target="_blank"
+                    className="text-gray-900 hover:text-gray-900  "
+                  >
                     <svg
                       className="w-6 h-6"
                       fill="currentColor"
@@ -814,16 +826,20 @@ export default function HomePage() {
             <div className="flex flex-col items-center justify-center">
               <img
                 className="mx-auto mb-4 w-36 h-36 rounded-full"
-                src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/thomas-lean.png"
+                src="https://scontent.fsgn13-2.fna.fbcdn.net/v/t39.30808-6/288461707_3304510519776981_6522894505983793182_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeFQFYtURjvru7ESpFO-4x91DUCsxWlnH08NQKzFaWcfT6eLs7h9EhOMO078U7IP_zAbMdgv2q6OiA_l4CaBpPOu&_nc_ohc=c2UPCNQm0rcAX9wurYW&_nc_zt=23&_nc_ht=scontent.fsgn13-2.fna&oh=00_AfCgJ5x-7XpGHjXH94D6DPpHw1fSWHtZDjBE1VA4XSAXeg&oe=6553F072"
                 alt="Leslie Avatar"
               />
               <h3 className="mb-1 text-2xl font-bold tracking-tight text-gradient ">
                 <a href="#">Trinh Tuong Anh</a>
               </h3>
-              <p className="text-white">Graphic Designer</p>
+              <p className="text-white">Graphic Designer/Co-founder</p>
               <ul className="flex items-center justify-center mt-4 space-x-4 bg-white rounded-2xl px-2 py-1 w-fit">
                 <li>
-                  <a href="#" className="text-[#39569c] hover:text-gray-900 ">
+                  <a
+                    href="https://www.facebook.com/tuonganh.trinh"
+                    target="_blank"
+                    className="text-[#39569c] hover:text-gray-900 "
+                  >
                     <svg
                       className="w-6 h-6"
                       fill="currentColor"
@@ -839,7 +855,11 @@ export default function HomePage() {
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="text-[#00acee] hover:text-gray-900 ">
+                  <a
+                    href="https://www.linkedin.com/in/tuong-anh-trinh"
+                    target="_blank"
+                    className="text-[#00acee] hover:text-gray-900"
+                  >
                     <svg
                       className="w-6 h-6"
                       xmlns="http://www.w3.org/2000/svg"
@@ -858,34 +878,18 @@ export default function HomePage() {
                     </svg>
                   </a>
                 </li>
-                <li>
-                  <a href="#" className="text-gray-900 hover:text-gray-900  ">
-                    <svg
-                      className="w-6 h-6"
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
-                      aria-hidden="true"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </a>
-                </li>
               </ul>
             </div>
             <div className="flex flex-col items-center justify-center ">
               <img
                 className="mx-auto mb-4 w-36 h-36 rounded-full"
-                src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/joseph-mcfall.png"
+                src="https://media.licdn.com/dms/image/C4E03AQFTN9caWCh_PA/profile-displayphoto-shrink_400_400/0/1663486939604?e=1704931200&v=beta&t=XMELG6byfj_tKYuVBSWOn5juBo4Oie6ys73QUMMaJPM"
                 alt="Joseph Avatar"
               />
               <h3 className="mb-1 text-2xl font-bold tracking-tight text-gradient ">
                 <a href="#">Bui Cong Thuan</a>
               </h3>
-              <p className="text-white">Sales</p>
+              <p className="text-white">Sales/Co-founder</p>
               <ul className="flex items-center justify-center mt-4 space-x-4 bg-white rounded-2xl px-2 py-1 w-fit">
                 <li>
                   <a
