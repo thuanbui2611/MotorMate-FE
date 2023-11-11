@@ -408,13 +408,13 @@ export default function HomePage() {
                     <div className="absolute hidden md:block left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-[100px] text-white font-bold opacity-10">
                       LESSEES
                     </div>
-                    <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-blue-500">
+                    <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-[#ff7e06]">
                       Lessees
                     </h1>
                     <div className="flex w-20 mt-1 mb-4 overflow-hidden rounded">
-                      <div className="flex-1 h-2 bg-blue-200"></div>
-                      <div className="flex-1 h-2 bg-blue-400"></div>
-                      <div className="flex-1 h-2 bg-blue-600"></div>
+                      <div className="flex-1 h-2 bg-orange-200"></div>
+                      <div className="flex-1 h-2 bg-orange-300"></div>
+                      <div className="flex-1 h-2 bg-orange-400"></div>
                     </div>
                   </div>
                   <p className="mb-4 text-sm lg:text-base text-center text-white">
@@ -427,11 +427,11 @@ export default function HomePage() {
                 <div className="relative flex justify-between">
                   <div className="flex flex-col items-center w-10 mr-4 md:w-16">
                     <div>
-                      <div className="flex items-center justify-center w-10 h-10 border border-blue-500 text-blue-500 font-bold rounded-full">
+                      <div className="flex items-center justify-center w-10 h-10 border border-[#ff7e06] text-[#ff7e06] font-bold rounded-full">
                         1
                       </div>
                     </div>
-                    <div className="w-px h-full bg-blue-500"></div>
+                    <div className="w-px h-full bg-[#ff7e06]"></div>
                   </div>
                   <div className="relative flex-1 bg-white rounded shadow mb-8 ">
                     <div className="absolute inline-block w-4 overflow-hidden -translate-y-1/2 top-7 -left-4">
@@ -472,11 +472,11 @@ export default function HomePage() {
                 <div className="relative flex justify-between">
                   <div className="flex flex-col items-center w-10 mr-4 md:w-16">
                     <div>
-                      <div className="flex items-center justify-center w-10 h-10 border text-blue-500 font-bold border-blue-500 rounded-full">
+                      <div className="flex items-center justify-center w-10 h-10 border border-[#ff7e06] text-[#ff7e06] font-bold rounded-full">
                         2
                       </div>
                     </div>
-                    <div className="w-px h-full bg-blue-500"></div>
+                    <div className="w-px h-full bg-[#ff7e06]"></div>
                   </div>
                   <div className="relative flex-1 bg-white rounded shadow mb-8 ">
                     <div className="absolute inline-block w-4 overflow-hidden -translate-y-1/2 top-7 -left-4">
@@ -518,11 +518,11 @@ export default function HomePage() {
                 <div className="relative flex justify-between">
                   <div className="flex flex-col items-center w-10 mr-4 md:w-16">
                     <div>
-                      <div className="flex items-center justify-center w-10 h-10 border border-blue-500 rounded-full text-blue-500 font-bold ">
+                      <div className="flex items-center justify-center w-10 h-10 border border-[#ff7e06] text-[#ff7e06] font-bold rounded-full">
                         3
                       </div>
                     </div>
-                    <div className="w-px h-full bg-blue-500"></div>
+                    <div className="w-px h-full bg-[#ff7e06]"></div>
                   </div>
                   <div className="relative flex-1 bg-white rounded shadow mb-8 ">
                     <div className="absolute inline-block w-4 overflow-hidden -translate-y-1/2 top-7 -left-4">
@@ -572,13 +572,13 @@ export default function HomePage() {
                     <div className="absolute hidden md:block left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-[100px] text-white font-bold opacity-10">
                       LESSORS
                     </div>
-                    <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-blue-500">
+                    <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-[#ff7e06]">
                       Lessors
                     </h1>
                     <div className="flex w-20 mt-1 mb-4 overflow-hidden rounded">
-                      <div className="flex-1 h-2 bg-blue-200"></div>
-                      <div className="flex-1 h-2 bg-blue-400"></div>
-                      <div className="flex-1 h-2 bg-blue-600"></div>
+                      <div className="flex-1 h-2 bg-orange-200"></div>
+                      <div className="flex-1 h-2 bg-orange-300"></div>
+                      <div className="flex-1 h-2 bg-orange-400"></div>
                     </div>
                   </div>
                   <p className="mb-4 text-sm lg:text-base text-center text-white">
@@ -591,11 +591,11 @@ export default function HomePage() {
                 <div className="relative flex justify-between">
                   <div className="flex flex-col items-center w-10 mr-4 md:w-16">
                     <div>
-                      <div className="flex items-center justify-center w-10 h-10 border border-blue-500 rounded-full text-blue-500 font-bold">
+                      <div className="flex items-center justify-center w-10 h-10 border border-[#ff7e06] text-[#ff7e06] font-bold rounded-full">
                         1
                       </div>
                     </div>
-                    <div className="w-px h-full bg-blue-500"></div>
+                    <div className="w-px h-full bg-[#ff7e06]"></div>
                   </div>
                   <div className="relative flex-1 bg-white rounded shadow mb-8 ">
                     <div className="absolute inline-block w-4 overflow-hidden -translate-y-1/2 top-7 -left-4">
@@ -636,11 +636,11 @@ export default function HomePage() {
                 <div className="relative flex justify-between">
                   <div className="flex flex-col items-center w-10 mr-4 md:w-16">
                     <div>
-                      <div className="flex items-center justify-center w-10 h-10 border border-blue-500 rounded-full text-blue-500 font-bold">
+                      <div className="flex items-center justify-center w-10 h-10 border border-[#ff7e06] text-[#ff7e06] font-bold rounded-full">
                         2
                       </div>
                     </div>
-                    <div className="w-px h-full bg-blue-500"></div>
+                    <div className="w-px h-full bg-[#ff7e06]"></div>
                   </div>
                   <div className="relative flex-1 bg-white rounded shadow mb-8 ">
                     <div className="absolute inline-block w-4 overflow-hidden -translate-y-1/2 top-7 -left-4">
@@ -683,11 +683,11 @@ export default function HomePage() {
                 <div className="relative flex justify-between">
                   <div className="flex flex-col items-center w-10 mr-4 md:w-16">
                     <div>
-                      <div className="flex items-center justify-center w-10 h-10 border border-blue-500 rounded-full text-blue-500 font-bold">
+                      <div className="flex items-center justify-center w-10 h-10 border border-[#ff7e06] text-[#ff7e06] font-bold rounded-full">
                         3
                       </div>
                     </div>
-                    <div className="w-px h-full bg-blue-500"></div>
+                    <div className="w-px h-full bg-[#ff7e06]"></div>
                   </div>
                   <div className="relative flex-1 bg-white rounded shadow mb-8 ">
                     <div className="absolute inline-block w-4 overflow-hidden -translate-y-1/2 top-7 -left-4">
