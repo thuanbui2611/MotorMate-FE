@@ -1,3 +1,40 @@
+.parent-container-paymentBTN {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 153px;
+  border-radius: 4px;
+  height: 52.5px;
+}
+
+.parent-container-paymentBTN:hover {
+  background-color: #5de2a3;
+}
+
+.parent-container-paymentBTN:hover .container-paymentBTN {
+  background-color: transparent;
+  transform: scale(1.03);
+  width: 76px;
+}
+.parent-container-paymentBTN:hover .container-paymentBTN .left-side {
+  width: 100%;
+}
+.parent-container-paymentBTN:hover .right-side {
+  background-color: #f9f7f9;
+}
+
+.parent-container-paymentBTN:hover .card {
+  animation: slide-top 1.2s cubic-bezier(0.645, 0.045, 0.355, 1) both;
+}
+
+.parent-container-paymentBTN:hover .post {
+  animation: slide-post 1s cubic-bezier(0.165, 0.84, 0.44, 1) both;
+}
+
+.parent-container-paymentBTN:hover .dollar {
+  animation: fade-in-fwd 0.3s 1s backwards;
+}
+
 .container-paymentBTN {
   background-color: #fff;
   display: flex;
@@ -8,19 +45,19 @@
   transition: 0.3s ease-in-out;
 }
 
-.container-paymentBTN:hover {
+/* .container-paymentBTN:hover {
   transform: scale(1.03);
   width: 76px;
 }
 
 .container-paymentBTN:hover .left-side {
   width: 100%;
-}
+} */
 
 .left-side {
   background-color: #5de2a3;
   width: 40px;
-  height: 50px;
+  height: 51px;
   border-radius: 4px;
   position: relative;
   display: flex;
@@ -43,9 +80,9 @@
   transition: 0.3s;
 }
 
-.right-side:hover {
+/* .right-side:hover {
   background-color: #f9f7f9;
-}
+} */
 
 .arrow {
   width: 10px;
@@ -85,13 +122,18 @@
 }
 
 @media only screen and (max-width: 480px) {
-  .container-paymentBTN {
+  /* .container-paymentBTN {
     transform: scale(0.7);
   }
 
-  .container-paymentBTN:hover {
+  .parent-container-paymentBTN {
+    width: 108px;
+    height: 38px;
+  } */
+
+  /* .parent-container-paymentBTN:hover .container-paymentBTN {
     transform: scale(0.74);
-  }
+  } */
 
   .new {
     font-size: 20px;
@@ -109,13 +151,13 @@
   margin: 6px 0 0 -18px;
 }
 
-.container-paymentBTN:hover .card {
+/* .container-paymentBTN:hover .card {
   animation: slide-top 1.2s cubic-bezier(0.645, 0.045, 0.355, 1) both;
 }
 
 .container-paymentBTN:hover .post {
   animation: slide-post 1s cubic-bezier(0.165, 0.84, 0.44, 1) both;
-}
+} */
 
 @keyframes slide-top {
   0% {
@@ -240,9 +282,9 @@
   text-align: center;
 }
 
-.container-paymentBTN:hover .dollar {
+/* .container-paymentBTN:hover .dollar {
   animation: fade-in-fwd 0.3s 1s backwards;
-}
+} */
 
 @keyframes fade-in-fwd {
   0% {

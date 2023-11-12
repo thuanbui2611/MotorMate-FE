@@ -28,6 +28,7 @@ export interface Owner {
   phoneNumber: string;
   email: string;
   address: string;
+  createdDate: string;
 }
 
 export interface Specifications {

@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import { store } from "../store/ConfigureStore";
 import { PaginatedResponse } from "../models/Pagination";
 
-axios.defaults.baseURL = "https://motormate.azurewebsites.net/";
+axios.defaults.baseURL = process.env.REACT_APP_MOTORMATE_API_URL;
 axios.defaults.headers.post["Content-Type"] = "application/json";
 const responseBody = (response: AxiosResponse) => response.data;
 axios.interceptors.request.use((config) => {
@@ -140,6 +140,7 @@ const Vehicle = {
   getVehicleByOwner: (ownerId: string) =>
     requests.get(`api/vehicle/owner/${ownerId}`),
   create: (values: {}) => requests.post("api/vehicle", values),
+  getRelatedVehicles: (id: string) => requests.get(`api/vehicle/related/${id}`),
   update: (id: string, values: {}) => requests.put(`api/vehicle/${id}`, values),
   delete: (id: string) => requests.delete(`api/vehicle/${id}`),
 };

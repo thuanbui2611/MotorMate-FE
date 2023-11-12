@@ -5,7 +5,7 @@ import { Location } from "../../app/models/Address";
 import { useAppSelector } from "../../app/store/ConfigureStore";
 import { Link } from "react-router-dom";
 import { Vehicle } from "../../app/models/Cart";
-import "../../app/assets/css/payment_btn.css";
+import Payment_btn from "../../app/components/Payment_btn";
 
 export default function Checkout() {
   const [selectedPaymentOption, setSelectedPaymentOption] =
@@ -333,7 +333,7 @@ export default function Checkout() {
                 <h2 className="mb-7 text-3xl font-heading font-bold">
                   Order summary ({totalVehicleCount} vehicles)
                 </h2>
-                <div className="flex flex-col items-center justify-start max-h-[600px] lg:max-h-[30vw] scrollbar overflow-y-auto mb-5 border border-gray-300 rounded shadow-sm">
+                <div className="flex flex-col items-center justify-start max-h-[600px] lg:max-h-[30vw] scrollbar overflow-y-auto mb-5 border border-gray-300 rounded-lg shadow-sm">
                   {/* List of products */}
                   {selectedVehicles.map((shop) => (
                     <div className="flex flex-col w-fit h-fit">
@@ -417,9 +417,9 @@ export default function Checkout() {
                     <span>10,00</span>
                   </span>
                 </div> */}
-                <div className="flex items-center w-1/2 justify-between py-4 px-10 mb-10 leading-8 bg-white font-heading font-medium rounded-3xl">
+                <div className="flex items-center w-fit justify-between py-4 px-10 mb-10 leading-8 bg-white font-heading font-medium rounded-3xl">
                   <span className="font-bold">Total</span>
-                  <span className="flex items-center text-xl text-green-500 font-semibold">
+                  <span className="flex items-center justify-center text-xl text-green-500 font-semibold ml-2">
                     <span>{totalPayment.toLocaleString()} VND</span>
                   </span>
                 </div>
@@ -443,47 +443,15 @@ export default function Checkout() {
                     </a>
                   </div>
                 </div> */}
-                <div className="flex items-center justify-between w-1/2 h-fit">
+                <div className="flex items-center justify-start w-full h-fit gap-10">
                   <Link
                     className="block py-4 px-5 w-fit text-base leading-6 font-bold tracking-tighter font-heading text-center bg-red-100 hover:bg-red-200 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-xl"
                     to="/my-cart"
                   >
                     Back to cart
                   </Link>
-                  <Link
-                    to="/payment"
-                    className="container-paymentBTN border border-[#80ea69] shadow-sm shadow-[#73c661] "
-                  >
-                    <div className="left-side">
-                      <div className="card">
-                        <div className="card-line"></div>
-                        <div className="buttons"></div>
-                      </div>
-                      <div className="post">
-                        <div className="post-line"></div>
-                        <div className="screen">
-                          <div className="dollar">$</div>
-                        </div>
-                        <div className="numbers"></div>
-                        <div className="numbers-line2"></div>
-                      </div>
-                    </div>
-                    <div className="right-side">
-                      <div className="new">Check out</div>
-                      <svg
-                        viewBox="0 0 440 440"
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="arrow"
-                      >
-                        <path
-                          fill="#06bf44"
-                          data-old_color="#000000"
-                          className="active-path"
-                          data-original="#000000"
-                          d="M345.441 248.292L151.154 442.573c-12.359 12.365-32.397 12.365-44.75 0-12.354-12.354-12.354-32.391 0-44.744L278.318 225.92 106.409 54.017c-12.354-12.359-12.354-32.394 0-44.748 12.354-12.359 32.391-12.359 44.75 0l194.287 194.284c6.177 6.18 9.262 14.271 9.262 22.366 0 8.099-3.091 16.196-9.267 22.373z"
-                        ></path>
-                      </svg>
-                    </div>
+                  <Link className="w-fit h-fit" to="/payment">
+                    <Payment_btn />
                   </Link>
                 </div>
               </div>

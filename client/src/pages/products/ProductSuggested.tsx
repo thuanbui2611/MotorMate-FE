@@ -1,20 +1,21 @@
 import { useState, useEffect } from "react";
-import { useSpringCarousel } from "react-spring-carousel";
 import Loading from "../../app/components/Loading";
 import { Vehicle } from "../../app/models/Vehicle";
 import agent from "../../app/api/agent";
-import ProductCard from "./ProductCard";
 import { useAppSelector } from "../../app/store/ConfigureStore";
 import ProductCarousel from "../../app/components/ProductCarousel";
 
-export default function ProductSuggested() {
+interface Props {
+  vehicle: Vehicle;
+}
+export default function ProductSuggested({ vehicle }: Props) {
   const [loading, setLoading] = useState(true);
-  const [productsSuggested, setproductsSuggested] = useState<Vehicle[]>([]);
+  const [productsSuggested, setProductsSuggested] = useState<Vehicle[]>([]);
   const userLogin = useAppSelector((state) => state.account.userDetail);
 
   useEffect(() => {
-    agent.Vehicle.all().then((data) => {
-      setproductsSuggested(data);
+    agent.Vehicle.getRelatedVehicles(vehicle.id).then((data) => {
+      setProductsSuggested(data);
       setLoading(false);
     });
   }, []);
@@ -25,7 +26,7 @@ export default function ProductSuggested() {
       {/* <!-- Card Blog --> */}
       <div className="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
         {/* <!-- Title --> */}
-        <div className="max-w-2xl text-center mx-auto mb-10 lg:mb-14">
+        <div className="max-w-2xl text-center mx-auto ">
           <h2 className="text-2xl font-bold md:text-4xl md:leading-tight dark:text-white">
             Related
           </h2>
@@ -36,7 +37,7 @@ export default function ProductSuggested() {
         {/* <!-- End Title --> */}
 
         {/* <!-- Grid --> */}
-        <div className=" py-6 md:py-8 lg:py-10 relative">
+        <div>
           <ProductCarousel userLogin={userLogin} products={productsSuggested} />
         </div>
 

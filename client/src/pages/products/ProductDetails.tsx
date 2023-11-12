@@ -12,6 +12,7 @@ import ImagesCarousel from "../../app/components/ImagesCarousel";
 import { useAppDispatch, useAppSelector } from "../../app/store/ConfigureStore";
 import { setIsOpenChat, setStartChatToUser } from "../chat/ChatSlice";
 import AddToCart from "../../app/components/AddToCart";
+import { ConvertDatetimeToDisplay } from "../../app/utils/ConvertDatetimeToDate";
 
 export default function ProductDetails() {
   const { id } = useParams<{ id: string }>();
@@ -20,22 +21,29 @@ export default function ProductDetails() {
   const [openImage, setOpenImage] = useState<number>();
   const [openSlideShow, setOpenSlideShow] = useState(false);
 
-  const [productsSuggested, setProductsSuggested] = useState<Vehicle[]>([]);
-
   const userLogin = useAppSelector((state) => state.account.userDetail);
   const dispatch = useAppDispatch();
 
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
   useEffect(() => {
-    window.scrollTo(0, 0); // Scroll to the top of the page
+    scrollToTop();
   }, []);
 
   useEffect(() => {
+    setLoading(true);
+
     agent.Vehicle.details(id!)
       .then((product) => setProduct(product))
       .catch((error) => console.log(error))
       .finally(() => setLoading(false));
 
-    agent.Vehicle.all().then((product) => setProductsSuggested(product));
+    scrollToTop();
   }, [id]);
 
   const handleOpenImage = (index: number) => {
@@ -70,10 +78,10 @@ export default function ProductDetails() {
                 role="tablist"
               >
                 <div className="w-full lg:py-6 mt-6 lg:mt-0">
-                  <h2 className="text-sm title-font text-gray-500 tracking-widest">
+                  <h2 className="text-sm text-gray-500 font-normal tracking-widest">
                     {product.specifications.brandName}
                   </h2>
-                  <h1 className="text-gray-900 text-3xl title-font font-medium mb-1">
+                  <h1 className="text-orange-based text-3xl md:text-4xl font-bold mb-1">
                     {product.specifications.modelName}
                   </h1>
                   <div className="flex mb-4">
@@ -173,105 +181,73 @@ export default function ProductDetails() {
 
                       <span className="text-gray-600 ml-3">4 Reviews</span>
                     </span>
-                    <span className="flex ml-3 pl-3 py-2 border-l-2 border-gray-200 space-x-2s">
-                      <a className="text-gray-500">
-                        <svg
-                          fill="currentColor"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          className="w-5 h-5"
-                          viewBox="0 0 24 24"
-                        >
-                          <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"></path>
-                        </svg>
-                      </a>
-                      <a className="text-gray-500">
-                        <svg
-                          fill="currentColor"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          className="w-5 h-5"
-                          viewBox="0 0 24 24"
-                        >
-                          <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"></path>
-                        </svg>
-                      </a>
-                      <a className="text-gray-500">
-                        <svg
-                          fill="currentColor"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          className="w-5 h-5"
-                          viewBox="0 0 24 24"
-                        >
-                          <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"></path>
-                        </svg>
-                      </a>
+                  </div>
+                  <div className="flex items-center justify-start gap-7 font-semibold">
+                    <div className="flex items-center justify-start">
+                      <span className="font-semibold">Condition:</span>
+                      <span className="ml-2 text-orange-based">
+                        {product.conditionPercentage}%
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-start font-semibold">
+                      <span className="font-semibold">Year:</span>
+                      <span className="ml-2 text-orange-based">
+                        {product.specifications.year}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex items-start justify-start mt-2 font-semibold">
+                    <span className="font-semibold">Address:</span>
+                    <span className="ml-2 text-orange-based">
+                      {product.address +
+                        ", " +
+                        product.ward +
+                        ", " +
+                        product.district +
+                        ", " +
+                        product.city}
                     </span>
                   </div>
-                  <p className="leading-relaxed">Decription bla bla bla</p>
                   <div className="flex mt-6 items-center pb-2 border-b-2 border-gray-100 mb-5">
                     <div className="flex">
-                      <span className="mr-3">Color</span>
-                      <button className="border-2 border-gray-300 rounded-full w-6 h-6 focus:outline-none"></button>
-                      <button className="border-2 border-gray-300 ml-1 bg-gray-700 rounded-full w-6 h-6 focus:outline-none"></button>
-                      <button className="border-2 border-gray-300 ml-1 bg-indigo-500 rounded-full w-6 h-6 focus:outline-none"></button>
-                    </div>
-                    <div className="flex ml-6 items-center">
-                      <span className="mr-3">Size</span>
-                      <div className="relative">
-                        <select className="rounded border appearance-none border-gray-300 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500 text-base pl-3 pr-10">
-                          <option>SM</option>
-                          <option>M</option>
-                          <option>L</option>
-                          <option>XL</option>
-                        </select>
-                        <span className="absolute right-0 top-0 h-full w-10 text-center text-gray-600 pointer-events-none flex items-center justify-center">
-                          <svg
-                            fill="none"
-                            stroke="currentColor"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            className="w-4 h-4"
-                            viewBox="0 0 24 24"
-                          >
-                            <path d="M6 9l6 6 6-6"></path>
-                          </svg>
-                        </span>
-                      </div>
+                      <span className="mr-2 font-semibold">Color</span>
+                      <div
+                        className="border-2 border-gray-300 ml-1 rounded-full w-6 h-6 focus:outline-none"
+                        style={{
+                          backgroundColor: product.specifications.hexCode,
+                        }}
+                      ></div>
                     </div>
                   </div>
                   <hr></hr>
-                  <div className="flex pt-5">
-                    <span className="title-font font-medium text-2xl text-green-500">
-                      {product.price.toLocaleString()} VND
-                    </span>
-                    <Link
-                      to={"/check-out/" + product.id}
-                      className={`flex ml-auto text-white bg-orange-based border-0 py-2 px-6 focus:outline-none hover:bg-orange-600 rounded ${
-                        product.owner.ownerId === userLogin?.id &&
-                        " pointer-events-none bg-gray-400"
-                      }`}
-                    >
-                      Rent now
-                    </Link>
 
-                    <button className="rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4">
-                      <AddToCart
-                        className="h-7 w-7"
-                        userId={userLogin?.id}
-                        vehicleId={product.id}
-                      />
-                    </button>
-                  </div>
-                  {product.owner.ownerId === userLogin?.id && (
-                    <p className="text-right font-normal text-red-600 text-xs md:text-sm">
+                  {product.owner.ownerId === userLogin?.id ? (
+                    <p className="text-right font-semibold text-red-600 text-xs md:text-sm pt-2">
                       You can not rent your own product!
                     </p>
+                  ) : (
+                    <div className="flex pt-5">
+                      <span className="font-semibold text-2xl text-green-500">
+                        {product.price.toLocaleString()} VND
+                      </span>
+                      <Link
+                        to={"/check-out/" + product.id}
+                        className={`flex ml-auto text-white bg-orange-based border-0 py-2 px-6 focus:outline-none hover:bg-orange-600 rounded ${
+                          product.owner.ownerId === userLogin?.id &&
+                          " pointer-events-none bg-gray-400"
+                        }`}
+                      >
+                        Rent now
+                      </Link>
+
+                      <button className="rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4">
+                        <AddToCart
+                          className="h-7 w-7"
+                          userId={userLogin?.id}
+                          vehicleId={product.id}
+                        />
+                      </button>
+                    </div>
                   )}
                 </div>
               </nav>
@@ -455,7 +431,9 @@ export default function ProductDetails() {
               </div>
               <div className="mt-2 md:mt-0 font-medium text-xs md:text-base">
                 Member since:
-                <span className="ml-1 text-orange-based">01/01/2023</span>
+                <span className="ml-1 text-orange-based">
+                  {ConvertDatetimeToDisplay(product.owner.createdDate)}
+                </span>
               </div>
             </div>
 
@@ -468,7 +446,7 @@ export default function ProductDetails() {
           </div>
         </div>
 
-        <ProductSuggested />
+        <ProductSuggested vehicle={product} />
         <ReviewProduct />
       </div>
       {/* End Features */}

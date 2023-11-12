@@ -148,7 +148,7 @@ export default function BlogPage() {
                 to={"/blog/" + blog.id}
                 key={blog.id}
               >
-                <div className="relative flex flex-row md:flex-col lg:flex-row lg:space-x-5 space-y-3 md:space-y-0 rounded-xl shadow-lg p-3 max-w-3xl  mx-auto border border-white bg-white group-hover:border-orange-based">
+                <div className="relative flex flex-row md:flex-col lg:flex-row lg:space-x-5 space-y-3 md:space-y-0 rounded-xl shadow-lg p-3 max-w-3xl mx-auto border border-gray-200 bg-white group-hover:border-orange-based">
                   <div className="w-1/3 md:w-full lg:w-1/3 bg-white grid place-items-center">
                     <img
                       src={blog.image.imageUrl}
@@ -200,11 +200,8 @@ export default function BlogPage() {
                     <h3 className="font-black text-gray-800 lg:text-3xl text-xl group-hover:text-orange-based">
                       {blog.title}
                     </h3>
-                    <p className="lg:text-lg text-gray-500 text-sm">
+                    <p className="lg:text-lg text-gray-500 text-sm line-clamp-3">
                       {blog.shortDescription}
-                    </p>
-                    <p className=" text-base lg:text-xl font-black text-orange-based text-right">
-                      Read more
                     </p>
                   </div>
                 </div>
