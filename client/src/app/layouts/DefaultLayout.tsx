@@ -17,6 +17,7 @@ export default function DefaultLayout() {
     "product-detail",
     "products",
     "my-orders",
+    "shop-orders",
   ];
   let isBackground = true;
   if (pathNotBackground.includes(location.pathname.split("/")[1])) {

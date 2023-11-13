@@ -81,7 +81,7 @@ export default function ProductDetails() {
                   <h2 className="text-sm text-gray-500 font-normal tracking-widest">
                     {product.specifications.brandName}
                   </h2>
-                  <h1 className="text-orange-based text-3xl md:text-4xl font-bold mb-1">
+                  <h1 className="text-black text-3xl md:text-4xl font-bold mb-1">
                     {product.specifications.modelName}
                   </h1>
                   <div className="flex mb-4">

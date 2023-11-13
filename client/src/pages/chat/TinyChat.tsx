@@ -702,12 +702,6 @@ export default function TinyChat() {
                               {/* Hover for display time of message*/}
                               <div
                                 className=" flex justify-start mb-1 mr-10"
-                                onMouseEnter={() =>
-                                  startHoverTimer("timeMessage" + chat.id)
-                                }
-                                onMouseLeave={() =>
-                                  resetHoverTimer("timeMessage" + chat.id)
-                                }
                                 key={chat.id}
                               >
                                 <img
@@ -715,7 +709,15 @@ export default function TinyChat() {
                                   className="object-cover h-6 w-6 rounded-full"
                                   alt="Avatar"
                                 />
-                                <div className="relative ml-1 py-2 px-3 bg-gray-200 rounded-br-2xl rounded-tr-2xl rounded-tl-lg text-black text-sm">
+                                <div
+                                  className="relative ml-1 py-2 px-3 bg-gray-200 rounded-br-2xl rounded-tr-2xl rounded-tl-lg text-black text-sm"
+                                  onMouseEnter={() =>
+                                    startHoverTimer("timeMessage" + chat.id)
+                                  }
+                                  onMouseLeave={() =>
+                                    resetHoverTimer("timeMessage" + chat.id)
+                                  }
+                                >
                                   {chat.message}
                                   <div
                                     id={"timeMessage" + chat.id}
@@ -732,15 +734,17 @@ export default function TinyChat() {
                               {/* Message sending */}
                               <div
                                 className="flex justify-end mb-1 ml-10"
-                                onMouseEnter={() =>
-                                  startHoverTimer("timeMessage" + chat.id)
-                                }
-                                onMouseLeave={() =>
-                                  resetHoverTimer("timeMessage" + chat.id)
-                                }
                                 key={chat.id}
                               >
-                                <div className="relative mr-1 py-2 px-3 bg-gradient-to-r from-[#ffa703] to-[#FF7E06] rounded-bl-2xl rounded-tl-2xl rounded-tr-lg text-white text-sm">
+                                <div
+                                  className="relative mr-1 py-2 px-3 bg-gradient-to-r from-[#ffa703] to-[#FF7E06] rounded-bl-2xl rounded-tl-2xl rounded-tr-lg text-white text-sm"
+                                  onMouseEnter={() =>
+                                    startHoverTimer("timeMessage" + chat.id)
+                                  }
+                                  onMouseLeave={() =>
+                                    resetHoverTimer("timeMessage" + chat.id)
+                                  }
+                                >
                                   {chat.message}
                                   <div
                                     id={"timeMessage" + chat.id}

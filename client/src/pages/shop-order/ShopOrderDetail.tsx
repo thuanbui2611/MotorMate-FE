@@ -1,4 +1,4 @@
-export default function OrderDetail() {
+export default function ShopOrderDetail() {
   const data = ["1", "2", "3", "4", "5"];
   return (
     <>
@@ -116,7 +116,7 @@ export default function OrderDetail() {
           </div>
           <div className="bg-gray-50 dark:bg-gray-800 w-full xl:w-96 flex justify-between items-center md:items-start px-4 py-6 md:p-6 xl:p-8 flex-col">
             <h3 className="text-xl dark:text-white font-semibold leading-5 text-gray-800">
-              Bill
+              Customer
             </h3>
             <div className="flex flex-col md:flex-row xl:flex-col justify-start items-stretch h-full w-full md:space-x-6 lg:space-x-8 xl:space-x-0">
               <div className="flex flex-col justify-start items-start flex-shrink-0">
@@ -176,10 +176,10 @@ export default function OrderDetail() {
         </div>
         <div className="flex items-center justify-center space-x-4 mt-8">
           <div className="text-center bg-red-600 w-fit h-fit p-2 px-3 rounded-full text-white font-bold shadow-md cursor-pointer hover:brightness-90">
-            Cancle Order
+            Deny order
           </div>
           <div className="text-center bg-green-600 w-fit h-fit p-2 px-3 rounded-full text-white font-bold shadow-md cursor-pointer hover:brightness-90">
-            Pay Order
+            Accept order
           </div>
         </div>
       </div>

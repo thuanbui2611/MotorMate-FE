@@ -198,9 +198,9 @@ export default function Header(props: Props) {
                 to="/"
                 className={`${
                   location.pathname === "/"
-                    ? "md:text-orange-based"
+                    ? "md:text-orange-based bg-gray-200 md:bg-transparent"
                     : "md:text-white"
-                } block header-items py-2 pl-3 pr-4 text-black rounded-md hover:bg-orange-based md:hover:bg-transparent md:p-0  md:hover:text-orange-based md:px-4 md:py-2`}
+                } block header-items py-2 pl-3 pr-4 text-black rounded-md hover:bg-gray-100 md:hover:bg-transparent md:p-0  md:hover:text-orange-based md:px-4 md:py-2`}
                 aria-current="page"
               >
                 Home
@@ -211,9 +211,9 @@ export default function Header(props: Props) {
                 to="/about"
                 className={`${
                   location.pathname === "/about"
-                    ? "md:text-orange-based"
+                    ? "md:text-orange-based bg-gray-200 md:bg-transparent"
                     : "md:text-white"
-                } block header-items py-2 pl-3 pr-4 text-black rounded-md hover:bg-orange-based md:hover:bg-transparent md:p-0  md:hover:text-orange-based md:px-4 md:py-2`}
+                } block header-items py-2 pl-3 pr-4 text-black rounded-md hover:bg-gray-100 md:hover:bg-transparent md:p-0  md:hover:text-orange-based md:px-4 md:py-2`}
               >
                 About
               </Link>
@@ -223,9 +223,9 @@ export default function Header(props: Props) {
                 to="/products"
                 className={`${
                   location.pathname === "/products"
-                    ? "md:text-orange-based"
+                    ? "md:text-orange-based bg-gray-200 md:bg-transparent"
                     : "md:text-white"
-                } block header-items py-2 pl-3 pr-4 text-black rounded-md hover:bg-orange-based md:hover:bg-transparent md:p-0  md:hover:text-orange-based md:px-4 md:py-2`}
+                } block header-items py-2 pl-3 pr-4 text-black rounded-md hover:bg-gray-100 md:hover:bg-transparent md:p-0  md:hover:text-orange-based md:px-4 md:py-2`}
               >
                 Rent Motorcycles
               </Link>
@@ -235,9 +235,9 @@ export default function Header(props: Props) {
                 to="/blog"
                 className={`${
                   location.pathname === "/blog"
-                    ? "md:text-orange-based"
+                    ? "md:text-orange-based bg-gray-200 md:bg-transparent"
                     : "md:text-white"
-                } block header-items py-2 pl-3 pr-4 text-black rounded-md hover:bg-orange-based md:hover:bg-transparent md:p-0  md:hover:text-orange-based md:px-4 md:py-2`}
+                } block header-items py-2 pl-3 pr-4 text-black rounded-md hover:bg-gray-100 md:hover:bg-transparent md:p-0  md:hover:text-orange-based md:px-4 md:py-2`}
               >
                 Blog
               </Link>
@@ -247,9 +247,9 @@ export default function Header(props: Props) {
                 to="/contact"
                 className={`${
                   location.pathname === "/contact"
-                    ? "md:text-orange-based"
+                    ? "md:text-orange-based bg-gray-200 md:bg-transparent"
                     : "md:text-white"
-                } block header-items py-2 pl-3 pr-4 text-black rounded-md hover:bg-orange-based md:hover:bg-transparent md:p-0  md:hover:text-orange-based md:px-4 md:py-2`}
+                } block header-items py-2 pl-3 pr-4 text-black rounded-md hover:bg-gray-100 md:hover:bg-transparent md:p-0  md:hover:text-orange-based md:px-4 md:py-2`}
               >
                 Contact
               </Link>

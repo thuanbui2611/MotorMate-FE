@@ -1,6 +1,6 @@
 import { Vehicle } from "../../app/models/Vehicle";
 import { store } from "../../app/store/ConfigureStore";
-import ProductCard from "./ProductCard";
+import ProductCard from "../../app/components/ProductCard";
 
 interface Props {
   products: Vehicle[];

@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
-import { Vehicle } from "../../app/models/Vehicle";
-import { UserDetail } from "../../app/models/User";
-import AddToCart from "../../app/components/AddToCart";
+import { Vehicle } from "../models/Vehicle";
+import { UserDetail } from "../models/User";
+import AddToCart from "./AddToCart";
 
 interface Props {
   product: Vehicle;
@@ -84,7 +84,7 @@ export default function ProductCard({ product, userLogin }: Props) {
             </p>
           </div>
           <div className="flex-col items-center justify-between">
-            <h3 className="text-xl font-semibold line-clamp-1">
+            <h3 className="text-xl font-bold line-clamp-1 text-black">
               {product.specifications.modelName}
             </h3>
             <h2 className=" text-gray-700 font-semibold">

@@ -1,7 +1,7 @@
 import { useSpringCarousel } from "react-spring-carousel";
 import { Vehicle } from "../models/Vehicle";
 import { UserDetail } from "../models/User";
-import ProductCard from "../../pages/products/ProductCard";
+import ProductCard from "./ProductCard";
 import { useEffect, useState } from "react";
 import "../assets/css/ProductCarousel.css";
 

@@ -24,6 +24,8 @@ import BlogDetails from "../../pages/blog/BlogDetails";
 import MyProducts from "../../pages/profile/MyProducts";
 import ProfileDetails from "../components/ProfileDetails";
 import OrderDetail from "../../pages/order/OrderDetail";
+import ShopOrderDetail from "../../pages/shop-order/ShopOrderDetail";
+import ShopOrders from "../../pages/shop-order";
 
 export const router = createBrowserRouter([
   {
@@ -54,6 +56,8 @@ export const router = createBrowserRouter([
           { path: "bill", element: <Bill /> },
           { path: "my-orders", element: <Orders /> },
           { path: "my-orders/:id", element: <OrderDetail /> },
+          { path: "shop-orders", element: <ShopOrders /> },
+          { path: "shop-orders/:id", element: <ShopOrderDetail /> },
           { path: "my-cart", element: <Cart /> },
           { path: "server-error", element: <ServerErrors /> },
         ],
