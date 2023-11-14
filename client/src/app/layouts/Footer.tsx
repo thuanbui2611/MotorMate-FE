@@ -1,4 +1,59 @@
+import { TextField } from "@mui/material";
+import { FieldValues, useForm } from "react-hook-form";
+import { toast } from "react-toastify";
+import agent from "../api/agent";
+
 export default function Footer() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    mode: "all",
+  });
+
+  async function handleSubmitSendMail(data: FieldValues) {
+    const fullName = data.lastName + " " + data.firstName;
+    const message =
+      "Make me stay up to date for new any features from Motormate.";
+    const body = `
+    <html>
+      <head>
+        <style>
+          body {
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #333333;
+          }
+          h1 {
+            color: #FF7E06;
+            font-size: 24px;
+            margin-bottom: 20px;
+          }
+          p {
+            margin-bottom: 10px;
+          }
+        </style>
+      </head>
+      <body>
+      <h1>Motormate get a new subscription!</h1>
+        <p>- Email: ${data.email}</p>
+        <p>${message}</p>
+        <p>Best regards,<br />${data.email}</p>
+      </body>
+    </html>
+    `;
+    const formData = {
+      toName: fullName,
+      toEmail: "motormate.official@gmail.com",
+      body: body,
+      subject: "Motormate - Subscription",
+    };
+    toast.success("Thank you for your subscription!");
+    await agent.Email.send(formData);
+  }
+
   return (
     <>
       <footer className="bg-color-header">
@@ -94,26 +149,55 @@ export default function Footer() {
             <div className="col-span-2">
               <h4 className="font-semibold text-gray-100">Stay up to date</h4>
 
-              <form>
-                <div className="mt-4 flex flex-col items-center gap-2 sm:flex-row sm:gap-3 bg-white rounded-md p-2">
+              <form onSubmit={handleSubmit(handleSubmitSendMail)}>
+                <div className="mt-4 flex flex-col items-center justify-center gap-2 sm:flex-row sm:gap-3 bg-white rounded-md p-2">
                   <div className="w-full">
                     <label htmlFor="hero-input" className="sr-only">
                       Search
                     </label>
-                    <input
+                    {/* <input
                       type="text"
-                      id="hero-input"
-                      name="hero-input"
                       className="py-3 px-4 block w-full border-transparent shadow-sm rounded-md focus:z-10 focus:border-blue-500 focus:ring-blue-500"
                       placeholder="Enter your email"
+                    /> */}
+                    <TextField
+                      className="py-3 px-4 block w-full border-transparent shadow-sm rounded-md focus:z-10 focus:border-blue-500 focus:ring-blue-500"
+                      type="email"
+                      required
+                      sx={{
+                        border: "none",
+
+                        "& label.Mui-focused": {
+                          color: "#FF7E06",
+                        },
+                        "& .MuiOutlinedInput-input": {
+                          boxShadow: "none",
+                        },
+                        "& .MuiOutlinedInput-root": {
+                          "& fieldset": {
+                            borderColor: "transparent",
+                          },
+                          "&:hover fieldset": {
+                            border: "#FF7E06",
+                          },
+                          "&.Mui-focused fieldset": {
+                            border: "#FF7E06",
+                          },
+                        },
+                      }}
+                      placeholder="abc@gmail.com"
+                      variant="outlined"
+                      {...register("email", {
+                        required: "Email is required",
+                      })}
                     />
                   </div>
-                  <a
+                  <button
                     className="w-full sm:w-auto whitespace-nowrap inline-flex justify-center items-center gap-x-3 text-center bg-[#ff7e06] hover:bg-[#ff7e06] border border-transparent text-white font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-[#ff7e06] focus:ring-offset-2 focus:ring-offset-white transition py-3 px-4"
-                    href="#"
+                    type="submit"
                   >
                     Subscribe
-                  </a>
+                  </button>
                 </div>
                 <p className="mt-3 text-sm text-gray-400">
                   New "MotorMate" or big discounts. Never spam.

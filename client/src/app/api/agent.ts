@@ -178,6 +178,11 @@ const Category = {
   delete: (id: string) => requests.delete(`api/blog/category/${id}`),
 };
 
+const Email = {
+  send: (values: {}) => requests.post("api/email/send", values),
+  sendBulk: (values: {}) => requests.post("api/email/send", values),
+};
+
 const agent = {
   Account,
   Brand,
@@ -189,6 +194,7 @@ const agent = {
   Cart,
   Blog,
   Category,
+  Email,
 };
 
 export default agent;

@@ -8,11 +8,13 @@ import agent from "../../app/api/agent";
 interface AccountState {
   user: User | null;
   userDetail: UserDetail | null;
+  userLoading: boolean;
 }
 
 const initialState: AccountState = {
   user: null,
   userDetail: null,
+  userLoading: false,
 };
 
 export const signInUser = createAsyncThunk<User, FieldValues>(
@@ -128,7 +130,11 @@ export const accountSlice = createSlice({
     });
 
     builder
+      .addCase(getUserDetails.pending, (state, action) => {
+        state.userLoading = true;
+      })
       .addCase(getUserDetails.fulfilled, (state, action) => {
+        state.userLoading = false;
         state.userDetail = action.payload;
       })
       .addCase(getUserDetails.rejected, (state, action) => {

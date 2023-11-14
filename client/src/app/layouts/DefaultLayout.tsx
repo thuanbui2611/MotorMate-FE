@@ -18,6 +18,9 @@ export default function DefaultLayout() {
     "products",
     "my-orders",
     "shop-orders",
+    "check-out",
+    "payment",
+    "bill",
   ];
   let isBackground = true;
   if (pathNotBackground.includes(location.pathname.split("/")[1])) {

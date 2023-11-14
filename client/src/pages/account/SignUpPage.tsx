@@ -132,6 +132,11 @@ export default function SignUpPage() {
                   className="input"
                   {...register("firstName", {
                     required: "First name is required",
+                    pattern: {
+                      value:
+                        /^(?!.*[<>])(?!.*<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>)(?!.*\b(xss|XSS)\b)(?!.*[!@#$%^&*()])(?!.*[-+=/\\|[\]{}:;"',.?]).*$/i,
+                      message: "Invalid name",
+                    },
                   })}
                   error={!!errors.firstName}
                   helperText={errors?.firstName?.message as string}
@@ -199,6 +204,11 @@ export default function SignUpPage() {
                   className="input"
                   {...register("lastName", {
                     required: "Last name is required",
+                    pattern: {
+                      value:
+                        /^(?!.*[<>])(?!.*<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>)(?!.*\b(xss|XSS)\b)(?!.*[!@#$%^&*()])(?!.*[-+=/\\|[\]{}:;"',.?]).*$/i,
+                      message: "Invalid name",
+                    },
                   })}
                   error={!!errors.lastName}
                   helperText={errors?.lastName?.message as string}

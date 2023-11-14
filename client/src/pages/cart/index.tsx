@@ -17,15 +17,18 @@ export default function Cart() {
   const [vehicleDeleted, setVehicleDeleted] = useState<Vehicle>({} as Vehicle);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const userLogin = useAppSelector((state) => state.account.userDetail);
-  const { cart, selectedVehicles } = useAppSelector((state) => state.cart);
+  const { userDetail, userLoading } = useAppSelector((state) => state.account);
+  const userLogin = userDetail;
+  const { cart, selectedVehicles, cartLoading } = useAppSelector(
+    (state) => state.cart
+  );
 
   useEffect(() => {
-    if (!userLogin) {
+    if (!userLogin && !userLoading) {
       toast.error("You need to login to view your cart!");
       navigate(-1);
     }
-  }, []);
+  }, [userLogin]);
 
   const openConfirmDeleteDialog = (vehicle: Vehicle) => {
     setConfirmDelete(true);
@@ -83,13 +86,13 @@ export default function Cart() {
     dispatch(addRemoveSelectedVehicle({ vehicle, shop }));
   };
 
-  return !cart ? (
+  return cartLoading || userLoading ? (
     <Loading />
   ) : (
     <>
       <section
         className={`bg-gray-100 h-fit ${
-          cart.shops.length === 0 && "min-h-screen"
+          cart?.shops.length === 0 && "min-h-screen"
         }`}
       >
         <div className="px-4 py-6 mx-auto max-w-7xl lg:py-4 md:px-6">
@@ -98,7 +101,7 @@ export default function Cart() {
               My Cart
             </h2>
             {/* Start cart */}
-            {cart.shops.length === 0 ? (
+            {cart?.shops.length === 0 ? (
               <div className="flex items-center justify-center text-center text-xl font-semibold text-orange-based brightness-90">
                 Empty cart. <br></br>
                 Please add more vehicles to the cart to have a variety of

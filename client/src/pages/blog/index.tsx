@@ -5,10 +5,20 @@ import { useEffect } from "react";
 import Loading from "../../app/components/Loading";
 import Pagination from "../../app/components/Pagination";
 import { ConvertDatetimeToDisplay } from "../../app/utils/ConvertDatetimeToDate";
+import { FieldValues, useForm } from "react-hook-form";
+import { toast } from "react-toastify";
+import agent from "../../app/api/agent";
+import { TextField } from "@mui/material";
 
 export default function BlogPage() {
   const [pageNumber, setPageNumber] = useSearchParams({ pageNumber: "" });
-
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    mode: "all",
+  });
   const blogs = useAppSelector(blogSelectors.selectAll);
   const { blogLoaded, metaData, blogParams } = useAppSelector(
     (state) => state.blog
@@ -34,7 +44,50 @@ export default function BlogPage() {
       dispatch(getBlogsAsync());
     }
   }, [dispatch, blogParams]);
-
+  async function handleSubmitSendMail(data: FieldValues) {
+    if (errors.email) {
+      toast.error("Email is invalid, please try again!");
+    }
+    const fullName = data.lastName + " " + data.firstName;
+    const message =
+      "Make me stay up to date for new any features from Motormate.";
+    const body = `
+    <html>
+      <head>
+        <style>
+          body {
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #333333;
+          }
+          h1 {
+            color: #FF7E06;
+            font-size: 24px;
+            margin-bottom: 20px;
+          }
+          p {
+            margin-bottom: 10px;
+          }
+        </style>
+      </head>
+      <body>
+      <h1>Motormate get a new subscription!</h1>
+        <p>- Email: ${data.email}</p>
+        <p>${message}</p>
+        <p>Best regards,<br />${data.email}</p>
+      </body>
+    </html>
+    `;
+    const formData = {
+      toName: fullName,
+      toEmail: "motormate.official@gmail.com",
+      body: body,
+      subject: "Motormate - Subscription",
+    };
+    toast.success("Thank you for your subscription!");
+    await agent.Email.send(formData);
+  }
   return !metaData ? (
     <Loading />
   ) : (
@@ -56,9 +109,6 @@ export default function BlogPage() {
             font-bold text-gray-900"
             >
               Stay Up To Date With{" "}
-              {/* <span className="text-transparent bg-clip-text bg-gradient-to-br from-indigo-600 from-20% via-blue-600 via-30% to-green-600">
-                {" "}
-              </span> */}
               <span className="text-gradient ">Motormate</span>
             </h1>
             <p className="mt-8 text-gray-700">
@@ -69,7 +119,7 @@ export default function BlogPage() {
             <div className="mt-10  w-full flex max-w-md mx-auto lg:mx-0">
               <div className="flex sm:flex-row flex-col gap-5 w-full">
                 <form
-                  action="#"
+                  onSubmit={handleSubmit(handleSubmitSendMail)}
                   className="py-1 pl-6 w-full pr-1 flex gap-3 items-center text-gray-600 shadow-lg shadow-gray-200/20
                             border border-gray-200 bg-gray-100 rounded-full ease-linear focus-within:bg-white  focus-within:border-blue-600"
                 >
@@ -90,12 +140,44 @@ export default function BlogPage() {
                       />
                     </svg>
                   </span>
-                  <input
+                  <TextField
+                    className="w-full py-3 outline-none bg-transparent"
+                    type="email"
+                    required
+                    sx={{
+                      border: "none",
+
+                      "& label.Mui-focused": {
+                        color: "#FF7E06",
+                      },
+                      "& .MuiOutlinedInput-input": {
+                        boxShadow: "none",
+                      },
+                      "& .MuiOutlinedInput-root": {
+                        "& fieldset": {
+                          borderColor: "transparent",
+                        },
+                        "&:hover fieldset": {
+                          border: "#FF7E06",
+                        },
+                        "&.Mui-focused fieldset": {
+                          border: "#FF7E06",
+                        },
+                      },
+                    }}
+                    placeholder="abc@gmail.com"
+                    variant="outlined"
+                    {...register("email", {
+                      required: "Email is required",
+                    })}
+                  />
+                  {/* <input
                     type="email"
                     placeholder="motormate.official@gmail.com"
                     className="w-full py-3 outline-none bg-transparent"
-                  />
+                  /> */}
                   <button
+                    type="submit"
                     className="flex text-white justify-center items-center w-max min-w-max sm:w-max px-6 h-12 rounded-full outline-none relative overflow-hidden border duration-300 ease-linear
                                 after:absolute after:inset-x-0 after:aspect-square after:scale-0 after:opacity-70 after:origin-center after:duration-300 after:ease-linear after:rounded-full after:top-0 after:left-0 after:bg-color-header hover:after:opacity-100 hover:after:scale-[2.5]  bg-gradient-to-r from-[#FF6003] to-[#FF7E06] border-transparent hover:border-[#172554]"
                   >

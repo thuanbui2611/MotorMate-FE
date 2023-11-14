@@ -1,20 +1,31 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../app/store/ConfigureStore";
 import Loading from "../../app/components/Loading";
-import { MouseEvent } from "react";
+import { MouseEvent, useEffect } from "react";
+import { toast } from "react-toastify";
 
 export default function Orders() {
-  const { cart, selectedVehicles } = useAppSelector((state) => state.cart);
+  const userLogin = useAppSelector((state) => state.account.userDetail);
+
+  const { cart, cartLoading, selectedVehicles } = useAppSelector(
+    (state) => state.cart
+  );
   const data = ["1", "2", "3", "4", "5"];
+  useEffect(() => {
+    if (!userLogin) {
+      toast.error("You need to login to view your orders!");
+      navigate(-1);
+    }
+  }, [userLogin]);
   const navigate = useNavigate();
 
-  return !cart ? (
+  return cartLoading ? (
     <Loading />
   ) : (
     <>
       <section
         className={`bg-gray-100 h-fit ${
-          cart.shops.length === 0 && "min-h-screen"
+          cart?.shops.length === 0 && "min-h-screen"
         }`}
       >
         <div className="px-4 py-6 mx-auto max-w-7xl lg:py-4 md:px-6">
@@ -23,7 +34,7 @@ export default function Orders() {
               My Orders
             </div>
             {/* Start cart */}
-            {cart.shops.length === 0 ? (
+            {cart?.shops.length === 0 ? (
               <div className="flex items-center justify-center text-center text-xl font-semibold text-orange-based brightness-90">
                 Empty order history. <br></br>
               </div>

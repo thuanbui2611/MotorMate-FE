@@ -73,7 +73,7 @@ export default function SettingProfile() {
                 </svg>
               </span>
               <span className="tracking-wide text-3xl font-bold">
-                Your account information
+                My Account Information
               </span>
             </div>
             <form onSubmit={handleSubmit(submitForm)}>
@@ -256,7 +256,7 @@ export default function SettingProfile() {
                 className="mx-auto block w-fit text-sm focus:outline-none hover:shadow-xs p-3 my-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
                 onClick={() => setIsEditMode(true)}
               >
-                Edit my information
+                Edit My Information
               </button>
             )}
           </div>
