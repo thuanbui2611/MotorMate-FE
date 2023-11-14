@@ -1,12 +1,4 @@
-import {
-  Button,
-  Dialog,
-  Card,
-  CardHeader,
-  CardBody,
-  CardFooter,
-  Typography,
-} from "@material-tailwind/react";
+import { Button } from "@material-tailwind/react";
 import { FieldValues, useForm } from "react-hook-form";
 import AppTextInput from "./AppTextInput";
 import { HexColorPicker } from "react-colorful";

@@ -24,8 +24,6 @@ export default function BlogDetails() {
       .finally(() => setLoading(false));
   }, []);
 
-  const relatedBlogs = ["1", "2", "3"];
-
   if (!blog && !loading) return <NotFound />;
   return loading ? (
     <Loading />
@@ -77,9 +75,9 @@ export default function BlogDetails() {
                 />
               </div>
               <div>
-                <p className="mt-2 p-4 font-normal md:p-8 text-xs md:text-xl">
+                <div className="mt-2 p-4 font-normal md:p-8 text-xs md:text-xl">
                   {parse(blog?.content || "")}
-                </p>
+                </div>
               </div>
             </div>
           </div>

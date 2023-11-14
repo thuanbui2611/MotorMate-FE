@@ -1,6 +1,4 @@
-import { useSearchParams } from "react-router-dom";
 import Breadcrumb from "../../app/components/Breadcrumb";
-import Pagination from "../../app/components/Pagination";
 import { useAppDispatch, useAppSelector } from "../../app/store/ConfigureStore";
 import { colorSelectors, deleteColorAsync, getColorsAsync } from "./ColorSlice";
 import { Color } from "../../app/models/Color";
@@ -15,6 +13,7 @@ export default function ColorPage() {
   const [colorDeleted, setColorDeleted] = useState<Color>({} as Color);
   const [openEditForm, setOpenEditForm] = useState(false);
   const [selectedColor, setSelectedColor] = useState<Color | null>(null);
+
   const dispatch = useAppDispatch();
 
   const colors = useAppSelector(colorSelectors.selectAll);

@@ -637,7 +637,7 @@ export default function TinyChat() {
                     className="flex items-center justify-center"
                     onSubmit={handleSubmitCreateChat}
                   >
-                    <div className="font-medium text-gray-600 text-xs w-[95%] ">
+                    <div className="font-medium text-gray-600 text-xs w-[95%] mt-2">
                       <SelectUserChat
                         onSelect={(username: string) =>
                           setUserNewChat(username)
@@ -795,7 +795,7 @@ export default function TinyChat() {
                 }
               >
                 <input
-                  className="bg-white py-2 px-1 rounded-lg flex-grow text-xs"
+                  className="bg-white py-2 px-2 rounded-lg flex-grow text-xs"
                   style={{ width: "93%" }}
                   type="text"
                   placeholder="Type your message here..."

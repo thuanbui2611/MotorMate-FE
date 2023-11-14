@@ -47,7 +47,7 @@ export default function Products() {
     useState(true);
   const [loadingFetchBrandsFilter, setLoadingFetchBrandsFilter] =
     useState(true);
-  const [priceFilter, setPriceFilter] = useState<string | undefined>(undefined);
+  const [priceFilter, setPriceFilter] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [paramsCompleted, setParamsCompleted] = useState(false);
 
@@ -647,6 +647,7 @@ export default function Products() {
                               id="demo-simple-select-autowidth"
                               // value={priceFilter}
                               // onChange={handleFilterByStatusChange}
+                              defaultValue=""
                               autoWidth
                               label="Age"
                             >

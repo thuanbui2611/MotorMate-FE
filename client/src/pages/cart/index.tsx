@@ -288,7 +288,9 @@ export default function Cart() {
 
       {confirmDelete && (
         <ConfirmDeleteDialog
-          objectName={vehicleDeleted?.licensePlate}
+          objectName={
+            vehicleDeleted.vehicleName + ", " + vehicleDeleted?.licensePlate
+          }
           actionDelete={() => handleDeleteVehicle(vehicleDeleted)}
           cancelDelete={cancelConfirmDeleteDialog}
         />

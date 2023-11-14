@@ -14,7 +14,6 @@ export default function MenuItemUser({ user }: Props) {
   const triggerUserMenu = useRef<any>(null);
   const dropdownUserMenu = useRef<any>(null);
 
-  const userFromToken = useAppSelector((state) => state.account.user);
   const { cart } = useAppSelector((state) => state.cart);
   const dispatch = useAppDispatch();
 
@@ -103,7 +102,7 @@ export default function MenuItemUser({ user }: Props) {
             {user?.name}
           </span>
           <span className="block text-sm  text-gray-500 truncate">
-            {userFromToken?.role}
+            {user?.role}
           </span>
         </div>
         <ul className="py-2" aria-labelledby="user-menu-button">

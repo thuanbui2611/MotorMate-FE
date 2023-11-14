@@ -1,0 +1,90 @@
+.logoVisaCard svg {
+  height: 48px;
+  width: 54px;
+}
+
+::selection {
+  background-color: rgba(0, 0, 0, 0);
+}
+
+/* .containerVisaCard {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+} */
+
+.cardVisaCard {
+  background: rgb(39,33,128);
+background: linear-gradient(90deg, rgba(39,33,128,1) 0%, rgba(45,51,159,1) 20%, rgba(98,55,192,1) 37%, rgba(110,59,207,1) 46%, rgba(96,55,190,1) 57%, rgba(57,52,166,1) 77%, rgba(62,41,151,1) 100%);
+  width: 300px;
+  height: 200px;
+  border-radius: 20px;
+  position: relative;
+  box-shadow: 3px 3px 17px 0px rgba(0, 0, 0, 0.55);
+}
+
+.cardVisaCard .logoVisaCard {
+  position: absolute;
+  display: inline-block;
+  background-color: white;
+  border-radius: 9999px;
+  cursor: pointer;
+}
+
+.cardVisaCard .removeVisaCard {
+  top: 30px;
+  right: 30px;
+  opacity: .9;
+  color: black;
+}
+
+.cardVisaCard .remove:hoverVisaCard {
+  color: #f06b5d;
+}
+
+.cardVisaCard .logoVisaCard {
+  top: 20px;
+  left: 30px;
+  font-size: 3em;
+  opacity: 1;
+}
+
+.cardVisaCard .numberVisaCard, .cardVisaCard .CVVisaCard {
+  display: block;
+  position: absolute;
+  left: 30px;
+  cursor: default;
+  color: black;
+  opacity: .9;
+  transition: color .7s ease-out;
+  font-size: 14px;
+}
+
+.cardVisaCard .ownerVisaCard{
+  display: block;
+  position: absolute;
+  left: 30px;
+  top: 80px;
+  font-weight: 500;
+}
+
+.cardVisaCard .numberVisaCard {
+  bottom: 60px;
+  letter-spacing: 4px;
+}
+
+.cardVisaCard .CVVisaCard {
+  bottom: 30px;
+  letter-spacing: 1px;
+}
+
+.cardVisaCard .expiredVisaCard {
+  display: block;
+  position: absolute;
+  right: 30px;
+  bottom: 30px;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 1px;
+}

@@ -4,7 +4,9 @@ html,
 body {
   font-family: "Montserrat", sans-serif;
 }
-
+.bg-opacity-60{
+  --tw-bg-opacity: 0.6;
+}
 /* Header */
 .text-gradient {
   background: linear-gradient(90deg, #ff6003, #ff7e06);

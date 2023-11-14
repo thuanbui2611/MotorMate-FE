@@ -27,7 +27,7 @@ export default function ConfirmDeleteDialog({
   };
   return (
     <>
-      <Dialog open={true} handler={cancelDelete} className="w-1/2">
+      <Dialog open={true} handler={cancelDelete} size="xs">
         <DialogHeader className="text-red-600 text-3xl">
           Confirm Delete
         </DialogHeader>

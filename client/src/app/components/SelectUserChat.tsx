@@ -94,6 +94,25 @@ export default function SelectUserChat({ onSelect }: Props) {
               {...params}
               required
               placeholder="Find user to start a chat..."
+              sx={{
+                "& label.Mui-focused": {
+                  color: "#FF7E06",
+                },
+                "& .MuiOutlinedInput-input": {
+                  boxShadow: "none",
+                },
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": {
+                    borderColor: "#6B7280",
+                  },
+                  "&:hover fieldset": {
+                    borderColor: "#FF7E06",
+                  },
+                  "&.Mui-focused fieldset": {
+                    borderColor: "#FF7E06",
+                  },
+                },
+              }}
               InputProps={{
                 ...params.InputProps,
                 endAdornment: null,
