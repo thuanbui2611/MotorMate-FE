@@ -183,6 +183,10 @@ const Email = {
   sendBulk: (values: {}) => requests.post("api/email/send", values),
 };
 
+const Checkout = {
+  create: (values: {}) => requests.post("api/order/checkout", values),
+};
+
 const agent = {
   Account,
   Brand,
@@ -195,6 +199,7 @@ const agent = {
   Blog,
   Category,
   Email,
+  Checkout,
 };
 
 export default agent;

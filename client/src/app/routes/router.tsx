@@ -6,7 +6,6 @@ import About from "../../pages/about";
 import Products from "../../pages/products";
 import ProductDetails from "../../pages/products/ProductDetails";
 import Checkout from "../../pages/checkout/Checkout";
-import Payment from "../../pages/checkout/Payment";
 import Bill from "../../pages/checkout/Bill";
 import SettingProfile from "../../pages/profile/SettingProfile";
 import Cart from "../../pages/cart";
@@ -26,6 +25,8 @@ import ProfileDetails from "../components/ProfileDetails";
 import OrderDetail from "../../pages/order/OrderDetail";
 import ShopOrderDetail from "../../pages/shop-order/ShopOrderDetail";
 import ShopOrders from "../../pages/shop-order";
+import PaymentWrapper from "../../pages/checkout/PaymentWrapper";
+import Payment from "../../pages/checkout/Payment";
 
 export const router = createBrowserRouter([
   {
@@ -51,7 +52,7 @@ export const router = createBrowserRouter([
           { path: "blog/:id", element: <BlogDetails /> },
           { path: "products", element: <Products /> },
           { path: "product-detail/:id", element: <ProductDetails /> },
-          { path: "check-out/:id", element: <Checkout /> },
+          { path: "check-out", element: <Checkout /> },
           { path: "payment", element: <Payment /> },
           { path: "bill", element: <Bill /> },
           { path: "my-orders", element: <Orders /> },

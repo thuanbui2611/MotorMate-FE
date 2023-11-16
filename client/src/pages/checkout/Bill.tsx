@@ -1,7 +1,17 @@
 import { Link } from "react-router-dom";
 import ProcessingBar from "../../app/components/ProcessingBar";
+import { useEffect } from "react";
 
 export default function Bill() {
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+  useEffect(() => {
+    scrollToTop();
+  }, []);
   return (
     <>
       <section className="pt-12 pb-24 bg-gray-100 overflow-hidden">

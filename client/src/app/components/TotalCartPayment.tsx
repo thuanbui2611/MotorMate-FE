@@ -30,7 +30,7 @@ export default function TotalCartPayment() {
         </p>
       </div>
       <Link
-        to="/check-out/1"
+        to="/check-out"
         className="flex items-center justify-center w-full h-full"
       >
         <Payment_btn />

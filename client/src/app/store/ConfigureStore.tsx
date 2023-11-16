@@ -6,6 +6,7 @@ import { ProfileSlice } from "../../pages/profile/ProfileSlice";
 import { ChatSlice } from "../../pages/chat/ChatSlice";
 import { CartSlice } from "../../pages/cart/CartSlice";
 import { BlogSlice } from "../../pages/blog/BlogSlice";
+import { CheckoutSlice } from "../../pages/checkout/CheckoutSlice";
 
 export const store = configureStore({
   reducer: {
@@ -15,6 +16,7 @@ export const store = configureStore({
     chat: ChatSlice.reducer,
     cart: CartSlice.reducer,
     blog: BlogSlice.reducer,
+    checkout: CheckoutSlice.reducer,
   },
 });
 

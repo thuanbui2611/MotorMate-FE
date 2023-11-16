@@ -3,9 +3,12 @@ import SelectCityVN from "../../app/components/SelectCityVN";
 import ProcessingBar from "../../app/components/ProcessingBar";
 import { Location } from "../../app/models/Address";
 import { useAppSelector } from "../../app/store/ConfigureStore";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Vehicle } from "../../app/models/Cart";
 import Payment_btn from "../../app/components/Payment_btn";
+import { useAppDispatch } from "../../app/store/ConfigureStore";
+import { createCheckoutAsync } from "./CheckoutSlice";
+import { toast } from "react-toastify";
 
 export default function Checkout() {
   const [selectedPaymentOption, setSelectedPaymentOption] =
@@ -16,6 +19,25 @@ export default function Checkout() {
   const [totalVehicleCount, setTotalVehicleCount] = useState<number>(0);
   const [totalPayment, setTotalPayment] = useState<number>(0);
   const { selectedVehicles } = useAppSelector((state) => state.cart);
+  const { userDetail } = useAppSelector((state) => state.account);
+
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+  useEffect(() => {
+    if (selectedVehicles.length === 0) {
+      toast.error("You need to choose at least one vehicle for checkout!");
+      navigate("/my-cart");
+      return;
+    }
+    scrollToTop();
+  }, []);
 
   useEffect(() => {
     let total = 0;
@@ -34,6 +56,7 @@ export default function Checkout() {
     });
     setTotalVehicleCount(count);
   }, [selectedVehicles]);
+
   //Select option Payment Method
   const handlePaymentOptionChange = (
     e: React.ChangeEvent<HTMLInputElement>
@@ -53,6 +76,18 @@ export default function Checkout() {
   const handleLocationChange = (value: Location) => {
     setLocation(value);
   };
+
+  async function onSubmit() {
+    debugger;
+    const vehicleIds = selectedVehicles.flatMap((shop) =>
+      shop.vehicles.map((v) => v.vehicleId)
+    );
+    const formData = {
+      userId: userDetail?.id,
+      vehicleIds: vehicleIds,
+    };
+    dispatch(createCheckoutAsync(formData));
+  }
   return (
     <>
       <section className="pt-12 pb-24 bg-gray-100">
@@ -67,14 +102,14 @@ export default function Checkout() {
           <div className="flex flex-wrap -mx-4 mb-14 justify-center items-center lg:items-start xl:mb-24 pt-10">
             <div className=" w-full lg:w-2/4 px-4 mb-14 md:mb-0">
               <h2 className="mb-7 text-3xl font-heading font-bold">
-                Your information
+                Lessee information
               </h2>
               <div className="py-12 px-8 md:pl-6 md:pr-16 bg-white rounded-3xl">
                 <div className="pb-4 border-b border-gray-200 border-opacity-30">
                   <div className="max-w-lg mx-auto">
                     <div className="flex flex-wrap mb-6 items-center">
                       <div className="w-full md:w-1/3 mb-2 md:mb-0 md:pr-10 md:text-right">
-                        <label className="text-lg">Your name:</label>
+                        <label className="text-lg">Lessee name:</label>
                       </div>
                       <div className="w-full md:w-2/3">
                         <input
@@ -450,7 +485,11 @@ export default function Checkout() {
                   >
                     Back to cart
                   </Link>
-                  <Link className="w-fit h-fit" to="/payment">
+                  <Link
+                    className="w-fit h-fit"
+                    to="/payment"
+                    onClick={onSubmit}
+                  >
                     <Payment_btn />
                   </Link>
                 </div>
