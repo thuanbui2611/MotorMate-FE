@@ -29,6 +29,7 @@ import {
 } from "./ProductSlice";
 import LoaderButton from "../../app/components/LoaderButton";
 import Pagination from "../../app/components/Pagination";
+import FadeInSection from "../../app/components/FadeInSection";
 
 export default function Products() {
   const [searchParams, setSearchParams] = useSearchParams({});
@@ -403,7 +404,7 @@ export default function Products() {
   //End of date picker
   if (!metaData) return <Loading />;
   return (
-    <>
+    <FadeInSection options="fade-in-scale">
       <div className="w-full my-12 mx-auto">
         <div className="flex justify-center items-center space-x-5">
           <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -683,6 +684,6 @@ export default function Products() {
           </section>
         </div>
       </div>
-    </>
+    </FadeInSection>
   );
 }

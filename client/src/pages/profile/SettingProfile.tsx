@@ -24,7 +24,9 @@ export default function SettingProfile() {
   useEffect(() => {
     if (userLogin) {
       reset(userLogin);
-      setValue("dateOfBirth", userLogin.dateOfBirth.substring(0, 10));
+      if (userLogin.dateOfBirth) {
+        setValue("dateOfBirth", userLogin.dateOfBirth.substring(0, 10));
+      }
     }
   }, [reset, userLogin, isEditMode]);
 

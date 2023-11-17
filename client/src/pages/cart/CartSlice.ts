@@ -46,13 +46,12 @@ export const addToCartAsync = createAsyncThunk<Cart, {}>(
 
 export const deleteItemInCartAsync = createAsyncThunk(
   "cart/deleteVehicleInCart",
-  async (data: { userId: string; vehicleId: string }) => {
+  async (data: { userId: string; vehicleId: string }, thunkAPI) => {
     try {
       await agent.Cart.deleteItem(data.userId, data.vehicleId);
       return data;
     } catch (error: any) {
-      toast.error(error.data.message);
-      throw error;
+      return thunkAPI.rejectWithValue({ error, data });
     }
   }
 );
@@ -62,7 +61,6 @@ export const CartSlice = createSlice({
   initialState,
   reducers: {
     addRemoveSelectedVehicle: (state, action) => {
-      debugger;
       const { shop, vehicle } = action.payload;
       const indexShop = state.selectedVehicles.findIndex(
         (s) => s.lessorId === shop.lessorId
@@ -112,13 +110,33 @@ export const CartSlice = createSlice({
       }
     },
     removeAllVehiclesInShop: (state, action) => {
-      debugger;
       const shop: Shop = action.payload;
       const indexShop = state.selectedVehicles.findIndex(
         (s) => s.lessorId === shop.lessorId
       );
       if (indexShop !== -1) {
         state.selectedVehicles.splice(indexShop, 1);
+      }
+    },
+    setSelectedVehicle: (state, action) => {
+      state.selectedVehicles = action.payload;
+    },
+    removeVehicleInCart: (state, action) => {
+      debugger;
+      const { vehicleId } = action.payload;
+      if (state.cart) {
+        state.cart.shops.forEach((shop) => {
+          const vehicleIndex = shop.vehicles.findIndex(
+            (v) => v.vehicleId === vehicleId
+          );
+          if (vehicleIndex !== -1) {
+            shop.vehicles.splice(vehicleIndex, 1);
+          }
+        });
+        // Remove shops without vehicles
+        state.cart.shops = state.cart.shops.filter(
+          (shop) => shop.vehicles.length > 0
+        );
       }
     },
   },
@@ -139,26 +157,44 @@ export const CartSlice = createSlice({
     });
     builder.addCase(addToCartAsync.fulfilled, (state, action) => {
       state.cart = action.payload;
+      state.cartLoading = false;
     });
     builder.addCase(addToCartAsync.rejected, (state, action) => {
       state.cartLoading = false;
+      toast.error("Add to cart fail! Please try again");
+      console.log("Add to cart fail: ", action.error.message);
+
+      const { error, data } = action.payload as any;
+      const { vehicleId } = data as { vehicleId: string; userId: string };
+      //Check if vehicle already add in cart, remove it
+      state.cart?.shops.forEach((shop) => {
+        const vehicleIndex = shop.vehicles.findIndex(
+          (v) => v.vehicleId === vehicleId
+        );
+        if (vehicleIndex !== -1) {
+          shop.vehicles.splice(vehicleIndex, 1);
+        }
+      });
     });
     builder.addCase(deleteItemInCartAsync.fulfilled, (state, action) => {
-      const { vehicleId } = action.payload;
-      if (state.cart) {
-        state.cart.shops.forEach((shop) => {
-          const vehicleIndex = shop.vehicles.findIndex(
-            (v) => v.vehicleId === vehicleId
-          );
-          if (vehicleIndex !== -1) {
-            shop.vehicles.splice(vehicleIndex, 1);
-          }
-        });
-        // Remove shops without vehicles
-        state.cart.shops = state.cart.shops.filter(
-          (shop) => shop.vehicles.length > 0
-        );
-      }
+      // const { vehicleId } = action.payload;
+      // if (state.cart) {
+      //   state.cart.shops.forEach((shop) => {
+      //     const vehicleIndex = shop.vehicles.findIndex(
+      //       (v) => v.vehicleId === vehicleId
+      //     );
+      //     if (vehicleIndex !== -1) {
+      //       shop.vehicles.splice(vehicleIndex, 1);
+      //     }
+      //   });
+      //   // Remove shops without vehicles
+      //   state.cart.shops = state.cart.shops.filter(
+      //     (shop) => shop.vehicles.length > 0
+      //   );
+      // }
+    });
+    builder.addCase(deleteItemInCartAsync.rejected, (state, action) => {
+      console.log("Delete item in cart fail: ", action.error.message);
     });
   },
 });
@@ -167,4 +203,6 @@ export const {
   addRemoveSelectedVehicle,
   addSelectAllVehicles,
   removeAllVehiclesInShop,
+  setSelectedVehicle,
+  removeVehicleInCart,
 } = CartSlice.actions;

@@ -3,8 +3,8 @@ import SelectCityVN from "../../app/components/SelectCityVN";
 import ProcessingBar from "../../app/components/ProcessingBar";
 import { Location } from "../../app/models/Address";
 import { useAppSelector } from "../../app/store/ConfigureStore";
-import { Link, useNavigate } from "react-router-dom";
-import { Vehicle } from "../../app/models/Cart";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Shop, Vehicle } from "../../app/models/Cart";
 import Payment_btn from "../../app/components/Payment_btn";
 import { useAppDispatch } from "../../app/store/ConfigureStore";
 import { createCheckoutAsync } from "./CheckoutSlice";
@@ -14,15 +14,19 @@ export default function Checkout() {
   const [selectedPaymentOption, setSelectedPaymentOption] =
     useState("cashOnDelivery");
   const [location, setLocation] = useState<Location | null>(null);
+  const [vehiclesCheckout, setVehiclesCheckout] = useState<Shop[]>([]);
 
   const [deliveryOption, setDeliveryOption] = useState("");
   const [totalVehicleCount, setTotalVehicleCount] = useState<number>(0);
   const [totalPayment, setTotalPayment] = useState<number>(0);
   const { selectedVehicles } = useAppSelector((state) => state.cart);
   const { userDetail } = useAppSelector((state) => state.account);
+  const [deliveryAddress, setDeliveryAddress] = useState<string>("");
+  // const [checkBox, setCheckBox] = useState<boolean>(false);
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { state } = useLocation();
 
   const scrollToTop = () => {
     window.scrollTo({
@@ -31,31 +35,42 @@ export default function Checkout() {
     });
   };
   useEffect(() => {
-    if (selectedVehicles.length === 0) {
-      toast.error("You need to choose at least one vehicle for checkout!");
-      navigate("/my-cart");
-      return;
-    }
     scrollToTop();
   }, []);
 
   useEffect(() => {
-    let total = 0;
-    selectedVehicles.forEach((shop) => {
-      shop.vehicles.forEach((vehicle: Vehicle) => {
-        total += +vehicle.price;
-      });
-    });
-    setTotalPayment(total);
-
-    let count = 0;
-    selectedVehicles.forEach((shop) => {
-      shop.vehicles.forEach((vehicle: Vehicle) => {
-        count += 1;
-      });
-    });
-    setTotalVehicleCount(count);
+    if (vehiclesCheckout.length === 0) {
+      if (state) {
+        setVehiclesCheckout(state.vehicleCheckout);
+      } else if (selectedVehicles.length === 0) {
+        toast.error("You need to choose at least one vehicle for checkout!");
+        navigate("/my-cart");
+        return;
+      } else {
+        setVehiclesCheckout(selectedVehicles);
+      }
+    }
   }, [selectedVehicles]);
+
+  useEffect(() => {
+    if (vehiclesCheckout.length > 0) {
+      let total = 0;
+      vehiclesCheckout.forEach((shop) => {
+        shop.vehicles.forEach((vehicle: Vehicle) => {
+          total += +vehicle.price;
+        });
+      });
+      setTotalPayment(total);
+
+      let count = 0;
+      vehiclesCheckout.forEach((shop) => {
+        shop.vehicles.forEach((vehicle: Vehicle) => {
+          count += 1;
+        });
+      });
+      setTotalVehicleCount(count);
+    }
+  }, [vehiclesCheckout]);
 
   //Select option Payment Method
   const handlePaymentOptionChange = (
@@ -77,17 +92,43 @@ export default function Checkout() {
     setLocation(value);
   };
 
-  async function onSubmit() {
-    debugger;
-    const vehicleIds = selectedVehicles.flatMap((shop) =>
+  const handleInputDeliveryAddress = (event: any) => {
+    setDeliveryAddress(event.target.value);
+  };
+
+  const onSubmit = async (event: any) => {
+    event.preventDefault();
+    if (deliveryOption === "") {
+      toast.error("You need to choose a delivery option!");
+      return;
+    }
+
+    const vehicleIds = vehiclesCheckout.flatMap((shop) =>
       shop.vehicles.map((v) => v.vehicleId)
     );
+
+    const pickUpAddress = deliveryAddress
+      ? deliveryAddress +
+        " " +
+        location?.district +
+        " " +
+        location?.ward +
+        " " +
+        location?.city
+      : "";
     const formData = {
+      //Pick up in vehicle address
       userId: userDetail?.id,
       vehicleIds: vehicleIds,
+      pickUpLocation: pickUpAddress
+        ? pickUpAddress
+        : "Pick up at the Vehicle Address",
+      dropOffLocation: pickUpAddress ? pickUpAddress : userDetail?.address,
     };
     dispatch(createCheckoutAsync(formData));
-  }
+
+    navigate("/payment");
+  };
   return (
     <>
       <section className="pt-12 pb-24 bg-gray-100">
@@ -99,33 +140,57 @@ export default function Checkout() {
               Checkout
             </h2>
           </div> */}
-          <div className="flex flex-wrap -mx-4 mb-14 justify-center items-center lg:items-start xl:mb-24 pt-10">
+          <form
+            onSubmit={onSubmit}
+            className="flex flex-wrap -mx-4 mb-14 justify-center items-center lg:items-start xl:mb-24 pt-10"
+          >
             <div className=" w-full lg:w-2/4 px-4 mb-14 md:mb-0">
               <h2 className="mb-7 text-3xl font-heading font-bold">
                 Lessee information
               </h2>
-              <div className="py-12 px-8 md:pl-6 md:pr-16 bg-white rounded-3xl">
+              <div className="py-12 px-8 bg-white rounded-3xl">
                 <div className="pb-4 border-b border-gray-200 border-opacity-30">
-                  <div className="max-w-lg mx-auto">
+                  <div className="mx-auto">
                     <div className="flex flex-wrap mb-6 items-center">
-                      <div className="w-full md:w-1/3 mb-2 md:mb-0 md:pr-10 md:text-right">
+                      <div className="w-full md:w-1/3 mb-2 md:mb-0 text-left">
                         <label className="text-lg">Lessee name:</label>
                       </div>
                       <div className="w-full md:w-2/3">
                         <input
                           className="w-full h-1/3 px-5 py-3 text-lg leading-9 bg-blue-50 border-2 border-blue-400 outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-xl"
                           type="text"
+                          disabled
+                          value={userDetail?.fullName}
                         />
                       </div>
                     </div>
                     <div className="flex flex-wrap mb-6 items-center">
-                      <div className="w-full md:w-1/3 mb-2 md:mb-0 md:pr-10 md:text-right">
+                      <div className="w-full md:w-1/3 mb-2 md:mb-0 text-left">
                         <label className="text-lg  ">Phone number:</label>
                       </div>
                       <div className="w-full md:w-2/3">
                         <input
                           className="w-full h-1/3 px-5 py-3 text-lg leading-9 bg-blue-50 border-2 border-blue-400 outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-xl"
                           type="text"
+                          disabled
+                          value={
+                            userDetail?.phoneNumber
+                              ? userDetail?.phoneNumber
+                              : "N/A"
+                          }
+                        />
+                      </div>
+                    </div>
+                    <div className="flex flex-wrap mb-6 items-center">
+                      <div className="w-full md:w-1/3 mb-2 md:mb-0 text-left">
+                        <label className="text-lg  ">Email:</label>
+                      </div>
+                      <div className="w-full md:w-2/3">
+                        <input
+                          className="w-full h-1/3 px-5 py-3 text-lg leading-9 bg-blue-50 border-2 border-blue-400 outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-xl"
+                          type="text"
+                          disabled
+                          value={userDetail?.email ? userDetail?.email : "N/A"}
                         />
                       </div>
                     </div>
@@ -148,10 +213,11 @@ export default function Checkout() {
                         </select>
                       </div>
                     </div>
+
                     {deliveryOption === "standardShipping" && (
                       <>
                         <div className="flex flex-col md:flex-row justify-center items-center md:items-start">
-                          <div className="w-full md:w-1/3 mb-2 md:mb-0 md:pr-10 md:text-right">
+                          <div className="w-full md:w-1/3 mb-2 md:mb-0 md:pr-10 text-left">
                             <label className="text-lg">
                               Select your address:
                             </label>
@@ -162,15 +228,19 @@ export default function Checkout() {
                         </div>
 
                         <div className="flex flex-wrap mb-6 items-center">
-                          <div className="w-full md:w-1/3 mb-2 md:mb-0 md:pr-10 md:text-right">
-                            <label className="text-lg  ">
-                              Delivery address:
-                            </label>
+                          <div className="w-full md:w-1/3 mb-2 md:mb-0 text-left">
+                            <label className="text-lg">Delivery address:</label>
                           </div>
                           <div className="w-full md:w-2/3">
                             <input
                               className="w-full h-1/3 px-5 py-3 text-lg leading-9 bg-blue-50 border-2 border-blue-400 outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-xl"
                               type="text"
+                              placeholder="123 Nguyen Thi Kieu"
+                              value={deliveryAddress}
+                              required
+                              onChange={(event) =>
+                                handleInputDeliveryAddress(event)
+                              }
                             />
                           </div>
                         </div>
@@ -178,8 +248,10 @@ export default function Checkout() {
                     )}
 
                     {deliveryOption === "selfPickup" && (
-                      <div className="flex flex-wrap mb-6 items-center">
-                        <div className="w-full md:w-1/3 mb-2 md:mb-0 md:pr-10 md:text-right">
+                      <div className="flex flex-wrap mb-6 items-center justify-center font-semibold">
+                        You have to follow the vehicle address to pick up your
+                        vehicle.
+                        {/* <div className="w-full md:w-1/3 mb-2 md:mb-0 md:pr-10 md:text-right">
                           <label className="text-lg  ">Pick-up Address:</label>
                         </div>
                         <div className="w-full md:w-2/3">
@@ -189,46 +261,13 @@ export default function Checkout() {
                             value="Q12 HCM"
                             disabled
                           />
-                        </div>
+                        </div> */}
                       </div>
                     )}
                   </div>
                 </div>
                 <div className=" border-b border-gray-200 border-opacity-30">
-                  <div className="max-w-lg mx-auto mb-6">
-                    {/* <div className="flex flex-wrap mb-6 items-center">
-                      <div className="w-full md:w-1/3 mb-2 md:mb-0 md:pr-10 md:text-right">
-                        <label className="text-lg  ">Country:</label>
-                      </div>
-                      <div className="w-full md:w-2/3">
-                        <input
-                          className="w-full h-1/3 px-5 py-3 text-lg leading-9 bg-blue-50 border-2 border-blue-400 outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-xl"
-                          type="text"
-                        />
-                      </div>
-                    </div>
-                    <div className="flex flex-wrap mb-6 items-center">
-                      <div className="w-full md:w-1/3 mb-2 md:mb-0 md:pr-10 md:text-right">
-                        <label className="text-lg  ">State:</label>
-                      </div>
-                      <div className="w-full md:w-2/3">
-                        <input
-                          className="w-full h-1/3 px-5 py-3 text-lg leading-9 bg-blue-50 border-2 border-blue-400 outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-xl"
-                          type="text"
-                        />
-                      </div>
-                    </div>
-                    <div className="flex flex-wrap mb-6 items-center">
-                      <div className="w-full md:w-1/3 mb-2 md:mb-0 md:pr-10 md:text-right">
-                        <label className="text-lg  ">Zip code:</label>
-                      </div>
-                      <div className="w-full md:w-1/3">
-                        <input
-                          className="w-full h-1/3 px-5 py-3 text-lg leading-9 bg-blue-50 border-2 border-blue-400 outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-xl"
-                          type="text"
-                        />
-                      </div>
-                    </div> */}
+                  <div className="mx-auto mb-6">
                     <div className="flex flex-wrap mb-6 items-center">
                       <div className="w-full md:w-1/3 mb-2 md:mb-0 md:pr-10 md:text-right">
                         <label className="text-lg">Payment method:</label>
@@ -306,61 +345,6 @@ export default function Checkout() {
                     </label>
                   </div>
                 </div>
-
-                {/* <div className="max-w-lg mx-auto">
-                  <div className="flex flex-wrap mb-6 items-center">
-                    <div className="w-full md:w-1/3 mb-2 md:mb-0 md:pr-10 md:text-right">
-                      <label className="text-lg  ">
-                        Name on card:
-                      </label>
-                    </div>
-                    <div className="w-full md:w-2/3">
-                      <input
-                        className="w-full h-1/3 px-5 py-3 text-lg leading-9 bg-blue-50 border-2 border-blue-400 outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-xl"
-                        type="text"
-                      />
-                    </div>
-                  </div>
-                  <div className="flex flex-wrap mb-6 items-center">
-                    <div className="w-full md:w-1/3 mb-2 md:mb-0 md:pr-10 md:text-right">
-                      <label className="text-lg  ">
-                        Credit card number:
-                      </label>
-                    </div>
-                    <div className="w-full md:w-2/3">
-                      <input
-                        className="w-full h-1/3 px-5 py-3 text-lg leading-9 bg-blue-50 border-2 border-blue-400 outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-xl"
-                        type="text"
-                      />
-                    </div>
-                  </div>
-                  <div className="flex flex-wrap mb-6 items-center">
-                    <div className="w-full md:w-1/3 mb-2 md:mb-0 md:pr-10 md:text-right">
-                      <label className="text-lg  ">
-                        Expiration:
-                      </label>
-                    </div>
-                    <div className="w-full md:w-2/3">
-                      <input
-                        className="w-full h-1/3 px-5 py-3 text-lg leading-9 bg-blue-50 border-2 border-blue-400 outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-xl"
-                        type="text"
-                      />
-                    </div>
-                  </div>
-                  <div className="flex flex-wrap items-center">
-                    <div className="w-full md:w-1/3 mb-2 md:mb-0 md:pr-10 md:text-right">
-                      <label className="text-lg  ">
-                        CVV:
-                      </label>
-                    </div>
-                    <div className="w-full md:w-1/3">
-                      <input
-                        className="w-full h-1/3 px-5 py-3 text-lg leading-9 bg-blue-50 border-2 border-blue-400 outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-xl"
-                        type="text"
-                      />
-                    </div>
-                  </div>
-                </div> */}
               </div>
             </div>
             <div className="w-full lg:w-2/4 px-4 mb-14 md:mb-0">
@@ -370,7 +354,7 @@ export default function Checkout() {
                 </h2>
                 <div className="flex flex-col items-center justify-start max-h-[600px] lg:max-h-[30vw] scrollbar overflow-y-auto mb-5 border border-gray-300 rounded-lg shadow-sm">
                   {/* List of products */}
-                  {selectedVehicles.map((shop) => (
+                  {vehiclesCheckout.map((shop) => (
                     <div className="flex flex-col w-fit h-fit">
                       <Link
                         to={"/profile/" + shop.lessorName}
@@ -422,6 +406,12 @@ export default function Checkout() {
                                 </span>
                                 <span className="ml-2 text-gray-800">
                                   {vehicle.licensePlate}
+                                </span>
+                              </p>
+                              <p className="mr-4 text-sm font-medium w-full">
+                                <span className="font-semibold">Address:</span>
+                                <span className="ml-2 text-gray-800">
+                                  "Address of vehicle"
                                 </span>
                               </p>
                               <p className="text-sm font-semibold">
@@ -485,17 +475,13 @@ export default function Checkout() {
                   >
                     Back to cart
                   </Link>
-                  <Link
-                    className="w-fit h-fit"
-                    to="/payment"
-                    onClick={onSubmit}
-                  >
+                  <button className="w-fit h-fit" type="submit">
                     <Payment_btn />
-                  </Link>
+                  </button>
                 </div>
               </div>
             </div>
-          </div>
+          </form>
         </div>
       </section>
     </>

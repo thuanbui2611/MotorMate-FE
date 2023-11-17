@@ -2,6 +2,7 @@ import { toast } from "react-toastify";
 import {
   addToCartAsync,
   deleteItemInCartAsync,
+  removeVehicleInCart,
 } from "../../pages/cart/CartSlice";
 import { useAppDispatch, useAppSelector } from "../store/ConfigureStore";
 import { useEffect, useState } from "react";
@@ -40,11 +41,13 @@ export default function AddToCart({ userId, vehicleId, className }: Props) {
       //remove item from cart
       setItemAddedToCart(false);
       toast.success("Remove vehicle from cart successfully!");
+      dispatch(removeVehicleInCart({ vehicleId }));
       const result = await dispatch(
         deleteItemInCartAsync({ userId, vehicleId })
       );
       if (result.meta.requestStatus === "rejected") {
-        toast.error("Something wrong, remove vehicle from cart failed!");
+        toast.error("Remove vehicle from cart failed!, please try again.");
+        window.location.reload();
       }
     } else {
       //add item to cart

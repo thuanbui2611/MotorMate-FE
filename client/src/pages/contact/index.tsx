@@ -2,6 +2,7 @@ import { TextField } from "@mui/material";
 import { FieldValues, useForm } from "react-hook-form";
 import agent from "../../app/api/agent";
 import { toast } from "react-toastify";
+import FadeInSection from "../../app/components/FadeInSection";
 
 export default function Contact() {
   const {
@@ -53,14 +54,17 @@ export default function Contact() {
     await agent.Email.send(formData);
   }
   return (
-    <>
-      <section className="flex items-center h-screen py-20">
+    <FadeInSection options="fade-in-scale">
+      <section className="flex items-center h-full lg:h-screen py-20">
         <div className="justify-center flex-1 max-w-6xl px-4 py-4 mx-auto lg:py-10 md:px-7">
           <div className="flex flex-wrap items-center justify-center -mx-4">
             <div className="w-full px-4 lg:w-1/2">
               <div className="max-w-sm mx-auto ">
                 <div className="p-6 mb-6 text-center bg-white border rounded-md shadow dark:border-gray-800 dark:bg-gray-800">
                   <form onSubmit={handleSubmit(handleSubmitSendMail)}>
+                    <div className="font-extrabold text-5xl text-gradient mb-6">
+                      Contact Us
+                    </div>
                     <div className="mb-6">
                       <h2 className="text-xl font-bold text-gray-700 ">
                         Please send message for futher information!
@@ -278,6 +282,6 @@ export default function Contact() {
           </div>
         </div>
       </section>
-    </>
+    </FadeInSection>
   );
 }

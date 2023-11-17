@@ -48,12 +48,6 @@ export default function Payment() {
           <PaymentForm />
         </div>
       </section>
-      <Link
-        to="/bill"
-        className="bg-orange-based p-5 text-white text-center font-bold text-xl"
-      >
-        Next
-      </Link>
     </Elements>
   );
 }

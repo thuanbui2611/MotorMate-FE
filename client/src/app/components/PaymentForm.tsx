@@ -67,11 +67,11 @@ export default function PaymentForm() {
             Payment
           </div>
           <div className="border-b-[1px] border-r w-full border-gray-300"></div>
-          <div className="flex flex-col items-start justify-center py-2">
+          {/* <div className="flex flex-col items-start justify-center py-2">
             <div className="font-bold text-lg">Address</div>
             <div className=" text-sm">Address information</div>
           </div>
-          <div className="border-b-[1px] border-r w-full border-gray-300"></div>
+          <div className="border-b-[1px] border-r w-full border-gray-300"></div> */}
           <div className="flex flex-col items-start justify-center py-1">
             <div className="flex flex-col justify-center items-center gap-6 mt-4">
               {/* <Cards
@@ -110,7 +110,6 @@ export default function PaymentForm() {
                       fontWeight: 600,
                       textTransform: "capitalize",
                     }}
-                    // loading={isSubmitting}
                     type="submit"
                     className="text-white rounded-lg w-20 text-center"
                     variant="contained"

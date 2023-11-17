@@ -21,18 +21,18 @@ export default function ConfirmDeleteDialog({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const onDelete = async () => {
     setIsSubmitting(true);
-    await actionDelete();
     cancelDelete();
+    await actionDelete();
     setIsSubmitting(false);
   };
   return (
     <>
-      <Dialog open={true} handler={cancelDelete} size="xs">
+      <Dialog open={true} handler={cancelDelete} size="sm">
         <DialogHeader className="text-red-600 text-3xl">
           Confirm Delete
         </DialogHeader>
         <DialogBody divider>
-          <p className=" text-xl font-bold text-red-600 mb-3">
+          <p className="text-xl font-bold text-red-600 mb-3">
             You should read this carefully!
           </p>
           <p className=" text-base font-medium text-black-2">
@@ -51,8 +51,9 @@ export default function ConfirmDeleteDialog({
           </Button>
           <LoadingButton
             size="large"
-            className="transition-all rounded-lg bg-gradient-to-tr from-green-600 to-green-400 shadow-md shadow-green-500/20 hover:shadow-lg hover:shadow-green-500/40 active:opacity-[0.85]"
-            loading={isSubmitting}
+            className="transition-all rounded-lg shadow-md"
+            // loading={isSubmitting}
+            color="error"
             onClick={() => onDelete()}
             variant="contained"
           >

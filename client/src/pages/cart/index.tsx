@@ -9,6 +9,7 @@ import {
   addSelectAllVehicles,
   deleteItemInCartAsync,
   removeAllVehiclesInShop,
+  removeVehicleInCart,
 } from "./CartSlice";
 import { toast } from "react-toastify";
 
@@ -40,6 +41,7 @@ export default function Cart() {
   const handleDeleteVehicle = async (vehicle: Vehicle) => {
     if (userLogin) {
       toast.success("Remove vehicle from cart successfully!");
+      dispatch(removeVehicleInCart({ vehicleId: vehicle.vehicleId }));
       const result = await dispatch(
         deleteItemInCartAsync({
           vehicleId: vehicle.vehicleId,
@@ -90,11 +92,7 @@ export default function Cart() {
     <Loading />
   ) : (
     <>
-      <section
-        className={`bg-gray-100 h-fit ${
-          cart?.shops.length === 0 && "min-h-screen"
-        }`}
-      >
+      <section className={`bg-gray-100 h-fit min-h-screen`}>
         <div className="px-4 py-6 mx-auto max-w-7xl lg:py-4 md:px-6">
           <div>
             <h2 className="text-center my-6 text-2xl md:text-4xl lg:text-5xl tracking-tight font-extrabold text-gradient">
