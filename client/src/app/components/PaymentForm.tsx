@@ -2,15 +2,22 @@ import { useState } from "react";
 import "react-credit-cards-2/dist/es/styles-compiled.css";
 import { LoadingButton } from "@mui/lab";
 import {
+  CardNumberElement,
+  LinkAuthenticationElement,
   PaymentElement,
   useElements,
   useStripe,
 } from "@stripe/react-stripe-js";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { useAppSelector } from "../store/ConfigureStore";
+import { UserDetail } from "../models/User";
 
 type Focused = "name" | "number" | "expiry" | "cvc" | "";
-export default function PaymentForm() {
+interface Props {
+  userLogin: UserDetail;
+}
+export default function PaymentForm({ userLogin }: Props) {
   const [state, setState] = useState({
     number: "",
     expiry: "",
@@ -82,7 +89,27 @@ export default function PaymentForm() {
                 focused={state.focus as Focused}
               /> */}
               <form onSubmit={handleSubmit}>
-                <PaymentElement />
+                <LinkAuthenticationElement
+                  // Optional prop for prefilling customer information
+                  options={{
+                    defaultValues: {
+                      email: userLogin.email,
+                    },
+                  }}
+                />
+                <h3>Payment</h3>
+                <PaymentElement
+                  // Optional prop for prefilling customer information
+                  options={{
+                    defaultValues: {
+                      billingDetails: {
+                        name: userLogin.fullName,
+                        phone: userLogin.phoneNumber,
+                      },
+                    },
+                  }}
+                />
+                {/* <PaymentElement /> */}
                 <div className="border-b-[1px] border-r w-full border-gray-300 mt-3"></div>
                 <div className="flex items-center justify-end pt-3 w-full">
                   <div className="font-bold text-lg">Total:</div>

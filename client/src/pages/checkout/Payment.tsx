@@ -15,7 +15,16 @@ export default function Payment() {
   const { checkoutLoaded, checkout } = useAppSelector(
     (state) => state.checkout
   );
+  const { userDetail } = useAppSelector((state) => state.account);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!userDetail) {
+      navigate("/login");
+      toast.error("Please login to continue");
+      return;
+    }
+  }, [userDetail]);
 
   const scrollToTop = () => {
     window.scrollTo({
@@ -32,20 +41,30 @@ export default function Payment() {
     scrollToTop();
   }, [checkoutLoaded]);
 
+  const appearance = {};
+  const loader = "auto";
+  // const clientSecret = checkout?.clientSecret as string;
+  const clientSecret =
+    "pi_3ODiQjETkkliUm4y1ZcGiofs_secret_U8ivLYm6UgtY7iPLXRoRIb5Cw";
   const options = {
     clientSecret: checkout?.clientSecret as string,
+    appearance: appearance,
+    loader: loader,
   };
 
   return checkoutLoaded ? (
     <Loading />
   ) : (
-    <Elements stripe={stripePromise} options={options}>
+    <Elements
+      stripe={stripePromise}
+      options={{ clientSecret, appearance, loader }}
+    >
       <section className="pt-12 pb-24 bg-gray-100 overflow-hidden">
         <div className="container px-4 mx-auto">
           <ProcessingBar processing="payment" />
         </div>
         <div className="flex items-center justify-center mt-12">
-          <PaymentForm />
+          <PaymentForm userLogin={userDetail!} />
         </div>
       </section>
     </Elements>
