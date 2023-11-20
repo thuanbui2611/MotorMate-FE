@@ -1,7 +1,15 @@
 import { Link } from "react-router-dom";
+import ConfirmDeleteDialog from "../../app/components/ConfirmDeleteDialog";
+import { useState } from "react";
 
 export default function OrderDetail() {
+  const [isOpenConfirmCancelDialog, setIsOpenConfirmCancelDialog] =
+    useState(false);
+
   const data = ["1", "2", "3", "4", "5"];
+  const handleCloseConfirmCancelDialog = () => {
+    setIsOpenConfirmCancelDialog(false);
+  };
   return (
     <>
       <div className="py-14 px-4 md:px-6 2xl:px-20 2xl:container 2xl:mx-auto">
@@ -41,7 +49,13 @@ export default function OrderDetail() {
               {/* Item start */}
               <div className="w-full h-fit bg-white rounded-lg">
                 {data.map((item, index) => (
-                  <div className="mt-4 md:mt-6 flex flex-col md:flex-row justify-center items-center md:space-x-6 xl:space-x-8 w-[95%] mx-4">
+                  <div
+                    className="relative mt-4 md:mt-6 flex flex-col md:flex-row justify-center items-center md:space-x-6 xl:space-x-8 w-[95%] mx-4"
+                    key={index}
+                  >
+                    <div className="absolute top-0 right-0 font-bold text-blue-600 w-fit h-fit p-1 bg-blue-200 rounded-full text-xs sm">
+                      Pending
+                    </div>
                     <div className="flex justify-center items-center pb-4 md:pb-8 w-full md:w-40">
                       <img
                         className="w-[150px] h-[150px] md:w-full md:h-full md:block rounded-lg"
@@ -82,10 +96,35 @@ export default function OrderDetail() {
                           </p>
                         </div>
                       </div>
-                      <div className="w-full md:w-1/4 flex justify-end space-x-8 items-end">
-                        <p className="text-base xl:text-lg font-semibold leading-6 text-black">
+                      <div className="w-full md:w-1/4 flex flex-col items-center justify-center md:flex-row md:justify-end md:items-center">
+                        <p className="text-base xl:text-lg font-semibold leading-6 text-green-600">
                           $36.00
                         </p>
+                        <svg
+                          className="h-5 w-5 lg:h-6 lg:w-6 text-[#fa0000] hover:text-[#e00000] cursor-pointer ml-0 md:ml-3"
+                          fill="currentColor"
+                          version="1.1"
+                          id="Layer_1"
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 493.456 493.456"
+                          xmlSpace="preserve"
+                          stroke="#fa0000"
+                          onClick={() => setIsOpenConfirmCancelDialog(true)}
+                        >
+                          <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                          <g
+                            id="SVGRepo_tracerCarrier"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          ></g>
+                          <g id="SVGRepo_iconCarrier">
+                            <g>
+                              <g>
+                                <path d="M246.73,0C110.682,0,0.002,110.684,0.002,246.744c0,136.032,110.68,246.712,246.728,246.712 s246.724-110.68,246.724-246.712C493.454,110.684,382.778,0,246.73,0z M360.258,348.776l-11.112,11.12 c-2.808,2.836-7.82,2.836-10.644,0l-88.68-88.672c-0.728-0.74-1.704-1.136-2.732-1.136c-1.028,0-2.004,0.4-2.732,1.136 L155.682,359.9c-2.82,2.836-7.828,2.836-10.648,0l-11.108-11.12c-1.412-1.404-2.196-3.304-2.196-5.3 c0-2.02,0.784-3.916,2.196-5.344l88.68-88.672c1.508-1.512,1.508-3.948,0-5.452l-88.68-88.68c-1.412-1.416-2.196-3.308-2.196-5.32 c0-2.02,0.784-3.916,2.196-5.328l11.108-11.108c2.82-2.82,7.828-2.82,10.648,0l88.68,88.672c1.444,1.444,4.016,1.444,5.46,0 l88.676-88.676c2.824-2.824,7.836-2.824,10.644,0l11.112,11.112c2.928,2.924,2.928,7.716,0,10.648l-88.692,88.676 c-1.504,1.504-1.504,3.94,0,5.452l88.696,88.672C363.186,341.072,363.186,345.844,360.258,348.776z"></path>
+                              </g>
+                            </g>
+                          </g>
+                        </svg>
                       </div>
                     </div>
                   </div>
@@ -199,13 +238,21 @@ export default function OrderDetail() {
         </div>
         <div className="flex items-center justify-center space-x-4 mt-8">
           <div className="text-center bg-red-600 w-fit h-fit p-2 px-3 rounded-full text-white font-bold shadow-md cursor-pointer shadow-red-900/30  hover:brightness-90">
-            Cancle Order
+            Cancel Order
           </div>
           <div className="text-center bg-green-600 w-fit h-fit p-2 px-3 rounded-full text-white font-bold shadow-md cursor-pointer shadow-green-900/30 hover:brightness-90">
             Pay Order
           </div>
         </div>
       </div>
+      {isOpenConfirmCancelDialog && (
+        <ConfirmDeleteDialog
+          actionName="Comfirm Cancel a Vehicle"
+          objectName="Vehicle ABC"
+          cancelDelete={handleCloseConfirmCancelDialog}
+          content="Are you sure to cancel the vehicle:"
+        />
+      )}
     </>
   );
 }

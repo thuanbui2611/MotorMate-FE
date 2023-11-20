@@ -149,24 +149,20 @@ export default function UsersPage() {
             <table className="w-full table-auto">
               <thead>
                 <tr className=" bg-gray-2 text-left dark:bg-meta-4  font-bold">
-                  <th className="min-w-[250px] text-center py-4 px-4 text-black dark:text-white xl:pl-11">
+                  <th className="min-w-[300px] text-left py-4 px-4 text-black dark:text-white xl:pl-11">
                     Full Name
                   </th>
                   <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
                     Username
                   </th>
-                  <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
-                    Role
-                  </th>
+
                   <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
                     Email
                   </th>
                   <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
                     PhoneNumber
                   </th>
-                  <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
-                    Profit
-                  </th>
+
                   <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
                     Status
                   </th>
@@ -193,11 +189,11 @@ export default function UsersPage() {
                                 alt="User image"
                               />
                             </div>
-                            <div className="ml-3 flex flex-col">
-                              <h5 className="font-medium text-black dark:text-white">
+                            <div className="ml-3 flex flex-col flex-1">
+                              <h5 className="font-medium text-black dark:text-white line-clamp-2">
                                 {user.fullName}
                               </h5>
-                              <p className="text-sm">role abc</p>
+                              <p className="text-sm">{user.roles[0]}</p>
                             </div>
                           </div>
                         </td>
@@ -206,11 +202,7 @@ export default function UsersPage() {
                             {user.username}
                           </h5>
                         </td>
-                        <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                          <h5 className="font-medium text-black dark:text-white">
-                            Role abc
-                          </h5>
-                        </td>
+
                         <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                           <h5 className="font-medium text-black dark:text-white">
                             {user.email}
@@ -221,9 +213,7 @@ export default function UsersPage() {
                             {user.phoneNumber}
                           </h5>
                         </td>
-                        <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                          <p className="text-meta-3 ">10.000</p>
-                        </td>
+
                         <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                           <p className="inline-flex rounded-full bg-success bg-opacity-10 py-1 px-3 text-sm font-medium text-success">
                             Enable

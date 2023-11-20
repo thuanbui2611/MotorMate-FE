@@ -9,12 +9,16 @@ import { LoadingButton } from "@mui/lab";
 import { useState } from "react";
 
 interface Props {
+  actionName?: string;
   objectName: string;
-  actionDelete: () => Promise<void>;
+  content?: string;
+  actionDelete?: () => Promise<void>;
   cancelDelete: () => void;
 }
 export default function ConfirmDeleteDialog({
+  actionName,
   objectName,
+  content,
   cancelDelete,
   actionDelete,
 }: Props) {
@@ -22,21 +26,23 @@ export default function ConfirmDeleteDialog({
   const onDelete = async () => {
     setIsSubmitting(true);
     cancelDelete();
-    await actionDelete();
+    if (actionDelete) {
+      await actionDelete();
+    }
     setIsSubmitting(false);
   };
   return (
     <>
       <Dialog open={true} handler={cancelDelete} size="sm">
-        <DialogHeader className="text-red-600 text-3xl">
-          Confirm Delete
+        <DialogHeader className="text-red-600 text-3xl font-bold">
+          {actionName ? actionName : "Confirm Delete"}
         </DialogHeader>
         <DialogBody divider>
           <p className="text-xl font-bold text-red-600 mb-3">
             You should read this carefully!
           </p>
           <p className=" text-base font-medium text-black-2">
-            Are you sure you want to delete:
+            {content ? content : "Are you sure you want to delete:"}
             <span className="font-bold ml-2">{objectName}</span>
           </p>
         </DialogBody>

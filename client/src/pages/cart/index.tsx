@@ -307,12 +307,12 @@ export default function Cart() {
                                     {vehicle.licensePlate}
                                   </p>
                                 </td>
-                                <td className="py-5 px-4">
+                                <td className="py-3 px-4">
                                   <LocalizationProvider
                                     dateAdapter={AdapterDayjs}
                                   >
                                     <div className="flex items-center justify-center">
-                                      <div className="flex flex-col items-center justify-center gap-2 text-center">
+                                      <div className="flex flex-col items-center justify-center gap-4 text-center">
                                         {isEditDateRent ===
                                         vehicle.vehicleId ? (
                                           <>
@@ -322,9 +322,11 @@ export default function Cart() {
                                                 "& .MuiOutlinedInput-input": {
                                                   padding: 1,
                                                   width: "80px",
+                                                  fontSize: "14px",
                                                 },
                                                 "& .MuiFormLabel-root": {
                                                   top: "-6px",
+                                                  fontSize: "14px",
                                                 },
                                               }}
                                               onChange={(date: any) => {
@@ -342,9 +344,11 @@ export default function Cart() {
                                                 "& .MuiOutlinedInput-input": {
                                                   padding: 1,
                                                   width: "80px",
+                                                  fontSize: "14px",
                                                 },
                                                 "& .MuiFormLabel-root": {
                                                   top: "-6px",
+                                                  fontSize: "14px",
                                                 },
                                               }}
                                               onChange={(time: any) =>
@@ -353,10 +357,10 @@ export default function Cart() {
                                             />
                                           </>
                                         ) : (
-                                          <>
+                                          <span className="mr-2">
                                             12:00 AM,
                                             <br /> 12/12/2023
-                                          </>
+                                          </span>
                                         )}
                                       </div>
 
@@ -393,12 +397,12 @@ export default function Cart() {
                                             >
                                               <g
                                                 id="SVGRepo_bgCarrier"
-                                                stroke-width="0"
+                                                strokeWidth="0"
                                               ></g>
                                               <g
                                                 id="SVGRepo_tracerCarrier"
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
                                               ></g>
                                               <g id="SVGRepo_iconCarrier">
                                                 <g>
@@ -423,12 +427,12 @@ export default function Cart() {
                                             >
                                               <g
                                                 id="SVGRepo_bgCarrier"
-                                                stroke-width="0"
+                                                strokeWidth="0"
                                               ></g>
                                               <g
                                                 id="SVGRepo_tracerCarrier"
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
                                               ></g>
                                               <g id="SVGRepo_iconCarrier">
                                                 <g>
@@ -441,7 +445,7 @@ export default function Cart() {
                                           </div>
                                         )}
                                       </div>
-                                      <div className="flex flex-col items-center justify-center gap-2 text-center">
+                                      <div className="flex flex-col items-center justify-center gap-4 text-center">
                                         {isEditDateRent ===
                                         vehicle.vehicleId ? (
                                           <>
@@ -451,9 +455,11 @@ export default function Cart() {
                                                 "& .MuiOutlinedInput-input": {
                                                   padding: 1,
                                                   width: "80px",
+                                                  fontSize: "14px",
                                                 },
                                                 "& .MuiFormLabel-root": {
                                                   top: "-6px",
+                                                  fontSize: "14px",
                                                 },
                                               }}
                                               disabled={
@@ -469,18 +475,20 @@ export default function Cart() {
                                                 "& .MuiOutlinedInput-input": {
                                                   padding: 1,
                                                   width: "80px",
+                                                  fontSize: "14px",
                                                 },
                                                 "& .MuiFormLabel-root": {
                                                   top: "-6px",
+                                                  fontSize: "14px",
                                                 },
                                               }}
                                             />
                                           </>
                                         ) : (
-                                          <>
+                                          <span className="ml-2">
                                             12:00 AM,
                                             <br /> 14/12/2023
-                                          </>
+                                          </span>
                                         )}
                                       </div>
                                     </div>

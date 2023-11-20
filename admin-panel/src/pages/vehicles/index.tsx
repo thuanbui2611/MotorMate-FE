@@ -6,6 +6,7 @@ import {
   getVehiclesAsync,
   lockVehicleAsync,
   setVehicleParams,
+  updateIsLockVehicle,
   vehicleSelectors,
 } from "./VehicleSlice";
 import Loader from "../../app/components/Loader";
@@ -27,6 +28,7 @@ import LoaderButton from "../../app/components/LoaderButton";
 import dataCityVN from "./../../app/data/dataCityVN.json";
 import SelectPageSize from "../../app/components/SelectPageSize";
 import { ConvertDatetimeToDisplay } from "../../app/utils/ConvertDatetimeToDate";
+import { toast } from "react-toastify";
 
 export default function VehiclesPage() {
   const [searchParams, setSearchParams] = useSearchParams({});
@@ -57,7 +59,7 @@ export default function VehiclesPage() {
     useState(true);
   const [paramsCompleted, setParamsCompleted] = useState(false);
   //End of filter
-  const [isLockLoading, setIsLockLoading] = useState(false);
+  const [isVehicleLocked, setIsVehicleLocked] = useState<boolean>();
 
   const vehicles = useAppSelector(vehicleSelectors.selectAll);
   const { vehicleLoaded, metaData, vehicleParams } = useAppSelector(
@@ -416,11 +418,9 @@ export default function VehiclesPage() {
     dispatch(setVehicleParams({ pageSize }));
   };
 
-  const handleLockVehicle = async (vehicleId: string) => {
-    setIsLockLoading(true);
-    dispatch(lockVehicleAsync(vehicleId)).then(() => {
-      setIsLockLoading(false);
-    });
+  const handleLockVehicle = async (vehicle: Vehicle) => {
+    dispatch(updateIsLockVehicle(vehicle));
+    await dispatch(lockVehicleAsync(vehicle.id));
   };
 
   if (!metaData) {
@@ -430,7 +430,7 @@ export default function VehiclesPage() {
       <>
         <Breadcrumb pageName="Vehicles" />
         <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
-          <div className="flex flex-col md:flex-row justify-between">
+          <div className="flex justify-between">
             <div className="flex items-center ml-2 order-2 md:order-1">
               <label htmlFor="simple-search" className="sr-only">
                 Search
@@ -458,9 +458,9 @@ export default function VehiclesPage() {
                 >
                   <path
                     stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
                     d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
                   />
                 </svg>
@@ -699,18 +699,18 @@ export default function VehiclesPage() {
                                       xmlns="http://www.w3.org/2000/svg"
                                       xmlnsXlink="http://www.w3.org/1999/xlink"
                                       stroke="#009dff"
-                                      stroke-width="0.00036"
+                                      strokeWidth="0.00036"
                                     >
                                       <g
                                         id="SVGRepo_bgCarrier"
-                                        stroke-width="0"
+                                        strokeWidth="0"
                                       ></g>
                                       <g
                                         id="SVGRepo_tracerCarrier"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
                                         stroke="#CCCCCC"
-                                        stroke-width="0.36"
+                                        strokeWidth="0.36"
                                       ></g>
                                       <g id="SVGRepo_iconCarrier">
                                         <title>pop-out-line</title>
@@ -727,7 +727,7 @@ export default function VehiclesPage() {
                                           y="0"
                                           width="36"
                                           height="36"
-                                          fill-opacity="0"
+                                          fillOpacity="0"
                                         ></rect>{" "}
                                       </g>
                                     </svg>
@@ -756,7 +756,7 @@ export default function VehiclesPage() {
                           </td>
                           <td className="py-5 px-4">
                             <p className="text-black dark:text-white">
-                              {vehicle.city}
+                              {vehicle.city.replace(/Thành Phố |Tỉnh /g, "")}
                             </p>
                           </td>
                           <td className="py-5 px-4">
@@ -883,38 +883,28 @@ export default function VehiclesPage() {
                                 </button>
                               </div>
                               <div className="flex">
-                                {isLockLoading ? (
-                                  <LoaderButton />
-                                ) : (
-                                  <>
-                                    <label className="relative inline-flex items-center cursor-pointer">
-                                      <input
-                                        type="checkbox"
-                                        className="sr-only peer"
-                                        checked={vehicle.isLocked}
-                                        onClick={() =>
-                                          handleLockVehicle(vehicle.id)
-                                        }
-                                      />
-                                      <div className="w-11 h-6 bg-success rounded-full peer peer-focus:ring-4 peer-focus:ring-red-300 dark:peer-focus:ring-red-800 dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-blue-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-blue-gray-600 peer-checked:bg-danger"></div>
+                                <label className="relative inline-flex items-center cursor-pointer">
+                                  <input
+                                    type="checkbox"
+                                    className="sr-only peer"
+                                    checked={vehicle.isLocked}
+                                    onChange={() => handleLockVehicle(vehicle)}
+                                  />
+                                  <div className="w-11 h-6 bg-success rounded-full   dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-blue-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-blue-gray-600 peer-checked:bg-danger"></div>
 
-                                      <>
-                                        <span
-                                          className={`ml-1 text-sm rounded-full px-1 font-semibold bg-opacity-10 text-black 
+                                  <>
+                                    <span
+                                      className={`ml-1 text-sm rounded-full px-1 font-semibold bg-opacity-10 text-black 
                                   ${
                                     vehicle.isLocked
                                       ? "bg-danger text-meta-1"
                                       : "bg-success text-meta-3"
                                   }`}
-                                        >
-                                          {vehicle.isLocked
-                                            ? "Locked"
-                                            : "Active"}
-                                        </span>
-                                      </>
-                                    </label>
+                                    >
+                                      {vehicle.isLocked ? "Locked" : "Active"}
+                                    </span>
                                   </>
-                                )}
+                                </label>
                               </div>
                             </div>
                           </td>

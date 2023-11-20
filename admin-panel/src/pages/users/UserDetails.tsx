@@ -8,6 +8,7 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import { UserDetail } from "../../app/models/User";
+import { ConvertDatetimeToDisplay } from "../../app/utils/ConvertDatetimeToDate";
 
 interface Props {
   user: UserDetail | null;
@@ -17,7 +18,7 @@ export default function UserDetails({ user, onClose }: Props) {
   return (
     <>
       <Dialog
-        size="md"
+        size="lg"
         open={true}
         handler={onClose}
         className="bg-transparent shadow-none w-fit"
@@ -68,9 +69,9 @@ export default function UserDetails({ user, onClose }: Props) {
                           <p className="text-lg font-semibold leading-4 text-left text-black">
                             {user?.fullName}
                           </p>
-                          {/* <p className="text-sm leading-4 text-gray-600 ">
-                          10 Vehicles
-                        </p> */}
+                          <p className="text-sm leading-4 text-gray-600 text-bold">
+                            {user?.roles[0]}
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -80,7 +81,7 @@ export default function UserDetails({ user, onClose }: Props) {
                     <div className="flex flex-col items-stretch justify-center w-full space-y-4 md:flex-row md:space-y-0 md:space-x-8">
                       <div className="flex flex-col w-full text-left space-y-2">
                         <h2 className="mb-2 text-xl font-bold text-black md:text-left ">
-                          Vehicle details
+                          Basic Information
                         </h2>
                         <div className="flex flex-col items-start justify-center w-full pb-4 space-y-4 border-b border-gray-200 md:border-0">
                           <div className="flex justify-center items-center">
@@ -124,8 +125,16 @@ export default function UserDetails({ user, onClose }: Props) {
                             </p>
                             <p className="ml-1 text-base leading-4 text-black break-all">
                               {user?.dateOfBirth
-                                ? user?.dateOfBirth
+                                ? ConvertDatetimeToDisplay(user?.dateOfBirth)
                                 : "No date of birth"}
+                            </p>
+                          </div>
+                          <div className="flex justify-center items-center">
+                            <p className="text-sm leading-5 text-black font-bold">
+                              Address:
+                            </p>
+                            <p className="ml-1 text-base leading-4 text-black break-all">
+                              {user?.address ? user?.address : "No address"}
                             </p>
                           </div>
                         </div>
@@ -133,12 +142,12 @@ export default function UserDetails({ user, onClose }: Props) {
                       <div className="flex flex-col w-full text-left space-y-4">
                         <div className="space-y-2">
                           <h2 className="mb-2 text-xl font-bold text-black ">
-                            Specific information
+                            Others
                           </h2>
                           <div className="flex flex-col items-start justify-center w-full pb-4 space-y-4 border-b border-gray-200 ">
                             <div className="flex justify-center items-center">
                               <p className="text-sm leading-5 text-black font-bold">
-                                Lisence Plate:
+                                IsLocked:
                               </p>
                               <p className="ml-1 text-base leading-4 text-black break-all">
                                 {/* {vehicle?.licensePlate} */}

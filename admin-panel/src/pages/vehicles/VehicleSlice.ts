@@ -94,14 +94,12 @@ export const updateVehicleAsync = createAsyncThunk<Vehicle, FieldValues>(
 
 export const lockVehicleAsync = createAsyncThunk(
   "vehicle/lockVehicleAsync",
-  async (id: string) => {
+  async (id: string, ThunkAPI) => {
     try {
       const response = await agent.Vehicle.lock(id);
-
       return response;
     } catch (error: any) {
-      toast.error(error.data.message);
-      throw error;
+      return ThunkAPI.rejectWithValue({ error: error.data });
     }
   }
 );
@@ -167,6 +165,19 @@ export const VehicleSlice = createSlice({
         ...action.payload,
       };
     },
+    updateIsLockVehicle: (state, action) => {
+      const vehicle = action.payload as Vehicle;
+      vehiclesAdapter.updateOne(state, {
+        id: vehicle.id,
+        changes: { isLocked: !vehicle.isLocked },
+      });
+      
+      if (vehicle.isLocked) {
+        toast.success("Unlock vehicle successfully!");
+      } else {
+        toast.success("Lock vehicle successfully!");
+      }
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -189,19 +200,16 @@ export const VehicleSlice = createSlice({
 
     builder
       .addCase(lockVehicleAsync.fulfilled, (state, action) => {
-        const { id, isLocked } = action.payload;
-        vehiclesAdapter.updateOne(state, {
-          id: id,
-          changes: { isLocked: isLocked },
-        });
-        if (isLocked) {
-          toast.success("Lock vehicle successfully!");
-        } else {
-          toast.success("Unlock vehicle successfully!");
-        }
+        // const { id, isLocked } = action.payload;
+        // vehiclesAdapter.updateOne(state, {
+        //   id: id,
+        //   changes: { isLocked: isLocked },
+        // });
       })
       .addCase(lockVehicleAsync.rejected, (state, action) => {
-        toast.error("Lock vehicle failed!");
+        toast.error("Error, Lock vehicle failed!");
+        console.log("Lock vehicle failed: ", action.error);
+        window.location.reload();
       });
 
     builder.addCase(updateVehicleAsync.fulfilled, (state, action) => {
@@ -226,4 +234,5 @@ export const {
   setPageNumber,
   addVehicle,
   removeVehicle,
+  updateIsLockVehicle
 } = VehicleSlice.actions;
