@@ -877,9 +877,9 @@ export default function VehicleForm({
             </div>
 
             {imagesSelected && (
-              <div className="flex w-full h-[190px] gap-3 mb-5 rounded-md bg-[#F5F7FB] py-4 px-8 w-full scrollbar overflow-auto">
+              <div className="flex h-[190px] gap-3 mb-5 rounded-md bg-[#F5F7FB] py-4 px-8 w-full scrollbar overflow-auto">
                 {imagesSelected.map((image, index) => (
-                  <div className="w-1/5 pb-4 pb-4" key={index}>
+                  <div className="w-1/5 pb-4" key={index}>
                     <div className="flex items-center justify-between pb-1 ">
                       <span className="truncate text-xs font-medium text-[#07074D]">
                         {image.name}
@@ -914,7 +914,7 @@ export default function VehicleForm({
                     <img
                       className="h-full w-full"
                       src={image.url || undefined}
-                      alt="Logo brand preview"
+                      alt="Vehicle Images"
                     />
                   </div>
                 ))}

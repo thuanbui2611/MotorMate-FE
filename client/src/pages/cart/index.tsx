@@ -10,6 +10,7 @@ import {
   deleteItemInCartAsync,
   removeAllVehiclesInShop,
   removeVehicleInCart,
+  updateDateRentOfVehicleInCartAsync,
 } from "./CartSlice";
 import { toast } from "react-toastify";
 import { TextField } from "@mui/material";
@@ -88,8 +89,21 @@ export default function Cart() {
     setIsEditDateRent(undefined);
   };
 
-  const onSubmitDateRent = async (vehicleId: string) => {
+  const onClickChangeDateRent = async (vehicleId: string) => {
+    debugger;
     setIsEditDateRent(undefined);
+    console.log("Star date: ", new Date(startDate));
+    console.log("End date: ", new Date(endDate));
+    console.log("Time start: ", timeStart);
+    console.log("Time end: ", timeEnd);
+    // const result = await dispatch(
+    //   updateDateRentOfVehicleInCartAsync({
+    //     userId: userDetail?.id,
+    //     vehicleId: vehicleId,
+    //     pickUpDateTime: startDate,
+    //     DropOffDateTime: endDate,
+    //   })
+    // );
   };
 
   const disabledDates = [
@@ -163,7 +177,6 @@ export default function Cart() {
         }
       }
     }
-
     return closestDisabledDate;
   };
   return cartLoading || userLoading ? (
@@ -390,7 +403,7 @@ export default function Cart() {
                                               xmlSpace="preserve"
                                               stroke="#11d45c"
                                               onClick={() =>
-                                                onSubmitDateRent(
+                                                onClickChangeDateRent(
                                                   vehicle.vehicleId
                                                 )
                                               }

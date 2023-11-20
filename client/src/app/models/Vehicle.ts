@@ -16,6 +16,7 @@ export interface Vehicle {
   licensePlate: string;
   insuranceNumber: string;
   insuranceExpiry: string;
+  unavailableDates: UnavailableDate[];
   status: string;
   images: Image[];
 }
@@ -36,14 +37,18 @@ export interface Specifications {
   modelName: string;
   year: string;
   capacity: string;
+  color: string;
+  hexCode: string;
   collectionId: string;
   collectionName: string;
   brandId: string;
   brandName: string;
-  hexCode: string;
-  color: string;
 }
 
+export interface UnavailableDate {
+  from: string;
+  to: string;
+}
 export interface VehicleParams {
   pageNumber: number;
   pageSize: number;

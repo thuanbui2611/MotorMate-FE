@@ -44,6 +44,18 @@ export const addToCartAsync = createAsyncThunk<Cart, {}>(
   }
 );
 
+export const updateDateRentOfVehicleInCartAsync = createAsyncThunk<Cart, {}>(
+  "cart/updateDateRentOfVehicleInCart",
+  async (data, thunkAPI) => {
+    try {
+      const response = await agent.Cart.updateDateRentOfVehicleInCart(data);
+      return response;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
 export const deleteItemInCartAsync = createAsyncThunk(
   "cart/deleteVehicleInCart",
   async (data: { userId: string; vehicleId: string }, thunkAPI) => {
@@ -176,6 +188,20 @@ export const CartSlice = createSlice({
         }
       });
     });
+    builder.addCase(
+      updateDateRentOfVehicleInCartAsync.fulfilled,
+      (state, action) => {
+        state.cart = action.payload;
+        toast.success("Update date rent success!");
+      }
+    );
+    builder.addCase(
+      updateDateRentOfVehicleInCartAsync.rejected,
+      (state, action) => {
+        toast.error("Update date rent fail! Please try again");
+        console.log("Update date rent fail: ", action.error.message);
+      }
+    );
     builder.addCase(deleteItemInCartAsync.fulfilled, (state, action) => {
       // const { vehicleId } = action.payload;
       // if (state.cart) {

@@ -157,6 +157,8 @@ const User = {
 const Cart = {
   getCartByUser: (userId: string) => requests.get(`api/cart/${userId}`),
   addToCart: (values: {}) => requests.post("api/cart", values),
+  updateDateRentOfVehicleInCart: (values: {}) =>
+    requests.put("api/cart", values),
   deleteItem: (userId: string, vehicleId: string) =>
     requests.delete(`api/cart/${userId}/${vehicleId}`),
 };

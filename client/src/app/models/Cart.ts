@@ -18,4 +18,11 @@ export interface Vehicle {
   price: string;
   licensePlate: string;
   image: string;
+  pickUpDateTime: string;
+  dropOffDateTime: string;
+  rentDates: RentDate[]; //unavailableDates
+}
+export interface RentDate {
+  from: string;
+  to: string;
 }
