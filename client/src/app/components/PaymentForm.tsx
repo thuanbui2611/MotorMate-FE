@@ -90,25 +90,16 @@ export default function PaymentForm({ userLogin }: Props) {
               /> */}
               <form onSubmit={handleSubmit}>
                 <LinkAuthenticationElement
-                  // Optional prop for prefilling customer information
-                  options={{
-                    defaultValues: {
-                      email: userLogin.email,
-                    },
-                  }}
+                  options={
+                    {
+                      // defaultValues: {
+                      //   email: userLogin.email,
+                      // },
+                    }
+                  }
                 />
-                <h3>Payment</h3>
-                <PaymentElement
-                  // Optional prop for prefilling customer information
-                  options={{
-                    defaultValues: {
-                      billingDetails: {
-                        name: userLogin.fullName,
-                        phone: userLogin.phoneNumber,
-                      },
-                    },
-                  }}
-                />
+
+                <PaymentElement />
                 {/* <PaymentElement /> */}
                 <div className="border-b-[1px] border-r w-full border-gray-300 mt-3"></div>
                 <div className="flex items-center justify-end pt-3 w-full">

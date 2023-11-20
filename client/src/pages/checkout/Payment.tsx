@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import ProcessingBar from "../../app/components/ProcessingBar";
 import PaymentForm from "../../app/components/PaymentForm";
 import { Elements } from "@stripe/react-stripe-js";
-import { loadStripe } from "@stripe/stripe-js";
+import { StripeElementsOptions, loadStripe } from "@stripe/stripe-js";
 import { useAppSelector } from "../../app/store/ConfigureStore";
 import Loading from "../../app/components/Loading";
 import { toast } from "react-toastify";
@@ -15,16 +15,16 @@ export default function Payment() {
   const { checkoutLoaded, checkout } = useAppSelector(
     (state) => state.checkout
   );
-  const { userDetail } = useAppSelector((state) => state.account);
+  const { userDetail, userLoading } = useAppSelector((state) => state.account);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!userDetail) {
+    if (!userDetail && !userLoading) {
       navigate("/login");
       toast.error("Please login to continue");
       return;
     }
-  }, [userDetail]);
+  }, [userDetail, userLoading]);
 
   const scrollToTop = () => {
     window.scrollTo({
@@ -32,33 +32,31 @@ export default function Payment() {
       behavior: "smooth",
     });
   };
-  useEffect(() => {
-    if (!checkout && !checkoutLoaded) {
-      toast.error("Something error, please try again");
-      navigate("/my-cart");
-      return;
-    }
-    scrollToTop();
-  }, [checkoutLoaded]);
+  // useEffect(() => {
+  //   if (!checkout && !checkoutLoaded) {
+  //     toast.error("Something error, please try again");
+  //     navigate("/my-cart");
+  //     return;
+  //   }
+  //   scrollToTop();
+  // }, [checkoutLoaded]);
 
-  const appearance = {};
+  const appearance = { theme: "stripe" };
   const loader = "auto";
   // const clientSecret = checkout?.clientSecret as string;
   const clientSecret =
-    "pi_3ODiQjETkkliUm4y1ZcGiofs_secret_U8ivLYm6UgtY7iPLXRoRIb5Cw";
-  const options = {
-    clientSecret: checkout?.clientSecret as string,
-    appearance: appearance,
-    loader: loader,
+    "pi_3ODpM3ETkkliUm4y0U7EopEX_secret_dUkN0suKBZzcR5gI9XG3OXIfN";
+  const options: StripeElementsOptions = {
+    clientSecret: clientSecret,
+    appearance: {
+      theme: "flat",
+    },
+    loader: "auto",
   };
-
   return checkoutLoaded ? (
     <Loading />
   ) : (
-    <Elements
-      stripe={stripePromise}
-      options={{ clientSecret, appearance, loader }}
-    >
+    <Elements stripe={stripePromise} options={options}>
       <section className="pt-12 pb-24 bg-gray-100 overflow-hidden">
         <div className="container px-4 mx-auto">
           <ProcessingBar processing="payment" />

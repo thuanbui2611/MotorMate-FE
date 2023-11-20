@@ -19,9 +19,6 @@ export default function About() {
               </div>
               <div className="w-full px-4 mb-10 lg:w-1/2 lg:mb-0 ">
                 <div className="relative">
-                  <h1 className="absolute -top-20  left-0 text-[20px] lg:text-[100px] text-gray-900 font-bold opacity-5 md:block hidden">
-                    About Us
-                  </h1>
                   <h1 className="pl-2 text-3xl font-bold border-l-8 border-orange-based md:text-5xl text-gradient">
                     Welcome to our site
                   </h1>
@@ -52,7 +49,7 @@ export default function About() {
             <div className="flex flex-wrap ">
               <div className="w-full px-4 mb-10 lg:w-1/2 lg:mb-0 ">
                 <div className="lg:max-w-md">
-                  <div className="px-4 pl-4 mb-6 border-l-4 border-blue-500">
+                  <div className="px-4 pl-4 mb-6 border-l-4 border-orange-based">
                     <span className="text-sm text-orange-based uppercase">
                       About us
                     </span>
@@ -186,7 +183,7 @@ export default function About() {
         <section className="flex items-center xl:h-screen pb-20">
           <div className="justify-center flex-1 max-w-6xl py-4 mx-auto lg:py-6 md:px-6">
             <div className="flex flex-wrap ">
-              <div className="w-full px-4 mb-10 lg:w-1/2 lg:mb-0">
+              <div className="w-full px-4 mb-10 lg:w-1/2 lg:mb-0 border-l-4 border-orange-based">
                 <span className="text-sm text-orange-based uppercase  ">
                   About us
                 </span>

@@ -13,7 +13,7 @@ import Login from "../../pages/account/Login";
 import ServerErrors from "../errors/ServerErrors";
 import Contact from "../../pages/contact";
 import SignUpPage from "../../pages/account/SignUpPage";
-import Orders from "../../pages/order";
+import Orders from "../../pages/my-order";
 import ForgotPassword from "../../pages/account/ForgotPassword";
 import ChangePassword from "../../pages/account/ChangePassword";
 import NotFound from "../errors/NotFound";
@@ -22,10 +22,9 @@ import BlogPage from "../../pages/blog";
 import BlogDetails from "../../pages/blog/BlogDetails";
 import MyProducts from "../../pages/profile/MyProducts";
 import ProfileDetails from "../components/ProfileDetails";
-import OrderDetail from "../../pages/order/OrderDetail";
+import OrderDetail from "../../pages/my-order/OrderDetail";
 import ShopOrderDetail from "../../pages/shop-order/ShopOrderDetail";
 import ShopOrders from "../../pages/shop-order";
-import PaymentWrapper from "../../pages/checkout/PaymentWrapper";
 import Payment from "../../pages/checkout/Payment";
 
 export const router = createBrowserRouter([

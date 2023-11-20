@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function OrderDetail() {
   const data = ["1", "2", "3", "4", "5"];
   return (
@@ -22,10 +24,24 @@ export default function OrderDetail() {
               Customer’s Cart
             </p> */}
             <div className="flex flex-col justify-start items-start rounded-lg shadow-md bg-gray-50 border border-gray-100 px-4 py-4 md:py-6 md:p-6 xl:p-8 w-full max-h-[30rem] scrollbar overflow-auto">
+              {/* Shop information */}
+              <div className="flex items-center justify-start mb-4">
+                <Link to={"/profile/" + ""} className="w-fit rounded p-2 pl-0">
+                  <div className="flex items-center no-underline hover:underline text-black ">
+                    {/* img size 32x32 */}
+                    <img
+                      alt="Placeholder"
+                      className="block rounded-full h-8 w-8"
+                      src="https://images2.thanhnien.vn/Uploaded/phucndh/2023_01_15/z4040523388756-c00d06cee10967450c92ab5ef4b703af-8795.jpg"
+                    />
+                    <div className="ml-2 text-sm font-bold">Shop name</div>
+                  </div>
+                </Link>
+              </div>
               {/* Item start */}
-              {data.map((item, index) => (
-                <>
-                  <div className="mt-4 md:mt-6 flex flex-col md:flex-row justify-center items-center  md:space-x-6 xl:space-x-8 w-full">
+              <div className="w-full h-fit bg-white rounded-lg">
+                {data.map((item, index) => (
+                  <div className="mt-4 md:mt-6 flex flex-col md:flex-row justify-center items-center md:space-x-6 xl:space-x-8 w-[95%] mx-4">
                     <div className="flex justify-center items-center pb-4 md:pb-8 w-full md:w-40">
                       <img
                         className="w-[150px] h-[150px] md:w-full md:h-full md:block rounded-lg"
@@ -73,8 +89,8 @@ export default function OrderDetail() {
                       </div>
                     </div>
                   </div>
-                </>
-              ))}
+                ))}
+              </div>
             </div>
             <div className="flex justify-center flex-col md:flex-rowitems-stretch w-full space-y-4 md:space-y-0 md:space-x-6 xl:space-x-8">
               <div className="flex flex-col justify-end items-end px-4 py-6 md:p-6 xl:p-8 w-full bg-gray-50 space-y-6 rounded-lg shadow-md border border-gray-100">

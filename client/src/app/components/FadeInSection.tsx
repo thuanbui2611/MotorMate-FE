@@ -1,16 +1,12 @@
 import React, { useEffect, useRef, useState, ReactNode } from "react";
 
-interface FadeInSectionProps {
+interface Props {
   children: ReactNode;
   className?: string;
   options: "fade-in-scale" | "fade-in-section";
 }
 
-const FadeInSection: React.FC<FadeInSectionProps> = ({
-  children,
-  className,
-  options,
-}) => {
+export default function FadeInSection({ children, className, options }: Props) {
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLDivElement | null>(null);
 
@@ -43,6 +39,4 @@ const FadeInSection: React.FC<FadeInSectionProps> = ({
       {children}
     </div>
   );
-};
-
-export default FadeInSection;
+}

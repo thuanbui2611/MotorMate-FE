@@ -54,9 +54,9 @@ export default function SettingProfile() {
 
   return (
     <>
-      <div className="container mx-auto my-5 p-5 flex-grow">
+      <div className="container mx-auto mt-5 mb-32 p-5 flex-grow">
         <div className="flex justify-center items-center w-full mx-auto rounded-sm">
-          <div className="bg-gray-200 p-3 shadow-sm rounded-xl w-fit">
+          <div className="bg-gray-100 p-3 shadow-sm rounded-xl w-fit">
             <div className="flex items-center space-x-2 font-semibold text-gray-900 leading-8 pb-4">
               <span className="text-green-500">
                 <svg

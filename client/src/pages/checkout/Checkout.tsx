@@ -35,7 +35,14 @@ export default function Checkout() {
     });
   };
   useEffect(() => {
-    scrollToTop();
+    debugger;
+    if (userDetail?.address && userDetail?.email && userDetail?.phoneNumber) {
+      scrollToTop();
+    } else {
+      navigate(`/profile/${userDetail?.username}/settings`);
+      toast.error("Please update your profile to check out!");
+      return;
+    }
   }, []);
 
   useEffect(() => {

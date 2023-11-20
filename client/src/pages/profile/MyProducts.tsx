@@ -244,7 +244,7 @@ export default function MyProducts() {
                   Location
                 </th>
                 <th className="min-w-[120px] py-4 px-4 text-black border-b-2 border-gray-200">
-                  Price
+                  Price (VND)
                 </th>
                 <th className="min-w-[120px] py-4 px-4 text-black border-b-2 border-gray-200">
                   Profit
@@ -258,10 +258,24 @@ export default function MyProducts() {
               </tr>
             </thead>
             <tbody>
-              {productOfUserLoaded && <LoaderButton />}
+              {productOfUserLoaded && (
+                <tr>
+                  <td colSpan={8}>
+                    <div className="flex justify-center items-center w-full h-20">
+                      <LoaderButton />
+                    </div>
+                  </td>
+                </tr>
+              )}
               {!productOfUserLoaded && myProducts.length === 0 ? (
-                <tr className="text-center h-20 flex items-center justify-center w-full">
-                  No Items Found.
+                <tr>
+                  <td colSpan={8}>
+                    <div className="flex justify-center items-center w-full h-20">
+                      <p className="text-black dark:text-white">
+                        No Items Found.
+                      </p>
+                    </div>
+                  </td>
                 </tr>
               ) : (
                 myProducts.map((vehicle) => (
@@ -302,7 +316,7 @@ export default function MyProducts() {
                       <p className="text-black font-normal">{vehicle.city}</p>
                     </td>
                     <td className="py-5 px-4">
-                      <p className="text-black font-normal">
+                      <p className="text-green-500 font-semibold">
                         {vehicle.price.toLocaleString()}
                       </p>
                     </td>
@@ -311,10 +325,25 @@ export default function MyProducts() {
                       <p className="text-meta-3">10.000</p>
                     </td>
                     <td className="py-5 px-4">
+                      <p
+                        className={`inline-flex rounded-full bg-opacity-10 py-1 px-3 text-sm font-bold ${
+                          vehicle.status.toLowerCase() === "approved"
+                            ? " text-green-600 bg-green-600"
+                            : vehicle.status.toLowerCase() === "pending"
+                            ? " text-blue-600 bg-blue-600 "
+                            : vehicle.status.toLowerCase() === "denied"
+                            ? " text-red-600 bg-red-600"
+                            : ""
+                        } `}
+                      >
+                        {vehicle.status}
+                      </p>
+                    </td>
+                    {/* <td className="py-5 px-4">
                       <p className="inline-flex rounded-full bg-red-600 bg-opacity-10 py-1 px-3 text-sm font-bold text-red-600">
                         Renting
                       </p>
-                    </td>
+                    </td> */}
                     <td className="py-5 px-4">
                       <div className="flex items-center space-x-3.5">
                         <Link

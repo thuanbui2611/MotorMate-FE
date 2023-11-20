@@ -704,8 +704,8 @@ export default function VehiclePending() {
                           </td>
 
                           <td className="py-5 px-4">
-                            <p className="inline-flex rounded-full bg-blue-500 bg-opacity-30 py-1 px-3 text-sm font-bold text-blue-800 dark:text-blue-300">
-                              Pending
+                            <p className="inline-flex rounded-full bg-opacity-30 py-1 px-3 text-sm font-bold text-red-600 bg-red-600 ">
+                              Denied
                             </p>
                           </td>
                           <td className="py-5 px-4">

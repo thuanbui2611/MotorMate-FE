@@ -89,6 +89,8 @@ export const AccountSlice = createSlice({
       state.user = null;
       localStorage.removeItem("user");
       toast.success("Log out success!");
+      //reload page to reset state
+      window.location.reload();
     },
     setUser: (state, action) => {
       try {

@@ -140,7 +140,6 @@ export default function Cart() {
       closestDisabledDate.getDate()
     );
     if (closestDisabledDate && closestDisabledOnlyDate > dateStart) {
-      debugger;
       const check = dateFromOption >= closestDisabledOnlyDate;
       return check; // Disable all dates after the closest disabled date
     }
@@ -178,8 +177,8 @@ export default function Cart() {
               My Cart
             </h2>
             {/* Start cart */}
-            {cart?.shops.length === 0 ? (
-              <div className="flex items-center justify-center text-center text-xl font-semibold text-orange-based brightness-90">
+            {!cart || cart.shops.length === 0 ? (
+              <div className="flex items-center justify-center text-center text-xl font-semibold text-orange-based brightness-90 h-40">
                 Empty cart. <br></br>
                 Please add more vehicles to the cart to have a variety of
                 decisions for your trip!
@@ -227,24 +226,24 @@ export default function Cart() {
                       </Link>
                     </div>
 
-                    <div className="max-w-full overflow-x-auto scrollbar">
+                    <div className="max-w-full overflow-x-auto scrollbar rounded-lg border shadow">
                       <table className="w-full table-auto">
                         <thead>
                           <tr className=" bg-gray-200/50 text-left text-sm md:text-base lg:text-lg font-bold">
                             <th className="py-4"></th>
-                            <th className="min-w-[300px] py-4 px-4 text-black xl:pl-11">
+                            <th className="min-w-[280px] py-4 px-4 text-black text-base">
                               Vehicle
                             </th>
-                            <th className="min-w-[120px] py-4 px-4 text-black">
+                            <th className="min-w-[120px] py-4 px-4 text-black text-base">
                               Brand
                             </th>
-                            <th className="min-w-[120px] py-4 px-4 text-black">
+                            <th className="min-w-[150px] py-4 px-4 text-black text-base">
                               License Plates
                             </th>
-                            <th className="min-w-[300px] w-fit py-4 px-4 text-black text-center">
+                            <th className="min-w-[300px] w-fit py-4 px-4 text-black text-center text-base">
                               Date Rent
                             </th>
-                            <th className="min-w-[150px] py-4 px-4 text-black">
+                            <th className="min-w-[150px] py-4 px-4 text-black text-base">
                               Price (per day)
                             </th>
                             <th className="py-4 px-4"></th>
@@ -258,10 +257,10 @@ export default function Cart() {
                                 className="border-[#eee] border-b"
                               >
                                 <td>
-                                  <label className="flex items-center ml-1 ">
+                                  <label className="flex items-center">
                                     <input
                                       type="checkbox"
-                                      className="w-4 h-4 mr-2"
+                                      className="w-4 h-4 ml-3"
                                       checked={selectedVehicles.some((shop) =>
                                         shop.vehicles.some(
                                           (v) =>
@@ -278,7 +277,7 @@ export default function Cart() {
                                     />
                                   </label>
                                 </td>
-                                <td className="py-5 px-4 pl-9 xl:pl-11">
+                                <td className="py-5 px-4">
                                   <Link
                                     to={"/product-detail/" + vehicle.vehicleId}
                                     className="flex items-center h-full cursor-pointer hover:bg-gray-100 rounded-lg"
@@ -291,10 +290,12 @@ export default function Cart() {
                                       />
                                     </div>
                                     <div className="ml-3 flex flex-col">
-                                      <h5 className="font-medium text-black text-xl">
+                                      <h5 className="font-semibold text-black text-xl line-clamp-1">
                                         {vehicle.vehicleName}
                                       </h5>
-                                      <p className="text-sm">{vehicle.color}</p>
+                                      <p className="text-sm text-gray-600">
+                                        {vehicle.color}
+                                      </p>
                                     </div>
                                   </Link>
                                 </td>
@@ -352,7 +353,10 @@ export default function Cart() {
                                             />
                                           </>
                                         ) : (
-                                          <>12AM, 12/12/2023</>
+                                          <>
+                                            12:00 AM,
+                                            <br /> 12/12/2023
+                                          </>
                                         )}
                                       </div>
 
@@ -473,7 +477,10 @@ export default function Cart() {
                                             />
                                           </>
                                         ) : (
-                                          <>12:00 AM, 12/12/2023 </>
+                                          <>
+                                            12:00 AM,
+                                            <br /> 14/12/2023
+                                          </>
                                         )}
                                       </div>
                                     </div>
