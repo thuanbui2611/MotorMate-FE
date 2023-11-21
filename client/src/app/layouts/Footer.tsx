@@ -185,7 +185,7 @@ export default function Footer() {
                           },
                         },
                       }}
-                      placeholder="abc@gmail.com"
+                      placeholder="john.doe@email.com"
                       variant="outlined"
                       {...register("email", {
                         required: "Email is required",

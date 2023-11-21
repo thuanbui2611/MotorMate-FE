@@ -762,8 +762,8 @@ export default function HomePage() {
               <div className="flex flex-col items-center justify-center ">
                 <img
                   className="mx-auto mb-4 w-36 h-36 rounded-full"
-                  src="https://media.licdn.com/dms/image/D5603AQGL4DJp1mWePg/profile-displayphoto-shrink_400_400/0/1694859124370?e=1704931200&v=beta&t=9qOFtmIqDfudcbhER6y0jpDeheZ0GkQfOv7vef18HOw"
-                  alt="Helene Avatar"
+                  src="https://res.cloudinary.com/dmwvl1lok/image/upload/v1700536475/motormate/Founders/dundon_b6v8ej.jpg"
+                  alt="DungDTGCS200419 Avatar"
                 />
                 <h3 className="mb-1 text-2xl font-bold tracking-tight text-gradient ">
                   <a href="#">Doan Thanh Dung</a>
@@ -839,13 +839,13 @@ export default function HomePage() {
               <div className="flex flex-col items-center justify-center">
                 <img
                   className="mx-auto mb-4 w-36 h-36 rounded-full"
-                  src="https://scontent.fsgn13-2.fna.fbcdn.net/v/t39.30808-6/288461707_3304510519776981_6522894505983793182_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeFQFYtURjvru7ESpFO-4x91DUCsxWlnH08NQKzFaWcfT6eLs7h9EhOMO078U7IP_zAbMdgv2q6OiA_l4CaBpPOu&_nc_ohc=c2UPCNQm0rcAX9wurYW&_nc_zt=23&_nc_ht=scontent.fsgn13-2.fna&oh=00_AfCgJ5x-7XpGHjXH94D6DPpHw1fSWHtZDjBE1VA4XSAXeg&oe=6553F072"
-                  alt="Leslie Avatar"
+                  src="https://res.cloudinary.com/dmwvl1lok/image/upload/v1700536474/motormate/Founders/anhtt_lvw1a5.jpg"
+                  alt="AnhTTBCS200426 Avatar"
                 />
                 <h3 className="mb-1 text-2xl font-bold tracking-tight text-gradient ">
                   <a href="#">Trinh Tuong Anh</a>
                 </h3>
-                <p className="text-white">Graphic Designer/Co-founder</p>
+                <p className="text-white">CEO/Co-founder</p>
                 <ul className="flex items-center justify-center mt-4 space-x-4 bg-white rounded-2xl px-2 py-1 w-fit">
                   <li>
                     <a
@@ -896,13 +896,13 @@ export default function HomePage() {
               <div className="flex flex-col items-center justify-center ">
                 <img
                   className="mx-auto mb-4 w-36 h-36 rounded-full"
-                  src="https://media.licdn.com/dms/image/C4E03AQFTN9caWCh_PA/profile-displayphoto-shrink_400_400/0/1663486939604?e=1704931200&v=beta&t=XMELG6byfj_tKYuVBSWOn5juBo4Oie6ys73QUMMaJPM"
-                  alt="Joseph Avatar"
+                  src="https://res.cloudinary.com/dmwvl1lok/image/upload/v1700536474/motormate/Founders/thuanbc_tkeb3d.jpg"
+                  alt="ThuanBCGCS200424 Avatar"
                 />
                 <h3 className="mb-1 text-2xl font-bold tracking-tight text-gradient ">
                   <a href="#">Bui Cong Thuan</a>
                 </h3>
-                <p className="text-white">Sales/Co-founder</p>
+                <p className="text-white">CFO/Co-founder</p>
                 <ul className="flex items-center justify-center mt-4 space-x-4 bg-white rounded-2xl px-2 py-1 w-fit">
                   <li>
                     <a

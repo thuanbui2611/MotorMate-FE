@@ -18,9 +18,12 @@ export default function About() {
                 </div>
               </div>
               <div className="w-full px-4 mb-10 lg:w-1/2 lg:mb-0 ">
-                <div className="relative">
-                  <h1 className="pl-2 text-3xl font-bold border-l-8 border-orange-based md:text-5xl text-gradient">
-                    Welcome to our site
+                <div className="border-l-4 border-orange-based">
+                  <span className="pl-2 text-sm text-orange-based uppercase">
+                    About us
+                  </span>
+                  <h1 className="pl-2 text-3xl font-bold border-orange-based md:text-5xl text-gradient">
+                    Wellcome to MotorMate!
                   </h1>
                 </div>
                 <p className="mt-6 mb-10 text-base leading-7 text-gray-200 ">

@@ -167,7 +167,7 @@ export default function BlogPage() {
                           },
                         },
                       }}
-                      placeholder="abc@gmail.com"
+                      placeholder="john.doe@email.com"
                       variant="outlined"
                       {...register("email", {
                         required: "Email is required",
