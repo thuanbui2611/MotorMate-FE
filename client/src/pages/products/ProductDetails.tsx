@@ -81,7 +81,7 @@ export default function ProductDetails() {
             image: vehicle.images[0].image!,
             pickUpDateTime: "",
             dropOffDateTime: "",
-            rentDates: [{ from: "", to: "" }],
+            unavailableDates: [{ from: "", to: "" }],
           },
         ],
       },

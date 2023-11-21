@@ -18,8 +18,22 @@ export const getCartAsync = createAsyncThunk<Cart, string>(
   "cart/getCart",
   async (userId, thunkAPI) => {
     try {
-      const cart = await agent.Cart.getCartByUser(userId);
-      return cart;
+      const response = await agent.Cart.getCartByUser(userId);
+      response.shops.map((shop: Shop) => {
+        shop.vehicles.map((vehicle: Vehicle) => {
+          debugger;
+          if(vehicle.pickUpDateTime && vehicle.dropOffDateTime)
+          {
+            const startDateTime = new Date(vehicle.pickUpDateTime);
+            const endDateTime = new Date(vehicle.dropOffDateTime);
+            vehicle.pickUpDateTime = startDateTime.toString()
+            vehicle.dropOffDateTime = endDateTime.toString()
+          }
+         
+        });
+      });
+      debugger;
+      return response;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -49,6 +63,16 @@ export const updateDateRentOfVehicleInCartAsync = createAsyncThunk<Cart, {}>(
   async (data, thunkAPI) => {
     try {
       const response = await agent.Cart.updateDateRentOfVehicleInCart(data);
+      response.shops.map((shop: Shop) => {
+        shop.vehicles.map((vehicle: Vehicle) => {
+          const startDateTime = new Date(vehicle.pickUpDateTime);
+          const endDateTime = new Date(vehicle.dropOffDateTime);
+          vehicle.pickUpDateTime = new Date(startDateTime.getTime() -
+          startDateTime.getTimezoneOffset() * 60 * 1000).toISOString()
+          vehicle.dropOffDateTime = new Date(endDateTime.getTime() - 
+          endDateTime.getTimezoneOffset() * 60 * 1000).toISOString()
+        });
+      });
       return response;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);

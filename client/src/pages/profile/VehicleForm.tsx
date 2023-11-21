@@ -59,7 +59,6 @@ export default function VehicleForm({
   const [selectedCollection, setSelectedCollection] =
     useState<Collection | null>(null);
 
-  const [users, setUsers] = useState<UserDetail[]>([]);
   const [models, setModels] = useState<ModelVehicle[]>([]);
   const [selectedModel, setSelectedModel] = useState<ModelVehicle | null>(null);
   const [colors, setColors] = useState<Color[]>([]);
@@ -114,7 +113,7 @@ export default function VehicleForm({
       //set images from server for delete image in cloudinary
       setImagesFromServer(vehicle.images);
     }
-  }, [vehicle, reset, users]);
+  }, [vehicle, reset]);
 
   useEffect(() => {
     if (vehicle && brands.length > 0) {
@@ -233,16 +232,16 @@ export default function VehicleForm({
 
       return files;
     });
-    console.log("Files change:", files);
-    console.log("Selected file:", selectedFiles);
+    // console.log("Files change:", files);
+    // console.log("Selected file:", selectedFiles);
   };
 
   const removeImageFromList = (file: ImageFile, index: number) => {
     if (selectedFiles) {
       //Remove image from user upload
       const fileList = Array.from(selectedFiles);
-      const result = fileList.filter((i) => i.name !== file.name);
-      setSelectedFiles(createFileList(result));
+      fileList.splice(index, 1);
+      setSelectedFiles(createFileList(fileList));
     }
     if (imagesFromServer) {
       //Remove image from server

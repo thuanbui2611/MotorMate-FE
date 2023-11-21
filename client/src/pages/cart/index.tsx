@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/store/ConfigureStore";
 import Loading from "../../app/components/Loading";
 import { Link, useNavigate } from "react-router-dom";
-import { Shop, Vehicle } from "../../app/models/Cart";
+import { Shop, UnavailableDates, Vehicle } from "../../app/models/Cart";
 import ConfirmDeleteDialog from "../../app/components/ConfirmDeleteDialog";
 import {
   addRemoveSelectedVehicle,
@@ -17,6 +17,7 @@ import { TextField } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker, TimePicker } from "@mui/x-date-pickers";
+import { formatChatTimeOnHover } from "../../app/utils/formatChatTime";
 
 export default function Cart() {
   const [confirmDelete, setConfirmDelete] = useState<Boolean>(false);
@@ -89,47 +90,70 @@ export default function Cart() {
     setIsEditDateRent(undefined);
   };
 
-  const onClickChangeDateRent = async (vehicleId: string) => {
-    debugger;
-    setIsEditDateRent(undefined);
-    console.log("Star date: ", new Date(startDate));
-    console.log("End date: ", new Date(endDate));
-    console.log("Time start: ", timeStart);
-    console.log("Time end: ", timeEnd);
-    // const result = await dispatch(
-    //   updateDateRentOfVehicleInCartAsync({
-    //     userId: userDetail?.id,
-    //     vehicleId: vehicleId,
-    //     pickUpDateTime: startDate,
-    //     DropOffDateTime: endDate,
-    //   })
-    // );
+  const handleOpenEditDateRent = (vehicle: Vehicle) => {
+    setIsEditDateRent(vehicle.vehicleId);
   };
 
-  const disabledDates = [
-    "2023-11-18T06:55:01.860Z",
-    "2023-11-19T08:30:00.000Z",
-    "2023-11-22T06:55:01.860Z",
-    "2023-11-24T08:30:00.000Z",
-  ];
-  const shouldDisableDateStart = (date: any) => {
+  const onClickChangeDateRent = async (vehicleId: string) => {
+    setIsEditDateRent(undefined);
+
+    const dateFrom = new Date(startDate);
+    const timeFrom = new Date(timeStart);
+    const dateTo = new Date(endDate);
+    const timeTo = new Date(timeEnd);
+    const dateTimeFrom = new Date(
+      dateFrom.getFullYear(),
+      dateFrom.getMonth(),
+      dateFrom.getDate(),
+      timeFrom.getHours(),
+      timeFrom.getMinutes()
+    );
+    const dateTimeTo = new Date(
+      dateTo.getFullYear(),
+      dateTo.getMonth(),
+      dateTo.getDate(),
+      timeTo.getHours(),
+      timeTo.getMinutes()
+    );
+    //Convert local to UTC+0
+    const dateTimeFromUTC = new Date(
+      dateTimeFrom.getTime() + dateTimeFrom.getTimezoneOffset() * 60 * 1000
+    );
+    const dateTimeToUTC = new Date(
+      dateTimeTo.getTime() + dateTimeTo.getTimezoneOffset() * 60 * 1000
+    );
+    const test = dateTimeFromUTC.toISOString();
+    debugger;
+    await dispatch(
+      updateDateRentOfVehicleInCartAsync({
+        userId: userDetail?.id,
+        vehicleId: vehicleId,
+        pickUpDateTime: dateTimeFromUTC.toISOString(),
+        DropOffDateTime: dateTimeToUTC.toISOString(),
+      })
+    );
+  };
+
+  const shouldDisableDateStart = (date: any, vehicle: Vehicle) => {
     const dateOption = new Date(date);
     const dateOnly = new Date(
       dateOption.getFullYear(),
       dateOption.getMonth(),
       dateOption.getDate()
     );
-    return disabledDates.some((disabledDate) => {
-      const disabledDateOnly = new Date(disabledDate);
-      return (
-        dateOnly.getFullYear() === disabledDateOnly.getFullYear() &&
-        dateOnly.getMonth() === disabledDateOnly.getMonth() &&
-        dateOnly.getDate() === disabledDateOnly.getDate()
-      );
-    });
+    const disabledDateTimeLocal = getDisabledDateTimeLocal(vehicle);
+    let check: boolean = false;
+
+    for (const date of disabledDateTimeLocal) {
+      if (dateOnly >= date.from && dateOnly <= date.to) {
+        check = true;
+        break;
+      }
+    }
+    return check;
   };
 
-  const shouldDisableDateEnd = (date: any) => {
+  const shouldDisableDateEnd = (date: any, vehicle: Vehicle) => {
     const dateOption = new Date(date);
     const dateFrom = new Date(startDate);
     const dateFromOption = new Date(
@@ -143,42 +167,46 @@ export default function Cart() {
       dateFrom.getDate()
     );
     if (dateFromOption <= dateStart) return true;
-    const closestDisabledDate = findClosestDisabledDate(
-      dateStart,
-      disabledDates
-    );
-    if (!closestDisabledDate) return false;
-    const closestDisabledOnlyDate = new Date(
-      closestDisabledDate.getFullYear(),
-      closestDisabledDate.getMonth(),
-      closestDisabledDate.getDate()
-    );
-    if (closestDisabledDate && closestDisabledOnlyDate > dateStart) {
-      const check = dateFromOption >= closestDisabledOnlyDate;
-      return check; // Disable all dates after the closest disabled date
-    }
-
-    return false; // Enable all other dates
-  };
-
-  const findClosestDisabledDate = (
-    startDate: Date,
-    disabledDates: string[]
-  ) => {
-    let closestDisabledDate = null;
-    let closestDiff = Infinity;
-    for (const dateString of disabledDates) {
-      const disabledDate = new Date(dateString);
-      if (disabledDate > startDate) {
-        const diff = disabledDate.getTime() - startDate.getTime();
-        if (diff < closestDiff) {
-          closestDiff = diff;
-          closestDisabledDate = disabledDate;
-        }
+    const disabledDateTimeLocal = getDisabledDateTimeLocal(vehicle);
+    let disableDateFrom = disabledDateTimeLocal[0].from;
+    for (const date of disabledDateTimeLocal) {
+      if (date.from <= disableDateFrom) {
+        disableDateFrom = date.from;
       }
     }
-    return closestDisabledDate;
+    return dateFromOption >= disableDateFrom;
   };
+
+  const getDisabledDateTimeLocal = (vehicle: Vehicle) => {
+    return vehicle.unavailableDates.map((date) => {
+      const fromUTC = new Date(date.from);
+      const toUTC = new Date(date.to);
+
+      const fromUTCOnlyDate = new Date(
+        fromUTC.getFullYear(),
+        fromUTC.getMonth(),
+        fromUTC.getDate()
+      );
+      const toUTCOnlyDate = new Date(
+        toUTC.getFullYear(),
+        toUTC.getMonth(),
+        toUTC.getDate()
+      );
+      //Convert +0 -> local
+      const fromLocal = new Date(
+        fromUTCOnlyDate.getTime() -
+          fromUTCOnlyDate.getTimezoneOffset() * 60 * 1000
+      );
+      const toLocal = new Date(
+        toUTCOnlyDate.getTime() - toUTCOnlyDate.getTimezoneOffset() * 60 * 1000
+      );
+      return {
+        from: fromLocal,
+        to: toLocal,
+      };
+    });
+  };
+
   return cartLoading || userLoading ? (
     <Loading />
   ) : (
@@ -342,13 +370,15 @@ export default function Cart() {
                                                   fontSize: "14px",
                                                 },
                                               }}
-                                              onChange={(date: any) => {
-                                                setStartDate(date);
-                                                console.log(date);
-                                              }}
+                                              onChange={(date: any) =>
+                                                setStartDate(date)
+                                              }
                                               format="DD/MM/YYYY"
                                               shouldDisableDate={(date: any) =>
-                                                shouldDisableDateStart(date)
+                                                shouldDisableDateStart(
+                                                  date,
+                                                  vehicle
+                                                )
                                               }
                                             />
                                             <TimePicker
@@ -367,12 +397,22 @@ export default function Cart() {
                                               onChange={(time: any) =>
                                                 setTimeStart(time)
                                               }
+                                              defaultValue={
+                                                vehicle.pickUpDateTime
+                                                  ? new Date(
+                                                      vehicle.pickUpDateTime
+                                                    )
+                                                  : undefined
+                                              }
                                             />
                                           </>
                                         ) : (
                                           <span className="mr-2">
-                                            12:00 AM,
-                                            <br /> 12/12/2023
+                                            {vehicle.pickUpDateTime
+                                              ? formatChatTimeOnHover(
+                                                  vehicle.pickUpDateTime.toString()
+                                                )
+                                              : "N/A"}
                                           </span>
                                         )}
                                       </div>
@@ -384,9 +424,7 @@ export default function Cart() {
                                           <div
                                             className="text-xs font-semibold bg-blue-500 cursor-pointer text-white absolute -bottom-9 rounded-full p-1 w-[70px] text-center hover:brightness-90"
                                             onClick={() =>
-                                              setIsEditDateRent(
-                                                vehicle.vehicleId
-                                              )
+                                              handleOpenEditDateRent(vehicle)
                                             }
                                           >
                                             Edit Date
@@ -464,6 +502,7 @@ export default function Cart() {
                                           <>
                                             <DatePicker
                                               label="End Date"
+                                              format="DD/MM/YYYY"
                                               sx={{
                                                 "& .MuiOutlinedInput-input": {
                                                   padding: 1,
@@ -479,7 +518,13 @@ export default function Cart() {
                                                 startDate ? false : true
                                               }
                                               shouldDisableDate={(date: any) =>
-                                                shouldDisableDateEnd(date)
+                                                shouldDisableDateEnd(
+                                                  date,
+                                                  vehicle
+                                                )
+                                              }
+                                              onChange={(date: any) =>
+                                                setEndDate(date)
                                               }
                                             />
                                             <TimePicker
@@ -495,12 +540,18 @@ export default function Cart() {
                                                   fontSize: "14px",
                                                 },
                                               }}
+                                              onChange={(time: any) =>
+                                                setTimeEnd(time)
+                                              }
                                             />
                                           </>
                                         ) : (
                                           <span className="ml-2">
-                                            12:00 AM,
-                                            <br /> 14/12/2023
+                                            {vehicle.pickUpDateTime
+                                              ? formatChatTimeOnHover(
+                                                  vehicle.dropOffDateTime
+                                                )
+                                              : "N/A"}
                                           </span>
                                         )}
                                       </div>

@@ -223,6 +223,7 @@ export default function VehicleForm({
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
+    debugger;
     setSelectedFiles((prevFiles) => {
       // Check type
       for (let i = 0; i < files?.length!; i++) {
@@ -257,9 +258,10 @@ export default function VehicleForm({
       return files;
     });
     //reset input
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
+    // if (fileInputRef.current) {
+    //   fileInputRef.current.value = "";
+    // }
+    debugger;
     console.log("Files change:", files);
     console.log("Selected file:", selectedFiles);
   };
@@ -268,8 +270,8 @@ export default function VehicleForm({
     if (selectedFiles) {
       //Remove image from user upload
       const fileList = Array.from(selectedFiles);
-      const result = fileList.filter((i) => i.name !== file.name);
-      setSelectedFiles(createFileList(result));
+      fileList.splice(index, 1);
+      setSelectedFiles(createFileList(fileList));
     }
     if (imagesFromServer) {
       //Remove image from server

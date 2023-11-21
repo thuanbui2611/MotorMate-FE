@@ -8,7 +8,6 @@ axios.defaults.headers.post["Content-Type"] = "application/json";
 const responseBody = (response: AxiosResponse) => response.data;
 axios.interceptors.request.use((config) => {
   const userToken = store.getState().account.user?.token;
-  console.log("get user token from user state", userToken);
   if (userToken) config.headers.Authorization = `Bearer ${userToken}`;
   return config;
 });

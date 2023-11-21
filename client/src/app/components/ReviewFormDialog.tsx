@@ -21,17 +21,17 @@ type ImageFile = {
 };
 export default function ReviewFormDialog({ actionReview, onClose }: Props) {
   const [selectedFiles, setSelectedFiles] = useState<FileList | null>(null);
-  const [imagesSelected, setImagesSelected] = useState<ImageFile[] | null>([]);
+  const [imagesSelected, setImagesSelected] = useState<ImageFile[] | null>(
+    null
+  );
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    debugger;
     //add selected images when user upload
     if (selectedFiles) {
       debugger;
       const imagesSelected: ImageFile[] = [];
-
       // Set image from user upload
       // Convert selectedFiles to selectedImages
       for (let i = 0; i < selectedFiles?.length; i++) {
@@ -40,13 +40,15 @@ export default function ReviewFormDialog({ actionReview, onClose }: Props) {
         const url = URL.createObjectURL(file);
         imagesSelected.push({ name, url });
       }
-      setImagesSelected((prevImages) => [...prevImages!, ...imagesSelected]);
+      setImagesSelected(imagesSelected);
     }
   }, [selectedFiles]);
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+    debugger;
     const files = e.target.files;
     setSelectedFiles((prevFiles) => {
+      debugger;
       // Check type
       for (let i = 0; i < files?.length!; i++) {
         if (!files![i].type.startsWith("image/")) {
@@ -76,15 +78,9 @@ export default function ReviewFormDialog({ actionReview, onClose }: Props) {
         return combinedFilesList;
       }
       // If there were no previous files, simply use the new FileList
-      debugger;
+
       return files;
     });
-    //reset input
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
-    console.log("Files change:", files);
-    console.log("Selected file:", selectedFiles);
   };
   const createFileList = (files: File[]) => {
     const dataTransfer = new DataTransfer();
@@ -94,11 +90,12 @@ export default function ReviewFormDialog({ actionReview, onClose }: Props) {
     return dataTransfer.files;
   };
   const removeImageFromList = (file: ImageFile, index: number) => {
+    debugger;
     if (selectedFiles) {
       //Remove image from user upload
       const fileList = Array.from(selectedFiles);
-      const result = fileList.filter((i) => i.name !== file.name);
-      setSelectedFiles(createFileList(result));
+      fileList.splice(index, 1);
+      setSelectedFiles(createFileList(fileList));
     }
   };
   return (

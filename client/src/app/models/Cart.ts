@@ -20,9 +20,9 @@ export interface Vehicle {
   image: string;
   pickUpDateTime: string;
   dropOffDateTime: string;
-  rentDates: RentDate[]; //unavailableDates
+  unavailableDates: UnavailableDates[];
 }
-export interface RentDate {
+export interface UnavailableDates {
   from: string;
   to: string;
 }
