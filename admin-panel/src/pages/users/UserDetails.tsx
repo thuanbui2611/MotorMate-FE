@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import { UserDetail } from "../../app/models/User";
-import { ConvertDatetimeToDisplay } from "../../app/utils/ConvertDatetimeToDate";
+import { ConvertToDateStr } from "../../app/utils/ConvertDatetimeToDate";
 
 interface Props {
   user: UserDetail | null;
@@ -125,7 +125,7 @@ export default function UserDetails({ user, onClose }: Props) {
                             </p>
                             <p className="ml-1 text-base leading-4 text-black break-all">
                               {user?.dateOfBirth
-                                ? ConvertDatetimeToDisplay(user?.dateOfBirth)
+                                ? ConvertToDateStr(user?.dateOfBirth)
                                 : "No date of birth"}
                             </p>
                           </div>
@@ -167,7 +167,7 @@ export default function UserDetails({ user, onClose }: Props) {
                                 Insurance expiration:
                               </p>
                               <p className="ml-1 text-base leading-4 text-black break-all">
-                                {/* {ConvertDatetimeToDisplay(
+                                {/* {ConvertToDateStr(
                                   vehicle!.insuranceExpiry
                                 )} */}
                               </p>

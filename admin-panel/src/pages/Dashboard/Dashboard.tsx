@@ -1,16 +1,16 @@
 import { ChangeEvent, useEffect, useState } from "react";
-import CardFour from "../../app/components/CardFour";
-import CardOne from "../../app/components/CardOne";
-import CardThree from "../../app/components/CardThree";
-import CardTwo from "../../app/components/CardTwo";
 import ChartOne from "../../app/components/ChartOne";
 import ChartThree from "../../app/components/ChartThree";
 import ChartTwo from "../../app/components/ChartTwo";
 import ChatCard from "../../app/components/ChatCard";
 import MapOne from "../../app/components/MapOne";
 import TableOne from "../../app/components/TableOne";
-import { set } from "react-hook-form";
 import { recognizeIdentityCard } from "../../app/utils/IDRecognition";
+import TotalViewsCard from "../../app/components/TotalViewsCard";
+import TotalProfitsCard from "../../app/components/TotalProfitsCard";
+import TotalProductsCard from "../../app/components/TotalProductsCard";
+import TotalUsersCard from "../../app/components/TotalUsersCard";
+import ChartFour from "../../app/components/ChartFour";
 
 const Dashboard = () => {
   const [ipAddress, setIPAddress] = useState("");
@@ -45,10 +45,10 @@ const Dashboard = () => {
   return (
     <>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
-        <CardOne />
-        <CardTwo />
-        <CardThree />
-        <CardFour />
+        <TotalViewsCard />
+        <TotalProfitsCard />
+        <TotalProductsCard />
+        <TotalUsersCard />
       </div>
       <div className="bg-black text-white"></div>
       <div className="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
@@ -59,11 +59,8 @@ const Dashboard = () => {
         <ChartOne />
         <ChartTwo />
         <ChartThree />
-        <MapOne />
-        <div className="col-span-12 xl:col-span-8">
-          <TableOne />
-        </div>
-        <ChatCard />
+        <TableOne />
+        <ChartFour />
       </div>
     </>
   );

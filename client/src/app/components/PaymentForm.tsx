@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "react-credit-cards-2/dist/es/styles-compiled.css";
 import { LoadingButton } from "@mui/lab";
 import {
@@ -25,6 +25,9 @@ export default function PaymentForm({ userLogin }: Props) {
     name: "",
     focus: "",
   });
+  const [totalPayment, setTotalPayment] = useState<number>(0);
+  const { selectedVehicles } = useAppSelector((state) => state.cart);
+
   const stripe = useStripe();
   const elements = useElements();
   const navigate = useNavigate();
@@ -62,10 +65,28 @@ export default function PaymentForm({ userLogin }: Props) {
       toast.error(error.message);
     } else {
       // Redirected to  `return_url`.
-
       toast.success("Payment success");
     }
   };
+  useEffect(() => {
+    let total = 0;
+    selectedVehicles.forEach((shop) => {
+      shop.vehicles.forEach((vehicle) => {
+        const { price, pickUpDateTime, dropOffDateTime } = vehicle;
+        const pricePerDay = +price;
+        const startDate = new Date(pickUpDateTime);
+        const endDate = new Date(dropOffDateTime);
+        const timeDiff = Math.abs(endDate.getTime() - startDate.getTime());
+        const numberOfDays = timeDiff / (1000 * 3600 * 24); // Convert milliseconds to days
+        const roundedNumberOfDays =
+          numberOfDays < 4.5
+            ? Math.floor(numberOfDays)
+            : Math.ceil(numberOfDays);
+        total += pricePerDay * roundedNumberOfDays;
+      });
+    });
+    setTotalPayment(total);
+  }, [selectedVehicles]);
   return (
     <>
       <div className="max-w-screen-lg bg-white rounded-lg border border-gray-300 p-5 shadow-md">
@@ -90,13 +111,11 @@ export default function PaymentForm({ userLogin }: Props) {
               /> */}
               <form onSubmit={handleSubmit}>
                 <LinkAuthenticationElement
-                  options={
-                    {
-                      // defaultValues: {
-                      //   email: userLogin.email,
-                      // },
-                    }
-                  }
+                  options={{
+                    defaultValues: {
+                      email: userLogin.email,
+                    },
+                  }}
                 />
 
                 <PaymentElement />
@@ -105,7 +124,7 @@ export default function PaymentForm({ userLogin }: Props) {
                 <div className="flex items-center justify-end pt-3 w-full">
                   <div className="font-bold text-lg">Total:</div>
                   <div className="font-bold text-xl text-green-500 ml-2">
-                    200.000 VND
+                    {totalPayment.toLocaleString()} VND
                   </div>
                 </div>
                 <div className="flex items-center justify-center gap-6 mt-3">

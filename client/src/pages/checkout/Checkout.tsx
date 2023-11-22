@@ -9,6 +9,7 @@ import Payment_btn from "../../app/components/Payment_btn";
 import { useAppDispatch } from "../../app/store/ConfigureStore";
 import { createCheckoutAsync } from "./CheckoutSlice";
 import { toast } from "react-toastify";
+import { CheckoutItems } from "../../app/models/Checkout";
 
 export default function Checkout() {
   const [selectedPaymentOption, setSelectedPaymentOption] =
@@ -18,10 +19,10 @@ export default function Checkout() {
 
   const [deliveryOption, setDeliveryOption] = useState("");
   const [totalVehicleCount, setTotalVehicleCount] = useState<number>(0);
-  const [totalPayment, setTotalPayment] = useState<number>(0);
   const { selectedVehicles } = useAppSelector((state) => state.cart);
   const { userDetail } = useAppSelector((state) => state.account);
   const [deliveryAddress, setDeliveryAddress] = useState<string>("");
+  const [totalPayment, setTotalPayment] = useState<number>(0);
   // const [checkBox, setCheckBox] = useState<boolean>(false);
 
   const dispatch = useAppDispatch();
@@ -34,8 +35,27 @@ export default function Checkout() {
       behavior: "smooth",
     });
   };
+
   useEffect(() => {
-    debugger;
+    let total = 0;
+    selectedVehicles.forEach((shop) => {
+      shop.vehicles.forEach((vehicle) => {
+        const { price, pickUpDateTime, dropOffDateTime } = vehicle;
+        const pricePerDay = +price;
+        const startDate = new Date(pickUpDateTime);
+        const endDate = new Date(dropOffDateTime);
+        const timeDiff = Math.abs(endDate.getTime() - startDate.getTime());
+        const numberOfDays = timeDiff / (1000 * 3600 * 24); // Convert milliseconds to days
+        const roundedNumberOfDays =
+          numberOfDays < 4.5
+            ? Math.floor(numberOfDays)
+            : Math.ceil(numberOfDays);
+        total += pricePerDay * roundedNumberOfDays;
+      });
+    });
+    setTotalPayment(total);
+  }, [selectedVehicles]);
+  useEffect(() => {
     if (userDetail?.address && userDetail?.email && userDetail?.phoneNumber) {
       scrollToTop();
     } else {
@@ -46,10 +66,10 @@ export default function Checkout() {
   }, []);
 
   useEffect(() => {
-    if (vehiclesCheckout.length === 0) {
+    if (vehiclesCheckout && vehiclesCheckout.length === 0) {
       if (state) {
         setVehiclesCheckout(state.vehicleCheckout);
-      } else if (selectedVehicles.length === 0) {
+      } else if (selectedVehicles?.length === 0) {
         toast.error("You need to choose at least one vehicle for checkout!");
         navigate("/my-cart");
         return;
@@ -60,15 +80,7 @@ export default function Checkout() {
   }, [selectedVehicles]);
 
   useEffect(() => {
-    if (vehiclesCheckout.length > 0) {
-      let total = 0;
-      vehiclesCheckout.forEach((shop) => {
-        shop.vehicles.forEach((vehicle: Vehicle) => {
-          total += +vehicle.price;
-        });
-      });
-      setTotalPayment(total);
-
+    if (vehiclesCheckout && vehiclesCheckout.length > 0) {
       let count = 0;
       vehiclesCheckout.forEach((shop) => {
         shop.vehicles.forEach((vehicle: Vehicle) => {
@@ -105,32 +117,46 @@ export default function Checkout() {
 
   const onSubmit = async (event: any) => {
     event.preventDefault();
+    let vehiclesSelected;
+
     if (deliveryOption === "") {
       toast.error("You need to choose a delivery option!");
       return;
+    } else if (deliveryOption === "standardShipping") {
+      const address = deliveryAddress
+        ? deliveryAddress +
+          " " +
+          location?.district +
+          " " +
+          location?.ward +
+          " " +
+          location?.city
+        : "";
+      vehiclesSelected = vehiclesCheckout.flatMap((shop) =>
+        shop.vehicles.map((vehicle) => ({
+          vehicleId: vehicle.vehicleId,
+          pickUpDateTime: vehicle.pickUpDateTime,
+          dropOffDateTime: vehicle.dropOffDateTime,
+          pickUpLocation: address,
+          dropOffLocation: address,
+        }))
+      );
+    } else {
+      vehiclesSelected = vehiclesCheckout.flatMap((shop) =>
+        shop.vehicles.map((vehicle) => ({
+          vehicleId: vehicle.vehicleId,
+          pickUpDateTime: vehicle.pickUpDateTime,
+          dropOffDateTime: vehicle.dropOffDateTime,
+          pickUpLocation: "Pick up at the Vehicle Address",
+          dropOffLocation: "Drop off at the Vehicle Address",
+        }))
+      );
     }
 
-    const vehicleIds = vehiclesCheckout.flatMap((shop) =>
-      shop.vehicles.map((v) => v.vehicleId)
-    );
-
-    const pickUpAddress = deliveryAddress
-      ? deliveryAddress +
-        " " +
-        location?.district +
-        " " +
-        location?.ward +
-        " " +
-        location?.city
-      : "";
     const formData = {
       //Pick up in vehicle address
       userId: userDetail?.id,
-      vehicleIds: vehicleIds,
-      pickUpLocation: pickUpAddress
-        ? pickUpAddress
-        : "Pick up at the Vehicle Address",
-      dropOffLocation: pickUpAddress ? pickUpAddress : userDetail?.address,
+      vehicles: vehiclesSelected,
     };
     dispatch(createCheckoutAsync(formData));
 
@@ -281,7 +307,7 @@ export default function Checkout() {
                       </div>
                       <div className="w-full md:w-2/3">
                         <div className="grid grid-cols-1 md:grid-cols-2 mt-5 ">
-                          <label className="relative inline-flex mb-5 mr-16 items-center">
+                          {/* <label className="relative inline-flex mb-5 mr-16 items-center">
                             <input
                               className="relative appearance-none mr-3"
                               type="radio"
@@ -299,14 +325,15 @@ export default function Checkout() {
                             <span className="ml-2 text-sm text-black leading-3 font-bold">
                               COD
                             </span>
-                          </label>
+                          </label> */}
                           <label className="relative inline-flex mb-5 mr-16 items-center">
                             <input
                               className="relative appearance-none mr-3"
                               type="radio"
                               value="visa"
-                              checked={selectedPaymentOption === "visa"}
+                              // checked={selectedPaymentOption === "visa"}
                               onChange={handlePaymentOptionChange}
+                              checked={true}
                             />
                             <img
                               style={{ width: "58px", height: "40px" }}
@@ -314,11 +341,11 @@ export default function Checkout() {
                             />
 
                             <span className="ml-2 text-sm text-black leading-3 font-bold">
-                              Visa
+                              International payment cards
                             </span>
                           </label>
 
-                          <label className="relative inline-flex mb-5 items-center font-bold">
+                          {/* <label className="relative inline-flex mb-5 items-center font-bold">
                             <input
                               className="relative appearance-none mr-3"
                               type="radio"
@@ -334,7 +361,7 @@ export default function Checkout() {
                             <span className="ml-2 text-sm text-black leading-3">
                               MoMo
                             </span>
-                          </label>
+                          </label> */}
                         </div>
                       </div>
                     </div>
@@ -419,6 +446,28 @@ export default function Checkout() {
                                 <span className="font-semibold">Address:</span>
                                 <span className="ml-2 text-gray-800">
                                   "Address of vehicle"
+                                </span>
+                              </p>
+                              <p className="mr-4 text-sm font-medium w-full">
+                                <span className="font-semibold">
+                                  Date Rent:
+                                </span>
+                                <span className="ml-2 text-blue-600">
+                                  {vehicle.pickUpDateTime.toLocaleString([], {
+                                    year: "numeric",
+                                    month: "2-digit",
+                                    day: "2-digit",
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                  })}{" "}
+                                  To{" "}
+                                  {vehicle.dropOffDateTime.toLocaleString([], {
+                                    year: "numeric",
+                                    month: "2-digit",
+                                    day: "2-digit",
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                  })}
                                 </span>
                               </p>
                               <p className="text-sm font-semibold">

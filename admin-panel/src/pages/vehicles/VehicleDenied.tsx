@@ -15,7 +15,7 @@ import {
   vehicleDeniedSelectors,
 } from "./VehicleDeniedSlice";
 import LoaderButton from "../../app/components/LoaderButton";
-import { ConvertDatetimeToDisplay } from "../../app/utils/ConvertDatetimeToDate";
+import { ConvertToDateStr } from "../../app/utils/ConvertDatetimeToDate";
 import { City } from "../../app/models/Address";
 import { Brand } from "../../app/models/Brand";
 import { Collection } from "../../app/models/Collection";
@@ -687,9 +687,7 @@ export default function VehiclePending() {
                           </td>
                           <td className="py-5 px-4">
                             <p className="text-black dark:text-white">
-                              {ConvertDatetimeToDisplay(
-                                vehicle.insuranceExpiry
-                              )}
+                              {ConvertToDateStr(vehicle.insuranceExpiry)}
                             </p>
                           </td>
                           <td className="py-5 px-4">

@@ -7,3 +7,8 @@ export interface Checkout {
   paymentIntentId: string;
   clientSecret: string;
 }
+
+export interface CheckoutItems {
+  shops: Shop[];
+  totalPayment: number;
+}

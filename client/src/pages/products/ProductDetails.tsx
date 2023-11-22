@@ -12,7 +12,7 @@ import ImagesCarousel from "../../app/components/ImagesCarousel";
 import { useAppDispatch, useAppSelector } from "../../app/store/ConfigureStore";
 import { setIsOpenChat, setStartChatToUser } from "../chat/ChatSlice";
 import AddToCart from "../../app/components/AddToCart";
-import { ConvertDatetimeToDisplay } from "../../app/utils/ConvertDatetimeToDate";
+import { ConvertToDateStr } from "../../app/utils/ConvertDatetimeToStr";
 import { setSelectedVehicle } from "../cart/CartSlice";
 import { Shop } from "../../app/models/Cart";
 import FadeInSection from "../../app/components/FadeInSection";
@@ -65,30 +65,30 @@ export default function ProductDetails() {
   };
 
   const handleClickRentNow = (vehicle: Vehicle) => {
-    const vehicleRent: Shop[] = [
-      {
-        lessorId: vehicle.owner.ownerId,
-        lessorName: vehicle.owner.name,
-        lessorImage: vehicle.owner.picture,
-        vehicles: [
-          {
-            vehicleId: vehicle.id,
-            vehicleName: vehicle.specifications.modelName,
-            brand: vehicle.specifications.brandName,
-            color: vehicle.specifications.color,
-            price: vehicle.price.toString(),
-            licensePlate: vehicle.licensePlate,
-            image: vehicle.images[0].image!,
-            pickUpDateTime: "",
-            dropOffDateTime: "",
-            unavailableDates: [{ from: "", to: "" }],
-          },
-        ],
-      },
-    ];
-    debugger;
-    // dispatch(setSelectedVehicle(vehicleRent));
-    navigate("/check-out", { state: { vehicleCheckout: vehicleRent } });
+    // const vehicleRent: Shop[] = [
+    //   {
+    //     lessorId: vehicle.owner.ownerId,
+    //     lessorName: vehicle.owner.name,
+    //     lessorImage: vehicle.owner.picture,
+    //     vehicles: [
+    //       {
+    //         vehicleId: vehicle.id,
+    //         vehicleName: vehicle.specifications.modelName,
+    //         brand: vehicle.specifications.brandName,
+    //         color: vehicle.specifications.color,
+    //         price: vehicle.price.toString(),
+    //         licensePlate: vehicle.licensePlate,
+    //         image: vehicle.images[0].image!,
+    //         pickUpDateTime: "",
+    //         dropOffDateTime: "",
+    //         unavailableDates: [{ from: "", to: "" }],
+    //       },
+    //     ],
+    //   },
+    // ];
+    // debugger;
+    // // dispatch(setSelectedVehicle(vehicleRent));
+    // navigate("/check-out", { state: { vehicleCheckout: vehicleRent } });
   };
 
   if (loading) return <Loading />;
@@ -466,7 +466,7 @@ export default function ProductDetails() {
                 <div className="mt-2 md:mt-0 font-medium text-xs md:text-base">
                   Member since:
                   <span className="ml-1 text-orange-based">
-                    {ConvertDatetimeToDisplay(product.owner.createdDate)}
+                    {ConvertToDateStr(product.owner.createdDate)}
                   </span>
                 </div>
               </div>

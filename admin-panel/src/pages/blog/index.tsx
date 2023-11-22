@@ -13,7 +13,7 @@ import {
 import Pagination from "../../app/components/Pagination";
 import ConfirmDeleteDialog from "../../app/components/ConfirmDeleteDialog";
 import BlogForm from "./BlogForm";
-import { ConvertDatetimeToDisplay } from "../../app/utils/ConvertDatetimeToDate";
+import { ConvertToDateStr } from "../../app/utils/ConvertDatetimeToDate";
 
 export default function BlogPage() {
   const [pageNumber, setPageNumber] = useSearchParams({ pageNumber: "" });
@@ -199,7 +199,7 @@ export default function BlogPage() {
                         </td>
                         <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                           <h5 className="font-medium text-black dark:text-white">
-                            {ConvertDatetimeToDisplay(blog.createdAt)}
+                            {ConvertToDateStr(blog.createdAt)}
                           </h5>
                         </td>
 

@@ -15,7 +15,7 @@ import {
   vehiclePendingSelectors,
 } from "./VehiclePendingSlice";
 import LoaderButton from "../../app/components/LoaderButton";
-import { ConvertDatetimeToDisplay } from "../../app/utils/ConvertDatetimeToDate";
+import { ConvertToDateStr } from "../../app/utils/ConvertDatetimeToDate";
 import { Collection } from "../../app/models/Collection";
 import { useSearchParams } from "react-router-dom";
 import dataCityVN from "./../../app/data/dataCityVN.json";
@@ -690,9 +690,7 @@ export default function VehiclePending() {
                           </td>
                           <td className="py-5 px-4">
                             <p className="text-black dark:text-white">
-                              {ConvertDatetimeToDisplay(
-                                vehicle.insuranceExpiry
-                              )}
+                              {ConvertToDateStr(vehicle.insuranceExpiry)}
                             </p>
                           </td>
                           <td className="py-5 px-4">

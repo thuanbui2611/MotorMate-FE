@@ -16,6 +16,7 @@ export default function Payment() {
     (state) => state.checkout
   );
   const { userDetail, userLoading } = useAppSelector((state) => state.account);
+  const clientSecret = checkout?.clientSecret as string;
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -33,7 +34,7 @@ export default function Payment() {
     });
   };
   useEffect(() => {
-    if (!checkout && !checkoutLoaded) {
+    if (!checkout?.clientSecret && !checkoutLoaded) {
       toast.error("Something error, please try again");
       navigate("/my-cart");
       return;
@@ -41,7 +42,6 @@ export default function Payment() {
     scrollToTop();
   }, [checkoutLoaded]);
 
-  const clientSecret = checkout?.clientSecret as string;
   // const clientSecret =
   //   "pi_3ODpM3ETkkliUm4y0U7EopEX_secret_dUkN0suKBZzcR5gI9XG3OXIfN";
   const options: StripeElementsOptions = {

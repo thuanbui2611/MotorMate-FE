@@ -18,7 +18,7 @@ import LoaderButton from "../../app/components/LoaderButton";
 import AppTextInput from "../../app/components/AppTextInput";
 import { LoadingButton } from "@mui/lab";
 import { addProductAsync, updateProductAsync } from "./ProfileSlice";
-import { ConvertDatetimeToDisplay } from "../../app/utils/ConvertDatetimeToDate";
+import { ConvertToDateStr } from "../../app/utils/ConvertDatetimeToStr";
 interface Props {
   vehicle: Vehicle | null;
   userLoggedIn: UserDetail | null;
@@ -38,10 +38,10 @@ export default function VehicleForm({
   const {
     control,
     register,
-    setValue,
     reset,
     handleSubmit,
-    formState: { isSubmitting, errors },
+    setValue,
+    formState: { isSubmitting },
   } = useForm({
     mode: "all",
   });
@@ -90,10 +90,10 @@ export default function VehicleForm({
   useEffect(() => {
     if (vehicle) {
       const vehicleDetails = { ...vehicle };
-      vehicleDetails.insuranceExpiry = ConvertDatetimeToDisplay(
+      vehicleDetails.insuranceExpiry = ConvertToDateStr(
         vehicleDetails.insuranceExpiry
       );
-      vehicleDetails.purchaseDate = ConvertDatetimeToDisplay(
+      vehicleDetails.purchaseDate = ConvertToDateStr(
         vehicleDetails.purchaseDate
       );
       reset(vehicleDetails);
@@ -112,6 +112,10 @@ export default function VehicleForm({
       setImagesSelected(defaultImage);
       //set images from server for delete image in cloudinary
       setImagesFromServer(vehicle.images);
+      //set date
+      console.log("Date trans: ", formatDate(vehicleDetails.insuranceExpiry));
+      setValue("insuranceExpiry", formatDate(vehicleDetails.insuranceExpiry));
+      setValue("purchaseDate", formatDate(vehicleDetails.purchaseDate));
     }
   }, [vehicle, reset]);
 
@@ -282,45 +286,38 @@ export default function VehicleForm({
     newValue: Brand | null
   ) => {
     setSelectedBrand(newValue);
-    if (!newValue) {
-      setSelectedCollection(null);
-      setSelectedModel(null);
-      setSelectedColor(null);
-    }
     if (newValue?.collections) {
       setCollections(newValue.collections);
-      setSelectedCollection(null);
-      setSelectedModel(null);
-      setSelectedColor(null);
     }
+    setSelectedCollection(null);
+    setSelectedModel(null);
+    setSelectedColor(null);
   };
 
   const handleCollectionChange = async (
     event: React.SyntheticEvent<Element, Event>,
     newValue: Collection | null
   ) => {
-    if (!newValue) {
-      setSelectedModel(null);
-      setSelectedColor(null);
+    if (newValue) {
+      setLoadingFetchModel(true);
+      setSelectedCollection(newValue);
+      const model = await getModelsByCollection(newValue);
+      setModels(model);
+      setLoadingFetchModel(false);
     }
-    setLoadingFetchModel(true);
-    setSelectedCollection(newValue);
-    const model = await getModelsByCollection(newValue);
-    setModels(model);
-    setLoadingFetchModel(false);
+    setSelectedModel(null);
+    setSelectedColor(null);
   };
 
   const handleModelChange = (
     event: React.SyntheticEvent<Element, Event>,
     newValue: ModelVehicle | null
   ) => {
-    if (!newValue) {
-      setSelectedColor(null);
-    }
     setSelectedModel(newValue);
     if (newValue?.colors) {
       setColors(newValue.colors);
     }
+    setSelectedColor(null);
   };
 
   const handleColorChange = (
@@ -356,6 +353,7 @@ export default function VehicleForm({
         images: imagesRequest,
       };
       console.log("form data:", formData);
+      debugger;
 
       if (vehicle) {
         if (imagesFromServer) {
@@ -396,6 +394,13 @@ export default function VehicleForm({
       onClose();
     }
   };
+  const formatDate = (dateStr: string) => {
+    debugger;
+    const parts = dateStr.split("/");
+    const formattedDate = `${parts[2]}-${parts[1]}-${parts[0]}`;
+    return formattedDate;
+  };
+
   return (
     <>
       <div

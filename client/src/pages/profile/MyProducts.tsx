@@ -19,7 +19,7 @@ import VehicleForm from "./VehicleForm";
 import ConfirmDeleteDialog from "../../app/components/ConfirmDeleteDialog";
 import { deleteImages } from "../../app/utils/Cloudinary";
 import LoaderButton from "../../app/components/LoaderButton";
-import { ConvertDatetimeToDisplay } from "../../app/utils/ConvertDatetimeToDate";
+import { ConvertToDateStr } from "../../app/utils/ConvertDatetimeToStr";
 
 export default function MyProducts() {
   const [actionName, setActionName] = useState(String);
@@ -32,7 +32,6 @@ export default function MyProducts() {
   const { productOfUserLoaded, profileUserLoaded, profileUser } =
     useAppSelector((state) => state.profile);
   const userLogin = useAppSelector((state) => state.account.userDetail);
-  debugger;
   const myProducts = useAppSelector(profileSelectors.selectAll).filter(
     (p) => p.owner.username.toLowerCase() === userLogin?.username.toLowerCase()
   );
@@ -309,7 +308,7 @@ export default function MyProducts() {
                     </td>
                     <td className="py-5 px-4">
                       <p className="text-black font-normal">
-                        {ConvertDatetimeToDisplay(vehicle.insuranceExpiry)}
+                        {ConvertToDateStr(vehicle.insuranceExpiry)}
                       </p>
                     </td>
                     <td className="py-5 px-4">

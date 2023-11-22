@@ -18,8 +18,8 @@ export interface Vehicle {
   price: string;
   licensePlate: string;
   image: string;
-  pickUpDateTime: string;
-  dropOffDateTime: string;
+  pickUpDateTime: Date;
+  dropOffDateTime: Date;
   unavailableDates: UnavailableDates[];
 }
 export interface UnavailableDates {

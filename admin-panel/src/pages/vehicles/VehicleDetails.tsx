@@ -16,7 +16,7 @@ import agent from "../../app/api/agent";
 import { addVehicle, removeVehicle } from "./VehicleSlice";
 import { addVehicleDenied, removeVehicleDenied } from "./VehicleDeniedSlice";
 import { toast } from "react-toastify";
-import { ConvertDatetimeToDisplay } from "../../app/utils/ConvertDatetimeToDate";
+import { ConvertToDateStr } from "../../app/utils/ConvertDatetimeToDate";
 
 interface Props {
   vehicle: Vehicle | null;
@@ -223,7 +223,7 @@ export default function VehicleDetails({ vehicle, onClose }: Props) {
                               Purchase date:
                             </p>
                             <p className="ml-1 text-base leading-4 text-black break-all">
-                              {ConvertDatetimeToDisplay(vehicle!.purchaseDate)}
+                              {ConvertToDateStr(vehicle!.purchaseDate)}
                             </p>
                           </div>
                         </div>
@@ -256,9 +256,7 @@ export default function VehicleDetails({ vehicle, onClose }: Props) {
                                 Insurance expiration:
                               </p>
                               <p className="ml-1 text-base leading-4 text-black break-all">
-                                {ConvertDatetimeToDisplay(
-                                  vehicle!.insuranceExpiry
-                                )}
+                                {ConvertToDateStr(vehicle!.insuranceExpiry)}
                               </p>
                             </div>
                             <div className="flex justify-center items-center">

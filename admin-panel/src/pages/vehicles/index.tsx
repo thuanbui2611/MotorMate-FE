@@ -27,8 +27,7 @@ import { ModelVehicle } from "../../app/models/ModelVehicle";
 import LoaderButton from "../../app/components/LoaderButton";
 import dataCityVN from "./../../app/data/dataCityVN.json";
 import SelectPageSize from "../../app/components/SelectPageSize";
-import { ConvertDatetimeToDisplay } from "../../app/utils/ConvertDatetimeToDate";
-import { toast } from "react-toastify";
+import { ConvertToDateStr } from "../../app/utils/ConvertDatetimeToDate";
 
 export default function VehiclesPage() {
   const [searchParams, setSearchParams] = useSearchParams({});
@@ -59,7 +58,6 @@ export default function VehiclesPage() {
     useState(true);
   const [paramsCompleted, setParamsCompleted] = useState(false);
   //End of filter
-  const [isVehicleLocked, setIsVehicleLocked] = useState<boolean>();
 
   const vehicles = useAppSelector(vehicleSelectors.selectAll);
   const { vehicleLoaded, metaData, vehicleParams } = useAppSelector(
@@ -749,9 +747,7 @@ export default function VehiclesPage() {
 
                           <td className="py-5 px-4">
                             <p className="text-black dark:text-white">
-                              {ConvertDatetimeToDisplay(
-                                vehicle.insuranceExpiry
-                              )}
+                              {ConvertToDateStr(vehicle.insuranceExpiry)}
                             </p>
                           </td>
                           <td className="py-5 px-4">

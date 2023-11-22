@@ -4,7 +4,7 @@ import { blogSelectors, getBlogsAsync, setBlogParams } from "./BlogSlice";
 import { useEffect } from "react";
 import Loading from "../../app/components/Loading";
 import Pagination from "../../app/components/Pagination";
-import { ConvertDatetimeToDisplay } from "../../app/utils/ConvertDatetimeToDate";
+import { ConvertToDateStr } from "../../app/utils/ConvertDatetimeToStr";
 import { FieldValues, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import agent from "../../app/api/agent";

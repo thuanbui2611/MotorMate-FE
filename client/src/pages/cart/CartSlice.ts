@@ -21,25 +21,12 @@ export const getCartAsync = createAsyncThunk<Cart, string>(
       const response = await agent.Cart.getCartByUser(userId);
       response.shops.map((shop: Shop) => {
         shop.vehicles.map((vehicle: Vehicle) => {
-          debugger;
           if (vehicle.pickUpDateTime && vehicle.dropOffDateTime) {
-            debugger;
-            const startDateTime = new Date(vehicle.pickUpDateTime);
-            const endDateTime = new Date(vehicle.dropOffDateTime);
-            // const startDateTimeLocal = new Date(
-            //   startDateTime.getTime() -
-            //     startDateTime.getTimezoneOffset() * 60 * 1000
-            // );
-            // const endDateTimeLocal = new Date(
-            //   endDateTime.getTime() -
-            //     endDateTime.getTimezoneOffset() * 60 * 1000
-            // );
-            vehicle.pickUpDateTime = startDateTime.toString();
-            vehicle.dropOffDateTime = endDateTime.toString();
+            vehicle.pickUpDateTime = new Date(vehicle.pickUpDateTime);
+            vehicle.dropOffDateTime = new Date(vehicle.dropOffDateTime);
           }
         });
       });
-      debugger;
       return response;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -72,15 +59,8 @@ export const updateDateRentOfVehicleInCartAsync = createAsyncThunk<Cart, {}>(
       const response = await agent.Cart.updateDateRentOfVehicleInCart(data);
       response.shops.map((shop: Shop) => {
         shop.vehicles.map((vehicle: Vehicle) => {
-          const startDateTime = new Date(vehicle.pickUpDateTime);
-          const endDateTime = new Date(vehicle.dropOffDateTime);
-          vehicle.pickUpDateTime = new Date(
-            startDateTime.getTime() -
-              startDateTime.getTimezoneOffset() * 60 * 1000
-          ).toISOString();
-          vehicle.dropOffDateTime = new Date(
-            endDateTime.getTime() - endDateTime.getTimezoneOffset() * 60 * 1000
-          ).toISOString();
+          vehicle.pickUpDateTime = new Date(vehicle.pickUpDateTime);
+          vehicle.dropOffDateTime = new Date(vehicle.dropOffDateTime);
         });
       });
       return response;
@@ -227,6 +207,9 @@ export const CartSlice = createSlice({
       (state, action) => {
         state.cart = action.payload;
         toast.success("Update date rent success!");
+        if (state.selectedVehicles.length > 0) {
+          state.selectedVehicles = [];
+        }
       }
     );
     builder.addCase(

@@ -1,5 +1,5 @@
 //Also use for data request, be careful when edit return format
-export function ConvertDatetimeToDisplay(dateTime: string): string {
+export function ConvertToDateStr(dateTime: string): string {
   const date = new Date(dateTime);
   const year = date.getFullYear();
   const month = (date.getMonth() + 1).toString().padStart(2, "0");
@@ -8,7 +8,7 @@ export function ConvertDatetimeToDisplay(dateTime: string): string {
   return `${day}/${month}/${year}`;
 }
 
-export function ConvertToDateTimeDisplay(dateTimeString: string): string {
+export function ConvertToDateTimeStr(dateTimeString: string): string {
   const dateUTC = new Date(dateTimeString);
   const dateTimeLocales = new Date(
     dateUTC.getTime() - dateUTC.getTimezoneOffset() * 60 * 1000

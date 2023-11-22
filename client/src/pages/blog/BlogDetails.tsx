@@ -7,7 +7,7 @@ import Loading from "../../app/components/Loading";
 import parse from "html-react-parser";
 import NotFound from "../../app/errors/NotFound";
 import BlogComment from "./BlogComment";
-import { ConvertToDateTimeDisplay } from "../../app/utils/ConvertDatetimeToDate";
+import { ConvertToDateTimeStr } from "../../app/utils/ConvertDatetimeToStr";
 import BlogRelatedCarousel from "../../app/components/BlogRelatedCarousel";
 
 export default function BlogDetails() {
@@ -40,7 +40,7 @@ export default function BlogDetails() {
                 {blog?.category.name}
               </a>
               <p className="text-sm font-medium bg-gray-200 rounded-full py-1 px-2">
-                {ConvertToDateTimeDisplay(blog?.createdAt!)}
+                {ConvertToDateTimeStr(blog?.createdAt!)}
               </p>
             </div>
             <div className="mt-2 flex items-center justify-center">

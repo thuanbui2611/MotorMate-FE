@@ -23,6 +23,10 @@ function getAxiosParams(userParams: UserParams) {
   const params = new URLSearchParams();
   params.append("pageNumber", userParams.pageNumber.toString());
   params.append("pageSize", userParams.pageSize.toString());
+
+  if (userParams.Query) {
+    params.append("Query", userParams.Query);
+  }
   return params;
 }
 
@@ -83,6 +87,7 @@ function initParams() {
   return {
     pageNumber: 1,
     pageSize: 5,
+    Query: null,
   };
 }
 

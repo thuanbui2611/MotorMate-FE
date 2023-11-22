@@ -16,6 +16,7 @@ import { UserDetail } from "../../app/models/User";
 import UserDetails from "./UserDetails";
 import UserForm from "./UserForm";
 import { deleteImage } from "../../app/utils/Cloudinary";
+import Autocomplete from "@mui/material/Autocomplete";
 
 export default function UsersPage() {
   const [pageNumber, setPageNumber] = useSearchParams({ pageNumber: "" });
@@ -25,12 +26,28 @@ export default function UsersPage() {
   const [confirmDeleteDiaglog, setConfirmDeleteDiaglog] = useState(false);
   const [userDeleted, setUserDeleted] = useState<UserDetail>({} as UserDetail);
   const [openDetails, setOpenDetails] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams({});
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [paramsCompleted, setParamsCompleted] = useState(false);
 
   const users = useAppSelector(userSelectors.selectAll);
   const { userLoaded, metaData, userParams } = useAppSelector(
     (state) => state.user
   );
   const dispatch = useAppDispatch();
+
+  //Get params value from url
+  const searchQueryParam = searchParams.get("Query");
+
+  useEffect(() => {
+    if (searchQueryParam) {
+      const querySearch = searchQueryParam.trim();
+      setSearchQuery(querySearch);
+      dispatch(setUserParams({ Query: querySearch }));
+    } else {
+      dispatch(setUserParams({ Query: undefined }));
+    }
+  }, [searchQueryParam, dispatch]);
 
   //Pagination
   const pageNum = pageNumber.get("pageNumber");
@@ -89,6 +106,26 @@ export default function UsersPage() {
       dispatch(getUsersAsync());
     }
   }, [dispatch, userParams]);
+
+  const handleSearch = () => {
+    if (searchQuery) {
+      setSearchParams((prev) => {
+        prev.set("Query", searchQuery.trim());
+        return prev;
+      });
+    } else {
+      setSearchParams((prev) => {
+        prev.delete("Query");
+        return prev;
+      });
+    }
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      handleSearch();
+    }
+  };
   if (!metaData) {
     return <Loader />;
   } else
@@ -96,7 +133,7 @@ export default function UsersPage() {
       <>
         <Breadcrumb pageName="User" />
         <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
-          <div className="flex justify-end">
+          <div className="flex justify-start mb-3">
             {/* <button
               onClick={() => handleSelectUser("Add a new user")}
               type="button"
@@ -144,6 +181,65 @@ export default function UsersPage() {
               </svg>
               <span>Add new User</span>
             </button> */}
+            <div className="flex items-center ml-2 order-2 md:order-1">
+              <label htmlFor="simple-search" className="sr-only">
+                Search
+              </label>
+              <div className="w-full">
+                <input
+                  type="text"
+                  className="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="Search..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                />
+              </div>
+              <button
+                onClick={handleSearch}
+                className="p-2.5 ml-2 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              >
+                <svg
+                  className="w-4 h-4"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+                  />
+                </svg>
+                <span className="sr-only">Search</span>
+              </button>
+            </div>
+          </div>
+          <div className="flex overflow-auto scrollbar max-h-[333px] justify-center items-center">
+            <div className="flex flex-wrap space-x-2 space-y-2 justify-start items-center mb-2 w-full">
+              <div className="max-w-[25%] min-w-[220px] flex-1  ml-2 mt-2">
+                {/* Filter Roles */}
+                {/* <Autocomplete
+                    className="bg-white rounded-md"
+                    fullWidth={true}
+                    size="small"
+                    multiple={true}
+                    disablePortal
+                    // value={selectedCities}
+                    options={cities}
+                    getOptionLabel={(option) => option.Name}
+                    onChange={(event, newValue) =>
+                      handleSelectCityChange(event, newValue)
+                    }
+                    renderInput={(params) => (
+                      <TextField {...params} placeholder="Cities" />
+                    )}
+                  /> */}
+              </div>
+            </div>
           </div>
           <div className="max-w-full overflow-x-auto scrollbar">
             <table className="w-full table-auto">

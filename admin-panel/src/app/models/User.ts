@@ -30,4 +30,5 @@ export interface Image {
 export interface UserParams {
   pageNumber: number;
   pageSize: number;
+  Query: string | null;
 }
