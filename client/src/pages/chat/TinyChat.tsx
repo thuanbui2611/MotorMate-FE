@@ -723,7 +723,7 @@ export default function TinyChat() {
                                     id={"timeMessage" + chat.id}
                                     className="absolute rounded-lg px-1 py-[2px] font-normal top-1/2 transform -translate-y-1/2 -right-10 h-fit w-fit bg-gray-700 text-white opacity-75 text-sm hidden "
                                   >
-                                    {formatChatTimeOnHover(chat.time)}
+                                    {formatChatTimeOnHover(chat.time, true)}
                                   </div>
                                 </div>
                               </div>
@@ -750,7 +750,7 @@ export default function TinyChat() {
                                     id={"timeMessage" + chat.id}
                                     className="absolute rounded-lg px-1 py-[2px] font-normal top-1/2 transform -translate-y-1/2 -left-10 h-fit w-fit bg-gray-700 opacity-75 text-sm hidden "
                                   >
-                                    {formatChatTimeOnHover(chat.time)}
+                                    {formatChatTimeOnHover(chat.time, true)}
                                   </div>
                                 </div>
                                 <img

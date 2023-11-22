@@ -22,14 +22,21 @@ export const getCartAsync = createAsyncThunk<Cart, string>(
       response.shops.map((shop: Shop) => {
         shop.vehicles.map((vehicle: Vehicle) => {
           debugger;
-          if(vehicle.pickUpDateTime && vehicle.dropOffDateTime)
-          {
+          if (vehicle.pickUpDateTime && vehicle.dropOffDateTime) {
+            debugger;
             const startDateTime = new Date(vehicle.pickUpDateTime);
             const endDateTime = new Date(vehicle.dropOffDateTime);
-            vehicle.pickUpDateTime = startDateTime.toString()
-            vehicle.dropOffDateTime = endDateTime.toString()
+            // const startDateTimeLocal = new Date(
+            //   startDateTime.getTime() -
+            //     startDateTime.getTimezoneOffset() * 60 * 1000
+            // );
+            // const endDateTimeLocal = new Date(
+            //   endDateTime.getTime() -
+            //     endDateTime.getTimezoneOffset() * 60 * 1000
+            // );
+            vehicle.pickUpDateTime = startDateTime.toString();
+            vehicle.dropOffDateTime = endDateTime.toString();
           }
-         
         });
       });
       debugger;
@@ -67,10 +74,13 @@ export const updateDateRentOfVehicleInCartAsync = createAsyncThunk<Cart, {}>(
         shop.vehicles.map((vehicle: Vehicle) => {
           const startDateTime = new Date(vehicle.pickUpDateTime);
           const endDateTime = new Date(vehicle.dropOffDateTime);
-          vehicle.pickUpDateTime = new Date(startDateTime.getTime() -
-          startDateTime.getTimezoneOffset() * 60 * 1000).toISOString()
-          vehicle.dropOffDateTime = new Date(endDateTime.getTime() - 
-          endDateTime.getTimezoneOffset() * 60 * 1000).toISOString()
+          vehicle.pickUpDateTime = new Date(
+            startDateTime.getTime() -
+              startDateTime.getTimezoneOffset() * 60 * 1000
+          ).toISOString();
+          vehicle.dropOffDateTime = new Date(
+            endDateTime.getTime() - endDateTime.getTimezoneOffset() * 60 * 1000
+          ).toISOString();
         });
       });
       return response;

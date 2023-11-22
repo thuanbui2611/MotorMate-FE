@@ -32,20 +32,18 @@ export default function Payment() {
       behavior: "smooth",
     });
   };
-  // useEffect(() => {
-  //   if (!checkout && !checkoutLoaded) {
-  //     toast.error("Something error, please try again");
-  //     navigate("/my-cart");
-  //     return;
-  //   }
-  //   scrollToTop();
-  // }, [checkoutLoaded]);
+  useEffect(() => {
+    if (!checkout && !checkoutLoaded) {
+      toast.error("Something error, please try again");
+      navigate("/my-cart");
+      return;
+    }
+    scrollToTop();
+  }, [checkoutLoaded]);
 
-  const appearance = { theme: "stripe" };
-  const loader = "auto";
-  // const clientSecret = checkout?.clientSecret as string;
-  const clientSecret =
-    "pi_3ODpM3ETkkliUm4y0U7EopEX_secret_dUkN0suKBZzcR5gI9XG3OXIfN";
+  const clientSecret = checkout?.clientSecret as string;
+  // const clientSecret =
+  //   "pi_3ODpM3ETkkliUm4y0U7EopEX_secret_dUkN0suKBZzcR5gI9XG3OXIfN";
   const options: StripeElementsOptions = {
     clientSecret: clientSecret,
     appearance: {

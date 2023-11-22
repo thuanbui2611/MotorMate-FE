@@ -72,11 +72,15 @@ export function formatChatTime(dateTimeString: string) {
   }
 }
 
-export function formatChatTimeOnHover(dateTimeString: string): string {
+export function formatChatTimeOnHover(
+  dateTimeString: string,
+  isConvertToLocal?: boolean
+): string {
   const date = new Date(dateTimeString);
-  const localDate = new Date(
-    date.getTime() - date.getTimezoneOffset() * 60 * 1000
-  );
+  let localDate = date;
+  if (isConvertToLocal) {
+    localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60 * 1000);
+  }
 
   const currentDate = new Date();
   const isSameDay =

@@ -18,14 +18,13 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker, TimePicker } from "@mui/x-date-pickers";
 import { formatChatTimeOnHover } from "../../app/utils/formatChatTime";
+import { DateTimePicker } from "@mui/x-date-pickers";
 
 export default function Cart() {
   const [confirmDelete, setConfirmDelete] = useState<Boolean>(false);
   const [vehicleDeleted, setVehicleDeleted] = useState<Vehicle>({} as Vehicle);
   const [isEditDateRent, setIsEditDateRent] = useState<string>();
-  const [timeStart, setTimeStart] = useState<any>();
   const [startDate, setStartDate] = useState<any>();
-  const [timeEnd, setTimeEnd] = useState<any>();
   const [endDate, setEndDate] = useState<any>();
 
   const dispatch = useAppDispatch();
@@ -98,37 +97,21 @@ export default function Cart() {
     setIsEditDateRent(undefined);
 
     const dateFrom = new Date(startDate);
-    const timeFrom = new Date(timeStart);
     const dateTo = new Date(endDate);
-    const timeTo = new Date(timeEnd);
-    const dateTimeFrom = new Date(
-      dateFrom.getFullYear(),
-      dateFrom.getMonth(),
-      dateFrom.getDate(),
-      timeFrom.getHours(),
-      timeFrom.getMinutes()
-    );
-    const dateTimeTo = new Date(
-      dateTo.getFullYear(),
-      dateTo.getMonth(),
-      dateTo.getDate(),
-      timeTo.getHours(),
-      timeTo.getMinutes()
-    );
     //Convert local to UTC+0
     const dateTimeFromUTC = new Date(
-      dateTimeFrom.getTime() + dateTimeFrom.getTimezoneOffset() * 60 * 1000
+      dateFrom.getTime() + dateFrom.getTimezoneOffset() * 60 * 1000
     );
     const dateTimeToUTC = new Date(
-      dateTimeTo.getTime() + dateTimeTo.getTimezoneOffset() * 60 * 1000
+      dateTo.getTime() + dateTo.getTimezoneOffset() * 60 * 1000
     );
-    const test = dateTimeFromUTC.toISOString();
+    const test = dateTimeFromUTC.toISOString().slice(0, -5) + "Z";
     debugger;
     await dispatch(
       updateDateRentOfVehicleInCartAsync({
         userId: userDetail?.id,
         vehicleId: vehicleId,
-        pickUpDateTime: dateTimeFromUTC.toISOString(),
+        pickUpDateTime: dateTimeFromUTC.toISOString(), // Remove last 5 characters (milliseconds) and append "Z"
         DropOffDateTime: dateTimeToUTC.toISOString(),
       })
     );
@@ -136,16 +119,19 @@ export default function Cart() {
 
   const shouldDisableDateStart = (date: any, vehicle: Vehicle) => {
     const dateOption = new Date(date);
-    const dateOnly = new Date(
+    const dateFromOption = new Date(
       dateOption.getFullYear(),
       dateOption.getMonth(),
       dateOption.getDate()
     );
+    if (dateFromOption < new Date()) return true;
     const disabledDateTimeLocal = getDisabledDateTimeLocal(vehicle);
     let check: boolean = false;
-
-    for (const date of disabledDateTimeLocal) {
-      if (dateOnly >= date.from && dateOnly <= date.to) {
+    for (const dateDisabled of disabledDateTimeLocal) {
+      if (
+        dateFromOption >= dateDisabled.from &&
+        dateFromOption <= dateDisabled.to
+      ) {
         check = true;
         break;
       }
@@ -153,6 +139,103 @@ export default function Cart() {
     return check;
   };
 
+  const getDisabledDateTimeLocal = (
+    vehicle: Vehicle
+  ): { from: Date; to: Date }[] => {
+    return vehicle.unavailableDates.map((date) => {
+      const fromUTC = new Date(date.from);
+      const toUTC = new Date(date.to);
+      // console.log(fromUTC);
+      // console.log(toUTC);
+
+      // const fromUTCOnlyDate = new Date(
+      //   fromUTC.getFullYear(),
+      //   fromUTC.getMonth(),
+      //   fromUTC.getDate()
+      // );
+      // const toUTCOnlyDate = new Date(
+      //   toUTC.getFullYear(),
+      //   toUTC.getMonth(),
+      //   toUTC.getDate()
+      // );
+      // //Convert +0 -> local
+      // const fromLocal = new Date(
+      //   fromUTCOnlyDate.getTime() -
+      //     fromUTCOnlyDate.getTimezoneOffset() * 60 * 1000
+      // );
+      // const toLocal = new Date(
+      //   toUTCOnlyDate.getTime() - toUTCOnlyDate.getTimezoneOffset() * 60 * 1000
+      // );
+      // return {
+      //   from: fromLocal,
+      //   to: toLocal,
+      // };
+      return {
+        from: new Date(
+          fromUTC.getFullYear(),
+          fromUTC.getMonth(),
+          fromUTC.getDate()
+        ),
+        to: new Date(toUTC.getFullYear(), toUTC.getMonth(), toUTC.getDate()),
+      };
+    });
+  };
+
+  //Test
+
+  function getDates(startDate: Date, stopDate: Date) {
+    let dateArray = new Array();
+    let currentDate = startDate;
+    while (currentDate <= stopDate) {
+      dateArray.push(new Date(currentDate));
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+    return dateArray;
+  }
+
+  function getArrDateBasedOnStartDateAndDates(
+    startDate: Date,
+    unavailableDates: { from: Date; to: Date }[]
+  ) {
+    // Sort array
+    const unavailableDateTimes = unavailableDates.map((date) => {
+      return {
+        from: new Date(date.from),
+        to: new Date(date.to),
+      };
+    });
+    unavailableDateTimes.sort(function (a, b) {
+      return a.from.getTime() - b.from.getTime();
+    });
+
+    // First and last item in array
+    const firstArrItem = unavailableDateTimes[0];
+    const lastArrItem = unavailableDateTimes[unavailableDateTimes.length - 1];
+
+    // Calculate
+    if (startDate < firstArrItem.from) {
+      const dateAvailableArr: Date[] = getDates(startDate, firstArrItem.from);
+      return dateAvailableArr;
+    } else if (startDate > lastArrItem.to) {
+      console.log("From StartDate -> Future");
+      return null;
+    } else {
+      for (let index = 0; index <= unavailableDateTimes.length - 1; index++) {
+        if (
+          startDate < unavailableDateTimes[index].from &&
+          startDate > unavailableDateTimes[index - 1].to
+        ) {
+          const dateAvailableArr: Date[] = getDates(
+            startDate,
+            unavailableDateTimes[index++].from
+          );
+          return dateAvailableArr;
+        }
+      }
+    }
+  }
+
+  //Test
   const shouldDisableDateEnd = (date: any, vehicle: Vehicle) => {
     const dateOption = new Date(date);
     const dateFrom = new Date(startDate);
@@ -167,46 +250,23 @@ export default function Cart() {
       dateFrom.getDate()
     );
     if (dateFromOption <= dateStart) return true;
+
+    let isDisabled: boolean = true;
     const disabledDateTimeLocal = getDisabledDateTimeLocal(vehicle);
-    let disableDateFrom = disabledDateTimeLocal[0].from;
-    for (const date of disabledDateTimeLocal) {
-      if (date.from <= disableDateFrom) {
-        disableDateFrom = date.from;
-      }
+
+    const listDateAvailable = getArrDateBasedOnStartDateAndDates(
+      dateFrom,
+      disabledDateTimeLocal
+    );
+    //Mai debugger.
+    if (listDateAvailable) {
+      isDisabled = listDateAvailable.some(
+        (dateAvailable) =>
+          dateAvailable.toDateString() !== dateFromOption.toDateString()
+      );
     }
-    return dateFromOption >= disableDateFrom;
+    return isDisabled;
   };
-
-  const getDisabledDateTimeLocal = (vehicle: Vehicle) => {
-    return vehicle.unavailableDates.map((date) => {
-      const fromUTC = new Date(date.from);
-      const toUTC = new Date(date.to);
-
-      const fromUTCOnlyDate = new Date(
-        fromUTC.getFullYear(),
-        fromUTC.getMonth(),
-        fromUTC.getDate()
-      );
-      const toUTCOnlyDate = new Date(
-        toUTC.getFullYear(),
-        toUTC.getMonth(),
-        toUTC.getDate()
-      );
-      //Convert +0 -> local
-      const fromLocal = new Date(
-        fromUTCOnlyDate.getTime() -
-          fromUTCOnlyDate.getTimezoneOffset() * 60 * 1000
-      );
-      const toLocal = new Date(
-        toUTCOnlyDate.getTime() - toUTCOnlyDate.getTimezoneOffset() * 60 * 1000
-      );
-      return {
-        from: fromLocal,
-        to: toLocal,
-      };
-    });
-  };
-
   return cartLoading || userLoading ? (
     <Loading />
   ) : (
@@ -352,28 +412,40 @@ export default function Cart() {
                                   <LocalizationProvider
                                     dateAdapter={AdapterDayjs}
                                   >
-                                    <div className="flex items-center justify-center">
+                                    <div className="flex flex-col items-center justify-center">
                                       <div className="flex flex-col items-center justify-center gap-4 text-center">
                                         {isEditDateRent ===
                                         vehicle.vehicleId ? (
                                           <>
-                                            <DatePicker
+                                            <DateTimePicker
                                               label="Start Date"
                                               sx={{
                                                 "& .MuiOutlinedInput-input": {
                                                   padding: 1,
-                                                  width: "80px",
+                                                  width: "115px",
                                                   fontSize: "14px",
+                                                  paddingRight: "0px",
+                                                },
+                                                "& .MuiInputBase-root": {
+                                                  paddingRight: "0px",
                                                 },
                                                 "& .MuiFormLabel-root": {
-                                                  top: "-6px",
+                                                  top: "-8px",
                                                   fontSize: "14px",
                                                 },
+                                                "& .MuiIconButton-root": {
+                                                  position: "relative",
+                                                  right: "10px",
+                                                  ":hover": {
+                                                    backgroundColor:
+                                                      "rgba(9, 53, 227, 0.3)",
+                                                  },
+                                                },
                                               }}
+                                              format="HH:mm, DD/MM/YYYY"
                                               onChange={(date: any) =>
                                                 setStartDate(date)
                                               }
-                                              format="DD/MM/YYYY"
                                               shouldDisableDate={(date: any) =>
                                                 shouldDisableDateStart(
                                                   date,
@@ -381,34 +453,10 @@ export default function Cart() {
                                                 )
                                               }
                                             />
-                                            <TimePicker
-                                              label="Start Time"
-                                              sx={{
-                                                "& .MuiOutlinedInput-input": {
-                                                  padding: 1,
-                                                  width: "80px",
-                                                  fontSize: "14px",
-                                                },
-                                                "& .MuiFormLabel-root": {
-                                                  top: "-6px",
-                                                  fontSize: "14px",
-                                                },
-                                              }}
-                                              onChange={(time: any) =>
-                                                setTimeStart(time)
-                                              }
-                                              defaultValue={
-                                                vehicle.pickUpDateTime
-                                                  ? new Date(
-                                                      vehicle.pickUpDateTime
-                                                    )
-                                                  : undefined
-                                              }
-                                            />
                                           </>
                                         ) : (
-                                          <span className="mr-2">
-                                            {vehicle.pickUpDateTime
+                                          <span>
+                                            {vehicle.pickUpDateTime !== null
                                               ? formatChatTimeOnHover(
                                                   vehicle.pickUpDateTime.toString()
                                                 )
@@ -422,7 +470,7 @@ export default function Cart() {
                                         {isEditDateRent !==
                                         vehicle.vehicleId ? (
                                           <div
-                                            className="text-xs font-semibold bg-blue-500 cursor-pointer text-white absolute -bottom-9 rounded-full p-1 w-[70px] text-center hover:brightness-90"
+                                            className=" font-semibold bg-blue-500 cursor-pointer text-white absolute -bottom-11 rounded-full p-1 w-[70px] text-center hover:brightness-90"
                                             onClick={() =>
                                               handleOpenEditDateRent(vehicle)
                                             }
@@ -500,20 +548,32 @@ export default function Cart() {
                                         {isEditDateRent ===
                                         vehicle.vehicleId ? (
                                           <>
-                                            <DatePicker
+                                            <DateTimePicker
                                               label="End Date"
-                                              format="DD/MM/YYYY"
                                               sx={{
                                                 "& .MuiOutlinedInput-input": {
                                                   padding: 1,
-                                                  width: "80px",
+                                                  width: "115px",
                                                   fontSize: "14px",
+                                                  paddingRight: "0px",
+                                                },
+                                                "& .MuiInputBase-root": {
+                                                  paddingRight: "0px",
                                                 },
                                                 "& .MuiFormLabel-root": {
-                                                  top: "-6px",
+                                                  top: "-8px",
                                                   fontSize: "14px",
                                                 },
+                                                "& .MuiIconButton-root": {
+                                                  position: "relative",
+                                                  right: "10px",
+                                                  ":hover": {
+                                                    backgroundColor:
+                                                      "rgba(9, 53, 227, 0.3)",
+                                                  },
+                                                },
                                               }}
+                                              format="HH:mm, DD/MM/YYYY"
                                               disabled={
                                                 startDate ? false : true
                                               }
@@ -526,28 +586,18 @@ export default function Cart() {
                                               onChange={(date: any) =>
                                                 setEndDate(date)
                                               }
-                                            />
-                                            <TimePicker
-                                              label="End Time"
-                                              sx={{
-                                                "& .MuiOutlinedInput-input": {
-                                                  padding: 1,
-                                                  width: "80px",
-                                                  fontSize: "14px",
-                                                },
-                                                "& .MuiFormLabel-root": {
-                                                  top: "-6px",
-                                                  fontSize: "14px",
-                                                },
-                                              }}
-                                              onChange={(time: any) =>
-                                                setTimeEnd(time)
-                                              }
+                                              // defaultValue={
+                                              //   vehicle.dropOffDateTime
+                                              //     ? new Date(
+                                              //         vehicle.dropOffDateTime
+                                              //       )
+                                              //     : undefined
+                                              // }
                                             />
                                           </>
                                         ) : (
-                                          <span className="ml-2">
-                                            {vehicle.pickUpDateTime
+                                          <span>
+                                            {vehicle.pickUpDateTime !== null
                                               ? formatChatTimeOnHover(
                                                   vehicle.dropOffDateTime
                                                 )
