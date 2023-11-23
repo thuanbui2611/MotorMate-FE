@@ -12,11 +12,13 @@ import {
   setUserParams,
   userSelectors,
 } from "./UserSlice";
-import { UserDetail } from "../../app/models/User";
+import { Role, UserDetail } from "../../app/models/User";
 import UserDetails from "./UserDetails";
 import UserForm from "./UserForm";
 import { deleteImage } from "../../app/utils/Cloudinary";
 import Autocomplete from "@mui/material/Autocomplete";
+import agent from "../../app/api/agent";
+import { TextField } from "@mui/material";
 
 export default function UsersPage() {
   const [pageNumber, setPageNumber] = useSearchParams({ pageNumber: "" });
@@ -29,7 +31,9 @@ export default function UsersPage() {
   const [searchParams, setSearchParams] = useSearchParams({});
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [paramsCompleted, setParamsCompleted] = useState(false);
-
+  const [roles, setRoles] = useState<Role[]>([]);
+  const [selectedRoles, setSelectedRoles] = useState<Role[]>([]);
+  const [isStartFilter, setIsStartFilter] = useState(false);
   const users = useAppSelector(userSelectors.selectAll);
   const { userLoaded, metaData, userParams } = useAppSelector(
     (state) => state.user
@@ -37,8 +41,11 @@ export default function UsersPage() {
   const dispatch = useAppDispatch();
 
   //Get params value from url
+  const pageNum = pageNumber.get("pageNumber");
   const searchQueryParam = searchParams.get("Query");
+  const rolesParam = searchParams.get("Roles");
 
+  //search
   useEffect(() => {
     if (searchQueryParam) {
       const querySearch = searchQueryParam.trim();
@@ -49,8 +56,56 @@ export default function UsersPage() {
     }
   }, [searchQueryParam, dispatch]);
 
+  //Starting filter
+  useEffect(() => {
+    if (!isStartFilter) {
+      if (pageNum || searchQueryParam || rolesParam) {
+        setIsStartFilter(true);
+      }
+    }
+  }, [userParams, pageNum]);
+
+  //Roles filter
+  useEffect(() => {
+    if (roles.length > 0) {
+      debugger;
+      if (rolesParam !== "") {
+        if (rolesParam) {
+          debugger;
+          const rolesFiltered = rolesParam.split("%2C");
+          const rolesSelected = roles.filter((role) =>
+            rolesFiltered.includes(role.name)
+          );
+          setSelectedRoles(rolesSelected);
+          dispatch(setUserParams({ Roles: rolesFiltered }));
+        } else {
+          debugger;
+          // dispatch(setUserParams({ Roles: [] }));
+          if (userParams.Roles && userParams.Roles.length > 0) {
+            const rolesSelected = roles.filter((role) =>
+              userParams.Roles?.includes(role.name)
+            );
+            setSelectedRoles(rolesSelected);
+          } else {
+            setSelectedRoles([]);
+          }
+        }
+      } else {
+        setSearchParams((prev) => {
+          prev.delete("Roles");
+          return prev;
+        });
+      }
+    } else
+      switch (true) {
+        case roles === null || typeof roles === "undefined":
+          console.log("roles is null or undefined");
+          break;
+        default:
+      }
+  }, [roles, rolesParam]);
   //Pagination
-  const pageNum = pageNumber.get("pageNumber");
+
   useEffect(() => {
     if (!pageNum || pageNum === "1") {
       setPageNumber((prev) => {
@@ -63,6 +118,16 @@ export default function UsersPage() {
     }
   }, [pageNum, dispatch]);
   //
+  //fetch role for select and filter
+  useEffect(() => {
+    try {
+      agent.User.getAllRole().then((response) => {
+        setRoles(response);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
 
   const handleSelectUser = (actionName: string, user?: UserDetail) => {
     setOpenEditForm((cur) => !cur);
@@ -95,17 +160,50 @@ export default function UsersPage() {
     setConfirmDeleteDiaglog((cur) => !cur);
     setUserDeleted(user);
   };
+
   const cancelDetailsDialog = () => {
     setSelectedUser(null);
     setOpenDetails((cur) => !cur);
   };
+
   const cancelConfirmDeleteDiaglog = () => setConfirmDeleteDiaglog(false);
+
+  const handleChangeRolesFilter = (
+    event: React.SyntheticEvent<Element, Event>,
+    newValue: Role[]
+  ) => {
+    debugger;
+    if (newValue.length > 0) {
+      const rolesFiltered = newValue?.map((role) => role.name);
+      if (searchParams.get("Roles")) {
+        setSearchParams((prev) => {
+          prev.set("Roles", rolesFiltered?.join("%2C") || "");
+          return prev;
+        });
+      } else {
+        setSearchParams((prev) => {
+          prev.append("Roles", rolesFiltered?.join("%2C") || "");
+          return prev;
+        });
+      }
+    } else {
+      setSearchParams((prev) => {
+        prev.delete("Roles");
+        return prev;
+      });
+      dispatch(setUserParams({ Roles: [] }));
+      setSelectedRoles([]);
+      setIsStartFilter(true);
+    }
+  };
 
   useEffect(() => {
     if (!userLoaded) {
-      dispatch(getUsersAsync());
+      if (isStartFilter || users.length === 0) {
+        dispatch(getUsersAsync());
+      }
     }
-  }, [dispatch, userParams]);
+  }, [dispatch, userParams, isStartFilter]);
 
   const handleSearch = () => {
     if (searchQuery) {
@@ -220,24 +318,24 @@ export default function UsersPage() {
           </div>
           <div className="flex overflow-auto scrollbar max-h-[333px] justify-center items-center">
             <div className="flex flex-wrap space-x-2 space-y-2 justify-start items-center mb-2 w-full">
-              <div className="max-w-[25%] min-w-[220px] flex-1  ml-2 mt-2">
+              <div className="max-w-[20%] min-w-[200px] flex-1 ml-2 mt-2">
                 {/* Filter Roles */}
-                {/* <Autocomplete
-                    className="bg-white rounded-md"
-                    fullWidth={true}
-                    size="small"
-                    multiple={true}
-                    disablePortal
-                    // value={selectedCities}
-                    options={cities}
-                    getOptionLabel={(option) => option.Name}
-                    onChange={(event, newValue) =>
-                      handleSelectCityChange(event, newValue)
-                    }
-                    renderInput={(params) => (
-                      <TextField {...params} placeholder="Cities" />
-                    )}
-                  /> */}
+                <Autocomplete
+                  className="bg-white rounded-md"
+                  fullWidth={true}
+                  size="small"
+                  multiple={true}
+                  disablePortal
+                  value={selectedRoles}
+                  options={roles}
+                  getOptionLabel={(option) => option.name}
+                  onChange={(event, newValue) =>
+                    handleChangeRolesFilter(event, newValue)
+                  }
+                  renderInput={(params) => (
+                    <TextField {...params} placeholder="Filter by Roles" />
+                  )}
+                />
               </div>
             </div>
           </div>

@@ -190,7 +190,7 @@ export default function VehiclesPage() {
         dispatch(setVehicleParams({ Cities: [] }));
       }
       setParamsCompleted(true);
-    } else
+    } else {
       switch (true) {
         case models === null || typeof models === "undefined":
           console.log("models is null or undefined");
@@ -210,6 +210,7 @@ export default function VehiclesPage() {
           break;
         default:
       }
+    }
   }, [
     modelsParam,
     models,
@@ -223,13 +224,14 @@ export default function VehiclesPage() {
   // End of Get valueFilter from url params, then set selected filterValue and request (dispatch).
 
   useEffect(() => {
-    if (!pageNum || pageNum === "1") {
+    if (pageNum === "1") {
       setSearchParams((prev) => {
         prev.delete("pageNumber");
         return prev;
       });
+      debugger;
       dispatch(setVehicleParams({ pageNumber: 1 }));
-    } else {
+    } else if (pageNum) {
       dispatch(setVehicleParams({ pageNumber: +pageNum }));
     }
   }, [pageNum, dispatch]);
@@ -241,6 +243,7 @@ export default function VehiclesPage() {
       setSearchQuery(querySearch);
       dispatch(setVehicleParams({ Search: querySearch }));
     } else {
+      debugger;
       dispatch(setVehicleParams({ Search: undefined }));
     }
   }, [searchQueryParam, dispatch]);
@@ -675,7 +678,7 @@ export default function VehiclesPage() {
                                   alt="Vehicle image"
                                 />
                               </div>
-                              <div className="ml-3 flex flex-col">
+                              <div className="ml-3 flex flex-1 flex-col">
                                 <div className="flex">
                                   <h5 className="font-medium text-black dark:text-white">
                                     {vehicle.specifications.modelName}

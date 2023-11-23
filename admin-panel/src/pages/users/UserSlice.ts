@@ -24,6 +24,12 @@ function getAxiosParams(userParams: UserParams) {
   params.append("pageNumber", userParams.pageNumber.toString());
   params.append("pageSize", userParams.pageSize.toString());
 
+  if (userParams.Roles !== undefined && userParams.Roles.length > 0) {
+    debugger;
+    userParams.Roles!.forEach((role) => {
+      params.append("Roles", role);
+    });
+  }
   if (userParams.Query) {
     params.append("Query", userParams.Query);
   }
@@ -37,6 +43,7 @@ export const getUsersAsync = createAsyncThunk<
 >("user/getUsersAsync", async (_, ThunkAPI) => {
   const params = getAxiosParams(ThunkAPI.getState().user.userParams);
   try {
+    debugger;
     const response = await agent.User.list(params);
     ThunkAPI.dispatch(setMetaData(response.metaData));
     return response.items;
@@ -62,6 +69,18 @@ export const updateUserAsync = createAsyncThunk<UserDetail, FieldValues>(
   async (data, ThunkAPI) => {
     try {
       const response = await agent.User.update(data.username, data);
+      return response;
+    } catch (error: any) {
+      return ThunkAPI.rejectWithValue({ error: error.data });
+    }
+  }
+);
+
+export const updateRoleOfUserAsync = createAsyncThunk<UserDetail, {}>(
+  "user/updateRoleOfUserAsync",
+  async (data, ThunkAPI) => {
+    try {
+      const response = await agent.User.updateRole(data);
       return response;
     } catch (error: any) {
       return ThunkAPI.rejectWithValue({ error: error.data });
@@ -139,7 +158,18 @@ export const UserSlice = createSlice({
       toast.success("Update user successfully!");
       usersAdapter.upsertOne(state, action.payload);
     });
-
+    builder.addCase(updateUserAsync.rejected, (state, action) => {
+      toast.error("Update user failed!");
+      console.log("Update user failed: ", action);
+    });
+    builder.addCase(updateRoleOfUserAsync.rejected, (state, action) => {
+      toast.error("Update Role for User failed!");
+      console.log("Update Role for User failed: ", action);
+    });
+    builder.addCase(updateRoleOfUserAsync.fulfilled, (state, action) => {
+      toast.success("Update user successfully!");
+      usersAdapter.upsertOne(state, action.payload);
+    });
     builder.addCase(deleteUserAsync.fulfilled, (state, action) => {
       usersAdapter.removeOne(state, action.payload);
     });

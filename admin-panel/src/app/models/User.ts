@@ -31,4 +31,10 @@ export interface UserParams {
   pageNumber: number;
   pageSize: number;
   Query: string | null;
+  Roles?: string[];
+}
+
+export interface Role {
+  id: string;
+  name: string;
 }

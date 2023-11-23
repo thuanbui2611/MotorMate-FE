@@ -28,7 +28,7 @@ export default function BrandPage() {
   const [selectedBrand, setSelectedBrand] = useState<Brand | null>(null);
   const [confirmDeleteDiaglog, setConfirmDeleteDiaglog] = useState(false);
   const [brandDeleted, setBrandDeleted] = useState<Brand>({} as Brand);
-
+  const [isStartFilter, setIsStartFilter] = useState(false);
   const brands = useAppSelector(brandSelectors.selectAll);
   const { brandLoaded, metaData, brandParams } = useAppSelector(
     (state) => state.brand
@@ -37,16 +37,27 @@ export default function BrandPage() {
 
   const pageNum = pageNumber.get("pageNumber");
   useEffect(() => {
-    if (!pageNum || pageNum === "1") {
+    debugger;
+    if (pageNum === "1") {
       setPageNumber((prev) => {
         prev.delete("pageNumber");
         return prev;
       });
       dispatch(setBrandParams({ pageNumber: 1 }));
-    } else {
+    } else if (pageNum) {
       dispatch(setBrandParams({ pageNumber: +pageNum }));
     }
   }, [pageNum, dispatch]);
+
+  //Starting filter
+  useEffect(() => {
+    debugger;
+    if (!isStartFilter) {
+      if (pageNum) {
+        setIsStartFilter(true);
+      }
+    }
+  }, [brandParams, pageNum]);
 
   const handleSelectBrand = (actionName: string, brand?: Brand) => {
     setOpenEditForm((cur) => !cur);
@@ -78,9 +89,12 @@ export default function BrandPage() {
 
   useEffect(() => {
     if (!brandLoaded) {
-      dispatch(getBrandsAsync());
+      debugger;
+      if (isStartFilter || brands.length === 0) {
+        dispatch(getBrandsAsync());
+      }
     }
-  }, [dispatch, brandParams]);
+  }, [dispatch, brandParams, isStartFilter]);
 
   if (!metaData) {
     return <Loader />;

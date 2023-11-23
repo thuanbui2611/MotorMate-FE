@@ -142,8 +142,10 @@ const User = {
   all: () => requests.get("api/user/all"),
   list: (params: URLSearchParams) => requests.get("api/user", params),
   details: (username: string) => requests.get(`api/user/${username}/details`),
+  getAllRole: () => requests.get("api/user/role/all"),
   update: (username: string, values: {}) =>
     requests.put(`api/user/${username}`, values),
+  updateRole: (values: {}) => requests.put(`api/user/role`, values),
   delete: (username: string) => requests.delete(`api/user/${username}`),
 };
 

@@ -171,13 +171,13 @@ export const VehicleSlice = createSlice({
         id: vehicle.id,
         changes: { isLocked: !vehicle.isLocked },
       });
-      
+
       if (vehicle.isLocked) {
         toast.success("Unlock vehicle successfully!");
       } else {
         toast.success("Lock vehicle successfully!");
       }
-    }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -234,5 +234,5 @@ export const {
   setPageNumber,
   addVehicle,
   removeVehicle,
-  updateIsLockVehicle
+  updateIsLockVehicle,
 } = VehicleSlice.actions;
