@@ -9,7 +9,9 @@ import { useSearchParams } from "react-router-dom";
 import {
   deleteUserAsync,
   getUsersAsync,
+  setStatusUser,
   setUserParams,
+  updateIsLockOfUserAsync,
   userSelectors,
 } from "./UserSlice";
 import { Role, UserDetail } from "../../app/models/User";
@@ -224,6 +226,18 @@ export default function UsersPage() {
       handleSearch();
     }
   };
+
+  const handleLockUser = async (user: UserDetail) => {
+    dispatch(setStatusUser(user.id));
+    await dispatch(updateIsLockOfUserAsync(user.id));
+  };
+  const handleEditRole = (actionName: string, user?: UserDetail) => {
+    setOpenEditForm((cur) => !cur);
+    if (user) {
+      setSelectedUser(user);
+    }
+    setActionName(actionName);
+  };
   if (!metaData) {
     return <Loader />;
   } else
@@ -384,10 +398,75 @@ export default function UsersPage() {
                               />
                             </div>
                             <div className="ml-3 flex flex-col flex-1">
-                              <h5 className="font-medium text-black dark:text-white line-clamp-2">
+                              <h5 className="font-semibold text-black dark:text-white line-clamp-2">
                                 {user.fullName}
                               </h5>
-                              <p className="text-sm">{user.roles[0]}</p>
+                              <div className="flex items-center justify-start gap-1">
+                                <p
+                                  className={`text-sm font-semibold ${
+                                    user.roles[0].toLowerCase() === "admin"
+                                      ? "text-gradient"
+                                      : user.roles[0].toLowerCase() === "staff"
+                                      ? "text-blue-500"
+                                      : user.roles[0].toLowerCase() === "lessor"
+                                      ? "text-green-500"
+                                      : " text-blue-gray-800"
+                                  } `}
+                                >
+                                  {user.roles[0]}
+                                </p>
+                                <div
+                                  className=" cursor-pointer hover:text-primary hover:bg-primary/30 rounded-full "
+                                  onClick={() =>
+                                    handleEditRole(`Update User`, user)
+                                  }
+                                >
+                                  <svg
+                                    className="fill-current"
+                                    width="14px"
+                                    height="14px"
+                                    viewBox="0 -0.5 21 21"
+                                    version="1.1"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    xmlnsXlink="http://www.w3.org/1999/xlink"
+                                    fill="none"
+                                  >
+                                    <g
+                                      id="SVGRepo_bgCarrier"
+                                      strokeWidth="0"
+                                    ></g>
+                                    <g
+                                      id="SVGRepo_tracerCarrier"
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                    ></g>
+                                    <g id="SVGRepo_iconCarrier">
+                                      <defs> </defs>
+                                      <g
+                                        id="Page-1"
+                                        fill="none"
+                                        fillRule="evenodd"
+                                      >
+                                        <g
+                                          id="Dribbble-Light-Preview"
+                                          transform="translate(-339.000000, -360.000000)"
+                                          fill="#000000"
+                                        >
+                                          <g
+                                            id="icons"
+                                            transform="translate(56.000000, 160.000000)"
+                                          >
+                                            <path
+                                              d="M283,220 L303.616532,220 L303.616532,218.042095 L283,218.042095 L283,220 Z M290.215786,213.147332 L290.215786,210.51395 L296.094591,205.344102 L298.146966,207.493882 L292.903151,213.147332 L290.215786,213.147332 Z M299.244797,202.64513 L301.059052,204.363191 L299.645788,205.787567 L297.756283,203.993147 L299.244797,202.64513 Z M304,204.64513 L299.132437,200 L288.154133,209.687714 L288.154133,215.105237 L293.78657,215.105237 L304,204.64513 Z"
+                                              className="fill-current"
+                                            ></path>
+                                          </g>
+                                        </g>
+                                      </g>
+                                    </g>
+                                  </svg>
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </td>
@@ -409,9 +488,30 @@ export default function UsersPage() {
                         </td>
 
                         <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                          <p className="inline-flex rounded-full bg-success bg-opacity-10 py-1 px-3 text-sm font-medium text-success">
-                            Enable
-                          </p>
+                          <div className="flex">
+                            <label className="relative inline-flex items-center cursor-pointer">
+                              <input
+                                type="checkbox"
+                                className="sr-only peer"
+                                checked={user.islocked}
+                                onChange={() => handleLockUser(user)}
+                              />
+                              <div className="w-11 h-6 bg-success rounded-full   dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-blue-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-blue-gray-600 peer-checked:bg-danger"></div>
+
+                              <>
+                                <span
+                                  className={`ml-1 text-sm rounded-full px-1 font-semibold bg-opacity-10 text-black 
+                                  ${
+                                    user.islocked
+                                      ? "bg-danger text-meta-1"
+                                      : "bg-success text-meta-3"
+                                  }`}
+                                >
+                                  {user.islocked ? "Locked" : "Active"}
+                                </span>
+                              </>
+                            </label>
+                          </div>
                         </td>
                         <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                           <div className="flex items-center space-x-3.5">

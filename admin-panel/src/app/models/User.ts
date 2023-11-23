@@ -19,6 +19,7 @@ export interface UserDetail {
   phoneNumber: string;
   dateOfBirth: string;
   createdDate: string;
+  islocked: boolean,
   roles: string[];
 }
 

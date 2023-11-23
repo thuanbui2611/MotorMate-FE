@@ -9,13 +9,16 @@ import {
 } from "@material-tailwind/react";
 import AppTextInput from "../../app/components/AppTextInput";
 import { LoadingButton } from "@mui/lab";
-import { UserDetail } from "../../app/models/User";
+import { Role, UserDetail } from "../../app/models/User";
 import { FieldValues, useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { deleteImage, uploadImage } from "../../app/utils/Cloudinary";
-import { updateUserAsync } from "./UserSlice";
+import { updateRoleOfUserAsync, updateUserAsync } from "./UserSlice";
 import { useAppDispatch } from "../../app/store/ConfigureStore";
+import Autocomplete from "@mui/material/Autocomplete";
+import { TextField } from "@mui/material";
+import agent from "../../app/api/agent";
 
 interface Props {
   user: UserDetail | null;
@@ -30,6 +33,8 @@ export default function UserForm({ user, cancelEdit, actionName }: Props) {
     url: string;
   } | null>(null);
   const [deleteCurrentImage, setDeleteCurrentImage] = useState<boolean>(false);
+  const [roles, setRoles] = useState<Role[]>([]);
+  const [selectedRole, setSelectedRole] = useState<Role | null>(null);
   const {
     control,
     register,
@@ -44,11 +49,25 @@ export default function UserForm({ user, cancelEdit, actionName }: Props) {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
+    agent.User.getAllRole().then((res) => setRoles(res));
+  }, []);
+
+  useEffect(() => {
     if (user) {
       reset(user);
-      setValue("dateOfBirth", user.dateOfBirth?.substring(0, 10));
+      // setValue("dateOfBirth", user.dateOfBirth?.substring(0, 10));
     }
   }, [reset, setValue, user]);
+
+  useEffect(() => {
+    debugger;
+    if (roles.length > 0 && user && !selectedRole) {
+      const userRole = roles.find(
+        (role) => role.name.toLowerCase() === user.roles[0].toLowerCase()
+      );
+      setSelectedRole(userRole || null);
+    }
+  }, [roles, user]);
 
   const onClose = () => {
     cancelEdit();
@@ -66,39 +85,55 @@ export default function UserForm({ user, cancelEdit, actionName }: Props) {
       setDeleteCurrentImage(false);
     }
   };
-
+  const handleSelectRoleChange = (
+    event: React.SyntheticEvent<Element, Event>,
+    newValue: Role | null
+  ) => {
+    setSelectedRole(newValue);
+  };
+  // async function submitForm(data: FieldValues) {
+  //   try {
+  //     const formData = {
+  //       username: user?.username,
+  //       firstName: data.firstName,
+  //       lastName: data.lastName,
+  //       address: data.address,
+  //       phoneNumber: data.phoneNumber,
+  //       image: user?.image || null,
+  //       dateOfBirth: data.dateOfBirth,
+  //     };
+  //     if (imageUploaded) {
+  //       let getImage = await uploadImage(imageUploaded);
+  //       if (getImage && getImage.image && getImage.publicId) {
+  //         formData.image = {
+  //           imageUrl: getImage.image,
+  //           publicId: getImage.publicId,
+  //         };
+  //       }
+  //     }
+  //     if (deleteCurrentImage) {
+  //       formData.image = null;
+  //     }
+  //     console.log("FormData: ", formData);
+  //     if (user) {
+  //       if (imageUploaded || deleteCurrentImage) {
+  //         await deleteImage(user.image.publicId);
+  //       }
+  //       await dispatch(updateUserAsync(formData));
+  //     } else {
+  //       // await dispatch(addUserAsync(formData));
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
   async function submitForm(data: FieldValues) {
+    if (user && selectedRole) {
+      await dispatch(
+        updateRoleOfUserAsync({ userId: user.id, roleId: selectedRole.id })
+      );
+    }
     try {
-      const formData = {
-        username: user?.username,
-        firstName: data.firstName,
-        lastName: data.lastName,
-        address: data.address,
-        phoneNumber: data.phoneNumber,
-        image: user?.image || null,
-        dateOfBirth: data.dateOfBirth,
-      };
-      if (imageUploaded) {
-        let getImage = await uploadImage(imageUploaded);
-        if (getImage && getImage.image && getImage.publicId) {
-          formData.image = {
-            imageUrl: getImage.image,
-            publicId: getImage.publicId,
-          };
-        }
-      }
-      if (deleteCurrentImage) {
-        formData.image = null;
-      }
-      console.log("FormData: ", formData);
-      if (user) {
-        if (imageUploaded || deleteCurrentImage) {
-          await deleteImage(user.image.publicId);
-        }
-        await dispatch(updateUserAsync(formData));
-      } else {
-        // await dispatch(addUserAsync(formData));
-      }
     } catch (error) {
       console.log(error);
     }
@@ -160,6 +195,7 @@ export default function UserForm({ user, cancelEdit, actionName }: Props) {
                       id="profile"
                       className="sr-only"
                       accept="image/*"
+                      disabled
                       onChange={handleImageChange}
                     />
                   </label>
@@ -168,54 +204,59 @@ export default function UserForm({ user, cancelEdit, actionName }: Props) {
               <div className="flex items-center justify-between gap-4">
                 <AppTextInput
                   control={control}
+                  disabled
                   label="First name"
                   {...register("firstName", {
-                    required: "First name is required",
-                    pattern: {
-                      value:
-                        /^(?!.*[<>])(?!.*<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>)(?!.*\b(xss|XSS)\b).*$/i,
-                      message: "Invalid name",
-                    },
+                    // required: "First name is required",
+                    // pattern: {
+                    //   value:
+                    //     /^(?!.*[<>])(?!.*<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>)(?!.*\b(xss|XSS)\b).*$/i,
+                    //   message: "Invalid name",
+                    // },
                   })}
                 />
                 <AppTextInput
                   control={control}
+                  disabled
                   label="Last name"
                   {...register("lastName", {
-                    pattern: {
-                      value:
-                        /^(?!.*[<>])(?!.*<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>)(?!.*\b(xss|XSS)\b).*$/i,
-                      message: "Invalid name",
-                    },
+                    // pattern: {
+                    //   value:
+                    //     /^(?!.*[<>])(?!.*<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>)(?!.*\b(xss|XSS)\b).*$/i,
+                    //   message: "Invalid name",
+                    // },
                   })}
                 />
               </div>
               <AppTextInput
                 control={control}
+                disabled
                 label="Address"
                 {...register("address", {
-                  required: "Address is required",
-                  pattern: {
-                    value:
-                      /^(?!.*[<>])(?!.*<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>)(?!.*\b(xss|XSS)\b).*$/i,
-                    message: "Invalid address",
-                  },
+                  // required: "Address is required",
+                  // pattern: {
+                  //   value:
+                  //     /^(?!.*[<>])(?!.*<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>)(?!.*\b(xss|XSS)\b).*$/i,
+                  //   message: "Invalid address",
+                  // },
                 })}
               />
               <div className="flex items-center justify-between gap-4">
                 <AppTextInput
+                  disabled
                   control={control}
                   label="Phone number"
                   {...register("phoneNumber", {
-                    required: "Phone number is required",
-                    pattern: {
-                      value:
-                        /^(?!.*[<>])(?!.*<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>)(?!.*\b(xss|XSS)\b).*$/i,
-                      message: "Invalid phone number",
-                    },
+                    // required: "Phone number is required",
+                    // pattern: {
+                    //   value:
+                    //     /^(?!.*[<>])(?!.*<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>)(?!.*\b(xss|XSS)\b).*$/i,
+                    //   message: "Invalid phone number",
+                    // },
                   })}
                 />
-                <AppTextInput
+                {/* <AppTextInput
+                  disabled
                   control={control}
                   label="Date of birth"
                   type="date"
@@ -226,13 +267,29 @@ export default function UserForm({ user, cancelEdit, actionName }: Props) {
                       message: "Invalid date",
                     },
                   })}
+                /> */}
+                <Autocomplete
+                  className="bg-white rounded-md"
+                  fullWidth={true}
+                  size="small"
+                  disablePortal
+                  value={selectedRole}
+                  options={roles}
+                  getOptionLabel={(option) => option.name}
+                  onChange={(event, newValue) =>
+                    handleSelectRoleChange(event, newValue)
+                  }
+                  renderInput={(params) => (
+                    <TextField {...params} placeholder="Role" label="Role" />
+                  )}
                 />
               </div>
             </CardBody>
-            <CardFooter className="pt-0 flex flex-row justify-between gap-10">
+            <CardFooter className="flex flex-row justify-center gap-16 ">
               <LoadingButton
                 className="bg-gradient-to-tr from-light-blue-600 to-light-blue-400 text-white shadow-md shadow-light-blue-500/20 hover:shadow-lg hover:shadow-light-blue-500/40 active:opacity-[0.85]"
                 loading={isSubmitting}
+                disabled={isSubmitting}
                 type="submit"
                 variant="contained"
                 color="success"

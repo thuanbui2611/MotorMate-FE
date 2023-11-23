@@ -179,7 +179,13 @@ const Category = {
     requests.put(`api/blog/category/${id}`, values),
   delete: (id: string) => requests.delete(`api/blog/category/${id}`),
 };
-
+const TripRequest = {
+  parentOrder: (parentOrderId: string) => requests.get(`api/order/parent/${parentOrderId}`),
+  ordersOfUser: (lesseeId: string) => requests.get(`api/order/lessee/${lesseeId}`),
+  ordersOfLessor: (lessorId: string) => requests.get(`api/order/lessor/${lessorId}`),
+  updateStatusOrder: (values: {}) =>
+    requests.put(`api/order/status`, values),
+};
 const Email = {
   send: (values: {}) => requests.post("api/email/send", values),
   sendBulk: (values: {}) => requests.post("api/email/send", values),
@@ -202,6 +208,7 @@ const agent = {
   Category,
   Email,
   Checkout,
+  TripRequest
 };
 
 export default agent;

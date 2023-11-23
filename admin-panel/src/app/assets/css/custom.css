@@ -17,3 +17,9 @@
   height: 100px; /* Adjust the height as needed */
 }
 /* End of custom scroll bar */
+.text-gradient {
+  background: linear-gradient(90deg, #ff6003, #ff7e06);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}

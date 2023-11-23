@@ -83,6 +83,7 @@ const Account = {
   loginGoogle: (values: { tokenCredential: string }) =>
     requests.post("api/auth/sso/google", values),
   Register: (values: {}) => requests.post("api/auth/sign-up", values),
+  updateIsLockUser: (values: {}, userId: string) => requests.post(`api/auth/${userId}/lock`, values),
 };
 
 const Brand = {

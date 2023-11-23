@@ -76,12 +76,25 @@ export const updateUserAsync = createAsyncThunk<UserDetail, FieldValues>(
   }
 );
 
-export const updateRoleOfUserAsync = createAsyncThunk<UserDetail, {}>(
+export const updateRoleOfUserAsync = createAsyncThunk<UserDetail, {userId: string, roleId: string}>(
   "user/updateRoleOfUserAsync",
-  async (data, ThunkAPI) => {
+  async (data: {userId: string, roleId: string}, ThunkAPI) => {
     try {
-      const response = await agent.User.updateRole(data);
+      debugger;
+      const response = await agent.User.updateRole({userId: data.userId, roleId: data.roleId});
       return response;
+    } catch (error: any) {
+      return ThunkAPI.rejectWithValue({ error: error.data });
+    }
+  }
+);
+
+export const updateIsLockOfUserAsync = createAsyncThunk(
+  "user/updateIsLockOfUserAsync",
+  async (id: string, ThunkAPI) => {
+    try {
+      const response = await agent.Account.updateIsLockUser({}, id);
+      return {response, id};
     } catch (error: any) {
       return ThunkAPI.rejectWithValue({ error: error.data });
     }
@@ -134,6 +147,20 @@ export const UserSlice = createSlice({
       state.userLoaded = false;
       state.userParams = { ...state.userParams, ...action.payload };
     },
+
+    setStatusUser: (state, action) => {
+      const id = action.payload;
+      debugger;
+      //find the user in entites by ID then update the isLock of that user
+      const user = state.entities[id];
+      if(user){
+        const message = user?.islocked ? "Unlock user successfully!" : "Lock user successfully!";
+        toast.success(message);
+      //update the isLock of that user
+        user.islocked = !user.islocked;
+        
+      }
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -167,11 +194,28 @@ export const UserSlice = createSlice({
       console.log("Update Role for User failed: ", action);
     });
     builder.addCase(updateRoleOfUserAsync.fulfilled, (state, action) => {
+      debugger;
       toast.success("Update user successfully!");
       usersAdapter.upsertOne(state, action.payload);
     });
     builder.addCase(deleteUserAsync.fulfilled, (state, action) => {
       usersAdapter.removeOne(state, action.payload);
+    });
+    builder.addCase(updateIsLockOfUserAsync.fulfilled, (state, action) => {
+      
+      // const {id} = action.payload;
+      // const user = state.entities[id];
+      // if(user){
+      //   const message = user?.islocked ? "Unlock user successfully!" : "Lock user successfully!";
+      //   toast.success(message);
+      //   user.islocked = !user.islocked;
+      // }
+      
+    });
+    builder.addCase(updateIsLockOfUserAsync.rejected, (state, action) => {
+      toast.error("Fail to update status of User!");
+      debugger;
+      window.location.reload()
     });
   },
 });
@@ -180,5 +224,5 @@ export const userSelectors = usersAdapter.getSelectors(
   (state: RootState) => state.user
 );
 
-export const { setUserParams, resetUserParams, setMetaData, setPageNumber } =
+export const { setUserParams, resetUserParams, setMetaData, setPageNumber, setStatusUser } =
   UserSlice.actions;
