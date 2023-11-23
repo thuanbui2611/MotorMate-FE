@@ -8,63 +8,79 @@ import {
 import { LoadingButton } from "@mui/lab";
 import { TextField } from "@mui/material";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 interface Props {
   actionName?: string;
   objectName: string;
   content?: string;
-  actionDelete?: () => Promise<void>;
-  cancelDelete: () => void;
+  actionCancel: (reason: string) => Promise<void>;
+  onClose: () => void;
 }
-export default function ConfirmDeleteDialog({
+export default function ConfirmCancelDialog({
   actionName,
   objectName,
   content,
-  cancelDelete,
-  actionDelete,
+  onClose,
+  actionCancel,
 }: Props) {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [reason, setReason] = useState("");
+
   const onDelete = async () => {
+    if (!reason) return toast.error("Please enter your reason!");
     setIsSubmitting(true);
-    cancelDelete();
-    if (actionDelete) {
-      await actionDelete();
-    }
-    setIsSubmitting(false);
+    await actionCancel(reason);
   };
   return (
     <>
       <Dialog
         open={true}
-        handler={cancelDelete}
+        handler={onClose}
         size="sm"
         className="md:max-w-xl max-w-xs"
       >
         <DialogHeader className="text-red-600 text-3xl font-bold px-8">
-          {actionName ? actionName : "Confirm Delete"}
+          {actionName}
         </DialogHeader>
         <DialogBody divider className="px-8">
           <p className="text-xl font-bold text-red-600 mb-3">
             You should read this carefully!
           </p>
           <p className="text-base font-medium">
-            {content ? content : "Are you sure you want to delete:"}
-            <span className="font-bold ml-2">{objectName}</span>
+            {content}
+            <span className="font-bold ml-2">
+              {objectName ? objectName : ""}
+            </span>
           </p>
+          <div className="flex gap-4 items-start justify-start mt-2">
+            <p className="font-medium text-base">Reason:</p>
+            <TextField
+              multiline
+              maxRows={3}
+              rows={2}
+              fullWidth
+              onChange={(e: any) => setReason(e.target.value)}
+              required
+              sx={{
+                "& .MuiOutlinedInput-input": {
+                  boxShadow: "none",
+                },
+                "& .MuiInputBase-root": {
+                  padding: 1,
+                },
+              }}
+            />
+          </div>
         </DialogBody>
         <DialogFooter>
-          <Button
-            variant="text"
-            color="red"
-            onClick={cancelDelete}
-            className="mr-1"
-          >
+          <Button variant="text" color="red" onClick={onClose} className="mr-1">
             <span>Cancel</span>
           </Button>
           <LoadingButton
             size="large"
             className="transition-all rounded-lg shadow-md"
-            // loading={isSubmitting}
+            loading={isSubmitting}
             color="error"
             onClick={() => onDelete()}
             variant="contained"

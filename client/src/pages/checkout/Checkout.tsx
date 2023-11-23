@@ -445,7 +445,7 @@ export default function Checkout() {
                               <p className="mr-4 text-sm font-medium w-full">
                                 <span className="font-semibold">Address:</span>
                                 <span className="ml-2 text-gray-800">
-                                  "Address of vehicle"
+                                  {vehicle.address}
                                 </span>
                               </p>
                               <p className="mr-4 text-sm font-medium w-full">

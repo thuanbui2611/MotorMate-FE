@@ -1,167 +1,259 @@
-import { Link, useNavigate } from "react-router-dom";
-import { useAppSelector } from "../../app/store/ConfigureStore";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../app/store/ConfigureStore";
 import Loading from "../../app/components/Loading";
-import { MouseEvent, useEffect } from "react";
+import { MouseEvent, useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import {
+  getMyOrdersAsync,
+  myOrderSelectors,
+  setMyOrdersParams,
+} from "./MyOrderSlice";
+import Pagination from "../../app/components/Pagination";
 
 export default function Orders() {
+  const [searchParams, setSearchParams] = useSearchParams({});
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  // const [paramsCompleted, setParamsCompleted] = useState(false);
+  const [isStartFilter, setIsStartFilter] = useState(false);
+
   const { userDetail, userLoading } = useAppSelector((state) => state.account);
   const userLogin = userDetail;
-  const { cart, cartLoading, selectedVehicles } = useAppSelector(
-    (state) => state.cart
+  const myOrders = useAppSelector(myOrderSelectors.selectAll);
+  const { myOrdersLoaded, myOrdersParams, metaData } = useAppSelector(
+    (state) => state.myOrder
   );
-  const data = ["1", "2", "3", "4", "5"];
+
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  //Get params value from url
+  const pageNum = searchParams.get("pageNumber");
+  const searchQueryParam = searchParams.get("Query");
   useEffect(() => {
     if (!userLogin && !userLoading) {
       toast.error("You need to login to view your orders!");
-      navigate(-1);
+      navigate("/login");
     }
   }, [userLogin, userLoading]);
-  const navigate = useNavigate();
+  useEffect(() => {
+    if (!pageNum || pageNum === "1") {
+      setSearchParams((prev) => {
+        prev.delete("pageNumber");
+        return prev;
+      });
+      dispatch(setMyOrdersParams({ pageNumber: 1 }));
+    } else {
+      dispatch(setMyOrdersParams({ pageNumber: +pageNum }));
+    }
+  }, [pageNum, dispatch]);
+  //search
+  const handleSearch = () => {
+    if (searchQuery) {
+      setSearchParams((prev) => {
+        prev.set("Search", searchQuery.trim());
+        return prev;
+      });
+    } else {
+      setSearchParams((prev) => {
+        prev.delete("Search");
+        return prev;
+      });
+    }
+  };
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      handleSearch();
+    }
+  };
+  useEffect(() => {
+    if (!myOrdersLoaded && userLogin) {
+      //paramsCompleted
+      dispatch(getMyOrdersAsync(userLogin.id));
+    }
+  }, [dispatch, myOrdersParams, userLogin]);
 
-  return cartLoading ? (
+  return !metaData ? (
     <Loading />
   ) : (
     <>
-      <section
-        className={`bg-gray-100 h-fit ${
-          cart?.shops.length === 0 && "min-h-screen"
-        }`}
-      >
-        <div className="px-4 py-6 mx-auto max-w-7xl lg:py-4 md:px-6">
+      <div className="bg-white p-8 rounded-md w-full max-w-7xl mx-auto">
+        <div className=" flex items-center justify-center pb-6">
           <div>
-            <div className="flex items-center justify-center mt-4 mb-4 text-2xl md:text-4xl lg:text-6xl tracking-tight font-extrabold text-gradient">
+            <h2 className="mb-4 text-2xl md:text-4xl lg:text-6xl tracking-tight font-extrabold text-gradient">
               My Orders
-            </div>
-            {/* Start cart */}
-            {cart?.shops.length === 0 ? (
-              <div className="flex items-center justify-center text-center text-xl font-semibold text-orange-based brightness-90">
-                Empty order history. <br></br>
-              </div>
-            ) : (
-              <>
-                <div className="w-full h-fit">
-                  <div className="flex items-center justify-between">
-                    <Link
-                      to="/my-orders/1"
-                      className="text-xl py-2 md:text-3xl md:py-4 text-blue-600 hover:underline font-bold"
-                    >
-                      Order #111
-                    </Link>
-                    <div className="w-fit py-1 px-2 bg-red-200 text-red-600 rounded-full font-bold text-xs md:text-sm">
-                      Deny
-                    </div>
-                  </div>
-                  <div className="w-full max-h-[80vh] scrollbar overflow-y-auto">
-                    {cart?.shops.map((shop) => (
-                      <div
-                        className="p-6 mb-8 border bg-gray-50 rounded-lg"
-                        key={shop.lessorId}
-                      >
-                        <div className="flex items-center justify-start mb-4">
-                          <Link
-                            to={"/profile/" + shop.lessorName}
-                            className=" w-fit rounded p-2"
-                          >
-                            <div className="flex items-center no-underline hover:underline text-black ">
-                              {/* img size 32x32 */}
-                              <img
-                                alt="Placeholder"
-                                className="block rounded-full h-8 w-8"
-                                src={shop.lessorImage}
-                              />
-                              <div className="ml-2 text-sm font-bold">
-                                {shop.lessorName}
-                              </div>
-                            </div>
-                          </Link>
-                        </div>
-
-                        <div className="max-w-full overflow-x-auto scrollbar rounded-lg border shadow">
-                          <table className="w-full table-auto">
-                            <thead>
-                              <tr className=" bg-gray-200/50 text-left text-sm md:text-base lg:text-lg font-bold">
-                                <th className="min-w-[300px] py-4 px-4 text-black xl:pl-11 text-base">
-                                  Vehicle
-                                </th>
-                                <th className="min-w-[120px] py-4 px-4 text-black text-base">
-                                  Brand
-                                </th>
-                                <th className="min-w-[120px] py-4 px-4 text-black text-base">
-                                  License plates
-                                </th>
-                                <th className="min-w-[150px] py-4 px-4 text-black text-base">
-                                  Price (per day)
-                                </th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <>
-                                {shop.vehicles.map((vehicle) => (
-                                  <tr
-                                    key={vehicle.vehicleId}
-                                    className="border-[#eee] border-b cursor-pointer hover:bg-gray-100"
-                                    onClick={() =>
-                                      navigate(
-                                        "/product-detail/" + vehicle.vehicleId
-                                      )
-                                    }
-                                  >
-                                    <td className="py-5 px-4 pl-9 xl:pl-11">
-                                      <div className="flex items-center h-full ">
-                                        <div className="h-20 w-20 rounded-md">
-                                          <img
-                                            className="h-full w-full rounded-md object-cover"
-                                            src={vehicle.image}
-                                            alt="Vehicle image"
-                                          />
-                                        </div>
-                                        <div className="ml-3 flex flex-col">
-                                          <h5 className="font-medium text-black text-xl">
-                                            {vehicle.vehicleName}
-                                          </h5>
-                                          <p className="text-sm">
-                                            {vehicle.color}
-                                          </p>
-                                        </div>
-                                      </div>
-                                    </td>
-                                    <td className="py-5 px-4">
-                                      <p className="text-black">
-                                        {vehicle.brand}
-                                      </p>
-                                    </td>
-                                    <td className="py-5 px-4">
-                                      <p className="text-black">
-                                        {vehicle.licensePlate}
-                                      </p>
-                                    </td>
-                                    <td className="py-5 px-4">
-                                      <p className="text-green-400">
-                                        {vehicle.price.toLocaleString()} VND
-                                      </p>
-                                    </td>
-                                  </tr>
-                                ))}
-                              </>
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                <div className="flex justify-center mt-10 mb-3">
-                  <hr className="w-[60%] border border-[#ff7e06]" />
-                </div>
-                {/* separate */}
-              </>
-            )}
-
-            {/* End cart */}
+            </h2>
           </div>
         </div>
-      </section>
+        <div className="flex bg-gray-50 items-center p-2 w-fit rounded-xl">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5 text-gray-400"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+              clipRule="evenodd"
+            />
+          </svg>
+          <input
+            type="text"
+            name="text"
+            className="inputSearch"
+            id="inputSearch"
+            placeholder="Search"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyDown={handleKeyDown}
+            style={{ boxShadow: "none" }}
+          />
+        </div>
+        <div>
+          <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
+            <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
+              <table className="min-w-full leading-normal">
+                <thead>
+                  <tr>
+                    <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-sm font-bold text-gray-600 uppercase tracking-wider">
+                      Order Tag
+                    </th>
+                    <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-sm font-bold text-gray-600 uppercase tracking-wider">
+                      Lessors
+                    </th>
+                    <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-sm font-bold text-gray-600 uppercase tracking-wider">
+                      Number of Vehicles
+                    </th>
+                    <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-sm font-bold text-gray-600 uppercase tracking-wider">
+                      Rent date
+                    </th>
+                    <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-sm font-bold text-gray-600 uppercase tracking-wider">
+                      Order date
+                    </th>
+                    <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-sm font-bold text-gray-600 uppercase tracking-wider">
+                      Total price
+                    </th>
+                    <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-sm font-bold text-gray-600 uppercase tracking-wider">
+                      Status
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {myOrders.length === 0 && !myOrdersLoaded ? (
+                    <tr>
+                      <td colSpan={7}>
+                        <div className="flex justify-center items-center w-full h-20">
+                          <p className="text-black dark:text-white">
+                            You have no orders yet!
+                          </p>
+                        </div>
+                      </td>
+                    </tr>
+                  ) : (
+                    <>
+                      {myOrders.map((order) => (
+                        <tr
+                          className=" cursor-pointer hover:bg-gray-100"
+                          onClick={() =>
+                            navigate(`/my-orders/${order.parentOrderId}`)
+                          }
+                        >
+                          <td className="px-5 pr-2 py-5 border-b border-gray-200">
+                            <p className="text-blue-500 font-medium text-base w-fit">
+                              #{order.parentOrderId.toUpperCase()}
+                            </p>
+                          </td>
+                          <td className="px-5 py-5 border-b border-gray-200">
+                            <p className="text-black font-medium text-base">
+                              {order.shops.length === 1
+                                ? order.shops[0].lessorName
+                                : order.shops[0].lessorName +
+                                  ", others " +
+                                  (order.shops.length - 1) +
+                                  " lessors"}
+                            </p>
+                          </td>
+                          <td className="px-5 py-5 border-b border-gray-200 text-base">
+                            <p className="text-black font-medium text-base text-center">
+                              {order.shops
+                                .map((shop) => shop.vehicles.length)
+                                .reduce((a, b) => a + b, 0)}
+                            </p>
+                          </td>
+                          <td className="px-5 py-5 border-b border-gray-200 text-base">
+                            <div className="flex flex-col items-center justify-center w-fit">
+                              <p className="text-black font-medium text-base">
+                                {new Date(order.dateRent.from).toLocaleString(
+                                  [],
+                                  {
+                                    year: "numeric",
+                                    month: "2-digit",
+                                    day: "2-digit",
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                  }
+                                )}
+                              </p>
+                              <span className="text-black font-medium text-sm">
+                                to
+                              </span>
+                              <p className="text-black font-medium text-base">
+                                {new Date(order.dateRent.to).toLocaleString(
+                                  [],
+                                  {
+                                    year: "numeric",
+                                    month: "2-digit",
+                                    day: "2-digit",
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                  }
+                                )}
+                              </p>
+                            </div>
+                          </td>
+                          <td className="px-5 py-5 border-b border-gray-200 text-base">
+                            <p className="text-black font-medium text-base">
+                              {new Date(order.createdAt).toLocaleString([], {
+                                year: "numeric",
+                                month: "2-digit",
+                                day: "2-digit",
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              })}
+                            </p>
+                          </td>
+                          <td className="px-5 py-5 border-b border-gray-200">
+                            <p className="text-green-600 font-semibold text-base">
+                              {order.totalAmmount.toLocaleString()} VND
+                            </p>
+                          </td>
+                          <td className="px-5 py-5 border-b border-gray-200">
+                            <span className="relative inline-block px-2 py-1 font-bold text-blue-600 bg-blue-200 leading-tight rounded-full text-sm">
+                              Pending
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                    </>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div className="flex justify-center items-center mt-6">
+            <Pagination
+              metaData={metaData}
+              onPageChange={(page: number) => {
+                setSearchParams((prev) => {
+                  prev.set("pageNumber", page.toString());
+                  return prev;
+                });
+              }}
+              loading={myOrdersLoaded}
+            />
+          </div>
+        </div>
+      </div>
     </>
   );
 }

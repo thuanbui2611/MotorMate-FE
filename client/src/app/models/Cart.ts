@@ -16,6 +16,7 @@ export interface Vehicle {
   brand: string;
   color: string;
   price: string;
+  address: string;
   licensePlate: string;
   image: string;
   pickUpDateTime: Date;

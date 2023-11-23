@@ -1,11 +1,82 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../app/store/ConfigureStore";
+import Loading from "../../app/components/Loading";
+import { MouseEvent, useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import Pagination from "../../app/components/Pagination";
+import {
+  getShopOrdersAsync,
+  setShopOrdersParams,
+  shopOrderSelectors,
+} from "./ShopOrder";
 
-export default function ShopOrders() {
-  const data = ["1", "2", "3", "4", "5"];
+export default function Orders() {
+  const [searchParams, setSearchParams] = useSearchParams({});
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  // const [paramsCompleted, setParamsCompleted] = useState(false);
+  const [isStartFilter, setIsStartFilter] = useState(false);
+
+  const { userDetail, userLoading } = useAppSelector((state) => state.account);
+  const userLogin = userDetail;
+  const shopOrders = useAppSelector(shopOrderSelectors.selectAll);
+  const { shopOrderLoaded, shopOrderParams, metaData } = useAppSelector(
+    (state) => state.shopOrder
+  );
+
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  return (
+
+  //Get params value from url
+  const pageNum = searchParams.get("pageNumber");
+  const searchQueryParam = searchParams.get("Query");
+  useEffect(() => {
+    if (!userLogin && !userLoading) {
+      toast.error("You need to login to view your shop order!");
+      navigate("/login");
+    }
+  }, [userLogin, userLoading]);
+  useEffect(() => {
+    if (!pageNum || pageNum === "1") {
+      setSearchParams((prev) => {
+        prev.delete("pageNumber");
+        return prev;
+      });
+      dispatch(setShopOrdersParams({ pageNumber: 1 }));
+    } else {
+      dispatch(setShopOrdersParams({ pageNumber: +pageNum }));
+    }
+  }, [pageNum, dispatch]);
+  //search
+  const handleSearch = () => {
+    if (searchQuery) {
+      setSearchParams((prev) => {
+        prev.set("Search", searchQuery.trim());
+        return prev;
+      });
+    } else {
+      setSearchParams((prev) => {
+        prev.delete("Search");
+        return prev;
+      });
+    }
+  };
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      handleSearch();
+    }
+  };
+  useEffect(() => {
+    if (!shopOrderLoaded && userLogin) {
+      //paramsCompleted
+      dispatch(getShopOrdersAsync(userLogin.id));
+    }
+  }, [dispatch, shopOrderParams, userLogin]);
+
+  return !metaData ? (
+    <Loading />
+  ) : (
     <>
-      <div className="bg-white p-8 rounded-md w-full">
+      <div className="bg-white p-8 rounded-md w-full max-w-7xl mx-auto">
         <div className=" flex items-center justify-center pb-6">
           <div>
             <h2 className="mb-4 text-2xl md:text-4xl lg:text-6xl tracking-tight font-extrabold text-gradient">
@@ -27,11 +98,15 @@ export default function ShopOrders() {
             />
           </svg>
           <input
-            className="bg-gray-50 outline-none ml-1 block "
             type="text"
-            name=""
-            id=""
-            placeholder="search..."
+            name="text"
+            className="inputSearch"
+            id="inputSearch"
+            placeholder="Search"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyDown={handleKeyDown}
+            style={{ boxShadow: "none" }}
           />
         </div>
         <div>
@@ -45,6 +120,9 @@ export default function ShopOrders() {
                     </th>
                     <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-sm font-bold text-gray-600 uppercase tracking-wider">
                       Customers
+                    </th>
+                    <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-sm font-bold text-gray-600 uppercase tracking-wider">
+                      Number of Vehicles
                     </th>
                     <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-sm font-bold text-gray-600 uppercase tracking-wider">
                       Rent date
@@ -61,75 +139,118 @@ export default function ShopOrders() {
                   </tr>
                 </thead>
                 <tbody>
-                  {data.map((item) => (
-                    <tr
-                      className=" cursor-pointer hover:bg-gray-100"
-                      onClick={() => navigate("/my-orders/1")}
-                    >
-                      <td className="px-5 py-5 border-b border-gray-200 text-sm">
-                        <div className="flex items-center">
-                          {/* <div className="flex-shrink-0 w-10 h-10">
-                          <img
-                            className="w-full h-full rounded-full"
-                            src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.2&w=160&h=160&q=80"
-                            alt=""
-                          />
-                        </div> */}
-                          <div className="ml-3">
-                            <p className="text-blue-500 font-bold whitespace-no-wrap">
-                              #123
-                            </p>
-                          </div>
+                  {shopOrders.length === 0 && !shopOrderLoaded ? (
+                    <tr>
+                      <td colSpan={7}>
+                        <div className="flex justify-center items-center w-full h-20">
+                          <p className="text-black dark:text-white">
+                            You have no orders yet!
+                          </p>
                         </div>
                       </td>
-                      <td className="px-5 py-5 border-b border-gray-200 text-sm">
-                        <p className="text-black font-semibold whitespace-no-wrap">
-                          thuanbcgcs200424
-                        </p>
-                      </td>
-                      <td className="px-5 py-5 border-b border-gray-200 text-sm">
-                        <p className="text-black font-semibold whitespace-no-wrap">
-                          10/10/2023 - 13/10/2023
-                        </p>
-                      </td>
-                      <td className="px-5 py-5 border-b border-gray-200 text-sm">
-                        <p className="text-black font-semibold whitespace-no-wrap">
-                          13/10/2023
-                        </p>
-                      </td>
-                      <td className="px-5 py-5 border-b border-gray-200 text-sm">
-                        <p className="text-black font-semibold whitespace-no-wrap">
-                          300.000 VND
-                        </p>
-                      </td>
-                      <td className="px-5 py-5 border-b border-gray-200 text-sm">
-                        <span className="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
-                          <span
-                            aria-hidden
-                            className="absolute inset-0 bg-blue-200  rounded-full"
-                          ></span>
-                          <span className="relative">Pending</span>
-                        </span>
-                      </td>
                     </tr>
-                  ))}
+                  ) : (
+                    <>
+                      {shopOrders.map((order) => (
+                        <tr
+                          className=" cursor-pointer hover:bg-gray-100"
+                          onClick={() =>
+                            navigate(`/shop-orders/${order.parentOrderId}`)
+                          }
+                        >
+                          <td className="px-5 pr-2 py-5 border-b border-gray-200">
+                            <p className="text-blue-500 font-medium text-base w-fit">
+                              #{order.parentOrderId.toUpperCase()}
+                            </p>
+                          </td>
+                          <td className="px-5 py-5 border-b border-gray-200">
+                            <p className="text-black font-medium text-base">
+                              {order.shops.length === 1
+                                ? order.shops[0].lessorName
+                                : order.shops[0].lessorName +
+                                  ", others " +
+                                  (order.shops.length - 1) +
+                                  " lessors"}
+                            </p>
+                          </td>
+                          <td className="px-5 py-5 border-b border-gray-200 text-base">
+                            <p className="text-black font-medium text-base text-center">
+                              {order.shops
+                                .map((shop) => shop.vehicles.length)
+                                .reduce((a, b) => a + b, 0)}
+                            </p>
+                          </td>
+                          <td className="px-5 py-5 border-b border-gray-200 text-base">
+                            <div className="flex flex-col items-center justify-center w-fit">
+                              <p className="text-black font-medium text-base">
+                                {new Date(order.dateRent.from).toLocaleString(
+                                  [],
+                                  {
+                                    year: "numeric",
+                                    month: "2-digit",
+                                    day: "2-digit",
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                  }
+                                )}
+                              </p>
+                              <span className="text-black font-medium text-sm">
+                                to
+                              </span>
+                              <p className="text-black font-medium text-base">
+                                {new Date(order.dateRent.to).toLocaleString(
+                                  [],
+                                  {
+                                    year: "numeric",
+                                    month: "2-digit",
+                                    day: "2-digit",
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                  }
+                                )}
+                              </p>
+                            </div>
+                          </td>
+                          <td className="px-5 py-5 border-b border-gray-200 text-base">
+                            <p className="text-black font-medium text-base">
+                              {new Date(order.createdAt).toLocaleString([], {
+                                year: "numeric",
+                                month: "2-digit",
+                                day: "2-digit",
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              })}
+                            </p>
+                          </td>
+                          <td className="px-5 py-5 border-b border-gray-200">
+                            <p className="text-green-600 font-semibold text-base">
+                              {order.totalAmmount.toLocaleString()} VND
+                            </p>
+                          </td>
+                          <td className="px-5 py-5 border-b border-gray-200">
+                            <span className="relative inline-block px-2 py-1 font-bold text-blue-600 bg-blue-200 leading-tight rounded-full text-sm">
+                              Pending
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                    </>
+                  )}
                 </tbody>
               </table>
-              {/* <div className="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between          ">
-                <span className="text-xs xs:text-sm text-gray-900">
-                  Showing 1 to 4 of 50 Entries
-                </span>
-                <div className="inline-flex mt-2 xs:mt-0">
-                  <button className="text-sm text-indigo-50 transition duration-150 hover:bg-indigo-500 bg-indigo-600 font-semibold py-2 px-4 rounded-l">
-                    Prev
-                  </button>
-                  &nbsp; &nbsp;
-                  <button className="text-sm text-indigo-50 transition duration-150 hover:bg-indigo-500 bg-indigo-600 font-semibold py-2 px-4 rounded-r">
-                    Next
-                  </button>
-                </div>
-              </div> */}
             </div>
+          </div>
+          <div className="flex justify-center items-center mt-6">
+            <Pagination
+              metaData={metaData}
+              onPageChange={(page: number) => {
+                setSearchParams((prev) => {
+                  prev.set("pageNumber", page.toString());
+                  return prev;
+                });
+              }}
+              loading={shopOrderLoaded}
+            />
           </div>
         </div>
       </div>

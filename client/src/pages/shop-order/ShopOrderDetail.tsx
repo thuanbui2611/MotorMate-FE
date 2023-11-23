@@ -1,6 +1,101 @@
+import { useEffect, useState } from "react";
+import { ParentOrder, Vehicle } from "../../app/models/TripRequest";
+import { useAppDispatch, useAppSelector } from "../../app/store/ConfigureStore";
+import { useParams } from "react-router-dom";
+import { shopOrderSelectors, updateStatusShopOrdersAsync } from "./ShopOrder";
+import agent from "../../app/api/agent";
+import NotFound from "../../app/errors/NotFound";
+import Loading from "../../app/components/Loading";
+import ConfirmCancelDialog from "../../app/components/ConfirmCancelDialog";
+
+type StatusOrder = "Canceled" | "Approved" | "Complete";
 export default function ShopOrderDetail() {
-  const data = ["1", "2", "3", "4", "5"];
-  return (
+  const [isOpenConfirmCancelDialog, setIsOpenConfirmCancelDialog] =
+    useState(false);
+  const [isOpenReviewDialog, setIsOpenReviewDialog] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [orderDetails, setOrderDetails] = useState<ParentOrder>();
+  const [selectedVehiclesCancel, setSelectedVehiclesCancel] = useState<
+    Vehicle[]
+  >([]);
+
+  const dispatch = useAppDispatch();
+  const { parentOrderId } = useParams();
+  const order = useAppSelector((state) =>
+    shopOrderSelectors.selectById(state, parentOrderId!)
+  );
+
+  useEffect(() => {
+    if (order) {
+      setOrderDetails(order);
+      setIsLoading(false);
+    }
+  }, [order]);
+
+  useEffect(() => {
+    if (!orderDetails && parentOrderId && !order) {
+      setIsLoading(true);
+      agent.TripRequest.parentOrder(parentOrderId).then((response) => {
+        if (response) {
+          setOrderDetails(response);
+          setIsLoading(false);
+        }
+      });
+    }
+  }, [orderDetails, parentOrderId]);
+  // Hover to see
+  let hoverTimer: ReturnType<typeof setTimeout>;
+  function startHoverTimer(idDiv: string) {
+    hoverTimer = setTimeout(() => showMessage(idDiv), 300);
+  }
+
+  function resetHoverTimer(idDiv: string) {
+    clearTimeout(hoverTimer);
+    hideMessage(idDiv);
+  }
+
+  function showMessage(idDiv: string): void {
+    const hiddenDiv = document.getElementById(idDiv) as HTMLElement;
+    hiddenDiv.classList.remove("hidden");
+  }
+  function hideMessage(idDiv: string): void {
+    const hiddenDiv = document.getElementById(idDiv) as HTMLElement;
+    hiddenDiv.classList.add("hidden");
+  }
+  const handleCloseReviewDialog = () => {
+    setIsOpenReviewDialog(false);
+  };
+
+  const handleUpdateStatusOrder = async (
+    statusUpdate: StatusOrder,
+    reasonCancel?: string
+  ) => {
+    if (!orderDetails || orderDetails?.shops[0].vehicles.length === 0) return;
+    const requestIds = orderDetails.shops[0].vehicles.map(
+      (vehicle) => vehicle.requestId
+    );
+    await dispatch(
+      updateStatusShopOrdersAsync({
+        status: statusUpdate,
+        requestIds: requestIds,
+        reason: reasonCancel ? reasonCancel : "",
+      })
+    );
+    setIsOpenConfirmCancelDialog(false);
+  };
+
+  const handleOpenConfirmCancelDialog = () => {
+    setIsOpenConfirmCancelDialog(true);
+  };
+  const handleCloseConfirmCancelDialog = () => {
+    setIsOpenConfirmCancelDialog(false);
+    setSelectedVehiclesCancel([]);
+  };
+  if (!orderDetails && !isLoading) return <NotFound />;
+
+  return isLoading ? (
+    <Loading />
+  ) : (
     <>
       <div className="py-14 px-4 md:px-6 2xl:px-20 2xl:container 2xl:mx-auto">
         <div className="flex justify-between items-center">
@@ -23,34 +118,35 @@ export default function ShopOrderDetail() {
             </p> */}
             <div className="flex flex-col justify-start items-start bg-gray-50 border border-gray-100 rounded-lg shadow-md px-4 py-4 md:py-6 md:p-6 xl:p-8 w-full max-h-[30rem] scrollbar overflow-auto">
               {/* Item start */}
-              {data.map((item, index) => (
+              {orderDetails?.shops[0].vehicles.map((vehicle) => (
                 <>
                   <div className="mt-4 md:mt-6 flex flex-col md:flex-row justify-center items-center  md:space-x-6 xl:space-x-8 w-full">
                     <div className="flex justify-center items-center pb-4 md:pb-8 w-full md:w-40">
                       <img
-                        className="w-[150px] h-[150px] md:w-full md:h-full md:block rounded-lg shadow-md"
-                        src="https://i.ibb.co/84qQR4p/Rectangle-10.png"
-                        alt="dress"
+                        className="w-[150px] h-[150px] md:w-full md:h-full md:block rounded-lg shadow-lg"
+                        src={vehicle.image}
+                        alt="Vehicle Image"
                       />
                     </div>
                     <div className="flex justify-start items-center border-b border-gray-200 md:flex-row flex-col w-fit md:w-full pb-8 space-y-4 md:space-y-0">
                       <div className="w-full md:w-1/2 flex flex-col justify-start items-start space-y-2">
                         <h3 className="text-xl xl:text-2xl font-semibold leading-6 text-black">
-                          Premium Quaility Dress
+                          {vehicle.vehicleName}
                         </h3>
                         <div className="flex justify-start items-start flex-col space-y-2">
                           <p className="text-sm leading-none text-black">
                             <span className="text-gray-500">Brand: </span>{" "}
-                            Italic Minimal Design
+                            {vehicle.brand}
                           </p>
                           <p className="text-sm leading-none text-black">
-                            <span className="text-gray-500">Color: </span> Small
+                            <span className="text-gray-500">Color: </span>{" "}
+                            {vehicle.color}
                           </p>
                           <p className="text-sm leading-none text-black">
                             <span className="text-gray-500">
                               License plates:{" "}
                             </span>
-                            Light Blue
+                            {vehicle.licensePlate}
                           </p>
                         </div>
                       </div>
@@ -58,17 +154,35 @@ export default function ShopOrderDetail() {
                         <div className="flex justify-center items-end flex-col space-y-2">
                           <p className="text-sm leading-none text-black">
                             <span className="text-gray-500">From: </span>
-                            13/11/2023
+                            {new Date(vehicle.pickUpDateTime).toLocaleString(
+                              [],
+                              {
+                                year: "numeric",
+                                month: "2-digit",
+                                day: "2-digit",
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              }
+                            )}
                           </p>
                           <p className="text-sm leading-none text-black">
                             <span className="text-gray-500">To: </span>
-                            13/11/2023
+                            {new Date(vehicle.dropOffDateTime).toLocaleString(
+                              [],
+                              {
+                                year: "numeric",
+                                month: "2-digit",
+                                day: "2-digit",
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              }
+                            )}
                           </p>
                         </div>
                       </div>
                       <div className="w-full md:w-1/4 flex justify-end space-x-8 items-end">
                         <p className="text-base xl:text-lg font-semibold leading-6 text-black">
-                          $36.00
+                          {vehicle.price.toLocaleString()} VND
                         </p>
                       </div>
                     </div>
@@ -114,8 +228,8 @@ export default function ShopOrderDetail() {
                   <p className="text-xl   font-bold leading-4 text-black">
                     Total
                   </p>
-                  <p className="text-base dark:text-gray-500 font-semibold leading-4 text-gray-600">
-                    $36.00
+                  <p className="text-lg font-bold leading-4 text-green-600">
+                    {orderDetails?.totalAmmount.toLocaleString()} VND
                   </p>
                 </div>
               </div>
@@ -129,15 +243,12 @@ export default function ShopOrderDetail() {
               <div className="flex flex-col justify-start items-start flex-shrink-0">
                 <div className="flex justify-center w-full md:justify-start items-center space-x-4 py-8 border-b border-gray-200">
                   <img
-                    src="https://i.ibb.co/5TSg7f6/Rectangle-18.png"
+                    src={"https://i.ibb.co/5TSg7f6/Rectangle-18.png"}
                     alt="avatar"
                   />
                   <div className="flex justify-start items-start flex-col space-y-2">
                     <p className="text-base font-semibold leading-4 text-left text-gray-800">
-                      David Kent
-                    </p>
-                    <p className="text-sm leading-5 text-gray-600">
-                      10 Previous Orders
+                      {orderDetails?.username}
                     </p>
                   </div>
                 </div>
@@ -166,7 +277,7 @@ export default function ShopOrderDetail() {
                       </g>
                     </svg>
                     <p className="cursor-pointer text-sm leading-5 text-blue-500 hover:underline">
-                      david89@gmail.com
+                      {orderDetails?.email}
                     </p>
                   </div>
                   <div className="flex space-x-2">
@@ -190,7 +301,7 @@ export default function ShopOrderDetail() {
                       </g>
                     </svg>
                     <p className="cursor-pointer text-sm leading-5">
-                      0999.999.999
+                      {orderDetails?.phone}
                     </p>
                   </div>
                 </div>
@@ -202,7 +313,7 @@ export default function ShopOrderDetail() {
                       Shipping Address
                     </p>
                     <p className="w-48 lg:w-full dark:text-gray-300 xl:w-48 text-center md:text-left text-sm leading-5 text-gray-600">
-                      180 North King Street, Northhampton MA 1060
+                      {orderDetails?.address}
                     </p>
                   </div>
                 </div>
@@ -211,14 +322,37 @@ export default function ShopOrderDetail() {
           </div>
         </div>
         <div className="flex items-center justify-center space-x-4 mt-8">
-          <div className="text-center bg-red-600 w-fit h-fit p-2 px-3 rounded-full text-white font-bold shadow-md shadow-red-900/30 cursor-pointer hover:brightness-90">
+          <div
+            className="text-center bg-red-600 w-fit h-fit p-2 px-3 rounded-full text-white font-bold shadow-md shadow-red-900/30 cursor-pointer hover:brightness-90"
+            onClick={() => handleOpenConfirmCancelDialog()}
+          >
             Deny order
           </div>
-          <div className="text-center bg-green-600 w-fit h-fit p-2 px-3 rounded-full text-white font-bold shadow-md shadow-green-900/30 cursor-pointer hover:brightness-90">
+          <div
+            className="text-center bg-green-600 w-fit h-fit p-2 px-3 rounded-full text-white font-bold shadow-md shadow-green-900/30 cursor-pointer hover:brightness-90"
+            onClick={() => handleUpdateStatusOrder("Approved")}
+          >
             Accept order
+          </div>
+          <div
+            className="text-center bg-blue-600 w-fit h-fit p-2 px-3 rounded-full text-white font-bold shadow-md shadow-blue-900/30 cursor-pointer hover:brightness-90"
+            onClick={() => handleUpdateStatusOrder("Complete")}
+          >
+            Complete order
           </div>
         </div>
       </div>
+      {isOpenConfirmCancelDialog && (
+        <ConfirmCancelDialog
+          actionName={"Cancel Order"}
+          objectName={""}
+          onClose={handleCloseConfirmCancelDialog}
+          content={"Are you sure to cancel this order?"}
+          actionCancel={(reasonCancel: string) =>
+            handleUpdateStatusOrder("Canceled", reasonCancel)
+          }
+        />
+      )}
     </>
   );
 }
