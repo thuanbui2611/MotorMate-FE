@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/store/ConfigureStore";
 import Loading from "../../app/components/Loading";
 import { Link, useNavigate } from "react-router-dom";
-import { Shop, UnavailableDates, Vehicle } from "../../app/models/Cart";
+import { Shop, Vehicle } from "../../app/models/Cart";
 import ConfirmDeleteDialog from "../../app/components/ConfirmDeleteDialog";
 import {
   addRemoveSelectedVehicle,
@@ -64,6 +64,7 @@ export default function Cart() {
       if (result.meta.requestStatus === "rejected") {
         toast.error("Something wrong, remove vehicle from cart failed!");
       }
+      setConfirmDelete(false);
     }
   };
 
@@ -109,6 +110,10 @@ export default function Cart() {
   };
 
   const onClickChangeDateRent = async (vehicle: Vehicle) => {
+    if (startDate === undefined || endDate === undefined) {
+      toast.error("Please choose your date rent!");
+      return;
+    }
     let dateFrom = new Date(startDate);
     let dateTo = new Date(endDate);
     if (endDate === undefined) {
@@ -140,6 +145,8 @@ export default function Cart() {
     );
     setIsUpdateRentDate(undefined);
     setIsEditDateRent(undefined);
+    setStartDate(undefined);
+    setEndDate(undefined);
   };
 
   const shouldDisableDateStart = (date: any, vehicle: Vehicle) => {
@@ -720,7 +727,8 @@ export default function Cart() {
             vehicleDeleted.vehicleName + ", " + vehicleDeleted?.licensePlate
           }
           actionDelete={() => handleDeleteVehicle(vehicleDeleted)}
-          cancelDelete={cancelConfirmDeleteDialog}
+          onClose={cancelConfirmDeleteDialog}
+          color="red"
         />
       )}
     </>

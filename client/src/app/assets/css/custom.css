@@ -7,6 +7,14 @@ body {
 .bg-opacity-60 {
   --tw-bg-opacity: 0.6;
 }
+
+.MuiDialog-root {
+  z-index: 99999 !important;
+}
+.MuiPickersPopper-root {
+  z-index: 99999 !important;
+}
+
 /* Header */
 .text-gradient {
   background: linear-gradient(90deg, #ff6003, #ff7e06);

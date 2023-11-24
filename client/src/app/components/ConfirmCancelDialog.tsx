@@ -62,6 +62,7 @@ export default function ConfirmCancelDialog({
               fullWidth
               onChange={(e: any) => setReason(e.target.value)}
               required
+              placeholder="Please let us know your reason!"
               sx={{
                 "& .MuiOutlinedInput-input": {
                   boxShadow: "none",

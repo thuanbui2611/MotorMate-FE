@@ -10,37 +10,44 @@ import {
 } from "@stripe/react-stripe-js";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { useAppSelector } from "../store/ConfigureStore";
+import { useAppDispatch, useAppSelector } from "../store/ConfigureStore";
 import { UserDetail } from "../models/User";
+import {
+  removeVehicleInCart,
+  resetSelectedVehicles,
+} from "../../pages/cart/CartSlice";
 
 type Focused = "name" | "number" | "expiry" | "cvc" | "";
 interface Props {
   userLogin: UserDetail;
 }
 export default function PaymentForm({ userLogin }: Props) {
-  const [state, setState] = useState({
-    number: "",
-    expiry: "",
-    cvc: "",
-    name: "",
-    focus: "",
-  });
+  // const [state, setState] = useState({
+  //   number: "",
+  //   expiry: "",
+  //   cvc: "",
+  //   name: "",
+  //   focus: "",
+  // });
   const [totalPayment, setTotalPayment] = useState<number>(0);
   const { selectedVehicles } = useAppSelector((state) => state.cart);
 
+  const dispatch = useAppDispatch();
   const stripe = useStripe();
   const elements = useElements();
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState<boolean>(false);
-  const handleInputChange = (e: any) => {
-    const { name, value } = e.target;
-    setState((prev) => ({ ...prev, [name]: value }));
-  };
+  //For react-card
+  // const handleInputChange = (e: any) => {
+  //   const { name, value } = e.target;
+  //   setState((prev) => ({ ...prev, [name]: value }));
+  // };
 
-  const handleInputFocus = (e: any) => {
-    setState((prev) => ({ ...prev, focus: e.target.name }));
-  };
+  // const handleInputFocus = (e: any) => {
+  //   setState((prev) => ({ ...prev, focus: e.target.name }));
+  // };
+  //End of for react-card
   const handleSubmit = async (event: any) => {
     debugger;
     setLoading(true);
@@ -62,10 +69,18 @@ export default function PaymentForm({ userLogin }: Props) {
     setLoading(false);
 
     if (error) {
-      toast.error(error.message);
+      toast.error("Payment failed, please try again!");
+      console.log("Payment failed: ", error);
     } else {
       // Redirected to  `return_url`.
       toast.success("Payment success");
+      //remove vehicle from cart and reset selected payment vehicle
+      selectedVehicles.forEach((shop) => {
+        shop.vehicles.forEach((vehicle) => {
+          dispatch(removeVehicleInCart(vehicle.vehicleId));
+        });
+      });
+      dispatch(resetSelectedVehicles());
     }
   };
   useEffect(() => {

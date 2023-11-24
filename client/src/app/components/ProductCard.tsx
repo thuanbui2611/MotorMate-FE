@@ -169,10 +169,11 @@ export default function ProductCard({ product, userLogin }: Props) {
             </span>
           </p>
         </div>
+
         <div className="flex justify-end items-center p-4 border-t border-gray-300">
           <AddToCart
-            userId={userLogin?.id}
-            vehicleId={product.id}
+            userLogin={userLogin}
+            vehicle={product}
             className="flex items-center justify-center text-gray-500 h-5 w-5 hover:text-blue-600"
           />
         </div>

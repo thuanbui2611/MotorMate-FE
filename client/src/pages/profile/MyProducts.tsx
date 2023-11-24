@@ -25,7 +25,8 @@ export default function MyProducts() {
   const [actionName, setActionName] = useState(String);
   const [selectedVehicle, setSelectedVehicle] = useState<Vehicle | null>(null);
   const [openEditForm, setOpenEditForm] = useState(false);
-  const [confirmDeleteDiaglog, setConfirmDeleteDiaglog] = useState(false);
+  const [isOpenConfirmDeleteDialog, setIsOpenConfirmDeleteDialog] =
+    useState(false);
   const [vehicleDeleted, setVehicleDeleted] = useState<Vehicle>({} as Vehicle);
   const [openDetails, setOpenDetails] = useState(false);
 
@@ -64,9 +65,10 @@ export default function MyProducts() {
     if (response.meta.requestStatus === "fulfilled" && vehicleDeleted.images) {
       await deleteImages(vehicleDeleted.images);
     }
+    setIsOpenConfirmDeleteDialog(false);
   }
   const openConfirmDeleteDiaglog = (vehicle: Vehicle) => {
-    setConfirmDeleteDiaglog((cur) => !cur);
+    setIsOpenConfirmDeleteDialog((cur) => !cur);
     setVehicleDeleted(vehicle);
   };
   const cancelEditForm = () => {
@@ -78,7 +80,7 @@ export default function MyProducts() {
     setOpenDetails((cur) => !cur);
   };
 
-  const cancelConfirmDeleteDialog = () => setConfirmDeleteDiaglog(false);
+  const cancelConfirmDeleteDialog = () => setIsOpenConfirmDeleteDialog(false);
 
   return (
     <>
@@ -478,11 +480,12 @@ export default function MyProducts() {
         />
       )}
 
-      {confirmDeleteDiaglog && (
+      {isOpenConfirmDeleteDialog && (
         <ConfirmDeleteDialog
           objectName={vehicleDeleted.licensePlate}
           actionDelete={() => handleDeleteVehicle(vehicleDeleted)}
-          cancelDelete={cancelConfirmDeleteDialog}
+          onClose={cancelConfirmDeleteDialog}
+          color="red"
         />
       )}
     </>

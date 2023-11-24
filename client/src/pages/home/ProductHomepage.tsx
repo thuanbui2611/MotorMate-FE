@@ -1,7 +1,7 @@
 import { useSpringCarousel } from "react-spring-carousel";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { store } from "../../app/store/ConfigureStore";
+import { store, useAppSelector } from "../../app/store/ConfigureStore";
 import { Vehicle } from "../../app/models/Vehicle";
 import AddToCart from "../../app/components/AddToCart";
 interface Props {
@@ -10,7 +10,7 @@ interface Props {
 export default function ProductHomepage({ products }: Props) {
   if (products.length === 0) return <></>;
   const [currentSlide, setCurrentSlide] = useState(products[0].id);
-  const userLogin = store.getState().account.userDetail;
+  const userLogin = useAppSelector((state) => state.account.userDetail);
 
   const {
     carouselFragment,
@@ -53,7 +53,12 @@ export default function ProductHomepage({ products }: Props) {
                   <div className="relative rounded-2xl aspect-w-16 aspect-h-9 ">
                     <img
                       className="object-scale-down max-h-40 w-full rounded-t-xl hover:scale-110 transition-all"
-                      src="https://purepng.com/public/uploads/large/purepng.com-motorcyclemotorcyclemotorbikebikecycleracing-bike-1701527509882zcnub.png"
+                      // src="https://purepng.com/public/uploads/large/purepng.com-motorcyclemotorcyclemotorbikebikecycleracing-bike-1701527509882zcnub.png"
+                      src={
+                        product.images[0].image
+                          ? product.images[0].image
+                          : undefined
+                      }
                       alt="Image Book"
                     />
 
@@ -65,8 +70,8 @@ export default function ProductHomepage({ products }: Props) {
                       </span>
                     ) : (
                       <AddToCart
-                        userId={userLogin?.id}
-                        vehicleId={product.id}
+                        userLogin={userLogin}
+                        vehicle={product}
                         className="absolute cursor top-1 left-[5px] md:top-2 md:left-2 flex items-center justify-center text-white h-[1vw] w-[1vw] md:h-3 md:w-3 lg:h-4 lg:w-4"
                       />
                     )}
@@ -231,7 +236,7 @@ export default function ProductHomepage({ products }: Props) {
                   <div className="flex items-end md:flex-row">
                     <div className="w-2/3 h-4 pl-2 md:pl-5 md:pb-0 inline-table">
                       <h5 className="font-bold text-gradient inline-block">
-                        100.000 VND
+                        {product.price.toLocaleString()} VND
                       </h5>
                       <span className="block -mt-[2px] pb-1 md:-mt-1 font-semibold text-gray-500">
                         per day

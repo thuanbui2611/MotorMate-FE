@@ -1,5 +1,4 @@
 import { Link, useParams } from "react-router-dom";
-import ConfirmDeleteDialog from "../../app/components/ConfirmDeleteDialog";
 import { useEffect, useState } from "react";
 import ReviewFormDialog from "../../app/components/ReviewFormDialog";
 import { useAppDispatch, useAppSelector } from "../../app/store/ConfigureStore";
@@ -69,9 +68,11 @@ export default function OrderDetail() {
 
   const handleCancelOrder = async (reasonCancel: string) => {
     if (selectedVehiclesCancel.length === 0) return;
-    const requestIds = selectedVehiclesCancel.map(
-      (vehicle) => vehicle.requestId
+    debugger;
+    const vehiclesToCancel = selectedVehiclesCancel.filter(
+      (vehicle) => vehicle.status.toLowerCase() === "pending"
     );
+    const requestIds = vehiclesToCancel.map((vehicle) => vehicle.requestId);
     await dispatch(
       updateStatusMyOrdersAsync({
         status: "Canceled",
@@ -89,6 +90,7 @@ export default function OrderDetail() {
     });
     setIsOpenConfirmCancelDialog(true);
   };
+
   const handleSelectCancelAll = () => {
     if (orderDetails) {
       const allVehicles = orderDetails.shops
@@ -98,6 +100,7 @@ export default function OrderDetail() {
       setIsOpenConfirmCancelDialog(true);
     }
   };
+
   const handleCloseConfirmCancelDialog = () => {
     setIsOpenConfirmCancelDialog(false);
     setSelectedVehiclesCancel([]);
@@ -166,14 +169,13 @@ export default function OrderDetail() {
                       key={vehicle.vehicleId}
                     >
                       <div
-                        className={`absolute top-0 right-0 font-bold w-fit h-fit p-1  rounded-full text-xs 
-                      ${
-                        vehicle.status === "Pending"
-                          ? "text-blue-600 bg-blue-200"
-                          : vehicle.status === "Canceled"
-                          ? "text-red-600 bg-red-200"
-                          : "text-green-600 bg-green-200"
-                      } `}
+                        className={`absolute top-0 right-0 font-bold w-fit h-fit p-1  rounded-full text-xs ${
+                          vehicle.status === "Pending"
+                            ? "text-blue-600 bg-blue-200"
+                            : vehicle.status === "Canceled"
+                            ? "text-red-600 bg-red-200"
+                            : "text-green-600 bg-green-200"
+                        } `}
                       >
                         {vehicle.status}
                       </div>
@@ -398,7 +400,7 @@ export default function OrderDetail() {
                             >
                               {vehicle.status === "Pending"
                                 ? "Cancel this vehicle"
-                                : vehicle.status === "Complete"
+                                : vehicle.status === "Completed"
                                 ? "Review this vehicle"
                                 : ""}
                             </div>

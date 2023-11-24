@@ -52,7 +52,6 @@ export const updateStatusShopOrdersAsync = createAsyncThunk<
   { state: RootState }
 >("shopOrder/updateStatusShopOrdersAsync", async (data, ThunkAPI) => {
   try {
-    //Not add addCase to update state yet.
     const response = await agent.TripRequest.updateStatusOrder(data);
     return response;
   } catch (error: any) {
@@ -113,13 +112,9 @@ export const ShopOrderSlice = createSlice({
       .addCase(updateStatusShopOrdersAsync.fulfilled, (state, action) => {
         const orderUpdated = action.payload;
         shopOrderAdapter.setOne(state, orderUpdated);
-        //lessor can deny, accept or finish order
-        toast.success("Cancel order successfully!");
       })
       .addCase(updateStatusShopOrdersAsync.rejected, (state, action) => {
         console.log("Update status shop orders rejected: ", action);
-        //lessor can deny, accept or finish order
-        toast.error("Cancel order failed!");
       });
   },
 });

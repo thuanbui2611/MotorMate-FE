@@ -180,6 +180,8 @@ const Category = {
   delete: (id: string) => requests.delete(`api/blog/category/${id}`),
 };
 const TripRequest = {
+  getBill: (paymentIntentId: string) =>
+    requests.get(`api/order/payment/${paymentIntentId}`),
   parentOrder: (parentOrderId: string) =>
     requests.get(`api/order/parent/${parentOrderId}`),
   ordersOfUser: (lesseeId: string, params: URLSearchParams) =>

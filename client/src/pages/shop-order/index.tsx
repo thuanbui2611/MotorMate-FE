@@ -8,7 +8,7 @@ import {
   getShopOrdersAsync,
   setShopOrdersParams,
   shopOrderSelectors,
-} from "./ShopOrder";
+} from "./ShopOrderSlice";
 
 export default function Orders() {
   const [searchParams, setSearchParams] = useSearchParams({});

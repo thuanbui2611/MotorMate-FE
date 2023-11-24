@@ -8,7 +8,7 @@ import { CartSlice } from "../../pages/cart/CartSlice";
 import { BlogSlice } from "../../pages/blog/BlogSlice";
 import { CheckoutSlice } from "../../pages/checkout/CheckoutSlice";
 import { MyOrderSlice } from "../../pages/my-order/MyOrderSlice";
-import { ShopOrderSlice } from "../../pages/shop-order/ShopOrder";
+import { ShopOrderSlice } from "../../pages/shop-order/ShopOrderSlice";
 
 export const store = configureStore({
   reducer: {

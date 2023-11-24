@@ -16,6 +16,8 @@ import { ConvertToDateStr } from "../../app/utils/ConvertDatetimeToStr";
 import { setSelectedVehicle } from "../cart/CartSlice";
 import { Shop } from "../../app/models/Cart";
 import FadeInSection from "../../app/components/FadeInSection";
+import { toast } from "react-toastify";
+import ChooseDateRentDialog from "../../app/components/ChooseDateRentDialog";
 
 export default function ProductDetails() {
   const { id } = useParams<{ id: string }>();
@@ -23,6 +25,7 @@ export default function ProductDetails() {
   const [loading, setLoading] = useState(true);
   const [openImage, setOpenImage] = useState<number>();
   const [openSlideShow, setOpenSlideShow] = useState(false);
+  const [isOpenRentNow, setIsOpenRentNow] = useState(false);
 
   const userLogin = useAppSelector((state) => state.account.userDetail);
   const dispatch = useAppDispatch();
@@ -64,31 +67,47 @@ export default function ProductDetails() {
     dispatch(setStartChatToUser(userId));
   };
 
-  const handleClickRentNow = (vehicle: Vehicle) => {
-    // const vehicleRent: Shop[] = [
-    //   {
-    //     lessorId: vehicle.owner.ownerId,
-    //     lessorName: vehicle.owner.name,
-    //     lessorImage: vehicle.owner.picture,
-    //     vehicles: [
-    //       {
-    //         vehicleId: vehicle.id,
-    //         vehicleName: vehicle.specifications.modelName,
-    //         brand: vehicle.specifications.brandName,
-    //         color: vehicle.specifications.color,
-    //         price: vehicle.price.toString(),
-    //         licensePlate: vehicle.licensePlate,
-    //         image: vehicle.images[0].image!,
-    //         pickUpDateTime: "",
-    //         dropOffDateTime: "",
-    //         unavailableDates: [{ from: "", to: "" }],
-    //       },
-    //     ],
-    //   },
-    // ];
-    // debugger;
-    // // dispatch(setSelectedVehicle(vehicleRent));
-    // navigate("/check-out", { state: { vehicleCheckout: vehicleRent } });
+  const handleClickRentNow = () => {
+    setIsOpenRentNow(true);
+  };
+
+  const handleCloseRentNow = () => {
+    setIsOpenRentNow(false);
+  };
+
+  const handleCheckOut = (dateFrom: Date, dateTo: Date) => {
+    if (!product) return;
+    if (!dateFrom || !dateTo) {
+      toast.error("Please choose date to rent");
+      return;
+    }
+
+    debugger;
+    const vehicleRent: Shop[] = [
+      {
+        lessorId: product.owner.ownerId,
+        lessorName: product.owner.name,
+        lessorImage: product.owner.picture,
+        vehicles: [
+          {
+            vehicleId: product.id,
+            vehicleName: product.specifications.modelName,
+            brand: product.specifications.brandName,
+            color: product.specifications.color,
+            price: product.price.toString(),
+            address: product.address,
+            licensePlate: product.licensePlate,
+            image: product.images[0].image!,
+            pickUpDateTime: dateFrom,
+            dropOffDateTime: dateTo,
+            unavailableDates: product.unavailableDates,
+          },
+        ],
+      },
+    ];
+    debugger;
+    dispatch(setSelectedVehicle(vehicleRent));
+    navigate("/check-out", { state: { vehicleCheckout: vehicleRent } });
   };
 
   if (loading) return <Loading />;
@@ -262,7 +281,7 @@ export default function ProductDetails() {
                           {product.price.toLocaleString()} VND
                         </span>
                         <div
-                          onClick={() => handleClickRentNow(product)}
+                          onClick={handleClickRentNow}
                           className={`flex cursor-pointer ml-auto text-white bg-orange-based border-0 py-2 px-6 focus:outline-none hover:bg-orange-600 rounded ${
                             product.owner.ownerId === userLogin?.id &&
                             " pointer-events-none bg-gray-400"
@@ -274,8 +293,8 @@ export default function ProductDetails() {
                         <button className="rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4">
                           <AddToCart
                             className="h-7 w-7"
-                            userId={userLogin?.id}
-                            vehicleId={product.id}
+                            userLogin={userLogin}
+                            vehicle={product}
                           />
                         </button>
                       </div>
@@ -488,6 +507,15 @@ export default function ProductDetails() {
           <ReviewProduct />
         </FadeInSection>
       </div>
+      {isOpenRentNow && (
+        <ChooseDateRentDialog
+          datesDisableRent={product.unavailableDates}
+          action={(dateFrom: Date, dateTo: Date) =>
+            handleCheckOut(dateFrom, dateTo)
+          }
+          onClose={handleCloseRentNow}
+        />
+      )}
     </>
   );
 }

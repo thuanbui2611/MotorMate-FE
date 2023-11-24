@@ -6,45 +6,59 @@ import {
   DialogFooter,
 } from "@material-tailwind/react";
 import { LoadingButton } from "@mui/lab";
-import { TextField } from "@mui/material";
 import { useState } from "react";
 
 interface Props {
   actionName?: string;
   objectName: string;
   content?: string;
-  actionDelete?: () => Promise<void>;
-  cancelDelete: () => void;
+  color?: "red" | "blue" | "green";
+  actionDelete: () => Promise<void>;
+  onClose: () => void;
 }
 export default function ConfirmDeleteDialog({
   actionName,
   objectName,
   content,
-  cancelDelete,
+  onClose,
   actionDelete,
+  color,
 }: Props) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const onDelete = async () => {
     setIsSubmitting(true);
-    cancelDelete();
-    if (actionDelete) {
-      await actionDelete();
-    }
-    setIsSubmitting(false);
+    debugger;
+    await actionDelete();
   };
   return (
     <>
       <Dialog
         open={true}
-        handler={cancelDelete}
+        handler={onClose}
         size="sm"
         className="md:max-w-xl max-w-xs"
       >
-        <DialogHeader className="text-red-600 text-3xl font-bold px-8">
+        <DialogHeader
+          className={`text-3xl font-bold px-8 ${
+            color === "red"
+              ? "text-red-600"
+              : color === "blue"
+              ? "text-blue-600"
+              : "text-green-600"
+          }`}
+        >
           {actionName ? actionName : "Confirm Delete"}
         </DialogHeader>
         <DialogBody divider className="px-8">
-          <p className="text-xl font-bold text-red-600 mb-3">
+          <p
+            className={`text-xl font-bold mb-3 ${
+              color === "red"
+                ? "text-red-600"
+                : color === "blue"
+                ? "text-blue-600"
+                : "text-green-600"
+            }`}
+          >
             You should read this carefully!
           </p>
           <p className="text-base font-medium">
@@ -53,19 +67,16 @@ export default function ConfirmDeleteDialog({
           </p>
         </DialogBody>
         <DialogFooter>
-          <Button
-            variant="text"
-            color="red"
-            onClick={cancelDelete}
-            className="mr-1"
-          >
+          <Button variant="text" color="red" onClick={onClose} className="mr-1">
             <span>Cancel</span>
           </Button>
           <LoadingButton
             size="large"
             className="transition-all rounded-lg shadow-md"
-            // loading={isSubmitting}
-            color="error"
+            loading={isSubmitting}
+            color={
+              color === "red" ? "error" : color === "blue" ? "info" : "success"
+            }
             onClick={() => onDelete()}
             variant="contained"
           >

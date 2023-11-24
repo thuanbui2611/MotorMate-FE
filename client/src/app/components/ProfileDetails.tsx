@@ -96,7 +96,7 @@ export default function ProfileDetails() {
                   </ul>
                 </div>
                 <div className="my-4"></div>
-                <div className="bg-white p-3 hover:shadow">
+                {/* <div className="bg-white p-3 hover:shadow">
                   <div className="flex items-center space-x-3 font-semibold text-gray-900 text-xl leading-8">
                     <span className="text-green-500">
                       <svg
@@ -158,7 +158,7 @@ export default function ProfileDetails() {
                       </a>
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
 
               <div className="w-full md:w-9/12 mx-2 bg-white">
@@ -166,7 +166,8 @@ export default function ProfileDetails() {
                   <h2 className="text-2xl md:text-4xl lg:text-5xl tracking-tight font-extrabold text-gradient">
                     Motorcycle for rent:
                   </h2>
-                  {userLogin?.username === profileUser?.username && (
+                  {userLogin?.username.toLowerCase().trim() ===
+                    profileUser?.username.toLowerCase().trim() && (
                     <button
                       onClick={handleAddVehicle}
                       type="button"

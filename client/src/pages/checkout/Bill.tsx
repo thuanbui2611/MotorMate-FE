@@ -1,8 +1,32 @@
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import ProcessingBar from "../../app/components/ProcessingBar";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import agent from "../../app/api/agent";
+import { ParentOrder } from "../../app/models/TripRequest";
+import Loading from "../../app/components/Loading";
 
 export default function Bill() {
+  const [searchParams, setSearchParams] = useSearchParams({});
+  const [orderDetail, setOrderDetail] = useState<ParentOrder>();
+  const [loading, setLoading] = useState(true);
+  const paymentIntent = searchParams.get("payment_intent");
+
+  useEffect(() => {
+    if (paymentIntent && !orderDetail) {
+      //clear all params of url
+      // setSearchParams({});
+
+      agent.TripRequest.getBill(paymentIntent)
+        .then((res) => {
+          setOrderDetail(res);
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.log(error);
+          setLoading(false);
+        });
+    }
+  }, [paymentIntent]);
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
@@ -12,7 +36,9 @@ export default function Bill() {
   useEffect(() => {
     scrollToTop();
   }, []);
-  return (
+  return loading ? (
+    <Loading />
+  ) : (
     <>
       <section className="pt-12 pb-24 bg-gray-100 overflow-hidden">
         <div className="container px-4 mx-auto">
@@ -82,17 +108,17 @@ export default function Bill() {
                 <div className="flex items-start justify-start flex-shrink-0">
                   <div className="flex items-center justify-center w-full pb-6 space-x-4 md:justify-start">
                     <img
-                      src="https://i.postimg.cc/RhQYkKYk/pexels-italo-melo-2379005.jpg"
+                      src={orderDetail?.avatar}
                       className="object-cover w-16 h-16 rounded-md"
                       alt="avatar"
                     />
                     <div className="flex flex-col items-start justify-start space-y-2">
                       <p className="text-lg font-semibold leading-4 text-left text-gray-800 cursor-pointer">
-                        Rahul Sharma
+                        {orderDetail?.fullName}
                       </p>
 
                       <p className="text-sm leading-4 cursor-pointer hover:underline text-blue-500 font-medium">
-                        rahul@gmail.com
+                        {orderDetail?.email}
                       </p>
                     </div>
                   </div>
@@ -104,7 +130,7 @@ export default function Bill() {
                     Order Tag:
                   </p>
                   <p className="text-base font-medium leading-4 text-blue-600 ">
-                    #001
+                    #{orderDetail?.parentOrderId.toUpperCase()}
                   </p>
                 </div>
                 <div className="w-full px-4 mb-4 md:w-1/4">
@@ -112,7 +138,14 @@ export default function Bill() {
                     Date:
                   </p>
                   <p className="text-base font-medium leading-4 text-gray-800 ">
-                    March 18, 2022
+                    {orderDetail?.createdAt &&
+                      new Date(orderDetail.createdAt).toLocaleString([], {
+                        year: "numeric",
+                        month: "2-digit",
+                        day: "2-digit",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
                   </p>
                 </div>
                 <div className="w-full px-4 mb-4 md:w-1/4">
@@ -120,15 +153,16 @@ export default function Bill() {
                     Payment method:
                   </p>
                   <p className="text-base font-medium leading-4 text-blue-600 ">
-                    VISA
+                    International payment cards
                   </p>
                 </div>
                 <div className="w-full px-4 mb-4 md:w-1/4">
                   <p className="mb-2 text-sm leading-5 text-gray-600  ">
                     Total:
                   </p>
-                  <p className="text-base font-medium leading-4 text-green-600">
-                    500.000 VND
+                  <p className="text-base font-semibold leading-4 text-green-600">
+                    {orderDetail && orderDetail.totalAmmount.toLocaleString()}{" "}
+                    VND
                   </p>
                 </div>
                 <div className="w-full px-4 mb-4 md:w-1/4">
@@ -232,7 +266,7 @@ export default function Bill() {
                   See More Vehicles
                 </Link>
                 <Link
-                  to="/my-orders/1"
+                  to={"/my-orders/" + orderDetail?.parentOrderId}
                   className="w-fit px-4 py-2 bg-blue-500 rounded-lg text-gray-50 md:w-auto font-semibold hover:bg-blue-600"
                 >
                   View Order Details

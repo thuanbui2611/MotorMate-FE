@@ -54,6 +54,7 @@ export const updateStatusMyOrdersAsync = createAsyncThunk<
   try {
     //Not add addCase to update state yet.
     const response = await agent.TripRequest.updateStatusOrder(data);
+    debugger;
     return response;
   } catch (error: any) {
     return ThunkAPI.rejectWithValue({ error: error.data });
@@ -113,6 +114,10 @@ export const MyOrderSlice = createSlice({
       .addCase(updateStatusMyOrdersAsync.fulfilled, (state, action) => {
         myOrdersAdapter.setOne(state, action.payload);
         toast.success("Cancel order successfully!");
+      })
+      .addCase(updateStatusMyOrdersAsync.rejected, (state, action) => {
+        console.log("Update status my orders rejected: ", action);
+        toast.error("Cancel order failed!");
       });
   },
 });

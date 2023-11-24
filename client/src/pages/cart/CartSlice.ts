@@ -45,6 +45,14 @@ export const addToCartAsync = createAsyncThunk<Cart, {}>(
   async (data, thunkAPI) => {
     try {
       const response = await agent.Cart.addToCart(data);
+      response.shops.map((shop: Shop) => {
+        shop.vehicles.map((vehicle: Vehicle) => {
+          if (vehicle.pickUpDateTime && vehicle.dropOffDateTime) {
+            vehicle.pickUpDateTime = new Date(vehicle.pickUpDateTime);
+            vehicle.dropOffDateTime = new Date(vehicle.dropOffDateTime);
+          }
+        });
+      });
       return response;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -59,8 +67,10 @@ export const updateDateRentOfVehicleInCartAsync = createAsyncThunk<Cart, {}>(
       const response = await agent.Cart.updateDateRentOfVehicleInCart(data);
       response.shops.map((shop: Shop) => {
         shop.vehicles.map((vehicle: Vehicle) => {
-          vehicle.pickUpDateTime = new Date(vehicle.pickUpDateTime);
-          vehicle.dropOffDateTime = new Date(vehicle.dropOffDateTime);
+          if (vehicle.pickUpDateTime && vehicle.dropOffDateTime) {
+            vehicle.pickUpDateTime = new Date(vehicle.pickUpDateTime);
+            vehicle.dropOffDateTime = new Date(vehicle.dropOffDateTime);
+          }
         });
       });
       return response;
@@ -165,6 +175,9 @@ export const CartSlice = createSlice({
         );
       }
     },
+    resetSelectedVehicles: (state) => {
+      state.selectedVehicles = [];
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getCartAsync.pending, (state, action) => {
@@ -248,4 +261,5 @@ export const {
   removeAllVehiclesInShop,
   setSelectedVehicle,
   removeVehicleInCart,
+  resetSelectedVehicles,
 } = CartSlice.actions;
