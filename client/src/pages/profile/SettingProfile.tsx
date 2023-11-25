@@ -205,6 +205,7 @@ export default function SettingProfile() {
                   className={`font-semibold ${
                     isEditMode ? "bg-white rounded-md" : ""
                   }`}
+                  fullWidth
                   disabled={!isEditMode}
                   sx={{
                     border: "none",

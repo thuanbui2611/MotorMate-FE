@@ -63,6 +63,16 @@ export default function PaymentForm({ userLogin }: Props) {
       elements,
       confirmParams: {
         return_url: process.env.REACT_APP_CLOUDINARY_BASE_URL + "/bill",
+        payment_method_data: {
+          billing_details: {
+            name: userLogin.fullName,
+            email: userLogin.email,
+            phone: userLogin.phoneNumber,
+            address: {
+              city: userLogin.address,
+            },
+          },
+        },
       },
     });
 
@@ -125,16 +135,15 @@ export default function PaymentForm({ userLogin }: Props) {
                 focused={state.focus as Focused}
               /> */}
               <form onSubmit={handleSubmit}>
-                <LinkAuthenticationElement
+                {/* <LinkAuthenticationElement
                   options={{
                     defaultValues: {
                       email: userLogin.email,
                     },
                   }}
-                />
+                /> */}
 
                 <PaymentElement />
-                {/* <PaymentElement /> */}
                 <div className="border-b-[1px] border-r w-full border-gray-300 mt-3"></div>
                 <div className="flex items-center justify-end pt-3 w-full">
                   <div className="font-bold text-lg">Total:</div>
