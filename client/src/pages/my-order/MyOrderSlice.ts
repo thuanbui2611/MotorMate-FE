@@ -25,9 +25,9 @@ function getAxiosParams(myOrdersParams: TripRequestParams) {
   params.append("pageNumber", myOrdersParams.pageNumber.toString());
   params.append("pageSize", myOrdersParams.pageSize.toString());
 
-  // if (productParams.Search) {
-  //   params.append("Search", productParams.Search);
-  // }
+  if (myOrdersParams.SearchQuery) {
+    params.append("SearchQuery", myOrdersParams.SearchQuery);
+  }
   return params;
 }
 
@@ -52,9 +52,7 @@ export const updateStatusMyOrdersAsync = createAsyncThunk<
   { state: RootState }
 >("myOrder/updateStatusMyOrdersAsync", async (data, ThunkAPI) => {
   try {
-    //Not add addCase to update state yet.
     const response = await agent.TripRequest.updateStatusOrder(data);
-    debugger;
     return response;
   } catch (error: any) {
     return ThunkAPI.rejectWithValue({ error: error.data });
@@ -65,6 +63,7 @@ function initParams() {
   return {
     pageNumber: 1,
     pageSize: 5,
+    SearchQuery: "",
   };
 }
 

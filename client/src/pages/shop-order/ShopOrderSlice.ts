@@ -7,7 +7,6 @@ import agent from "../../app/api/agent";
 import { MetaData } from "../../app/models/Pagination";
 import { ParentOrder, TripRequestParams } from "../../app/models/TripRequest";
 import { RootState } from "../../app/store/ConfigureStore";
-import { toast } from "react-toastify";
 
 interface ShopOrderState {
   shopOrder: ParentOrder | null;
@@ -25,9 +24,9 @@ function getAxiosParams(shopOrderParams: TripRequestParams) {
   params.append("pageNumber", shopOrderParams.pageNumber.toString());
   params.append("pageSize", shopOrderParams.pageSize.toString());
 
-  // if (productParams.Search) {
-  //   params.append("Search", productParams.Search);
-  // }
+  if (shopOrderParams.SearchQuery) {
+    params.append("SearchQuery", shopOrderParams.SearchQuery);
+  }
   return params;
 }
 
@@ -63,6 +62,7 @@ function initParams() {
   return {
     pageNumber: 1,
     pageSize: 5,
+    SearchQuery: "",
   };
 }
 

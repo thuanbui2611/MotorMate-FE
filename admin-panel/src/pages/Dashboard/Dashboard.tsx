@@ -1,16 +1,13 @@
-import { ChangeEvent, useEffect, useState } from "react";
-import ChartOne from "../../app/components/ChartOne";
-import ChartThree from "../../app/components/ChartThree";
-import ChartTwo from "../../app/components/ChartTwo";
-import ChatCard from "../../app/components/ChatCard";
-import MapOne from "../../app/components/MapOne";
-import TableOne from "../../app/components/TableOne";
+import { ChangeEvent, useState } from "react";
 import { recognizeIdentityCard } from "../../app/utils/IDRecognition";
 import TotalViewsCard from "../../app/components/TotalViewsCard";
 import TotalProfitsCard from "../../app/components/TotalProfitsCard";
 import TotalProductsCard from "../../app/components/TotalProductsCard";
 import TotalUsersCard from "../../app/components/TotalUsersCard";
-import ChartFour from "../../app/components/ChartFour";
+import TableTopLessee from "../../app/components/TableTopLessee";
+import TableTopLessor from "../../app/components/TableTopLessor";
+import ChartVistorAnalyze from "../../app/components/ChartVistorAnalyze";
+import ChartTotalRevenue from "../../app/components/ChartTotalRevenue";
 
 const Dashboard = () => {
   const [ipAddress, setIPAddress] = useState("");
@@ -56,11 +53,11 @@ const Dashboard = () => {
           <input type="file" onChange={handleFileChange} />
           <button onClick={handleUpload}>Submit</button>
         </div> */}
-        <ChartOne />
-        <ChartTwo />
-        <ChartThree />
-        <TableOne />
-        <ChartFour />
+        <ChartTotalRevenue />
+        {/* <ChartThree /> */}
+        <TableTopLessee />
+        <TableTopLessor />
+        <ChartVistorAnalyze />
       </div>
     </>
   );

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import agent from "../../app/api/agent";
 import { ParentOrder } from "../../app/models/TripRequest";
 import Loading from "../../app/components/Loading";
+import NotFound from "../../app/errors/NotFound";
 
 export default function Bill() {
   const [searchParams, setSearchParams] = useSearchParams({});
@@ -36,6 +37,8 @@ export default function Bill() {
   useEffect(() => {
     scrollToTop();
   }, []);
+
+  if (!orderDetail && !loading) return <NotFound />;
   return loading ? (
     <Loading />
   ) : (
@@ -130,7 +133,7 @@ export default function Bill() {
                     Order Tag:
                   </p>
                   <p className="text-base font-medium leading-4 text-blue-600 ">
-                    #{orderDetail?.parentOrderId.toUpperCase()}
+                    #{orderDetail && orderDetail.parentOrderId.toUpperCase()}
                   </p>
                 </div>
                 <div className="w-full px-4 mb-4 md:w-1/4">

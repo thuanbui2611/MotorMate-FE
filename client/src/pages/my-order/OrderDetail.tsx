@@ -38,8 +38,8 @@ export default function OrderDetail() {
       agent.TripRequest.parentOrder(parentOrderId).then((response) => {
         if (response) {
           setOrderDetails(response);
-          setIsLoading(false);
         }
+        setIsLoading(false);
       });
     }
   }, [orderDetails, parentOrderId]);

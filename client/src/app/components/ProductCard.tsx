@@ -37,7 +37,7 @@ export default function ProductCard({ product, userLogin }: Props) {
           <div style={{ display: "inline-flex" }}>
             <svg
               viewBox="0 0 1024 1024"
-              className="icon mr-1"
+              className="iconLocation mr-1"
               version="1.1"
               xmlns="http://www.w3.org/2000/svg"
               fill="#000000"

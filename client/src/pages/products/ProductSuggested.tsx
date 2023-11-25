@@ -4,6 +4,7 @@ import { Vehicle } from "../../app/models/Vehicle";
 import agent from "../../app/api/agent";
 import { useAppSelector } from "../../app/store/ConfigureStore";
 import ProductCarousel from "../../app/components/ProductCarousel";
+import { Link } from "react-router-dom";
 
 interface Props {
   vehicle: Vehicle;
@@ -50,9 +51,9 @@ export default function ProductSuggested({ vehicle }: Props) {
               <p className="text-gray-600 dark:text-gray-400">
                 Want to see more?
               </p>
-              <a
+              <Link
                 className="inline-flex items-center gap-x-1.5 text-blue-600 decoration-2 hover:underline font-medium"
-                href="/products"
+                to="/products"
               >
                 Go here
                 <svg
@@ -69,7 +70,7 @@ export default function ProductSuggested({ vehicle }: Props) {
                     strokeLinecap="round"
                   />
                 </svg>
-              </a>
+              </Link>
             </div>
           </div>
         </div>

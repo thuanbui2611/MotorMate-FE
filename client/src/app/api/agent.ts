@@ -2,6 +2,9 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import { store } from "../store/ConfigureStore";
 import { PaginatedResponse } from "../models/Pagination";
+import { useNavigate } from "react-router-dom";
+
+
 
 axios.defaults.baseURL = process.env.REACT_APP_MOTORMATE_API_URL;
 axios.defaults.headers.post["Content-Type"] = "application/json";
@@ -26,7 +29,6 @@ axios.interceptors.response.use(
   },
   (error: AxiosError) => {
     const { data, status } = error.response!;
-    // const navigate = useNavigate();
     switch (status) {
       case 400:
         if ((data as any).errors) {
@@ -56,10 +58,11 @@ axios.interceptors.response.use(
         break;
       case 500:
         console.log("Catch 500: ", error.response);
-        toast.error(`${error.response?.statusText}`);
+        // toast.error(`${error.response?.statusText}`);
         // navigate("/server-error", {
         //   state: { error: data },
         // });
+        window.location.href = "/server-error"
         break;
       default:
         break;

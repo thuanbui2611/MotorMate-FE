@@ -261,6 +261,7 @@ body {
   }
 } */
 
+
 /* Product Homepage card */
 .card-location,
 .card-brand {
@@ -1431,6 +1432,12 @@ p {
 /* End of animation open and close chat */
 
 /* Custom product */
+.iconLocation{
+  width: 12px;
+  height: 12px;
+  margin-right: 4px;
+
+}
 .customButton {
   background-color: #ffe53b;
   background-image: linear-gradient(147deg, #ffe53b, #ff2525, #ffe53b);

@@ -1,5 +1,5 @@
 import Breadcrumb from "../app/components/Breadcrumb";
-import TableOne from "../app/components/TableOne";
+import TableOne from "../app/components/TableTopLessee";
 import TableThree from "../app/components/TableThree";
 import TableTwo from "../app/components/TableTwo";
 

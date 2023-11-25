@@ -42,4 +42,5 @@ export interface Vehicle {
 export interface TripRequestParams {
   pageNumber: number;
   pageSize: number;
+  SearchQuery: string;
 }

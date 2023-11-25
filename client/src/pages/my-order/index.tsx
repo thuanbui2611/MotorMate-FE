@@ -9,12 +9,14 @@ import {
   setMyOrdersParams,
 } from "./MyOrderSlice";
 import Pagination from "../../app/components/Pagination";
+import LoaderButton from "../../app/components/LoaderButton";
 
 export default function Orders() {
   const [searchParams, setSearchParams] = useSearchParams({});
   const [searchQuery, setSearchQuery] = useState<string>("");
   // const [paramsCompleted, setParamsCompleted] = useState(false);
   const [isStartFilter, setIsStartFilter] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const { userDetail, userLoading } = useAppSelector((state) => state.account);
   const userLogin = userDetail;
@@ -28,7 +30,7 @@ export default function Orders() {
 
   //Get params value from url
   const pageNum = searchParams.get("pageNumber");
-  const searchQueryParam = searchParams.get("Query");
+  const searchQueryParam = searchParams.get("SearchQuery");
   useEffect(() => {
     if (!userLogin && !userLoading) {
       toast.error("You need to login to view your orders!");
@@ -47,19 +49,34 @@ export default function Orders() {
     }
   }, [pageNum, dispatch]);
   //search
+  useEffect(() => {
+    if (searchQueryParam) {
+      const querySearch = searchQueryParam.trim();
+      setSearchQuery(querySearch);
+      dispatch(setMyOrdersParams({ SearchQuery: querySearch }));
+    } else {
+      setSearchParams((prev) => {
+        prev.delete("SearchQuery");
+        return prev;
+      });
+      dispatch(setMyOrdersParams({ SearchQuery: undefined }));
+    }
+  }, [searchQueryParam, dispatch]);
+
   const handleSearch = () => {
     if (searchQuery) {
       setSearchParams((prev) => {
-        prev.set("Search", searchQuery.trim());
+        prev.set("SearchQuery", searchQuery.trim());
         return prev;
       });
     } else {
       setSearchParams((prev) => {
-        prev.delete("Search");
+        prev.delete("SearchQuery");
         return prev;
       });
     }
   };
+
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       handleSearch();
@@ -79,17 +96,18 @@ export default function Orders() {
       <div className="bg-white p-8 rounded-md w-full max-w-7xl mx-auto">
         <div className=" flex items-center justify-center pb-6">
           <div>
-            <h2 className="mb-4 text-2xl md:text-4xl lg:text-6xl tracking-tight font-extrabold text-gradient">
+            <h2 className="mb-4 text-4xl lg:text-6xl tracking-tight font-extrabold text-gradient">
               My Orders
             </h2>
           </div>
         </div>
-        <div className="flex bg-gray-50 items-center p-2 w-fit rounded-xl">
+        <div className="flex bg-gray-50 items-center p-2 w-fit rounded-xl shadow-sm">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5 text-gray-400"
+            className="h-7 w-7 text-gray-600 cursor-pointer hover:text-gray-900 hover:bg-gray-300 rounded-full p-1"
             viewBox="0 0 20 20"
             fill="currentColor"
+            onClick={() => handleSearch()}
           >
             <path
               fill-rule="evenodd"
@@ -100,9 +118,9 @@ export default function Orders() {
           <input
             type="text"
             name="text"
-            className="inputSearch"
+            className="inputSearch bg-white rounded-lg"
             id="inputSearch"
-            placeholder="Search"
+            placeholder="Search order tag..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyDown={handleKeyDown}
@@ -121,8 +139,8 @@ export default function Orders() {
                     <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-sm font-bold text-gray-600 uppercase tracking-wider">
                       Lessors
                     </th>
-                    <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-sm font-bold text-gray-600 uppercase tracking-wider">
-                      Number of Vehicles
+                    <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-sm font-bold text-gray-600 uppercase tracking-wider text-center w-fit">
+                      Number of <br /> Vehicles
                     </th>
                     <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-sm font-bold text-gray-600 uppercase tracking-wider">
                       Rent date
@@ -146,6 +164,14 @@ export default function Orders() {
                           <p className="text-black dark:text-white">
                             You have no orders yet!
                           </p>
+                        </div>
+                      </td>
+                    </tr>
+                  ) : myOrdersLoaded ? (
+                    <tr>
+                      <td colSpan={7}>
+                        <div className="flex justify-center items-center w-full h-96">
+                          <LoaderButton />
                         </div>
                       </td>
                     </tr>

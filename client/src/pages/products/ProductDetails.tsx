@@ -39,7 +39,9 @@ export default function ProductDetails() {
   };
 
   useEffect(() => {
-    scrollToTop();
+    if (window.scrollY > 0) {
+      scrollToTop();
+    }
   }, []);
 
   useEffect(() => {
@@ -77,6 +79,11 @@ export default function ProductDetails() {
 
   const handleCheckOut = (dateFrom: Date, dateTo: Date) => {
     if (!product) return;
+    if (!userLogin) {
+      toast.error("Please login to rent!");
+      navigate("/login");
+      return;
+    }
     if (!dateFrom || !dateTo) {
       toast.error("Please choose date to rent");
       return;
@@ -117,7 +124,7 @@ export default function ProductDetails() {
     <>
       <div className="mx-auto w-full bg-white">
         <FadeInSection options="fade-in-scale">
-          <div className="relative p-6 md:p-16 shadow-lg rounded-xl mx-4 md:mx-36 mt-12">
+          <div className="relative max-w-[1420px] p-6 md:p-16 shadow-lg rounded-xl mx-5 lg:mx-auto mt-12">
             {/* <!-- Grid --> */}
             <div className="relative z-10 lg:grid lg:grid-cols-12 lg:gap-16 lg:items-center">
               <div className="mb-10 lg:mb-0 lg:col-span-6 lg:col-start-7 lg:order-2 lg:mr-10">
@@ -277,12 +284,12 @@ export default function ProductDetails() {
                       </p>
                     ) : (
                       <div className="flex pt-5">
-                        <span className="font-semibold text-2xl text-green-500">
+                        <span className="font-bold text-lg sm:text-2xl text-green-500">
                           {product.price.toLocaleString()} VND
                         </span>
                         <div
                           onClick={handleClickRentNow}
-                          className={`flex cursor-pointer ml-auto text-white bg-orange-based border-0 py-2 px-6 focus:outline-none hover:bg-orange-600 rounded ${
+                          className={`flex py-2 px-2 md:px-6 cursor-pointer ml-auto text-white text-sm sm:text-xl bg-orange-based border-0 shadow-md focus:outline-none hover:bg-orange-600 font-semibold rounded ${
                             product.owner.ownerId === userLogin?.id &&
                             " pointer-events-none bg-gray-400"
                           }`}
@@ -290,9 +297,9 @@ export default function ProductDetails() {
                           Rent now
                         </div>
 
-                        <button className="rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4">
+                        <button className="rounded-full w-7 h-7 sm:w-10 sm:h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4">
                           <AddToCart
-                            className="h-7 w-7"
+                            className="h-5 w-5 sm:h-7 sm:w-7"
                             userLogin={userLogin}
                             vehicle={product}
                           />
@@ -371,16 +378,19 @@ export default function ProductDetails() {
           {/* Shop information */}
           <div className="flex bg-white border border-gray-200 mt-10 w-fit rounded-2xl shadow-lg mx-auto">
             <div className="flex text-center justify-center items-center text-gray-500 md:pr-2 ">
-              <div className="flex justify-center items-center w-20 h-20 pl-2 md:w-32 md:h-32">
+              <Link
+                to={"/profile/" + product.owner.username}
+                className="flex justify-center items-center w-20 h-20 pl-2 md:w-32 md:h-32"
+              >
                 <img
-                  className="mx-auto my-auto rounded-full shadow-lg"
+                  className="mx-auto my-auto rounded-full shadow-lg cursor-pointer"
                   src={product.owner.picture}
                   alt="Shop Avatar"
                 />
-              </div>
+              </Link>
 
-              <div className="w-fit inline-flex flex-col text-left">
-                <h3 className="mx-3 mb-1 text-base font-medium md:text-2xl md:font-bold tracking-tight text-gray-900">
+              <div className="w-fit inline-flex flex-col text-left pl-3">
+                <h3 className="mr-2 mb-1 text-base font-medium md:text-2xl md:font-bold tracking-tight text-gray-900 hover:text-blue-600 line-clamp-2">
                   <Link to={"/profile/" + product.owner.username}>
                     {product.owner.name}
                   </Link>
@@ -388,7 +398,7 @@ export default function ProductDetails() {
 
                 <div className="flex">
                   <button
-                    className="flex ml-3 md:mt-4 bg-orange-200 hover:bg-orange-400 text-black py-1 px-1 rounded-full"
+                    className="flex md:mt-4 bg-orange-200 hover:bg-orange-400 text-black py-1 px-1 rounded-full"
                     onClick={() => handleClickChat(product.owner.username)}
                   >
                     <svg
@@ -421,54 +431,6 @@ export default function ProductDetails() {
                         <path
                           d="M16.5 11.5C17.3284 11.5 18 10.8284 18 10C18 9.17157 17.3284 8.5 16.5 8.5C15.6716 8.5 15 9.17157 15 10C15 10.8284 15.6716 11.5 16.5 11.5Z"
                           fill="#0F0F0F"
-                        ></path>
-                      </g>
-                    </svg>
-                  </button>
-                  <button className="flex ml-1 md:ml-2 md:mt-4 bg-orange-200 hover:bg-orange-400 text-black py-1 px-1 rounded-full">
-                    <svg
-                      className="w-4 h-4 md:w-6 md:h-6"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-                      <g
-                        id="SVGRepo_tracerCarrier"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      ></g>
-                      <g id="SVGRepo_iconCarrier">
-                        <path
-                          d="M9.5 21.5V18.5C9.5 17.5654 9.5 17.0981 9.70096 16.75C9.83261 16.522 10.022 16.3326 10.25 16.201C10.5981 16 11.0654 16 12 16C12.9346 16 13.4019 16 13.75 16.201C13.978 16.3326 14.1674 16.522 14.299 16.75C14.5 17.0981 14.5 17.5654 14.5 18.5V21.5"
-                          stroke="#000000"
-                          strokeWidth="1.5"
-                          strokeLinecap="round"
-                        ></path>
-                        <path
-                          d="M21 22H9M3 22H5.5"
-                          stroke="#000000"
-                          strokeWidth="1.5"
-                          strokeLinecap="round"
-                        ></path>
-                        <path
-                          d="M19 22V15"
-                          stroke="#000000"
-                          strokeWidth="1.5"
-                          strokeLinecap="round"
-                        ></path>
-                        <path
-                          d="M5 22V15"
-                          stroke="#000000"
-                          strokeWidth="1.5"
-                          strokeLinecap="round"
-                        ></path>
-                        <path
-                          d="M11.9999 2H7.47214C6.26932 2 5.66791 2 5.18461 2.2987C4.7013 2.5974 4.43234 3.13531 3.89443 4.21114L2.49081 7.75929C2.16652 8.57905 1.88279 9.54525 2.42867 10.2375C2.79489 10.7019 3.36257 11 3.99991 11C5.10448 11 5.99991 10.1046 5.99991 9C5.99991 10.1046 6.89534 11 7.99991 11C9.10448 11 9.99991 10.1046 9.99991 9C9.99991 10.1046 10.8953 11 11.9999 11C13.1045 11 13.9999 10.1046 13.9999 9C13.9999 10.1046 14.8953 11 15.9999 11C17.1045 11 17.9999 10.1046 17.9999 9C17.9999 10.1046 18.8953 11 19.9999 11C20.6373 11 21.205 10.7019 21.5712 10.2375C22.1171 9.54525 21.8334 8.57905 21.5091 7.75929L20.1055 4.21114C19.5676 3.13531 19.2986 2.5974 18.8153 2.2987C18.332 2 17.7306 2 16.5278 2H16"
-                          stroke="#000000"
-                          strokeWidth="1.5"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
                         ></path>
                       </g>
                     </svg>

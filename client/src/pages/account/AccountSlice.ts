@@ -89,6 +89,7 @@ export const accountSlice = createSlice({
   reducers: {
     signOut: (state) => {
       state.user = null;
+      state.userDetail = null;
       localStorage.removeItem("user");
       toast.success("Log out success!");
     },

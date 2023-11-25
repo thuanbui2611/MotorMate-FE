@@ -24,7 +24,7 @@ export default function HomePage() {
       <FadeInSection options="fade-in-section">
         <div className="cover-page flex justify-center items-center mx-auto bg-color-header px-4 py-8 lg:gap-8 xl:gap-0 lg:py-16">
           <div className="relative mx-auto w-fit flex shrink-0 justify-center items-center ">
-            <div className="h-[55.9vw] w-full">
+            <div className="h-[55.9vw] w-full max-h-[1080px]">
               <img
                 className="cover-img"
                 src={require("../../app/assets/images/cover/HeroCover-homepage.png")}

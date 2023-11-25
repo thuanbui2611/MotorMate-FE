@@ -1,8 +1,8 @@
 import Breadcrumb from "../app/components/Breadcrumb";
-import ChartFour from "../app/components/ChartFour";
-import ChartOne from "../app/components/ChartOne";
+import ChartFour from "../app/components/ChartVistorAnalyze";
 import ChartThree from "../app/components/ChartThree";
 import ChartTwo from "../app/components/ChartTwo";
+import ChartTotalRevenue from "../app/components/ChartTotalRevenue";
 
 const Chart = () => {
   return (
@@ -13,7 +13,7 @@ const Chart = () => {
         <div className="col-span-12">
           <ChartFour />
         </div>
-        <ChartOne />
+        <ChartTotalRevenue />
         <ChartTwo />
         <ChartThree />
       </div>

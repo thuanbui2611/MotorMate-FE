@@ -50,17 +50,18 @@ export default function ProductHomepage({ products }: Props) {
                 to={"/product-detail/" + product.id}
               >
                 <div className=" flex flex-col">
-                  <div className="relative rounded-2xl aspect-w-16 aspect-h-9 ">
-                    <img
-                      className="object-scale-down max-h-40 w-full rounded-t-xl hover:scale-110 transition-all"
-                      // src="https://purepng.com/public/uploads/large/purepng.com-motorcyclemotorcyclemotorbikebikecycleracing-bike-1701527509882zcnub.png"
-                      src={
-                        product.images[0].image
-                          ? product.images[0].image
-                          : undefined
-                      }
-                      alt="Image Book"
-                    />
+                  <div className="relative rounded-lg md:rounded-2xl aspect-w-16 aspect-h-9 ">
+                    <div className="h-[14vw] max-h-[200px] max-w-[230px]">
+                      <img
+                        className="object-cover h-full w-full rounded-t-lg md:rounded-t-2xl hover:scale-110 transition-all"
+                        src={
+                          product.images[0].image
+                            ? product.images[0].image
+                            : undefined
+                        }
+                        alt="Image Book"
+                      />
+                    </div>
 
                     {userLogin &&
                     userLogin.username.toLowerCase() ===
@@ -77,10 +78,10 @@ export default function ProductHomepage({ products }: Props) {
                     )}
                   </div>
                   <div
-                    className="p-1 px-2 md:px-5 md:py-1 h-fit"
+                    className="flex flex-col items-start justify-start p-1 px-2 md:px-5 md:py-1 h-fit"
                     style={{ lineClamp: 2 }}
                   >
-                    <div className="w-full inline-flex items-center justify-between">
+                    <div className="w-full inline-flex items-center justify-between mb-[1vw] sm:mb-[3px]">
                       <div className="flex items-center">
                         <svg
                           className="icon"
