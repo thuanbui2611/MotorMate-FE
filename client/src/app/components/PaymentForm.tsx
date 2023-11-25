@@ -62,7 +62,7 @@ export default function PaymentForm({ userLogin }: Props) {
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: "http://localhost:3000/bill",
+        return_url: process.env.REACT_APP_CLOUDINARY_BASE_URL + "/bill",
       },
     });
 
@@ -73,7 +73,7 @@ export default function PaymentForm({ userLogin }: Props) {
       console.log("Payment failed: ", error);
     } else {
       // Redirected to  `return_url`.
-      toast.success("Payment success");
+      // toast.success("Payment success");
       //remove vehicle from cart and reset selected payment vehicle
       selectedVehicles.forEach((shop) => {
         shop.vehicles.forEach((vehicle) => {
