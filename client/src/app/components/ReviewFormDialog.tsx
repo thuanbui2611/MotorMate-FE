@@ -423,8 +423,13 @@ export default function ReviewFormDialog({ actionReview, onClose }: Props) {
             </div>
           </form>
         </DialogBody>
-        <DialogFooter>
-          <Button variant="text" color="red" onClick={onClose} className="mr-1">
+        <DialogFooter className="items-center justify-center gap-5">
+          <Button
+            variant="text"
+            color="red"
+            onClick={onClose}
+            className="mr-1 hover:bg-gray-200"
+          >
             <span>Cancel</span>
           </Button>
           <LoadingButton

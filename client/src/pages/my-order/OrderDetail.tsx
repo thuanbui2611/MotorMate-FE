@@ -277,9 +277,9 @@ export default function OrderDetail() {
                                   </g>
                                 </g>
                               </svg>
-                            ) : vehicle.status === "Complete" ? (
+                            ) : vehicle.status === "Completed" ? (
                               <svg
-                                className="w-7 h-7 rounded-full bg-red-500 hover:bg-red-600 ml-0 md:ml-3"
+                                className="w-7 h-7 cursor-pointer rounded-full bg-red-500 hover:bg-red-600 ml-0 md:ml-3"
                                 xmlns="http://www.w3.org/2000/svg"
                                 xmlnsXlink="http://www.w3.org/1999/xlink"
                                 version="1.1"
