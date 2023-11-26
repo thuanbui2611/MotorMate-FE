@@ -236,7 +236,9 @@ export default function ProductDetails() {
                           </label>
                         </div>
 
-                        <span className="text-gray-600 ml-3">4 Reviews</span>
+                        <span className="text-gray-600 ml-3">
+                          {product.totalRating} Reviews
+                        </span>
                       </span>
                     </div>
                     <div className="flex items-center justify-start gap-7 font-semibold">
@@ -466,7 +468,7 @@ export default function ProductDetails() {
           <ProductSuggested vehicle={product} />
         </FadeInSection>
         <FadeInSection options="fade-in-scale">
-          <ReviewProduct />
+          <ReviewProduct vehicle={product} />
         </FadeInSection>
       </div>
       {isOpenRentNow && (

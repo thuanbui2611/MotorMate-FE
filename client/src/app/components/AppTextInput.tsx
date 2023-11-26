@@ -2,7 +2,7 @@ import { TextField } from "@mui/material";
 import { useController, UseControllerProps } from "react-hook-form";
 
 interface Props extends UseControllerProps {
-  label: string;
+  label?: string;
   placeholder?: string;
   size?: "small" | "medium";
   multiline?: boolean;
@@ -13,6 +13,8 @@ interface Props extends UseControllerProps {
   className?: string;
   InputProps?: any | undefined;
   value?: any | undefined;
+  maxRows?: number;
+  sx?: any;
 }
 
 export default function AppTextInput(props: Props) {
@@ -22,8 +24,10 @@ export default function AppTextInput(props: Props) {
     <TextField
       {...props}
       {...field}
+      sx={props.sx}
       multiline={props.multiline}
       rows={props.rows}
+      maxRows={props.maxRows}
       type={props.type}
       size={props.size}
       placeholder={props.placeholder}

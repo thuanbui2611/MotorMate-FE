@@ -1,41 +1,6 @@
 import Breadcrumb from "../app/components/Breadcrumb";
 
 const Settings = () => {
-  // const [modalOpen, setModalOpen] = useState(false);
-  // // const [rows, setRows] = useState(localStorage.getItem("alertSettings")?JSON.parse(localStorage.getItem("alertSettings")):[]);
-  // // set rows replace below
-  // const storedSettings = localStorage.getItem("alertSettings");
-  // const parsedSettings = storedSettings ? JSON.parse(storedSettings) : [];
-
-  // const [rows, setRows] = useState(parsedSettings);
-  // useEffect(() => {
-  //   // storing input name
-  //   localStorage.setItem("alertSettings", JSON.stringify(rows));
-  // }, [rows]);
-  // const [rowToEdit, setRowToEdit] = useState(null);
-
-  // const handleDeleteRow = (targetIndex: any) => {
-  //   setRows(rows.filter((_: any, idx: any) => idx !== targetIndex));
-  // };
-
-  // const handleEditRow = (idx: any) => {
-  //   setRowToEdit(idx);
-
-  //   setModalOpen(true);
-  // };
-
-  // const handleSubmit = (newRow: any) => {
-  //   rowToEdit === null
-  //     ? setRows([...rows, newRow])
-  //     : setRows(
-  //         rows.map((currRow: any, idx: any) => {
-  //           if (idx !== rowToEdit) return currRow;
-
-  //           return newRow;
-  //         })
-  //       );
-  // };
-
   return (
     <>
       <div className="mx-auto max-w-270">

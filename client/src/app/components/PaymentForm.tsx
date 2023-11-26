@@ -62,7 +62,7 @@ export default function PaymentForm({ userLogin }: Props) {
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: process.env.REACT_APP_CLOUDINARY_BASE_URL + "/bill",
+        return_url: process.env.REACT_APP_MOTORMATE_BASE_URL + "/bill",
         payment_method_data: {
           billing_details: {
             name: userLogin.fullName,

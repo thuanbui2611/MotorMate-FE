@@ -1,33 +1,49 @@
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import ProcessingBar from "../../app/components/ProcessingBar";
 import { useEffect, useState } from "react";
 import agent from "../../app/api/agent";
 import { ParentOrder } from "../../app/models/TripRequest";
 import Loading from "../../app/components/Loading";
 import NotFound from "../../app/errors/NotFound";
+import { useAppSelector } from "../../app/store/ConfigureStore";
+import { toast } from "react-toastify";
 
 export default function Bill() {
   const [searchParams, setSearchParams] = useSearchParams({});
   const [orderDetail, setOrderDetail] = useState<ParentOrder>();
   const [loading, setLoading] = useState(true);
   const paymentIntent = searchParams.get("payment_intent");
-
+  const { userDetail, userLoading } = useAppSelector((state) => state.account);
+  const navigate = useNavigate();
+  //Validate bill page
   useEffect(() => {
-    if (paymentIntent && !orderDetail) {
-      //clear all params of url
-      // setSearchParams({});
-
-      agent.TripRequest.getBill(paymentIntent)
-        .then((res) => {
-          setOrderDetail(res);
-          setLoading(false);
-        })
-        .catch((error) => {
-          console.log(error);
-          setLoading(false);
-        });
+    if (!userDetail && !userLoading) {
+      toast.error("Please login to continue");
+      navigate("/login");
     }
-  }, [paymentIntent]);
+    if (userDetail && !userLoading && orderDetail) {
+      if (userDetail.id !== orderDetail.userId) {
+        toast.error("You don't have permission to access this page!");
+        navigate("/");
+      }
+    }
+  }, [userDetail, userLoading, orderDetail]);
+  useEffect(() => {
+    if (paymentIntent && !orderDetail && userDetail) {
+      setTimeout(() => {
+        //clear all params of url
+        // setSearchParams({});
+        agent.TripRequest.getBill(paymentIntent)
+          .then((res) => {
+            setOrderDetail(res);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+        setLoading(false);
+      }, 3000);
+    }
+  }, [paymentIntent, userDetail]);
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
@@ -133,7 +149,7 @@ export default function Bill() {
                     Order Tag:
                   </p>
                   <p className="text-base font-medium leading-4 text-blue-600 ">
-                    #{orderDetail && orderDetail.parentOrderId.toUpperCase()}
+                    #{orderDetail && orderDetail.parentOrderId}
                   </p>
                 </div>
                 <div className="w-full px-4 mb-4 md:w-1/4">
@@ -173,15 +189,18 @@ export default function Bill() {
                     Delivery method:
                   </p>
                   <p className="text-base font-medium leading-4 text-gray-800">
-                    Self Pick Up
+                    {orderDetail?.shops[0].vehicles[0].pickUpLocation ===
+                    "Pick up at the Vehicle Address"
+                      ? "Self-Pickup"
+                      : "Standard Delivery"}
                   </p>
                 </div>
                 <div className="w-full px-4 mb-4 md:w-3/4">
-                  <p className="mb-2 text-sm leading-5 text-gray-600  ">
-                    Address:
+                  <p className="mb-2 text-sm leading-5 text-gray-600">
+                    Delivery Address:
                   </p>
                   <p className="text-base font-medium leading-4 text-gray-800">
-                    ABC ABC ABC ABC ABC ABC ABC ABC ABC ABC ABC ABC ABC ABC
+                    {orderDetail?.shops[0].vehicles[0].pickUpLocation}
                   </p>
                 </div>
               </div>

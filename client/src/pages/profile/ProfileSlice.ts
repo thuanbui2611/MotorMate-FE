@@ -9,22 +9,30 @@ import { RootState } from "../../app/store/ConfigureStore";
 import agent from "../../app/api/agent";
 import { FieldValues } from "react-hook-form";
 import { toast } from "react-toastify";
+import { ProfileParams } from "../../app/models/Profile";
+import { MetaData } from "../../app/models/Pagination";
 
 interface ProfileState {
   profileUser: UserDetail | null;
   profileUserLoaded: boolean;
   productOfUser: Vehicle | null;
   productOfUserLoaded: boolean;
+  productOfUserParams: ProfileParams;
+  metaData: MetaData | null;
 }
 
-const initialState: ProfileState = {
-  profileUser: null,
-  profileUserLoaded: false,
-  productOfUser: null,
-  productOfUserLoaded: false,
-};
-
 const profileAdapter = createEntityAdapter<Vehicle>();
+
+function getAxiosParams(myOrdersParams: ProfileParams) {
+  const params = new URLSearchParams();
+  params.append("pageNumber", myOrdersParams.pageNumber.toString());
+  params.append("pageSize", myOrdersParams.pageSize.toString());
+  debugger;
+  if (myOrdersParams.Search) {
+    params.append("Search", myOrdersParams.Search);
+  }
+  return params;
+}
 
 export const getProfileByUsernameAsync = createAsyncThunk<UserDetail, string>(
   "profile/getUser",
@@ -43,9 +51,13 @@ export const getProductsOfUserAsync = createAsyncThunk<
   string,
   { state: RootState }
 >("profile/getProductUserAsync", async (ownerId: string, ThunkAPI) => {
+  const params = getAxiosParams(
+    ThunkAPI.getState().profile.productOfUserParams
+  );
   try {
-    const response = await agent.Vehicle.getVehicleByOwner(ownerId);
-    return response;
+    const response = await agent.Vehicle.getVehicleByOwner(ownerId, params);
+    ThunkAPI.dispatch(setMetaData(response.metaData));
+    return response.items;
   } catch (error: any) {
     return ThunkAPI.rejectWithValue({ error: error.data });
   }
@@ -101,6 +113,14 @@ export const deleteProductAsync = createAsyncThunk(
   }
 );
 
+function initParams() {
+  return {
+    pageNumber: 1,
+    pageSize: 5,
+    Search: "",
+  };
+}
+
 export const ProfileSlice = createSlice({
   name: "profile",
   initialState: profileAdapter.getInitialState<ProfileState>({
@@ -108,6 +128,8 @@ export const ProfileSlice = createSlice({
     profileUser: null,
     profileUserLoaded: false,
     productOfUserLoaded: false,
+    productOfUserParams: initParams(),
+    metaData: null,
   }),
   reducers: {
     addProductUser: (state, action) => {
@@ -119,11 +141,20 @@ export const ProfileSlice = createSlice({
     removeProductUser: (state, action) => {
       profileAdapter.removeOne(state, action.payload);
     },
+    setMetaData: (state, action) => {
+      state.metaData = action.payload;
+    },
+    setProductOfUserParams: (state, action) => {
+      state.productOfUserParams = {
+        ...state.productOfUserParams,
+        ...action.payload,
+      };
+    },
   },
   extraReducers: (builder) => {
     builder
       .addCase(getProductsOfUserAsync.fulfilled, (state, action) => {
-        profileAdapter.upsertMany(state, action.payload);
+        profileAdapter.setAll(state, action.payload);
         state.productOfUserLoaded = false;
       })
       .addCase(getProductsOfUserAsync.pending, (state, action) => {
@@ -169,4 +200,4 @@ export const profileSelectors = profileAdapter.getSelectors(
   (state: RootState) => state.profile
 );
 
-export const {} = ProfileSlice.actions;
+export const { setMetaData, setProductOfUserParams } = ProfileSlice.actions;

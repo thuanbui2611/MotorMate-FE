@@ -8,11 +8,13 @@ import { User, UserDetail } from "../../app/models/User";
 interface AccountState {
   user: User | null;
   userDetail: UserDetail | null;
+  userLoading: boolean;
 }
 
 const initialState: AccountState = {
   user: null,
   userDetail: null,
+  userLoading: false,
 };
 
 export const signInUser = createAsyncThunk<User, FieldValues>(
@@ -87,10 +89,8 @@ export const AccountSlice = createSlice({
   reducers: {
     signOut: (state) => {
       state.user = null;
+      state.userDetail = null;
       localStorage.removeItem("user");
-      toast.success("Log out success!");
-      //reload page to reset state
-      window.location.reload();
     },
     setUser: (state, action) => {
       try {

@@ -11,6 +11,7 @@ import { VehicleDeniedSlice } from "../../pages/vehicles/VehicleDeniedSlice";
 import { UserSlice } from "../../pages/users/UserSlice";
 import { BlogSlice } from "../../pages/blog/BlogSlice";
 import { BlogCategorySlice } from "../../pages/blogCategory/BlogCategorySlice";
+import { TransactionSlice } from "../../pages/transactions/TransactionSlice";
 
 export const store = configureStore({
   reducer: {
@@ -25,6 +26,7 @@ export const store = configureStore({
     user: UserSlice.reducer,
     blog: BlogSlice.reducer,
     blogCategory: BlogCategorySlice.reducer,
+    transaction: TransactionSlice.reducer,
   },
 });
 

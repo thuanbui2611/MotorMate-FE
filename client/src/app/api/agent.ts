@@ -4,8 +4,6 @@ import { store } from "../store/ConfigureStore";
 import { PaginatedResponse } from "../models/Pagination";
 import { useNavigate } from "react-router-dom";
 
-
-
 axios.defaults.baseURL = process.env.REACT_APP_MOTORMATE_API_URL;
 axios.defaults.headers.post["Content-Type"] = "application/json";
 const responseBody = (response: AxiosResponse) => response.data;
@@ -62,7 +60,7 @@ axios.interceptors.response.use(
         // navigate("/server-error", {
         //   state: { error: data },
         // });
-        window.location.href = "/server-error"
+        window.location.href = "/server-error";
         break;
       default:
         break;
@@ -140,8 +138,10 @@ const Vehicle = {
   listVehicleByStatus: (params: URLSearchParams, statusRoute: string) =>
     requests.get(`api/vehicle/status/${statusRoute}`, params),
   details: (id: string) => requests.get(`api/vehicle/${id}`),
-  getVehicleByOwner: (ownerId: string) =>
-    requests.get(`api/vehicle/owner/${ownerId}`),
+  getVehicleByOwner: (ownerId: string, params: URLSearchParams) =>
+    requests.get(`api/vehicle/owner/${ownerId}`, params),
+  getReviewsOfVehicle: (vehicleId: string, params: URLSearchParams) =>
+    requests.get(`api/vehicle/review/${vehicleId}`, params),
   create: (values: {}) => requests.post("api/vehicle", values),
   getRelatedVehicles: (id: string) => requests.get(`api/vehicle/related/${id}`),
   update: (id: string, values: {}) => requests.put(`api/vehicle/${id}`, values),
@@ -191,6 +191,7 @@ const TripRequest = {
     requests.get(`api/order/lessee/${lesseeId}?${params}`),
   ordersOfLessor: (lessorId: string, params: URLSearchParams) =>
     requests.get(`api/order/lessor/${lessorId}?${params}`),
+  reviewVehicle: (values: {}) => requests.post(`api/order/review`, values),
   updateStatusOrder: (values: {}) => requests.put(`api/order/status`, values),
 };
 const Email = {

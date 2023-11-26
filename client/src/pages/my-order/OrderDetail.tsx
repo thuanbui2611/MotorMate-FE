@@ -1,13 +1,14 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import ReviewFormDialog from "../../app/components/ReviewFormDialog";
 import { useAppDispatch, useAppSelector } from "../../app/store/ConfigureStore";
 import { myOrderSelectors, updateStatusMyOrdersAsync } from "./MyOrderSlice";
-import { ParentOrder, Vehicle } from "../../app/models/TripRequest";
+import { ParentOrder, Shop, Vehicle } from "../../app/models/TripRequest";
 import agent from "../../app/api/agent";
 import Loading from "../../app/components/Loading";
 import NotFound from "../../app/errors/NotFound";
 import ConfirmCancelDialog from "../../app/components/ConfirmCancelDialog";
+import { toast } from "react-toastify";
 
 export default function OrderDetail() {
   const [isOpenConfirmCancelDialog, setIsOpenConfirmCancelDialog] =
@@ -18,12 +19,31 @@ export default function OrderDetail() {
   const [selectedVehiclesCancel, setSelectedVehiclesCancel] = useState<
     Vehicle[]
   >([]);
-
+  const [selectedVehicleReview, setSelectedVehicleReview] =
+    useState<Vehicle | null>(null);
+  const [selectedShopReview, setSelectedShopReview] = useState<Shop | null>(
+    null
+  );
+  const { userDetail, userLoading } = useAppSelector((state) => state.account);
   const dispatch = useAppDispatch();
   const { parentOrderId } = useParams();
   const order = useAppSelector((state) =>
     myOrderSelectors.selectById(state, parentOrderId!)
   );
+  const navigate = useNavigate();
+  //Validate page
+  useEffect(() => {
+    if (!userDetail && !userLoading) {
+      toast.error("You must login to access this page!");
+      navigate("/login");
+    }
+    if (userDetail && !userLoading && orderDetails) {
+      if (userDetail.id !== orderDetails.userId) {
+        toast.error("You don't have permission to access this page!");
+        navigate("/not-found");
+      }
+    }
+  }, [userDetail, userLoading, orderDetails]);
 
   useEffect(() => {
     if (order) {
@@ -33,7 +53,7 @@ export default function OrderDetail() {
   }, [order]);
 
   useEffect(() => {
-    if (!orderDetails && parentOrderId && !order) {
+    if (!orderDetails && parentOrderId && !order && userDetail) {
       setIsLoading(true);
       agent.TripRequest.parentOrder(parentOrderId).then((response) => {
         if (response) {
@@ -42,7 +62,7 @@ export default function OrderDetail() {
         setIsLoading(false);
       });
     }
-  }, [orderDetails, parentOrderId]);
+  }, [orderDetails, parentOrderId, userDetail]);
   // Hover to see
   let hoverTimer: ReturnType<typeof setTimeout>;
   function startHoverTimer(idDiv: string) {
@@ -62,6 +82,15 @@ export default function OrderDetail() {
     const hiddenDiv = document.getElementById(idDiv) as HTMLElement;
     hiddenDiv.classList.add("hidden");
   }
+
+  const handleOpenReviewDialog = (vehicle: Vehicle) => {
+    const shop = orderDetails?.shops.find((shop) =>
+      shop.vehicles.includes(vehicle)
+    );
+    if (shop) setSelectedShopReview(shop);
+    setIsOpenReviewDialog(true);
+    setSelectedVehicleReview(vehicle);
+  };
   const handleCloseReviewDialog = () => {
     setIsOpenReviewDialog(false);
   };
@@ -117,7 +146,7 @@ export default function OrderDetail() {
             <h1 className="text-3xl lg:text-4xl font-semibold leading-7 lg:leading-9 ">
               Order{" "}
               <span className="text-blue-600">
-                #{orderDetails && orderDetails.parentOrderId.toUpperCase()}
+                #{orderDetails && orderDetails.parentOrderId}
               </span>
             </h1>
             <p className="text-base dark:text-gray-500 font-medium leading-6 text-gray-600">
@@ -131,11 +160,32 @@ export default function OrderDetail() {
                 })}
             </p>
           </div>
-          <div className=" font-bold text-blue-600 w-fit h-fit p-1 px-2 bg-blue-200 rounded-full">
-            Status
+          <div
+            className={`font-bold text-blue-600 w-fit h-fit p-1 px-2 bg-blue-200 rounded-full ${
+              orderDetails?.status === "Pending"
+                ? "text-blue-600 bg-blue-200"
+                : orderDetails?.status === "Canceled"
+                ? "text-red-600 bg-red-200"
+                : orderDetails?.status === "On Going"
+                ? "text-orange-based bg-orange-100"
+                : "text-green-600 bg-green-200"
+            }`}
+          >
+            {orderDetails?.status}
           </div>
         </div>
-        <div className="mt-10 flex flex-col xl:flex-row jusitfy-center items-stretch w-full xl:space-x-8 space-y-4 md:space-y-6 xl:space-y-0">
+        <div className="flex items-start justify-start mt-5">
+          <p className="text-blue-600">
+            {orderDetails?.shops[0].vehicles[0].pickUpLocation ===
+            "Pick up at the Vehicle Address"
+              ? "Self-Pickup: "
+              : "Standard Delivery Address: "}
+            <span className="font-medium text-black">
+              {orderDetails?.shops[0].vehicles[0].pickUpLocation}
+            </span>
+          </p>
+        </div>
+        <div className="mt-5 flex flex-col xl:flex-row jusitfy-center items-stretch w-full xl:space-x-8 space-y-4 md:space-y-6 xl:space-y-0">
           <div className="flex flex-col justify-start items-start w-full space-y-4 md:space-y-6 xl:space-y-8">
             {/* <p className="text-lg md:text-xl   font-semibold leading-6 xl:leading-5 text-black">
               Customer’s Cart
@@ -145,7 +195,7 @@ export default function OrderDetail() {
                 {/* Shop information */}
                 <div className="flex items-center justify-start mb-4">
                   <Link
-                    to={"/profile/" + ""}
+                    to={"/profile/" + shop.lessorName.toLocaleLowerCase()}
                     className="w-fit rounded p-2 pl-0"
                   >
                     <div className="flex items-center no-underline hover:underline text-black ">
@@ -170,10 +220,12 @@ export default function OrderDetail() {
                     >
                       <div
                         className={`absolute top-0 right-0 font-bold w-fit h-fit p-1  rounded-full text-xs ${
-                          vehicle.status === "Pending"
+                          vehicle?.status === "Pending"
                             ? "text-blue-600 bg-blue-200"
-                            : vehicle.status === "Canceled"
+                            : vehicle?.status === "Canceled"
                             ? "text-red-600 bg-red-200"
+                            : vehicle?.status === "On Going"
+                            ? "text-orange-based bg-orange-100"
                             : "text-green-600 bg-green-200"
                         } `}
                       >
@@ -205,6 +257,10 @@ export default function OrderDetail() {
                                 License plates:{" "}
                               </span>
                               {vehicle.licensePlate}
+                            </p>
+                            <p className="text-sm leading-none text-black">
+                              <span className="text-gray-500">Address: </span>
+                              {vehicle.pickUpLocation}
                             </p>
                           </div>
                         </div>
@@ -285,7 +341,7 @@ export default function OrderDetail() {
                                 version="1.1"
                                 viewBox="0 0 256 256"
                                 xmlSpace="preserve"
-                                onClick={() => setIsOpenReviewDialog(true)}
+                                onClick={() => handleOpenReviewDialog(vehicle)}
                                 onMouseEnter={() =>
                                   startHoverTimer(vehicle.vehicleId.toString())
                                 }
@@ -517,14 +573,16 @@ export default function OrderDetail() {
             </div>
           </div> */}
         </div>
-        <div className="flex items-center justify-center space-x-4 mt-8">
-          <div
-            className="text-center bg-red-600 w-fit h-fit p-2 px-3 rounded-full text-white font-bold shadow-md cursor-pointer shadow-red-900/30  hover:brightness-90"
-            onClick={handleSelectCancelAll}
-          >
-            Cancel Order
+        {orderDetails?.status === "Pending" && (
+          <div className="flex items-center justify-center space-x-4 mt-8">
+            <div
+              className="text-center bg-red-600 w-fit h-fit p-2 px-3 rounded-full text-white font-bold shadow-md cursor-pointer shadow-red-900/30  hover:brightness-90"
+              onClick={handleSelectCancelAll}
+            >
+              Cancel Order
+            </div>
           </div>
-        </div>
+        )}
       </div>
       {isOpenConfirmCancelDialog && (
         <ConfirmCancelDialog
@@ -550,7 +608,11 @@ export default function OrderDetail() {
         />
       )}
       {isOpenReviewDialog && (
-        <ReviewFormDialog onClose={handleCloseReviewDialog} />
+        <ReviewFormDialog
+          vehicle={selectedVehicleReview}
+          shop={selectedShopReview}
+          onClose={handleCloseReviewDialog}
+        />
       )}
     </>
   );

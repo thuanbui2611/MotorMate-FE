@@ -83,7 +83,8 @@ const Account = {
   loginGoogle: (values: { tokenCredential: string }) =>
     requests.post("api/auth/sso/google", values),
   Register: (values: {}) => requests.post("api/auth/sign-up", values),
-  updateIsLockUser: (values: {}, userId: string) => requests.post(`api/auth/${userId}/lock`, values),
+  updateIsLockUser: (values: {}, userId: string) =>
+    requests.post(`api/auth/${userId}/lock`, values),
 };
 
 const Brand = {
@@ -167,6 +168,12 @@ const Category = {
   delete: (id: string) => requests.delete(`api/blog/category/${id}`),
 };
 
+const TripeRequest = {
+  list: (params: URLSearchParams) => requests.get("api/order", params),
+  parentOrder: (parentOrderId: string) =>
+    requests.get(`api/order/parent/${parentOrderId}`),
+};
+
 const agent = {
   Account,
   Brand,
@@ -177,6 +184,7 @@ const agent = {
   User,
   Blog,
   Category,
+  TripeRequest,
 };
 
 export default agent;

@@ -5,10 +5,9 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import dayjs, { Dayjs } from "dayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import Loading from "../../app/components/Loading";
 import ProductList from "./ProductList";
 
@@ -51,6 +50,8 @@ export default function Products() {
   const [priceFilter, setPriceFilter] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [paramsCompleted, setParamsCompleted] = useState(false);
+  const [startDate, setStartDate] = useState<any>();
+  const [endDate, setEndDate] = useState<any>();
 
   const products = useAppSelector(productSelectors.selectAll);
   const { productLoaded, metaData, productParams } = useAppSelector(
@@ -66,6 +67,9 @@ export default function Products() {
   const citiesParam = searchParams.get("Cities");
   const isSortPriceDescParam = searchParams.get("IsSortPriceDesc");
   const searchQueryParam = searchParams.get("Search");
+  const startDateParam = searchParams.get("StartDate");
+  const endDateParam = searchParams.get("EndDate");
+
   const cities = dataCityVN as City[];
 
   // Get data for filter
@@ -316,6 +320,7 @@ export default function Products() {
       });
     }
   };
+
   const handleSelectCityChange = (
     event: React.SyntheticEvent<Element, Event>,
     newValue: City[]
@@ -340,6 +345,7 @@ export default function Products() {
       });
     }
   };
+
   const handleSelectBrandChange = (
     event: React.SyntheticEvent<Element, Event>,
     newValue: Brand[]
@@ -393,36 +399,102 @@ export default function Products() {
       handleSearch();
     }
   };
-
   // End of handle change filter
 
-  //Date picker
-  const [startDate, setStartDate] = React.useState<Dayjs | null>();
-  // dayjs("2022-04-17")
-  const [endDate, setEndDate] = React.useState<Dayjs | null>();
-  // dayjs("20-10-2022")
-  //End of date picker
+  // Start of DateRent filter
+  useEffect(() => {
+    if (startDate && endDate) {
+      debugger;
+      setSearchParams((prev) => {
+        prev.set("StartDate", startDate.format("DD/MM/YYYY"));
+        return prev;
+      });
+      setSearchParams((prev) => {
+        prev.set("EndDate", endDate.format("DD/MM/YYYY"));
+        return prev;
+      });
+    }
+  }, [startDate, endDate]);
+
+  useEffect(() => {
+    if (startDateParam && endDateParam) {
+      const startDate = decodeURIComponent(startDateParam);
+      const endDate = decodeURIComponent(endDateParam);
+      const test = formatDateToISO(startDate);
+      debugger;
+      dispatch(
+        setProductParams({
+          DateRentFrom: formatDateToISO(startDate),
+          DateRentTo: formatDateToISO(endDate),
+        })
+      );
+    } else {
+      setSearchParams((prev) => {
+        prev.delete("StartDate");
+        prev.delete("EndDate");
+        return prev;
+      });
+      dispatch(
+        setProductParams({ DateRentFrom: undefined, DateRentTo: undefined })
+      );
+    }
+  }, [startDate, endDate, dispatch]);
+
+  const formatDateToISO = (dateString: string) => {
+    const [day, month, year] = dateString.split("/");
+    const isoDate = new Date(+year, +month - 1, +day).toISOString();
+    return isoDate;
+  };
+  // End of DateRent filter
   if (!metaData) return <Loading />;
   return (
     <FadeInSection options="fade-in-scale">
       <div className="w-full my-12 mx-auto">
         <div className="flex justify-center items-center space-x-5">
           <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <div className="">
+            <div className="flex items-center justify-center gap-4">
               <DatePicker
-                label="Start date"
-                defaultValue={dayjs()}
-                value={startDate}
-                onChange={(newStartDate) => setStartDate(newStartDate)}
-                className="xl:w-[10vw] lg:w-[10vw] md:w-[12vw] sm:w-[10vw]"
+                label="Start Date"
+                sx={{
+                  "& .MuiOutlinedInput-input": {
+                    width: "90px",
+                    paddingRight: "0px",
+                  },
+                  "& .MuiIconButton-root": {
+                    position: "relative",
+                    right: "10px",
+                    ":hover": {
+                      backgroundColor: "rgba(9, 53, 227, 0.3)",
+                    },
+                  },
+                }}
+                format="DD/MM/YYYY"
+                onChange={(date: any) => setStartDate(date)}
+                disablePast={true}
               />
-            </div>
-            <div>
+
               <DatePicker
-                label="End date"
-                value={endDate}
-                onChange={(newEndDate) => setEndDate(newEndDate)}
-                className="xl:w-[10vw] lg:w-[10vw] md:w-[12vw] sm:w-[10vw]"
+                label="End Date"
+                sx={{
+                  "& .MuiOutlinedInput-input": {
+                    width: "90px",
+                    paddingRight: "0px",
+                  },
+                  "& .MuiIconButton-root": {
+                    position: "relative",
+                    right: "10px",
+                    ":hover": {
+                      backgroundColor: "rgba(9, 53, 227, 0.3)",
+                    },
+                  },
+                }}
+                format="DD/MM/YYYY"
+                disabled={startDate ? false : true}
+                disablePast={true}
+                shouldDisableDate={(date: any) => {
+                  return date <= startDate;
+                }}
+                onChange={(date: any) => setEndDate(date)}
               />
             </div>
           </LocalizationProvider>
@@ -632,8 +704,8 @@ export default function Products() {
                               <MenuItem value="">
                                 <em>None</em>
                               </MenuItem>
-                              <MenuItem value="true">Increasing</MenuItem>
-                              <MenuItem value="false">Descreasing</MenuItem>
+                              <MenuItem value="false">Increasing</MenuItem>
+                              <MenuItem value="true">Descreasing</MenuItem>
                             </Select>
                           </FormControl>
                           {/* End Filter by price form */}

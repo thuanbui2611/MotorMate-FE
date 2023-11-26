@@ -82,6 +82,7 @@ export default function Orders() {
       handleSearch();
     }
   };
+  //end search
   useEffect(() => {
     if (!myOrdersLoaded && userLogin) {
       //paramsCompleted
@@ -93,7 +94,7 @@ export default function Orders() {
     <Loading />
   ) : (
     <>
-      <div className="bg-white p-8 rounded-md w-full max-w-7xl mx-auto">
+      <div className="bg-white p-8 rounded-md w-full max-w-7xl mx-auto min-h-screen">
         <div className=" flex items-center justify-center pb-6">
           <div>
             <h2 className="mb-4 text-4xl lg:text-6xl tracking-tight font-extrabold text-gradient">
@@ -186,7 +187,7 @@ export default function Orders() {
                         >
                           <td className="px-5 pr-2 py-5 border-b border-gray-200">
                             <p className="text-blue-500 font-medium text-base w-fit">
-                              #{order.parentOrderId.toUpperCase()}
+                              #{order.parentOrderId}
                             </p>
                           </td>
                           <td className="px-5 py-5 border-b border-gray-200">
@@ -254,8 +255,18 @@ export default function Orders() {
                             </p>
                           </td>
                           <td className="px-5 py-5 border-b border-gray-200">
-                            <span className="relative inline-block px-2 py-1 font-bold text-blue-600 bg-blue-200 leading-tight rounded-full text-sm">
-                              Pending
+                            <span
+                              className={`relative inline-block px-2 py-1 font-bold leading-tight rounded-full text-sm ${
+                                order?.status === "Pending"
+                                  ? "text-blue-600 bg-blue-200"
+                                  : order?.status === "Canceled"
+                                  ? "text-red-600 bg-red-200"
+                                  : order?.status === "On Going"
+                                  ? "text-orange-based bg-orange-100"
+                                  : "text-green-600 bg-green-200"
+                              }`}
+                            >
+                              {order.status}
                             </span>
                           </td>
                         </tr>
@@ -266,7 +277,7 @@ export default function Orders() {
               </table>
             </div>
           </div>
-          <div className="flex justify-center items-center mt-6">
+          <div className="flex justify-center items-center">
             <Pagination
               metaData={metaData}
               onPageChange={(page: number) => {

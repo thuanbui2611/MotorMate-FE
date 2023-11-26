@@ -9,6 +9,7 @@ import { LoadingButton } from "@mui/lab";
 import { useState } from "react";
 
 interface Props {
+  actionTitle?: string;
   actionName?: string;
   objectName: string;
   content?: string;
@@ -17,6 +18,7 @@ interface Props {
   onClose: () => void;
 }
 export default function ConfirmDeleteDialog({
+  actionTitle,
   actionName,
   objectName,
   content,
@@ -47,7 +49,7 @@ export default function ConfirmDeleteDialog({
               : "text-green-600"
           }`}
         >
-          {actionName ? actionName : "Confirm Delete"}
+          {actionTitle ? actionTitle : "Confirm Delete"}
         </DialogHeader>
         <DialogBody divider className="px-8">
           <p
@@ -61,6 +63,20 @@ export default function ConfirmDeleteDialog({
           >
             You should read this carefully!
           </p>
+          {actionName === "Completed" ? (
+            <p className="text-base font-medium">
+              Only vehicles that are{" "}
+              <span className="text-orange-based">on going</span> and
+              <span className="text-blue-600"> pending</span> will be completed.
+            </p>
+          ) : (
+            // Approved vehicles
+            <p className="text-base font-medium">
+              Only vehicles that are{" "}
+              <span className="text-blue-600"> pending</span> will be approved.
+            </p>
+          )}
+
           <p className="text-base font-medium">
             {content ? content : "Are you sure you want to delete:"}
             <span className="font-bold ml-2">{objectName}</span>

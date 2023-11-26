@@ -90,7 +90,7 @@ export default function Orders() {
     <Loading />
   ) : (
     <>
-      <div className="bg-white p-8 rounded-md w-full max-w-7xl mx-auto">
+      <div className="bg-white p-8 rounded-md w-full max-w-7xl mx-auto min-h-screen">
         <div className=" flex items-center justify-center pb-6">
           <div>
             <h2 className="mb-4 text-4xl lg:text-6xl tracking-tight font-extrabold text-gradient">
@@ -135,8 +135,8 @@ export default function Orders() {
                     <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-sm font-bold text-gray-600 uppercase tracking-wider">
                       Customers
                     </th>
-                    <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-sm font-bold text-gray-600 uppercase tracking-wider">
-                      Number of Vehicles
+                    <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-sm font-bold text-gray-600 uppercase tracking-wider text-center">
+                      Number of <br /> Vehicles
                     </th>
                     <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-sm font-bold text-gray-600 uppercase tracking-wider">
                       Rent date
@@ -182,17 +182,12 @@ export default function Orders() {
                         >
                           <td className="px-5 pr-2 py-5 border-b border-gray-200">
                             <p className="text-blue-500 font-medium text-base w-fit">
-                              #{order.parentOrderId.toUpperCase()}
+                              #{order.parentOrderId}
                             </p>
                           </td>
                           <td className="px-5 py-5 border-b border-gray-200">
                             <p className="text-black font-medium text-base">
-                              {order.shops.length === 1
-                                ? order.shops[0].lessorName
-                                : order.shops[0].lessorName +
-                                  ", others " +
-                                  (order.shops.length - 1) +
-                                  " lessors"}
+                              {order.username}
                             </p>
                           </td>
                           <td className="px-5 py-5 border-b border-gray-200 text-base">
@@ -251,7 +246,7 @@ export default function Orders() {
                           </td>
                           <td className="px-5 py-5 border-b border-gray-200">
                             <span className="relative inline-block px-2 py-1 font-bold text-blue-600 bg-blue-200 leading-tight rounded-full text-sm">
-                              Pending
+                              {order.status}
                             </span>
                           </td>
                         </tr>
@@ -262,7 +257,7 @@ export default function Orders() {
               </table>
             </div>
           </div>
-          <div className="flex justify-center items-center mt-6">
+          <div className="flex justify-center items-center">
             <Pagination
               metaData={metaData}
               onPageChange={(page: number) => {

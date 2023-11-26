@@ -1,10 +1,8 @@
 import { Navigate, createBrowserRouter } from "react-router-dom";
 import App from "../../App";
 import DefaultLayout from "../layout/DefaulLayout";
-import Chart from "../../pages/Chart";
 import Profile from "../../pages/Profile";
 import Settings from "../../pages/Settings";
-import Tables from "../../pages/Tables";
 import Brand from "../../pages/brand";
 import Transactions from "../../pages/transactions";
 import Dashboard from "../../pages/Dashboard/Dashboard";
@@ -18,6 +16,9 @@ import ColorPage from "../../pages/color";
 import UsersPage from "../../pages/users";
 import BlogPage from "../../pages/blog";
 import BlogCategory from "../../pages/blogCategory/BlogCategory";
+import TransactionDetail from "../../pages/transactions/TransactionDetail";
+import NotFound from "../errors/NotFound";
+import RequireAuth from "./RequireAuth";
 
 export const router = createBrowserRouter([
   {
@@ -25,31 +26,37 @@ export const router = createBrowserRouter([
     element: <App />,
     children: [
       {
-        element: <DefaultLayout />,
+        element: <RequireAuth roles={["Admin", "Staff"]} />,
         children: [
-          { path: "", element: <Dashboard /> },
-          { path: "dashboard", element: <Dashboard /> },
-          { path: "collections", element: <Collection /> },
-          { path: "brand", element: <Brand /> },
-          { path: "transactions", element: <Transactions /> },
-          { path: "model-vehicles", element: <ModelVehicle /> },
-          { path: "colors", element: <ColorPage /> },
-          { path: "vehicles", element: <VehiclesPage /> },
-          { path: "vehicles/pending", element: <VehiclePending /> },
-          { path: "vehicles/deny", element: <VehicleDenied /> },
-          { path: "users", element: <UsersPage /> },
-          { path: "profile", element: <Profile /> },
-          { path: "blog", element: <BlogPage /> },
-          { path: "blog/category", element: <BlogCategory /> },
-
-          { path: "tables", element: <Tables /> },
-          { path: "settings", element: <Settings /> },
-          { path: "chart", element: <Chart /> },
+          {
+            element: <DefaultLayout />,
+            children: [
+              { path: "", element: <Dashboard /> },
+              { path: "dashboard", element: <Dashboard /> },
+              { path: "collections", element: <Collection /> },
+              { path: "brand", element: <Brand /> },
+              { path: "transactions", element: <Transactions /> },
+              {
+                path: "transactions/:parentOrderId",
+                element: <TransactionDetail />,
+              },
+              { path: "model-vehicles", element: <ModelVehicle /> },
+              { path: "colors", element: <ColorPage /> },
+              { path: "vehicles", element: <VehiclesPage /> },
+              { path: "vehicles/pending", element: <VehiclePending /> },
+              { path: "vehicles/deny", element: <VehicleDenied /> },
+              { path: "users", element: <UsersPage /> },
+              { path: "profile", element: <Profile /> },
+              { path: "blog", element: <BlogPage /> },
+              { path: "blog/category", element: <BlogCategory /> },
+              { path: "settings", element: <Settings /> },
+            ],
+          },
         ],
       },
 
       { path: "login", element: <SignIn /> },
-      // { path: 'not-found', element: <NotFound /> },
+      { path: "not-found", element: <NotFound /> },
       { path: "*", element: <Navigate replace to="/not-found" /> },
     ],
   },

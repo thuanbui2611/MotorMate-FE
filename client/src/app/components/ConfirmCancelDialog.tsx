@@ -48,11 +48,17 @@ export default function ConfirmCancelDialog({
             You should read this carefully!
           </p>
           <p className="text-base font-medium">
+            Only vehicles that are{" "}
+            <span className="text-orange-based">on going</span> and
+            <span className="text-blue-600"> pending</span> will be cancelled.
+          </p>
+          <p className="text-base font-medium">
             {content}
             <span className="font-bold ml-2">
               {objectName ? objectName : ""}
             </span>
           </p>
+
           <div className="flex gap-4 items-start justify-start mt-2">
             <p className="font-medium text-base">Reason:</p>
             <TextField
@@ -75,7 +81,12 @@ export default function ConfirmCancelDialog({
           </div>
         </DialogBody>
         <DialogFooter>
-          <Button variant="text" color="red" onClick={onClose} className="mr-1">
+          <Button
+            variant="text"
+            color="red"
+            onClick={onClose}
+            className="mr-1 hover:bg-gray-200"
+          >
             <span>Cancel</span>
           </Button>
           <LoadingButton

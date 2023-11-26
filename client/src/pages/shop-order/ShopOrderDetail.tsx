@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { ParentOrder, Vehicle } from "../../app/models/TripRequest";
 import { useAppDispatch, useAppSelector } from "../../app/store/ConfigureStore";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   shopOrderSelectors,
   updateStatusShopOrdersAsync,
@@ -31,6 +31,22 @@ export default function ShopOrderDetail() {
   const order = useAppSelector((state) =>
     shopOrderSelectors.selectById(state, parentOrderId!)
   );
+  const { userDetail, userLoading } = useAppSelector((state) => state.account);
+  const navigate = useNavigate();
+  //Validate page
+  useEffect(() => {
+    if (!userDetail && !userLoading) {
+      toast.error("You must login to access this page!");
+      navigate("/login");
+    }
+    if (userDetail && !userLoading && orderDetails) {
+      if (userDetail.id !== orderDetails.shops[0].lessorId) {
+        toast.error("You don't have permission to access this page!");
+        navigate("/not-found");
+      }
+    }
+  }, [userDetail, userLoading, orderDetails]);
+  //End validate page
 
   useEffect(() => {
     if (order) {
@@ -40,7 +56,7 @@ export default function ShopOrderDetail() {
   }, [order]);
 
   useEffect(() => {
-    if (!orderDetails && parentOrderId && !order) {
+    if (!orderDetails && parentOrderId && !order && userDetail) {
       setIsLoading(true);
       agent.TripRequest.parentOrder(parentOrderId).then((response) => {
         if (response) {
@@ -50,9 +66,11 @@ export default function ShopOrderDetail() {
         setIsLoading(false);
       });
     }
-  }, [orderDetails, parentOrderId]);
+  }, [orderDetails, parentOrderId, userDetail]);
+
   // Hover to see
   let hoverTimer: ReturnType<typeof setTimeout>;
+
   function startHoverTimer(idDiv: string) {
     hoverTimer = setTimeout(() => showMessage(idDiv), 300);
   }
@@ -104,7 +122,6 @@ export default function ShopOrderDetail() {
           .map((vehicle) => vehicle.requestId);
         break;
     }
-    debugger;
     if (requestIds.length === 0) return;
 
     const result = await dispatch(
@@ -176,15 +193,32 @@ export default function ShopOrderDetail() {
             <h1 className="text-3xl dark:text-white lg:text-4xl font-semibold leading-7 lg:leading-9 text-gray-800">
               Order{" "}
               <span className="text-blue-600">
-                #{orderDetails && orderDetails.parentOrderId.toUpperCase()}
+                #{orderDetails && orderDetails.parentOrderId}
               </span>
             </h1>
             <p className="text-base dark:text-gray-300 font-medium leading-6 text-gray-600">
-              21st Mart 2021 at 10:34 PM
+              {order?.createdAt &&
+                new Date(order?.createdAt).toLocaleString([], {
+                  year: "numeric",
+                  month: "2-digit",
+                  day: "2-digit",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
             </p>
           </div>
-          <div className=" font-bold text-blue-600 w-fit h-fit p-2  bg-blue-200 rounded-full">
-            Pending
+          <div
+            className={`font-bold w-fit h-fit p-2 rounded-full ${
+              orderDetails?.status === "Pending"
+                ? "text-blue-600 bg-blue-200"
+                : orderDetails?.status === "Canceled"
+                ? "text-red-600 bg-red-200"
+                : orderDetails?.status === "On Going"
+                ? "text-orange-based bg-orange-100"
+                : "text-green-600 bg-green-200"
+            }`}
+          >
+            {orderDetails?.status}
           </div>
         </div>
         <div className="mt-10 flex flex-col xl:flex-row jusitfy-center items-stretch w-full xl:space-x-8 space-y-4 md:space-y-6 xl:space-y-0">
@@ -557,14 +591,25 @@ export default function ShopOrderDetail() {
                   </div>
                 </div>
               </div>
-              <div className="flex justify-between xl:h-full items-stretch w-full flex-col mt-6 md:mt-0">
-                <div className="flex justify-center md:justify-start xl:flex-col flex-col md:space-x-6 lg:space-x-8 xl:space-x-0 space-y-4 xl:space-y-12 md:space-y-0 md:flex-row items-center md:items-start">
-                  <div className="flex w-full justify-center md:justify-start items-center md:items-start flex-col space-y-4 xl:mt-8">
-                    <p className="text-base font-semibold leading-4 text-center md:text-left text-gray-800">
+              <div className="flex justify-between xl:h-full items-stretch w-full flex-col">
+                <div className="flex justify-center md:justify-start flex-col items-center md:items-start">
+                  <div className="flex w-full justify-center md:justify-start items-center md:items-start flex-col space-y-4 py-5">
+                    <p className="text-base font-bold leading-4 text-center md:text-left text-gray-800">
+                      Customer Address
+                    </p>
+                    <p className="w-full text-center font-semibold md:text-left text-sm leading-5 text-gray-600">
+                      {orderDetails?.address}
+                    </p>
+                  </div>
+                  <div className="flex w-full justify-center md:justify-start items-center md:items-start flex-col space-y-4 border-t pt-5">
+                    <p className="text-base font-bold leading-4 text-center md:text-left text-gray-800">
                       Shipping Address
                     </p>
-                    <p className="w-full text-center md:text-left text-sm leading-5 text-gray-600">
-                      {orderDetails?.address}
+                    <p className="w-full text-center font-semibold md:text-left text-sm leading-5 text-gray-600">
+                      {orderDetails?.shops[0].vehicles[0].pickUpLocation ===
+                      "Pick up at the Vehicle Address"
+                        ? "Customer will pick up at the vehicle address"
+                        : orderDetails?.shops[0].vehicles[0].pickUpLocation}
                     </p>
                   </div>
                 </div>
@@ -572,26 +617,52 @@ export default function ShopOrderDetail() {
             </div>
           </div>
         </div>
-        <div className="flex items-center justify-center space-x-4 mt-8">
-          <div
-            className="text-center bg-red-600 w-fit h-fit p-2 px-3 rounded-full text-white font-bold shadow-md shadow-red-900/30 cursor-pointer hover:brightness-90"
-            onClick={() => handleOpenConfirmCancelDialog()}
-          >
-            Deny order
-          </div>
-          <div
-            className="text-center bg-blue-600 w-fit h-fit p-2 px-3 rounded-full text-white font-bold shadow-md shadow-green-900/30 cursor-pointer hover:brightness-90"
-            onClick={() => handleOpenConfirmOrderStatusDialog("Approved")}
-          >
-            Accept order
-          </div>
-          <div
-            className="text-center bg-green-600 w-fit h-fit p-2 px-3 rounded-full text-white font-bold shadow-md shadow-blue-900/30 cursor-pointer hover:brightness-90"
-            onClick={() => handleOpenConfirmOrderStatusDialog("Completed")}
-          >
-            Complete order
-          </div>
-        </div>
+        {orderDetails?.status === "Canceled" ||
+        orderDetails?.status === "Completed" ? (
+          <></>
+        ) : (
+          <>
+            <div className="flex items-center justify-center space-x-4 mt-8">
+              {orderDetails?.status === "Canceled" ||
+              orderDetails?.status === "Completed" ? (
+                ""
+              ) : (
+                <>
+                  <div
+                    className="text-center bg-red-600 w-fit h-fit p-2 px-3 rounded-full text-white font-bold shadow-md shadow-red-900/30 cursor-pointer hover:brightness-90"
+                    onClick={() => handleOpenConfirmCancelDialog()}
+                  >
+                    Deny Order
+                  </div>
+                </>
+              )}
+              {orderDetails?.status === "Pending" && (
+                <>
+                  <div
+                    className="text-center bg-blue-600 w-fit h-fit p-2 px-3 rounded-full text-white font-bold shadow-md shadow-green-900/30 cursor-pointer hover:brightness-90"
+                    onClick={() =>
+                      handleOpenConfirmOrderStatusDialog("Approved")
+                    }
+                  >
+                    Accept Order
+                  </div>
+                </>
+              )}
+              {orderDetails?.status === "On Going" && (
+                <>
+                  <div
+                    className="text-center bg-green-600 w-fit h-fit p-2 px-3 rounded-full text-white font-bold shadow-md shadow-blue-900/30 cursor-pointer hover:brightness-90"
+                    onClick={() =>
+                      handleOpenConfirmOrderStatusDialog("Completed")
+                    }
+                  >
+                    Complete Order
+                  </div>
+                </>
+              )}
+            </div>
+          </>
+        )}
       </div>
       {isOpenConfirmCancelDialog && (
         <ConfirmCancelDialog
@@ -610,13 +681,14 @@ export default function ShopOrderDetail() {
       )}
       {isOpenConfirmStatusActionDialog && (
         <ConfirmDeleteDialog
-          actionName="Approve Vehicle"
+          actionTitle={`${statusToUpdate} Vehicle`}
+          actionName={statusToUpdate}
           objectName={
             selectedVehiclesToUpdate.length <= 1
               ? `${selectedVehiclesToUpdate[0].vehicleName}, ${selectedVehiclesToUpdate[0].licensePlate}`
               : "This Order"
           }
-          content="Are you sure to approved:"
+          content={`Are you sure to ${statusToUpdate.toLowerCase()}:`}
           onClose={handleCloseConfirmOrderStatusDialog}
           actionDelete={() => handleUpdateStatusOrder()}
           color={

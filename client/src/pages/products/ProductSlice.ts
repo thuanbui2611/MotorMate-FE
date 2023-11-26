@@ -47,6 +47,12 @@ function getAxiosParams(productParams: VehicleParams) {
   if (productParams.Search) {
     params.append("Search", productParams.Search);
   }
+  if (productParams.DateRentFrom) {
+    params.append("DateRent.From", productParams.DateRentFrom);
+  }
+  if (productParams.DateRentTo) {
+    params.append("DateRent.To", productParams.DateRentTo);
+  }
   return params;
 }
 
@@ -57,7 +63,10 @@ export const getProductsAsync = createAsyncThunk<
 >("product/getProductsAsync", async (_, ThunkAPI) => {
   const params = getAxiosParams(ThunkAPI.getState().product.productParams);
   try {
-    const response = await agent.Vehicle.list(params);
+    const response = await agent.Vehicle.listVehicleByStatus(
+      params,
+      "Approved"
+    );
     ThunkAPI.dispatch(setMetaData(response.metaData));
     return response.items;
   } catch (error: any) {
@@ -75,6 +84,8 @@ function initParams() {
     Cities: [],
     IsSortPriceDesc: null,
     Search: null,
+    DateRentFrom: null,
+    DateRentTo: null,
   };
 }
 

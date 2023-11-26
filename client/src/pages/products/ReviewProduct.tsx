@@ -1,8 +1,20 @@
 import AdsReviewProduct from "../../app/components/AdsReviewProduct";
 import { SlideshowLightbox } from "lightbox.js-react";
 import "lightbox.js-react/dist/index.css";
+import { Vehicle } from "../../app/models/Vehicle";
+import { useEffect, useState } from "react";
+import { Review } from "../../app/models/Review";
+import agent from "../../app/api/agent";
 
-export default function ReviewProduct() {
+interface Props {
+  vehicle: Vehicle;
+}
+
+export default function ReviewProduct({ vehicle }: Props) {
+  const [review, setReview] = useState<Review[]>([]);
+  //after have id entity by vehicleId, will check if in state exist or not -> get review by vehicleId
+
+  useEffect(() => {}, []);
   const images = [
     {
       src: "https://source.unsplash.com/sQZ_A17cufs/549x711",
@@ -28,10 +40,11 @@ export default function ReviewProduct() {
         <div className="flex flex-col justify-start items-start w-3/4 space-y-8">
           <div className="flex justify-start items-start">
             <p className="text-3xl lg:text-4xl font-semibold leading-7 lg:leading-9 text-gray-800 ">
-              Reviews (69)
+              Reviews ({vehicle.totalRating})
             </p>
           </div>
           {/* Review Start */}
+
           <div className="w-full flex justify-start items-start flex-col bg-gray-50 p-3 rounded-2xl">
             <div className="mx-2">
               <div className="md:block">

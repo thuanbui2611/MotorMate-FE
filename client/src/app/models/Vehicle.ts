@@ -18,6 +18,8 @@ export interface Vehicle {
   insuranceExpiry: string;
   unavailableDates: UnavailableDate[];
   status: string;
+  rating: string;
+  totalRating: string;
   images: Image[];
 }
 
@@ -58,4 +60,6 @@ export interface VehicleParams {
   Cities?: string[];
   IsSortPriceDesc: string | null;
   Search: string | null;
+  DateRentFrom: string | null;
+  DateRentTo: string | null;
 }

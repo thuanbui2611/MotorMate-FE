@@ -107,7 +107,6 @@ export const accountSlice = createSlice({
       }
     },
     updateUser: (state, action) => {
-      debugger;
       const userUpdated: UserDetail = action.payload;
       state.userDetail = action.payload;
 

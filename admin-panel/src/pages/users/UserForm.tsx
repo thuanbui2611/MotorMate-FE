@@ -280,7 +280,16 @@ export default function UserForm({ user, cancelEdit, actionName }: Props) {
                     handleSelectRoleChange(event, newValue)
                   }
                   renderInput={(params) => (
-                    <TextField {...params} placeholder="Role" label="Role" />
+                    <TextField
+                      {...params}
+                      placeholder="Role"
+                      label="Role"
+                      sx={{
+                        "& .MuiOutlinedInput-root": {
+                          height: "55px",
+                        },
+                      }}
+                    />
                   )}
                 />
               </div>
