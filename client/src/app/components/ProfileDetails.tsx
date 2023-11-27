@@ -221,13 +221,15 @@ export default function ProfileDetails() {
                 </div>
 
                 <div className="mx-10">
-                  {products.length > 0 ? (
+                  {products && products.length > 0 ? (
                     <ProductCarousel
                       userLogin={userLogin}
                       products={products}
                     />
                   ) : (
-                    <>No Vehicles</>
+                    <div className="h-52 w-full flex items-center justify-center bg-gray-50 rounded-lg mt-5 text-center text-black font-semibold">
+                      No Vehicles
+                    </div>
                   )}
                 </div>
               </div>

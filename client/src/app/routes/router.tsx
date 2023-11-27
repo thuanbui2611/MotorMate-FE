@@ -26,48 +26,76 @@ import OrderDetail from "../../pages/my-order/OrderDetail";
 import ShopOrderDetail from "../../pages/shop-order/ShopOrderDetail";
 import ShopOrders from "../../pages/shop-order";
 import Payment from "../../pages/checkout/Payment";
+import RequireAuth from "./RequireAuth";
 
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
     children: [
+      // Public routes
       {
         element: <DefaultLayout />,
         children: [
           { path: "", element: <HomePage /> },
-          {
-            path: "profile/:username/",
-            element: <Profile />,
-            children: [
-              { path: "", element: <ProfileDetails /> },
-              { path: "settings", element: <SettingProfile /> },
-              { path: "my-vehicles", element: <MyProducts /> },
-            ],
-          },
           { path: "about", element: <About /> },
           { path: "contact", element: <Contact /> },
           { path: "blog", element: <BlogPage /> },
           { path: "blog/:id", element: <BlogDetails /> },
           { path: "products", element: <Products /> },
           { path: "product-detail/:id", element: <ProductDetails /> },
-          { path: "check-out", element: <Checkout /> },
-          { path: "payment", element: <Payment /> },
-          { path: "bill", element: <Bill /> },
-          { path: "my-orders", element: <Orders /> },
-          { path: "my-orders/:parentOrderId", element: <OrderDetail /> },
-          { path: "shop-orders", element: <ShopOrders /> },
-          { path: "shop-orders/:parentOrderId", element: <ShopOrderDetail /> },
-          { path: "my-cart", element: <Cart /> },
-          { path: "server-error", element: <ServerErrors /> },
         ],
       },
+      // Auth routes
+      {
+        element: <RequireAuth />,
+        children: [
+          {
+            element: <DefaultLayout />,
+            children: [
+              {
+                path: "profile/:username/",
+                element: <Profile />,
+                children: [
+                  { path: "", element: <ProfileDetails /> },
+                  { path: "settings", element: <SettingProfile /> },
+                  { path: "my-vehicles", element: <MyProducts /> },
+                ],
+              },
+              { path: "check-out", element: <Checkout /> },
+              { path: "payment", element: <Payment /> },
+              { path: "bill", element: <Bill /> },
+              { path: "my-orders", element: <Orders /> },
+              { path: "my-orders/:parentOrderId", element: <OrderDetail /> },
+              { path: "my-cart", element: <Cart /> },
+            ],
+          },
+        ],
+      },
+      // Auth routes with roles
+      {
+        element: <RequireAuth roles={["Admin", "Staff", "Lessor"]} />,
+        children: [
+          {
+            element: <DefaultLayout />,
+            children: [
+              { path: "shop-orders", element: <ShopOrders /> },
+              {
+                path: "shop-orders/:parentOrderId",
+                element: <ShopOrderDetail />,
+              },
+            ],
+          },
+        ],
+      },
+      // Public routes
       { path: "login", element: <Login /> },
       { path: "sign-up", element: <SignUpPage /> },
       { path: "forgot-password", element: <ForgotPassword /> },
       { path: "forgot-password/:resetCode", element: <ChangePassword /> },
       { path: "not-found", element: <NotFound /> },
       { path: "*", element: <Navigate replace to="/not-found" /> },
+      { path: "server-error", element: <ServerErrors /> },
     ],
   },
 ]);

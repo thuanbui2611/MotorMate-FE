@@ -29,6 +29,8 @@ import {
 import LoaderButton from "../../app/components/LoaderButton";
 import Pagination from "../../app/components/Pagination";
 import FadeInSection from "../../app/components/FadeInSection";
+import dayjs from "dayjs";
+import { toast } from "react-toastify";
 
 export default function Products() {
   const [searchParams, setSearchParams] = useSearchParams({});
@@ -52,6 +54,8 @@ export default function Products() {
   const [paramsCompleted, setParamsCompleted] = useState(false);
   const [startDate, setStartDate] = useState<any>();
   const [endDate, setEndDate] = useState<any>();
+  const [startDateDefault, setStartDateDefault] = useState<any>();
+  const [endDateDefault, setEndDateDefault] = useState<any>();
 
   const products = useAppSelector(productSelectors.selectAll);
   const { productLoaded, metaData, productParams } = useAppSelector(
@@ -295,6 +299,7 @@ export default function Products() {
       });
     }
   };
+
   const handleSelectModelChange = (
     event: React.SyntheticEvent<Element, Event>,
     newValue: ModelVehicle[]
@@ -418,16 +423,31 @@ export default function Products() {
 
   useEffect(() => {
     if (startDateParam && endDateParam) {
-      const startDate = decodeURIComponent(startDateParam);
-      const endDate = decodeURIComponent(endDateParam);
-      const test = formatDateToISO(startDate);
-      debugger;
-      dispatch(
-        setProductParams({
-          DateRentFrom: formatDateToISO(startDate),
-          DateRentTo: formatDateToISO(endDate),
-        })
-      );
+      try {
+        const startDateToISO = formatDateToISO(
+          decodeURIComponent(startDateParam)
+        );
+        const endDateToISO = formatDateToISO(decodeURIComponent(endDateParam));
+        setStartDate(convertToDayjs(decodeURIComponent(startDateParam)));
+        setEndDate(convertToDayjs(decodeURIComponent(endDateParam)));
+        dispatch(
+          setProductParams({
+            DateRentFrom: startDateToISO,
+            DateRentTo: endDateToISO,
+          })
+        );
+      } catch (error) {
+        toast.error("Please make sure your date is valid");
+        console.log(error);
+        setSearchParams((prev) => {
+          prev.delete("StartDate");
+          prev.delete("EndDate");
+          return prev;
+        });
+        dispatch(
+          setProductParams({ DateRentFrom: undefined, DateRentTo: undefined })
+        );
+      }
     } else {
       setSearchParams((prev) => {
         prev.delete("StartDate");
@@ -438,12 +458,18 @@ export default function Products() {
         setProductParams({ DateRentFrom: undefined, DateRentTo: undefined })
       );
     }
-  }, [startDate, endDate, dispatch]);
+  }, [startDateParam, endDateParam, dispatch]);
 
   const formatDateToISO = (dateString: string) => {
     const [day, month, year] = dateString.split("/");
     const isoDate = new Date(+year, +month - 1, +day).toISOString();
     return isoDate;
+  };
+
+  const convertToDayjs = (dateString: string) => {
+    const [day, month, year] = dateString.split("/");
+    const dayjsDate = dayjs(new Date(+year, +month - 1, +day));
+    return dayjsDate;
   };
   // End of DateRent filter
   if (!metaData) return <Loading />;
@@ -471,6 +497,7 @@ export default function Products() {
                 format="DD/MM/YYYY"
                 onChange={(date: any) => setStartDate(date)}
                 disablePast={true}
+                value={startDate}
               />
 
               <DatePicker
@@ -489,12 +516,13 @@ export default function Products() {
                   },
                 }}
                 format="DD/MM/YYYY"
-                disabled={startDate ? false : true}
+                disabled={startDate || startDateDefault ? false : true}
                 disablePast={true}
                 shouldDisableDate={(date: any) => {
                   return date <= startDate;
                 }}
                 onChange={(date: any) => setEndDate(date)}
+                value={endDate}
               />
             </div>
           </LocalizationProvider>

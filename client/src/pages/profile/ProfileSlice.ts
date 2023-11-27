@@ -177,12 +177,14 @@ export const ProfileSlice = createSlice({
         state.profileUserLoaded = false;
       });
     builder.addCase(addProductAsync.fulfilled, (state, action) => {
-      toast.success("Add product successfully!");
+      toast.success("Add product successfully, please wait for the approval!");
       profileAdapter.addOne(state, action.payload);
     });
 
     builder.addCase(updateProductAsync.fulfilled, (state, action) => {
-      toast.success("Update product successfully!");
+      toast.success(
+        "Update product successfully, please wait for the approval!"
+      );
       profileAdapter.upsertOne(state, action.payload);
     });
 

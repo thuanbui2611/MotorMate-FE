@@ -6,17 +6,17 @@ import {
 import { MetaData } from "../../app/models/Pagination";
 import { RootState } from "../../app/store/ConfigureStore";
 import agent from "../../app/api/agent";
-import { Review, ReviewParams } from "../../app/models/Review";
+import { ReviewParams, ReviewProduct } from "../../app/models/Review";
 
 interface ProductReviewState {
-  reviewProduct: Review | null;
+  reviewProduct: ReviewProduct | null;
   reviewProductLoaded: boolean;
   reviewProductParams: ReviewParams;
   metaData: MetaData | null;
 }
 
-const reviewProductsAdapter = createEntityAdapter<Review>({
-  selectId: (review) => review.userId, //will edit to vehicleId
+const reviewProductsAdapter = createEntityAdapter<ReviewProduct>({
+  selectId: (review) => review.reviewProduct[0].vehicleId,
 });
 
 function getAxiosParams(reviewProductParams: ReviewParams) {
@@ -28,17 +28,20 @@ function getAxiosParams(reviewProductParams: ReviewParams) {
 }
 
 export const getReviewsProductAsync = createAsyncThunk<
-  Review[],
-  void,
+  ReviewProduct,
+  string,
   { state: RootState }
->("reviewProduct/getReviewsProductAsync", async (_, ThunkAPI) => {
+>("reviewProduct/getReviewsProductAsync", async (vehicleId, ThunkAPI) => {
   const params = getAxiosParams(
     ThunkAPI.getState().reviewProduct.reviewProductParams
   );
   try {
-    const response = await agent.Vehicle.list(params);
+    const response = await agent.Vehicle.getReviewsOfVehicle(vehicleId, params);
     ThunkAPI.dispatch(setMetaData(response.metaData));
-    return response.items;
+    const reviewProductResponse: ReviewProduct = {
+      reviewProduct: response.items,
+    };
+    return reviewProductResponse;
   } catch (error: any) {
     return ThunkAPI.rejectWithValue({ error: error.data });
   }
@@ -84,7 +87,7 @@ export const ReviewProductSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getReviewsProductAsync.fulfilled, (state, action) => {
-        reviewProductsAdapter.setAll(state, action.payload);
+        reviewProductsAdapter.upsertOne(state, action.payload);
         state.reviewProductLoaded = false;
       })
       .addCase(getReviewsProductAsync.pending, (state, action) => {

@@ -18,7 +18,7 @@ export interface Vehicle {
   insuranceExpiry: string;
   unavailableDates: UnavailableDate[];
   status: string;
-  rating: string;
+  rating: number;
   totalRating: string;
   images: Image[];
 }

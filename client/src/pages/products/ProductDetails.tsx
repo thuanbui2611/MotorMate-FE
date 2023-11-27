@@ -116,6 +116,53 @@ export default function ProductDetails() {
     dispatch(setSelectedVehicle(vehicleRent));
     navigate("/check-out", { state: { vehicleCheckout: vehicleRent } });
   };
+  const renderRatingSVG = () => {
+    if (!product?.rating) return;
+    if (product.rating === 0) return <></>;
+    const ratingInt = Math.floor(product.rating);
+    const ratingDecimal = product.rating - ratingInt;
+    debugger;
+    const ratingSVG = [];
+    let percentageColor = "";
+    for (let i = 0; i < 5; i++) {
+      debugger;
+      if (i < ratingInt) {
+        percentageColor = "100%";
+      } else {
+        percentageColor = ratingDecimal * 100 + "%";
+      }
+      ratingSVG.push(
+        <li key={i}>
+          <svg
+            className="w-8 h-8"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <defs>
+              <linearGradient
+                id={`colorGradient${i}`}
+                x1="0"
+                y1="0"
+                x2="1"
+                y2="0"
+              >
+                {/* set value for color, $.1 -> 10%, $.2 -> 20%... */}
+                <stop offset={percentageColor} stopColor="#ffc73a" />
+                <stop offset="20%" stopColor="#ffffff" />
+              </linearGradient>
+            </defs>
+            <path
+              d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"
+              pathLength="360"
+              fill={`url(#colorGradient${i})`}
+            ></path>
+          </svg>
+        </li>
+      );
+    }
+
+    return ratingSVG;
+  };
 
   if (loading) return <Loading />;
   if (!product || product.isLocked) return <NotFound />;
@@ -141,100 +188,15 @@ export default function ProductDetails() {
                     <h1 className="text-black text-3xl md:text-4xl font-bold mb-1">
                       {product.specifications.modelName}
                     </h1>
-                    <div className="flex mb-4">
+
+                    <div className="flex mb-4 items-center justify-start">
                       <span className="flex items-center">
-                        <div className="rating">
-                          <input
-                            hidden
-                            value="star-1"
-                            name="star-radio"
-                            id="star-1"
-                            type="radio"
-                          />
-                          <label htmlFor="star-1">
-                            <svg
-                              viewBox="0 0 24 24"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"
-                                pathLength="360"
-                              ></path>
-                            </svg>
-                          </label>
-                          <input
-                            hidden
-                            value="star-2"
-                            name="star-radio"
-                            id="star-2"
-                            type="radio"
-                          />
-                          <label htmlFor="star-2">
-                            <svg
-                              viewBox="0 0 24 24"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"
-                                pathLength="360"
-                              ></path>
-                            </svg>
-                          </label>
-                          <input
-                            hidden
-                            value="star-3"
-                            name="star-radio"
-                            id="star-3"
-                            type="radio"
-                          />
-                          <label htmlFor="star-3">
-                            <svg
-                              viewBox="0 0 24 24"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"
-                                pathLength="360"
-                              ></path>
-                            </svg>
-                          </label>
-                          <input
-                            hidden
-                            value="star-4"
-                            name="star-radio"
-                            id="star-4"
-                            type="radio"
-                          />
-                          <label htmlFor="star-4">
-                            <svg
-                              viewBox="0 0 24 24"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"
-                                pathLength="360"
-                              ></path>
-                            </svg>
-                          </label>
-                          <input
-                            hidden
-                            value="star-5"
-                            name="star-radio"
-                            id="star-5"
-                            type="radio"
-                          />
-                          <label htmlFor="star-5">
-                            <svg
-                              viewBox="0 0 24 24"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"
-                                pathLength="360"
-                              ></path>
-                            </svg>
-                          </label>
-                        </div>
+                        <ul className="flex pb-1">
+                          <li className="text-[#ffc73a] text-2xl font-semibold mr-2">
+                            {product.rating}
+                          </li>
+                          {renderRatingSVG()}
+                        </ul>
 
                         <span className="text-gray-600 ml-3">
                           {product.totalRating} Reviews

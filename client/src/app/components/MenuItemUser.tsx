@@ -126,14 +126,16 @@ export default function MenuItemUser({ user }: Props) {
               Orders
             </Link>
           </li>
-          <li>
-            <Link
-              to="/shop-orders"
-              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-            >
-              Shop Orders
-            </Link>
-          </li>
+          {user.role !== "User" && (
+            <li>
+              <Link
+                to="/shop-orders"
+                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              >
+                Shop Orders
+              </Link>
+            </li>
+          )}
           <li>
             <Link
               to={"/profile/" + user.username + "/my-vehicles"}

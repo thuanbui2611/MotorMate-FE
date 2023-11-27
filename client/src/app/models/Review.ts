@@ -1,4 +1,8 @@
+export interface ReviewProduct {
+  reviewProduct: Review[];
+}
 export interface Review {
+  vehicleId: string;
   userId: string;
   username: string;
   email: string;

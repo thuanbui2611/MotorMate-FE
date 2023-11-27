@@ -12,6 +12,69 @@ export default function ProductHomepage({ products }: Props) {
   const [currentSlide, setCurrentSlide] = useState(products[0].id);
   const userLogin = useAppSelector((state) => state.account.userDetail);
 
+  const renderRatingSVG = (rating: number) => {
+    const ratingInt = Math.floor(rating);
+    const ratingDecimal = rating - ratingInt;
+    const ratingSVG = [];
+    let percentageColor = "";
+    if (rating === 0) {
+      for (let i = 0; i < 5; i++) {
+        ratingSVG.push(
+          <svg
+            key={i}
+            className="w-[2vw] md:w-4 md:h-4 lg:w-5 lg:h-5"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="transparent"
+            stroke="white"
+          >
+            <path
+              d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"
+              pathLength="360"
+            ></path>
+          </svg>
+        );
+      }
+    } else {
+      for (let i = 0; i < 5; i++) {
+        if (i < ratingInt) {
+          percentageColor = "100%";
+        } else {
+          percentageColor = ratingDecimal * 100 + "%";
+        }
+        ratingSVG.push(
+          <li key={i}>
+            <svg
+              className="w-[2vw] md:w-4 md:h-4 lg:w-5 lg:h-5"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <defs>
+                <linearGradient
+                  id={`colorGradient${i}`}
+                  x1="0"
+                  y1="0"
+                  x2="1"
+                  y2="0"
+                >
+                  {/* set value for color, $.1 -> 10%, $.2 -> 20%... */}
+                  <stop offset={percentageColor} stopColor="#ffc73a" />
+                  <stop offset="20%" stopColor="#ffffff" />
+                </linearGradient>
+              </defs>
+              <path
+                d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"
+                pathLength="360"
+                fill={`url(#colorGradient${i})`}
+              ></path>
+            </svg>
+          </li>
+        );
+      }
+    }
+    return ratingSVG;
+  };
+
   const {
     carouselFragment,
     slideToPrevItem,
@@ -29,15 +92,6 @@ export default function ProductHomepage({ products }: Props) {
       return {
         ...product,
         renderItem: (
-          //   <div
-          //     className={`grid aspect-[2] w-full place-items-center text-2xl text-white transition-all duration-700 ${
-          //       currentSlide === product.id
-          //         ? "z-10 scale-150 bg-yellow-600"
-          //         : "bg-violet-500"
-          //     }`}
-          //   >
-          //     "awd"
-          //   </div>
           <div
             className={`card-container items-center sm:flex w-60 mb-8 mx-auto ${
               currentSlide === product.id ? "z-10 scale-150" : ""
@@ -152,85 +206,10 @@ export default function ProductHomepage({ products }: Props) {
                       {product.specifications.color}
                     </div>
 
-                    <ul className="flex">
-                      <li>
-                        <svg
-                          className="w-[2vw] md:w-4 md:h-4 lg:w-5 lg:h-5"
-                          viewBox="0 0 24 24"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="#ffc73a"
-                        >
-                          <path
-                            d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"
-                            pathLength="360"
-                          ></path>
-                        </svg>
-                      </li>
-                      <li>
-                        <svg
-                          className="w-[2vw] md:w-4 md:h-4 lg:w-5 lg:h-5"
-                          viewBox="0 0 24 24"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="#ffc73a"
-                        >
-                          <path
-                            d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"
-                            pathLength="360"
-                          ></path>
-                        </svg>
-                      </li>
-                      <li>
-                        <svg
-                          className="w-[2vw] md:w-4 md:h-4 lg:w-5 lg:h-5"
-                          viewBox="0 0 24 24"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="#ffc73a"
-                        >
-                          <path
-                            d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"
-                            pathLength="360"
-                          ></path>
-                        </svg>
-                      </li>
-                      <li>
-                        <svg
-                          className="w-[2vw] md:w-4 md:h-4 lg:w-5 lg:h-5"
-                          viewBox="0 0 24 24"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="#ffc73a"
-                        >
-                          <path
-                            d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"
-                            pathLength="360"
-                          ></path>
-                        </svg>
-                      </li>
-                      <li>
-                        <svg
-                          className="w-[2vw] md:w-4 md:h-4 lg:w-5 lg:h-5"
-                          viewBox="0 0 24 24"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <defs>
-                            <linearGradient
-                              id="colorGradient"
-                              x1="0"
-                              y1="0"
-                              x2="1"
-                              y2="0"
-                            >
-                              {/* set value for color, $.1 -> 10%, $.2 -> 20%... */}
-                              <stop offset="20%" stopColor="#ffc73a" />
-                              <stop offset="20%" stopColor="#ffffff" />
-                            </linearGradient>
-                          </defs>
-                          <path
-                            d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"
-                            pathLength="360"
-                            fill="url(#colorGradient)"
-                          ></path>
-                        </svg>
-                      </li>
+                    <ul
+                      className={`flex ${product.rating === 0 && "gap-[2px]"}`}
+                    >
+                      {renderRatingSVG(product.rating)}
                     </ul>
                   </div>
 
