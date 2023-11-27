@@ -1,10 +1,18 @@
 import { useSpringCarousel } from "react-spring-carousel";
 import { useEffect, useState } from "react";
 import BlogRelatedCard from "./BlogRelatedCard";
+import { Blog } from "../models/Blog";
+import agent from "../api/agent";
+import { toast } from "react-toastify";
 
-export default function BlogRelatedCarousel() {
-  const blogsRelated = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
+interface Props {
+  blogId: string | undefined;
+}
+export default function BlogRelatedCarousel({ blogId }: Props) {
+  const [loading, setLoading] = useState<boolean>(true);
+  const [relatedBlogs, setRelatedBlogs] = useState<Blog[]>([]);
   const [itemsPerSlide, setItemsPerSlide] = useState(4);
+
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth <= 768) {
@@ -22,24 +30,49 @@ export default function BlogRelatedCarousel() {
     };
   }, []);
 
-  const { carouselFragment, slideToPrevItem, slideToNextItem } =
-    useSpringCarousel({
-      autoplay: true,
-      slideToNextItem: true,
+  useEffect(() => {
+    if (loading && blogId) {
+      agent.Blog.getRelatedBlogs(blogId)
+        .then((res) => {
+          setRelatedBlogs(res);
+        })
+        .catch((error) => {
+          toast.error("Get related blogs failed!");
+          console.log(error);
+        });
+      setLoading(false);
+    }
+  }, []);
+
+  let carouselProps = {};
+  if (relatedBlogs && relatedBlogs.length > 0) {
+    carouselProps = {
+      autoplay: relatedBlogs.length < itemsPerSlide ? false : true,
+      slideToNextItem: relatedBlogs.length < itemsPerSlide ? false : true,
       slideToPrevItem: true,
       itemsPerSlide:
-        blogsRelated.length < itemsPerSlide
-          ? blogsRelated.length
+        relatedBlogs.length < itemsPerSlide
+          ? relatedBlogs.length
           : itemsPerSlide,
-      withLoop: true,
+      withLoop: relatedBlogs.length < itemsPerSlide ? false : true,
       gutter: 24,
-      items: blogsRelated.map((blog) => {
-        return {
-          ...blogsRelated,
-          renderItem: <BlogRelatedCard />,
-        };
-      }),
-    });
+      items: relatedBlogs.map((blog) => ({
+        ...blog,
+        renderItem: <BlogRelatedCard blogRelated={blog} />,
+      })),
+    };
+  } else {
+    carouselProps = {
+      items: [],
+    };
+    return (
+      <p className="flex items-center justify-center h-40 text-red-500 w-full bg-gray-100 rounded-lg my-10">
+        No related posts found.
+      </p>
+    );
+  }
+  const { carouselFragment, slideToPrevItem, slideToNextItem } =
+    useSpringCarousel(carouselProps);
 
   return (
     <div className="relative">

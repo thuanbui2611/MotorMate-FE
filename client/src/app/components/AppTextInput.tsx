@@ -15,6 +15,7 @@ interface Props extends UseControllerProps {
   value?: any | undefined;
   maxRows?: number;
   sx?: any;
+  disabled?: boolean;
 }
 
 export default function AppTextInput(props: Props) {
@@ -32,6 +33,7 @@ export default function AppTextInput(props: Props) {
       size={props.size}
       placeholder={props.placeholder}
       fullWidth
+      disabled={props.disabled}
       variant="outlined"
       // value={props.value}
       className={props.className}

@@ -236,8 +236,6 @@ export default function VehicleForm({
 
       return files;
     });
-    // console.log("Files change:", files);
-    // console.log("Selected file:", selectedFiles);
   };
 
   const removeImageFromList = (file: ImageFile, index: number) => {

@@ -1,4 +1,4 @@
-import { useEffect, useState, ChangeEvent } from "react";
+import { useEffect, useState } from "react";
 import Breadcrumb from "../../app/components/Breadcrumb";
 import { useAppDispatch, useAppSelector } from "../../app/store/ConfigureStore";
 import {
@@ -6,20 +6,14 @@ import {
   deleteBrandAsync,
   getBrandsAsync,
   setBrandParams,
-  setPageNumber,
 } from "./BrandSlice";
 import Loader from "../../app/components/Loader";
 import Pagination from "../../app/components/Pagination";
 import BrandForm from "./BrandForm";
 import { Brand } from "../../app/models/Brand";
 import ConfirmDeleteDialog from "../../app/components/ConfirmDeleteDialog";
-import {
-  deleteImage,
-  deleteImages,
-  uploadImages,
-} from "../../app/utils/Cloudinary";
+import { deleteImage } from "../../app/utils/Cloudinary";
 import { useSearchParams } from "react-router-dom";
-import { set } from "react-hook-form";
 
 export default function BrandPage() {
   const [pageNumber, setPageNumber] = useSearchParams({ pageNumber: "" });

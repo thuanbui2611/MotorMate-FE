@@ -169,7 +169,13 @@ const Cart = {
 const Blog = {
   list: (params: URLSearchParams) => requests.get("api/blog", params),
   details: (id: string) => requests.get(`api/blog/${id}`),
+  getCommentOfBlog: (blogId: string, params: URLSearchParams) =>
+    requests.get(`api/blog/${blogId}/comment`, params),
+  getRelatedBlogs: (blogId: string) =>
+    requests.get(`api/blog/${blogId}/related`),
   create: (values: {}) => requests.post("api/blog", values),
+  createCommentForBlog: (values: {}, blogId: string) =>
+    requests.post(`api/blog/${blogId}/comment`, values),
   update: (id: string, values: {}) => requests.put(`api/blog/${id}`, values),
   delete: (id: string) => requests.delete(`api/blog/${id}`),
 };

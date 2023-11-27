@@ -16,7 +16,10 @@ interface ProductReviewState {
 }
 
 const reviewProductsAdapter = createEntityAdapter<ReviewProduct>({
-  selectId: (review) => review.reviewProduct[0].vehicleId,
+  selectId: (review) =>
+    review.reviewProduct.length > 0
+      ? review.reviewProduct[0].vehicleId
+      : "defaultId",
 });
 
 function getAxiosParams(reviewProductParams: ReviewParams) {

@@ -28,7 +28,7 @@ export default function BrandForm({ brand, cancelEdit, actionName }: Props) {
     control,
     reset,
     handleSubmit,
-    formState: { isSubmitting, errors },
+    formState: { isSubmitting },
   } = useForm({
     mode: "all",
   });

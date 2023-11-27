@@ -228,7 +228,6 @@ export default function VehicleForm({
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
-    debugger;
     setSelectedFiles((prevFiles) => {
       // Check type
       for (let i = 0; i < files?.length!; i++) {
@@ -266,9 +265,6 @@ export default function VehicleForm({
     // if (fileInputRef.current) {
     //   fileInputRef.current.value = "";
     // }
-    debugger;
-    console.log("Files change:", files);
-    console.log("Selected file:", selectedFiles);
   };
 
   const removeImageFromList = (file: ImageFile, index: number) => {
@@ -409,21 +405,24 @@ export default function VehicleForm({
           }
           //Get image from server and image uploaded to cloudinary
           const resultUpload = [...imagesFromServer, ...resultUploadImage!];
-
+          debugger;
           //Update images request to formData
           formData.images = resultUpload;
           //Update to vehicle approved or pending or deny
           switch (vehicle.status.trim().toLowerCase()) {
             case "approved":
+              debugger;
               await dispatch(updateVehicleAsync(formData));
               break;
             case "pending":
+              debugger;
               await dispatch(updateVehiclePendingAsync(formData));
               break;
             case "deny":
               break;
           }
-          await dispatch(updateVehicleAsync(formData));
+          debugger;
+          // await dispatch(updateVehicleAsync(formData));
         }
       } else {
         //ADD VEHICLE

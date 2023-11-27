@@ -180,7 +180,7 @@ export default function BlogPage() {
                                 alt="User image"
                               />
                             </div>
-                            <div className="ml-3 flex flex-col">
+                            <div className="ml-3 flex flex-1 flex-col">
                               <h5 className="font-medium text-black dark:text-white">
                                 {blog.title}
                               </h5>

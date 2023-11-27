@@ -20,10 +20,10 @@ import { addBlogAsync, updateBlogAsync } from "./BlogSlice";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import agent from "../../app/api/agent";
-import { UserDetail } from "../../app/models/User";
 import LoaderButton from "../../app/components/LoaderButton";
 import { Box, TextField } from "@mui/material";
 import { Category } from "../../app/models/Category";
+import { UserDetail } from "../../app/models/User";
 interface Props {
   blog: Blog | null;
   cancelEdit: () => void;
@@ -81,8 +81,13 @@ export default function BlogForm({ blog, cancelEdit, actionName }: Props) {
     //fetch all users
     const fetchUsers = async () => {
       try {
-        const response = await agent.User.all();
-        setUsers(response);
+        const response: UserDetail[] = await agent.User.all();
+        const authors: Author[] = response.map((user) => ({
+          authorId: user.id,
+          username: user.username,
+          picture: user.image.imageUrl,
+        }));
+        setUsers(authors);
         setLoadingFetchOwner(false);
       } catch (error) {
         console.error("Error fetching users:", error);
@@ -201,7 +206,7 @@ export default function BlogForm({ blog, cancelEdit, actionName }: Props) {
               <div className="grid md:grid-cols-3 gap-6 mb-6">
                 <div className="md:col-span-1 flex flex-col">
                   <label className="block mb-2 text-sm font-semibold text-black">
-                    Owner:
+                    Author:
                   </label>
                   {loadingFetchOwner ? (
                     <LoaderButton />

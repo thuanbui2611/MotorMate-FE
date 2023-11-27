@@ -16,12 +16,15 @@ export default function BlogDetails() {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    agent.Blog.details(id!)
-      .then((blog) => {
-        setBlog(blog);
-      })
-      .catch((error) => console.log(error))
-      .finally(() => setLoading(false));
+    debugger;
+    if (loading && !blog) {
+      agent.Blog.details(id!)
+        .then((blog) => {
+          setBlog(blog);
+        })
+        .catch((error) => console.log(error))
+        .finally(() => setLoading(false));
+    }
   }, []);
 
   if (!blog && !loading) return <NotFound />;
@@ -86,11 +89,11 @@ export default function BlogDetails() {
           </h2>
           <div className="max-w-7xl mx-auto px-5 mb-3">
             {/* Blog card */}
-            <BlogRelatedCarousel />
+            <BlogRelatedCarousel blogId={blog?.id} />
           </div>
 
           <div className=" max-w-5xl py-16 xl:px-8 flex flex-col justify-center mx-auto">
-            <BlogComment />
+            <BlogComment blogId={blog?.id} />
           </div>
         </div>
       </div>
