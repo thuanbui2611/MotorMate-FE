@@ -60,7 +60,7 @@ axios.interceptors.response.use(
         // navigate("/server-error", {
         //   state: { error: data },
         // });
-        window.location.href = "/server-error";
+        // window.location.href = "/server-error";
         break;
       default:
         break;

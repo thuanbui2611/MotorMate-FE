@@ -23,7 +23,6 @@ export default function Checkout() {
   const { userDetail } = useAppSelector((state) => state.account);
   const [deliveryAddress, setDeliveryAddress] = useState<string>("");
   const [totalPayment, setTotalPayment] = useState<number>(0);
-  // const [checkBox, setCheckBox] = useState<boolean>(false);
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -55,7 +54,9 @@ export default function Checkout() {
     });
     setTotalPayment(total);
   }, [selectedVehicles]);
+
   useEffect(() => {
+    debugger;
     if (userDetail?.address && userDetail?.email && userDetail?.phoneNumber) {
       scrollToTop();
     } else {
@@ -66,6 +67,7 @@ export default function Checkout() {
   }, []);
 
   useEffect(() => {
+    debugger;
     if (vehiclesCheckout && vehiclesCheckout.length === 0) {
       if (state) {
         setVehiclesCheckout(state.vehicleCheckout);
@@ -158,8 +160,9 @@ export default function Checkout() {
       userId: userDetail?.id,
       vehicles: vehiclesSelected,
     };
-    dispatch(createCheckoutAsync(formData));
-
+    debugger;
+    await dispatch(createCheckoutAsync(formData));
+    debugger;
     navigate("/payment");
   };
   return (

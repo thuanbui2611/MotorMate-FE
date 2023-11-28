@@ -15,9 +15,23 @@ const initialState: CheckoutState = {
 
 export const createCheckoutAsync = createAsyncThunk<Checkout, {}>(
   "checkout/create",
-  async (data, thunkAPI) => {
+  async (data: any, thunkAPI) => {
     try {
-      const response = await agent.Checkout.create(data);
+      const vehiclesConverted = data.vehicles.map((vehicle: any) => {
+        return {
+          vehicleId: vehicle.vehicleId,
+          pickUpDateTime: vehicle.pickUpDateTime.toISOString(),
+          dropOffDateTime: vehicle.dropOffDateTime.toISOString(),
+          pickUpLocation: vehicle.pickUpLocation,
+      dropOffLocation: vehicle.dropOffLocation,
+        }
+      })
+      const convertedData = {
+        userId: data.userId,
+        vehicles: vehiclesConverted
+      }
+      debugger;
+      const response = await agent.Checkout.create(convertedData);
       return response;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);

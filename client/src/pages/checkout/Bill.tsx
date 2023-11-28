@@ -14,6 +14,7 @@ export default function Bill() {
   const [loading, setLoading] = useState(true);
   const paymentIntent = searchParams.get("payment_intent");
   const { userDetail, userLoading } = useAppSelector((state) => state.account);
+  const [isLoopFetch, setIsLoopFetch] = useState(false);
   const navigate = useNavigate();
   //Validate bill page
   useEffect(() => {
@@ -30,20 +31,43 @@ export default function Bill() {
   }, [userDetail, userLoading, orderDetail]);
   useEffect(() => {
     if (paymentIntent && !orderDetail && userDetail) {
-      setTimeout(() => {
-        //clear all params of url
-        // setSearchParams({});
-        agent.TripRequest.getBill(paymentIntent)
-          .then((res) => {
-            setOrderDetail(res);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-        setLoading(false);
-      }, 3000);
+      if (!isLoopFetch) {
+        setTimeout(() => {
+          //clear all params of url
+          // setSearchParams({});
+          agent.TripRequest.getBill(paymentIntent)
+            .then((res) => {
+              if (!res) {
+                setIsLoopFetch(true);
+              } else {
+                setOrderDetail(res);
+                setIsLoopFetch(false);
+              }
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+          setLoading(false);
+        }, 3000);
+      } else {
+        setTimeout(() => {
+          agent.TripRequest.getBill(paymentIntent)
+            .then((res) => {
+              if (!res) {
+                setIsLoopFetch(true);
+              } else {
+                setOrderDetail(res);
+                setIsLoopFetch(false);
+              }
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+          setLoading(false);
+        }, 1000);
+      }
     }
-  }, [paymentIntent, userDetail]);
+  }, [paymentIntent, userDetail, isLoopFetch]);
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
