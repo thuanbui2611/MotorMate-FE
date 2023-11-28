@@ -26,7 +26,7 @@ stages:
       inputs:
         command: 'custom'
         workingDir: '$(System.DefaultWorkingDirectory)/client'
-        customCommand: 'npm run build --if-present'
+        customCommand: 'run build --if-present'
 
     - task: ArchiveFiles@2
       displayName: "Archive client solution"
