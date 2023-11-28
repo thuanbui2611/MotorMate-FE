@@ -1,0 +1,62 @@
+trigger: none
+
+pool:
+  name: Linux-agent
+
+variables:
+  azureSubscription: 'b4bb6c40-9ae9-48f8-ba74-bba33613049a'
+  webClientAppName: 'motormate-frontend-web-client'
+  webAdminAppName: 'motormate-frontend-web-admin'
+
+stages:
+- stage:
+  displayName: "Build and Deploy MotorMate Admin and Client"
+  jobs:
+  - job: 
+    displayName: "Build and Deploy"
+    steps:
+    - task: ArchiveFiles@2
+      displayName: "Archive client solution"
+      inputs:
+        rootFolderOrFile: '$(System.DefaultWorkingDirectory)/client'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '$(System.DefaultWorkingDirectory)/client.zip'
+        replaceExistingArchive: true
+      
+    - task: ArchiveFiles@2
+      displayName: "Archive admin solution"
+      inputs:
+        rootFolderOrFile: '$(System.DefaultWorkingDirectory)/admin-panel'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '$(System.DefaultWorkingDirectory)/admin.zip'
+        replaceExistingArchive: true
+    
+    - task: AzureRmWebAppDeployment@4
+      displayName: 'Azure App Service Deploy: $(webClientAppName)'
+      inputs:
+        azureSubscription: $(azureSubscription)
+        appType: webAppLinux
+        WebAppName: $(webClientAppName)
+        packageForLinux: '$(System.DefaultWorkingDirectory)/client.zip'
+        RuntimeStack: 'NODE|18-lts'
+        StartupCommand: 'npm run start'
+        ScriptType: 'Inline Script'
+        InlineScript: |
+          npm install
+          npm run build --if-present
+      
+    - task: AzureRmWebAppDeployment@4
+      displayName: 'Azure App Service Deploy: $(webAdminAppName)'
+      inputs:
+        azureSubscription: $(azureSubscription)
+        appType: webAppLinux
+        WebAppName: $(webAdminAppName)
+        packageForLinux: '$(System.DefaultWorkingDirectory)/admin.zip'
+        RuntimeStack: 'NODE|18-lts'
+        StartupCommand: 'npm run start'
+        ScriptType: 'Inline Script'
+        InlineScript: |
+          npm install
+          npm run build --if-present
