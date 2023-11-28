@@ -261,7 +261,6 @@ body {
   }
 } */
 
-
 /* Product Homepage card */
 .card-location,
 .card-brand {
@@ -1432,11 +1431,10 @@ p {
 /* End of animation open and close chat */
 
 /* Custom product */
-.iconLocation{
+.iconLocation {
   width: 12px;
   height: 12px;
   margin-right: 4px;
-
 }
 .customButton {
   background-color: #ffe53b;
@@ -1757,3 +1755,37 @@ p {
   }
 }
 /* end of Blog Details */
+
+/* Blog home */
+.titleBlogHome {
+  padding: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .titleBlogHome {
+    padding: 0 1rem 0 1rem;
+  }
+  .titleBlogHome h2 {
+    font-size: 16px;
+  }
+  .titleBlogHome p {
+    font-size: 14px;
+  }
+}
+@media (min-width: 1300px) {
+  .titleBlogHome {
+    padding: 0 1rem 0 1rem;
+  }
+  .titleBlogHome h2 {
+    font-size: 22px;
+  }
+  .titleBlogHome p {
+    font-size: 18px;
+  }
+}
+@media (max-width: 640px) {
+  .titleBlogHome {
+    padding: 0 8px 0 8px;
+  }
+}
+/* End of blog home */

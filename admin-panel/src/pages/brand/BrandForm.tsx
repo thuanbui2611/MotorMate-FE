@@ -173,7 +173,7 @@ export default function BrandForm({ brand, cancelEdit, actionName }: Props) {
               ) : (
                 //Upload image
                 <>
-                  {deleteCurrentImage && (
+                  {!imageReview && !brand?.image && !imageUploaded ? (
                     <div className="mb-8">
                       <input
                         type="file"
@@ -182,7 +182,6 @@ export default function BrandForm({ brand, cancelEdit, actionName }: Props) {
                         className="sr-only"
                         onChange={handleImageChange}
                         accept="image/*"
-                        ref={fileInputRef}
                       />
                       <label
                         htmlFor="file"
@@ -201,6 +200,38 @@ export default function BrandForm({ brand, cancelEdit, actionName }: Props) {
                         </div>
                       </label>
                     </div>
+                  ) : (
+                    <>
+                      {deleteCurrentImage && (
+                        <div className="mb-8">
+                          <input
+                            type="file"
+                            name="logo"
+                            id="file"
+                            className="sr-only"
+                            onChange={handleImageChange}
+                            accept="image/*"
+                            ref={fileInputRef}
+                          />
+                          <label
+                            htmlFor="file"
+                            className="relative flex min-h-[200px] items-center justify-center rounded-md border border-dashed border-[#e0e0e0] p-12 text-center hover:bg-graydark/5"
+                          >
+                            <div>
+                              <span className="mb-2 block text-xl font-semibold text-[#07074D]">
+                                Drop image here
+                              </span>
+                              <span className="mb-2 block text-base font-medium text-[#6B7280]">
+                                Or
+                              </span>
+                              <span className="inline-flex rounded border border-[#e0e0e0] py-2 px-7 text-base font-medium text-[#07074D]">
+                                Browse
+                              </span>
+                            </div>
+                          </label>
+                        </div>
+                      )}
+                    </>
                   )}
                 </>
               )}

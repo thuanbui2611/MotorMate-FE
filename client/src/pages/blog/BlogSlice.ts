@@ -82,7 +82,7 @@ export const deleteBlogAsync = createAsyncThunk(
 function initParams() {
   return {
     pageNumber: 1,
-    pageSize: 5,
+    pageSize: 6,
   };
 }
 

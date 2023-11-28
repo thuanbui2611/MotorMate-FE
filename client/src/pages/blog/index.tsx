@@ -223,13 +223,12 @@ export default function BlogPage() {
           </div>
         </section>
       </FadeInSection>
-      <section className="bg-white ">
+      <section className="bg-white pb-10">
         <div className="container px-6 py-10 mx-auto">
-          <h1 className="text-3xl font-semibold text-gray-800 capitalize lg:text-4xl dark:text-white">
-            Blog
+          <h1 className="mb-4 text-2xl md:text-4xl lg:text-5xl tracking-tight font-extrabold text-gradient">
+            Blogs
           </h1>
-
-          <div className="grid grid-cols-1 gap-4 lg:gap-8 mt-8 lg:mt-16 lg:grid-cols-2">
+          <div className="grid grid-cols-1 gap-4 lg:gap-8 mt-8 lg:mt-12 lg:grid-cols-2">
             {blogs.map((blog) => (
               <Link
                 className="lg:flex group"
@@ -310,9 +309,9 @@ export default function BlogPage() {
           </div>
         </div>
       </section>
-      <section className="flex items-center justify-center px-4 sm:px-6 lg:px-4 pb-12 bg-white w-full h-fit">
+
+      {/* <section className="flex items-center justify-center px-4 sm:px-6 lg:px-4 pb-12 bg-white w-full h-fit">
         <article className="max-w-7xl ">
-          {/* <h2 className="text-2xl font-extrabold text-black">News</h2> */}
           <section className="mt-6 grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-x-6 gap-y-8">
             <article
               className="relative w-full h-64 bg-cover bg-center group rounded-lg overflow-hidden shadow-lg hover:shadow-2xl  transition duration-300 ease-in-out"
@@ -373,7 +372,7 @@ export default function BlogPage() {
             </article>
           </section>
         </article>
-      </section>
+      </section> */}
     </div>
   );
 }
