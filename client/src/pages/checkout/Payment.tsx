@@ -42,8 +42,6 @@ export default function Payment() {
     scrollToTop();
   }, [checkoutLoaded]);
 
-  // const clientSecret =
-  //   "pi_3ODpM3ETkkliUm4y0U7EopEX_secret_dUkN0suKBZzcR5gI9XG3OXIfN";
   const options: StripeElementsOptions = {
     clientSecret: clientSecret,
     appearance: {

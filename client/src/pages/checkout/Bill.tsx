@@ -48,7 +48,7 @@ export default function Bill() {
               console.log(error);
             });
           setLoading(false);
-        }, 3000);
+        }, 5000);
       } else {
         setTimeout(() => {
           agent.TripRequest.getBill(paymentIntent)
