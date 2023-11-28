@@ -120,7 +120,7 @@ export const BlogCommentSlice = createSlice({
     builder.addCase(addCommentAsync.fulfilled, (state, action) => {
       toast.success("Add comment successfully!");
       const { blogId } = action.payload;
-      state.entities[blogId]?.comments.push(action.payload);
+      state.entities[blogId]?.comments.unshift(action.payload);
     });
     builder.addCase(addCommentAsync.rejected, (state, action) => {
       toast.success("Add comment failed!");

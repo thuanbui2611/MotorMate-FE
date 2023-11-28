@@ -254,7 +254,7 @@ export default function Products() {
     if (searchQueryParam) {
       const querySearch = searchQueryParam.trim();
       setSearchQuery(querySearch);
-      dispatch(setProductParams({ Search: querySearch }));
+      dispatch(setProductParams({ Search: querySearch, pageNumber: 1 }));
     } else {
       setSearchParams((prev) => {
         prev.delete("IsSortPriceDesc");
@@ -386,7 +386,15 @@ export default function Products() {
     });
   };
   //search
-  const handleSearch = () => {
+  const handleSearch = (isReset?: boolean) => {
+    if (isReset) {
+      setSearchParams((prev) => {
+        prev.delete("Search");
+        return prev;
+      });
+      setSearchQuery("");
+      return;
+    }
     if (searchQuery) {
       setSearchParams((prev) => {
         prev.set("Search", searchQuery.trim());
@@ -697,7 +705,13 @@ export default function Products() {
                           id="inputSearch"
                           placeholder="Search"
                           value={searchQuery}
-                          onChange={(e) => setSearchQuery(e.target.value)}
+                          onChange={(e) => {
+                            if (e.target.value) {
+                              setSearchQuery(e.target.value);
+                            } else {
+                              handleSearch(true);
+                            }
+                          }}
                           onKeyDown={handleKeyDown}
                           style={{ boxShadow: "none" }}
                         />
@@ -705,7 +719,7 @@ export default function Products() {
                         <label
                           htmlFor="input"
                           className="labelforsearch cursor-pointer"
-                          onClick={() => handleSearch}
+                          onClick={() => handleSearch()}
                         >
                           <svg viewBox="0 0 512 512" className="searchIcon">
                             <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"></path>

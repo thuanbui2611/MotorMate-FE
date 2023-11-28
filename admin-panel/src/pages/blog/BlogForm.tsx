@@ -54,7 +54,7 @@ export default function BlogForm({ blog, cancelEdit, actionName }: Props) {
     reset,
     register,
     handleSubmit,
-    formState: { isSubmitting, errors },
+    formState: { isSubmitting },
   } = useForm({
     mode: "all",
   });
@@ -62,9 +62,14 @@ export default function BlogForm({ blog, cancelEdit, actionName }: Props) {
   useEffect(() => {
     if (blog) {
       reset(blog);
-
+      debugger;
       setContent(blog.content);
       setSelectedAuthor(blog.author);
+      const selectedCategory: Category = {
+        id: blog.category.categoryId,
+        name: blog.category.name,
+      };
+      setSelectedCategories(selectedCategory);
     }
   }, [blog, reset]);
   useEffect(() => {
@@ -108,6 +113,7 @@ export default function BlogForm({ blog, cancelEdit, actionName }: Props) {
 
   const handleImageChange = (e: any) => {
     const file = e.target.files[0];
+    debugger;
     if (!file.type.startsWith("image/")) {
       toast.error("Accept only image file");
     } else {
@@ -116,7 +122,7 @@ export default function BlogForm({ blog, cancelEdit, actionName }: Props) {
         name: file.name,
         url: URL.createObjectURL(file),
       });
-      setDeleteCurrentImage(false);
+      setDeleteCurrentImage(true);
     }
   };
 
@@ -132,6 +138,11 @@ export default function BlogForm({ blog, cancelEdit, actionName }: Props) {
         authorId: selectedAuthor?.authorId,
         categoryId: selectedCategories?.id,
       };
+      debugger;
+      if (deleteCurrentImage) {
+        formData.imageUrl = null;
+        formData.publicId = null;
+      }
       if (imageUploaded) {
         let getImage = await uploadImage(imageUploaded as any);
         if (getImage) {
@@ -139,13 +150,12 @@ export default function BlogForm({ blog, cancelEdit, actionName }: Props) {
           formData.publicId = getImage.publicId;
         }
       }
-      if (deleteCurrentImage) {
-        formData.imageUrl = null;
-        formData.publicId = null;
-      }
+
       console.log("Form data:", formData);
+      debugger;
       if (blog) {
         if (imageUploaded || deleteCurrentImage) {
+          debugger;
           await deleteImage(blog.image.publicId);
         }
         await dispatch(updateBlogAsync(formData));
@@ -333,6 +343,7 @@ export default function BlogForm({ blog, cancelEdit, actionName }: Props) {
                       onClick={() => {
                         setImageReview(null);
                         setImageUploaded(null);
+                        setDeleteCurrentImage(true);
                       }}
                     >
                       <svg
@@ -367,36 +378,41 @@ export default function BlogForm({ blog, cancelEdit, actionName }: Props) {
               ) : (
                 //upload image
                 <>
-                  <div className="mb-8">
-                    <input
-                      type="file"
-                      name="logo"
-                      id="file"
-                      className="sr-only"
-                      onChange={handleImageChange}
-                      accept="image/*"
-                    />
-                    <label
-                      htmlFor="file"
-                      className="relative flex min-h-[200px] items-center justify-center rounded-md border border-dashed border-[#e0e0e0] p-12 text-center hover:bg-graydark/5"
-                    >
-                      <div>
-                        <span className="mb-2 block text-xl font-semibold text-[#07074D]">
-                          Drop image here
-                        </span>
-                        <span className="mb-2 block text-base font-medium text-[#6B7280]">
-                          Or
-                        </span>
-                        <span className="inline-flex rounded border border-[#e0e0e0] py-2 px-7 text-base font-medium text-[#07074D]">
-                          Browse
-                        </span>
-                      </div>
-                    </label>
-                  </div>
+                  {deleteCurrentImage && (
+                    <div className="mb-8">
+                      <input
+                        type="file"
+                        name="logo"
+                        id="file"
+                        className="sr-only"
+                        onChange={handleImageChange}
+                        accept="image/*"
+                      />
+                      <label
+                        htmlFor="file"
+                        className="relative flex min-h-[200px] items-center justify-center rounded-md border border-dashed border-[#e0e0e0] p-12 text-center hover:bg-graydark/5"
+                      >
+                        <div>
+                          <span className="mb-2 block text-xl font-semibold text-[#07074D]">
+                            Drop image here
+                          </span>
+                          <span className="mb-2 block text-base font-medium text-[#6B7280]">
+                            Or
+                          </span>
+                          <span className="inline-flex rounded border border-[#e0e0e0] py-2 px-7 text-base font-medium text-[#07074D]">
+                            Browse
+                          </span>
+                        </div>
+                      </label>
+                    </div>
+                  )}
                 </>
               )}
 
-              {blog?.image && !deleteCurrentImage && !imageReview && (
+              {blog?.image &&
+              !imageUploaded &&
+              !deleteCurrentImage &&
+              !imageReview ? (
                 <div className="mb-5 rounded-md bg-[#F5F7FB] py-4 px-8">
                   <div className="flex items-center justify-between">
                     <span className="truncate pr-3 text-base font-medium text-[#07074D]"></span>
@@ -405,6 +421,7 @@ export default function BlogForm({ blog, cancelEdit, actionName }: Props) {
                       onClick={() => {
                         setImageUploaded(null);
                         setDeleteCurrentImage(true);
+                        setImageReview(null);
                       }}
                     >
                       <svg
@@ -436,6 +453,8 @@ export default function BlogForm({ blog, cancelEdit, actionName }: Props) {
                     alt="Blog image preview"
                   />
                 </div>
+              ) : (
+                <></>
               )}
               <label className="block text-sm font-semibold text-black">
                 Content:

@@ -2,15 +2,18 @@ import { useSpringCarousel } from "react-spring-carousel";
 import { useEffect, useState } from "react";
 import BlogRelatedCard from "./BlogRelatedCard";
 import { Blog } from "../models/Blog";
-import agent from "../api/agent";
-import { toast } from "react-toastify";
 
 interface Props {
-  blogId: string | undefined;
+  relatedBlogs: Blog[];
 }
-export default function BlogRelatedCarousel({ blogId }: Props) {
-  const [loading, setLoading] = useState<boolean>(true);
-  const [relatedBlogs, setRelatedBlogs] = useState<Blog[]>([]);
+export default function BlogRelatedCarousel({ relatedBlogs }: Props) {
+  if (relatedBlogs.length === 0)
+    return (
+      <p className="flex items-center justify-center h-40 text-red-500 w-full bg-gray-100 rounded-lg my-10">
+        No related posts found.
+      </p>
+    );
+
   const [itemsPerSlide, setItemsPerSlide] = useState(4);
 
   useEffect(() => {
@@ -30,23 +33,8 @@ export default function BlogRelatedCarousel({ blogId }: Props) {
     };
   }, []);
 
-  useEffect(() => {
-    if (loading && blogId) {
-      agent.Blog.getRelatedBlogs(blogId)
-        .then((res) => {
-          setRelatedBlogs(res);
-        })
-        .catch((error) => {
-          toast.error("Get related blogs failed!");
-          console.log(error);
-        });
-      setLoading(false);
-    }
-  }, []);
-
-  let carouselProps = {};
-  if (relatedBlogs && relatedBlogs.length > 0) {
-    carouselProps = {
+  const { carouselFragment, slideToPrevItem, slideToNextItem } =
+    useSpringCarousel({
       autoplay: relatedBlogs.length < itemsPerSlide ? false : true,
       slideToNextItem: relatedBlogs.length < itemsPerSlide ? false : true,
       slideToPrevItem: true,
@@ -60,19 +48,7 @@ export default function BlogRelatedCarousel({ blogId }: Props) {
         ...blog,
         renderItem: <BlogRelatedCard blogRelated={blog} />,
       })),
-    };
-  } else {
-    carouselProps = {
-      items: [],
-    };
-    return (
-      <p className="flex items-center justify-center h-40 text-red-500 w-full bg-gray-100 rounded-lg my-10">
-        No related posts found.
-      </p>
-    );
-  }
-  const { carouselFragment, slideToPrevItem, slideToNextItem } =
-    useSpringCarousel(carouselProps);
+    });
 
   return (
     <div className="relative">

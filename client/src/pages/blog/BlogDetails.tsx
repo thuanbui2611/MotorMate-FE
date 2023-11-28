@@ -9,6 +9,7 @@ import NotFound from "../../app/errors/NotFound";
 import BlogComment from "./BlogComment";
 import { ConvertToDateTimeStr } from "../../app/utils/ConvertDatetimeToStr";
 import BlogRelatedCarousel from "../../app/components/BlogRelatedCarousel";
+import RelatedBlogs from "./RelatedBlogs";
 
 export default function BlogDetails() {
   const { id } = useParams<{ id: string }>();
@@ -21,9 +22,9 @@ export default function BlogDetails() {
       agent.Blog.details(id!)
         .then((blog) => {
           setBlog(blog);
+          setLoading(false);
         })
-        .catch((error) => console.log(error))
-        .finally(() => setLoading(false));
+        .catch((error) => console.log(error));
     }
   }, []);
 
@@ -78,7 +79,7 @@ export default function BlogDetails() {
                 />
               </div>
               <div>
-                <div className="mt-2 p-4 font-normal md:p-8 text-xs md:text-xl">
+                <div className="mt-2 p-4 font-normal md:p-8 text-xs md:text-xl blogContentContainer">
                   {parse(blog?.content || "")}
                 </div>
               </div>
@@ -87,14 +88,16 @@ export default function BlogDetails() {
           <h2 className="text-2xl mt-4 text-gray-500 font-bold text-center">
             Related Posts
           </h2>
-          <div className="max-w-7xl mx-auto px-5 mb-3">
-            {/* Blog card */}
-            <BlogRelatedCarousel blogId={blog?.id} />
-          </div>
-
-          <div className=" max-w-5xl py-16 xl:px-8 flex flex-col justify-center mx-auto">
-            <BlogComment blogId={blog?.id} />
-          </div>
+          {blog && (
+            <div className="max-w-7xl mx-auto px-5 mb-3">
+              <RelatedBlogs blogId={blog.id} />
+            </div>
+          )}
+          {blog && (
+            <div className=" max-w-5xl py-16 xl:px-8 flex flex-col justify-center mx-auto">
+              <BlogComment blogId={blog?.id} />
+            </div>
+          )}
         </div>
       </div>
     </>

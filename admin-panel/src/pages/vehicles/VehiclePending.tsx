@@ -346,7 +346,15 @@ export default function VehiclePending() {
   };
   // End of handle change filter
 
-  const handleSearch = () => {
+  const handleSearch = (isReset?: boolean) => {
+    if (isReset) {
+      setSearchParams((prev) => {
+        prev.delete("Search");
+        return prev;
+      });
+      setSearchQuery("");
+      return;
+    }
     if (searchQuery) {
       setSearchParams((prev) => {
         prev.set("Search", searchQuery.trim());
@@ -430,12 +438,18 @@ export default function VehiclePending() {
                   className="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[200px] p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="Search..."
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onChange={(e) => {
+                    if (e.target.value) {
+                      setSearchQuery(e.target.value);
+                    } else {
+                      handleSearch(true);
+                    }
+                  }}
                   onKeyDown={handleKeyDown}
                 />
               </div>
               <button
-                onClick={handleSearch}
+                onClick={() => handleSearch()}
                 className="p-2.5 ml-2 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               >
                 <svg
@@ -604,7 +618,7 @@ export default function VehiclePending() {
             <table className="w-full table-auto">
               <thead>
                 <tr className=" bg-gray-2 text-left dark:bg-meta-4  font-bold">
-                  <th className="min-w-[220px] py-4 px-4 text-black dark:text-white xl:pl-11">
+                  <th className="min-w-[250px] py-4 px-4 text-black dark:text-white text-center">
                     Vehicle Name
                   </th>
                   <th className="min-w-[150px] py-4 px-4 text-black dark:text-white">
@@ -658,7 +672,7 @@ export default function VehiclePending() {
                           key={vehicle.id}
                           className="dark:border-strokedark border-[#eee] border-b"
                         >
-                          <td className="py-5 px-4 pl-9 xl:pl-11">
+                          <td className="py-5 px-4">
                             <div className="flex items-center h-full">
                               <div className="h-12 w-12 rounded-md">
                                 <img

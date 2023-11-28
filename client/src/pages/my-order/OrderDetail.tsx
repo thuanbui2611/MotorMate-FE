@@ -231,18 +231,24 @@ export default function OrderDetail() {
                       >
                         {vehicle.status}
                       </div>
-                      <div className="flex justify-center items-center pb-4 md:pb-8 w-full md:w-40">
+                      <Link
+                        to={"/product-detail/" + vehicle.vehicleId}
+                        className="cursor-pointer flex justify-center items-center pb-4 md:pb-8 w-full md:w-40 hover:brightness-90"
+                      >
                         <img
                           className="w-[150px] h-[150px] md:w-full md:h-full md:block rounded-lg shadow-lg"
                           src={vehicle.image}
                           alt="Vehicle Image"
                         />
-                      </div>
+                      </Link>
                       <div className="flex justify-start items-center border-b border-gray-100 md:flex-row flex-col w-fit md:w-full pb-8 space-y-4 md:space-y-0">
                         <div className="w-full md:w-1/2 flex flex-col justify-start items-start space-y-2">
-                          <h3 className="text-xl xl:text-2xl font-semibold leading-6 text-black">
+                          <Link
+                            to={"/product-detail/" + vehicle.vehicleId}
+                            className="text-xl xl:text-2xl font-semibold leading-6 text-black hover:text-blue-600 cursor-pointer"
+                          >
                             {vehicle.vehicleName}
-                          </h3>
+                          </Link>
                           <div className="flex justify-start items-start flex-col space-y-2">
                             <p className="text-sm leading-none text-black">
                               <span className="text-gray-500">Brand: </span>{" "}

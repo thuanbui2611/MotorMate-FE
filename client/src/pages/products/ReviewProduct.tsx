@@ -1,15 +1,16 @@
-import AdsReviewProduct from "../../app/components/AdsReviewProduct";
 import { SlideshowLightbox } from "lightbox.js-react";
 import "lightbox.js-react/dist/index.css";
 import { Vehicle } from "../../app/models/Vehicle";
 import { useEffect, useState } from "react";
 import { Review } from "../../app/models/Review";
-import agent from "../../app/api/agent";
 import { useAppDispatch, useAppSelector } from "../../app/store/ConfigureStore";
 import {
   getReviewsProductAsync,
   reviewProductsSelectors,
+  setReviewProductParams,
 } from "./ReviewProductSlice";
+import Loading from "../../app/components/Loading";
+import LoaderButton from "../../app/components/LoaderButton";
 
 interface Props {
   vehicle: Vehicle;
@@ -20,7 +21,7 @@ export default function ReviewProduct({ vehicle }: Props) {
 
   const dispatch = useAppDispatch();
 
-  const { reviewProductLoaded, reviewProductParams } = useAppSelector(
+  const { reviewProductLoaded, reviewProductParams, metaData } = useAppSelector(
     (state) => state.reviewProduct
   );
   const reviewsFromState = useAppSelector((state) =>
@@ -34,7 +35,7 @@ export default function ReviewProduct({ vehicle }: Props) {
   }, [reviewsFromState]);
 
   useEffect(() => {
-    if (!reviewsFromState && !reviewProductLoaded) {
+    if (!reviewProductLoaded) {
       dispatch(getReviewsProductAsync(vehicle.id));
     }
   }, [reviewProductParams, dispatch]);
@@ -91,7 +92,9 @@ export default function ReviewProduct({ vehicle }: Props) {
     return ratingSVG;
   };
 
-  return (
+  return !metaData ? (
+    <Loading />
+  ) : (
     <>
       {/* Ads */}
       {/* <AdsReviewProduct /> */}
@@ -215,14 +218,14 @@ export default function ReviewProduct({ vehicle }: Props) {
                     <p className="mt-3 text-sm md:text-base font-medium leading-normal text-gray-700 w-full">
                       {review.content}
                     </p>
-                    <div className="mt-6 flex justify-start items-start space-x-4 max-w-full overflow-auto">
+                    <div className="mt-6 flex justify-start items-start space-x-4 max-w-full h-20 overflow-x-auto">
                       <SlideshowLightbox
                         className="flex gap-4 h-20 w-full"
                         showThumbnails={true}
                       >
                         {review.images.map((image, index) => (
                           <img
-                            className="rounded h-full w-full border border-gray-300 shadow-md"
+                            className="rounded h-20 w-full border border-gray-300 shadow-md"
                             src={image || undefined}
                             key={index}
                           />
@@ -234,7 +237,26 @@ export default function ReviewProduct({ vehicle }: Props) {
               </div>
             </div>
           ))}
-
+          <>
+            {reviews &&
+            reviews.length > 0 &&
+            metaData.totalItemCount > reviews.length ? (
+              <div
+                className="flex items-center justify-center mx-auto w-24 h-7 text-blue-500 hover:text-blue-700 cursor-pointer text-sm lg:text-base border border-blue-500 rounded-xl px-2 hover:bg-blue-400"
+                onClick={() =>
+                  dispatch(
+                    setReviewProductParams({
+                      pageSize: reviewProductParams.pageSize + 5,
+                    })
+                  )
+                }
+              >
+                {reviewProductLoaded ? <LoaderButton /> : <span>See more</span>}
+              </div>
+            ) : (
+              <></>
+            )}
+          </>
           {/* Review End */}
         </div>
       </div>

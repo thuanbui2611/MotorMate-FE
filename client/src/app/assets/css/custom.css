@@ -1740,3 +1740,20 @@ p {
 }
 
 /* End of prodcut detail ads */
+
+/* Blog Details */
+.blogContentContainer p {
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .blogContentContainer p {
+    font-size: 2vw;
+  }
+}
+@media (max-width: 400px) {
+  .blogContentContainer p {
+    font-size: 10px;
+  }
+}
+/* end of Blog Details */

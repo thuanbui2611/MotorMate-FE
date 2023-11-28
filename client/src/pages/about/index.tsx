@@ -23,10 +23,10 @@ export default function About() {
                     About us
                   </span>
                   <h1 className="pl-2 text-3xl font-bold border-orange-based md:text-5xl text-gradient">
-                    Wellcome to MotorMate!
+                    Welcome to MotorMate!
                   </h1>
                 </div>
-                <p className="mt-6 mb-10 text-base leading-7 text-gray-200 ">
+                <p className="mt-6 mb-10 text-base font-medium leading-7 text-gray-200 ">
                   MotorMate is a self-ride motorcycle rental platform. Our
                   platform connects people who have high-quality motorcycles for
                   rent with those who want an excellent rental experience. Our
@@ -60,18 +60,18 @@ export default function About() {
                       Missions
                     </h1>
                   </div>
-                  <p className="px-4 mb-2 text-base leading-7 text-gray-200">
+                  <p className="px-4 mb-2 text-base leading-7 text-gray-200 font-medium">
                     MotorMate's goal is to provide a simple and user-friendly
                     application that allows users to select the type of bike
                     they want to rent and connect with reputable rental service
                     providers.
                   </p>
-                  <p className="px-4 mb-2 text-base leading-7 text-gray-200">
+                  <p className="px-4 mb-2 text-base leading-7 text-gray-200 font-medium">
                     MotorMate provides travelers with the peace of mind that
                     they are renting from reputable providers and can enjoy
                     their travels without worry.
                   </p>
-                  <p className="px-4 mb-10 text-base leading-7 text-gray-200">
+                  <p className="px-4 mb-10 text-base leading-7 text-gray-200 font-medium">
                     Our mission is to be a leading platform for outstanding
                     motorcycle rental services. Our mission is to provide users
                     with an outstanding experience by providing them with a
@@ -101,7 +101,7 @@ export default function About() {
                 <h2 className="mt-2 text-3xl font-black text-gradient md:text-5xl mb-10">
                   Vission
                 </h2>
-                <p className="mb-10 text-gray-200">
+                <p className="mb-10 text-gray-200 font-medium">
                   Our vision is to be acknowledged as the leading platform for
                   self-ride motorcycle rentals, with an emphasis on quality,
                   customer service, and innovation. We intend to expand our

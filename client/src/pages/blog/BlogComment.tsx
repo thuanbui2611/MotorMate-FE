@@ -146,45 +146,48 @@ export default function BlogCommentPage({ blogId }: Props) {
             </div>
           </div>
           {/* Comment Start */}
-          {blogComments?.comments.map((comment) => (
-            <div className="w-full flex justify-start items-start flex-col bg-gray-50">
-              <div className="flex mx-10 w-[92%]">
-                <div>
-                  <img
-                    src={comment.avatar}
-                    alt="user-avatar"
-                    className="w-12 h-12 rounded-full shadow-md"
-                  />
-                </div>
-                <div className="w-full flex justify-start items-start flex-col bg-gray-200/50 ml-2 rounded-2xl p-4">
-                  <div className="flex w-full justify-between items-start">
-                    <p className="text-base leading-none text-black font-bold">
-                      {comment.username}
-                    </p>
-                    <p className="text-sm leading-none text-black ">
-                      {new Date(comment.createdAt).toLocaleString([], {
-                        year: "numeric",
-                        month: "2-digit",
-                        day: "2-digit",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
-                    </p>
+          {!blogCommentLoaded &&
+            blogComments &&
+            blogComments.comments.map((comment) => (
+              <div className="w-full flex justify-start items-start flex-col bg-gray-50">
+                <div className="flex mx-10 w-[92%]">
+                  <div>
+                    <img
+                      src={comment.avatar}
+                      alt="user-avatar"
+                      className="w-12 h-12 rounded-full shadow-md"
+                    />
                   </div>
-                  <div className="md:block">
-                    <p className="mt-3 text-xs md:text-sm font-medium text-black w-full">
-                      {comment.Comment}
-                    </p>
+                  <div className="w-full flex justify-start items-start flex-col bg-gray-200/50 ml-2 rounded-2xl p-4">
+                    <div className="flex w-full justify-between items-start">
+                      <p className="text-base leading-none text-black font-bold">
+                        {comment.username}
+                      </p>
+                      <p className="text-sm leading-none text-black ">
+                        {new Date(comment.createdAt).toLocaleString([], {
+                          year: "numeric",
+                          month: "2-digit",
+                          day: "2-digit",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </p>
+                    </div>
+                    <div className="md:block">
+                      <p className="mt-3 text-xs md:text-sm font-medium text-black w-full">
+                        {comment.Comment}
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
 
           {/* Review End */}
           <>
             {blogComments &&
-            metaData.totalItemCount > blogComments?.comments.length ? (
+            blogComments.comments.length > 0 &&
+            metaData.totalItemCount > blogComments.comments.length ? (
               <div
                 className="mx-auto w-24 h-7 text-blue-500 hover:text-blue-700 cursor-pointer text-sm lg:text-base border border-blue-500 rounded-xl px-2 hover:bg-blue-400"
                 onClick={() =>

@@ -56,7 +56,7 @@ export default function BrandForm({ brand, cancelEdit, actionName }: Props) {
         name: file.name,
         url: URL.createObjectURL(file),
       });
-      setDeleteCurrentImage(false);
+      setDeleteCurrentImage(true);
     }
 
     if (fileInputRef.current) {
@@ -72,16 +72,17 @@ export default function BrandForm({ brand, cancelEdit, actionName }: Props) {
         imageUrl: brand?.image.image || null,
         publicId: brand?.image.publicId || null,
       };
+
+      if (deleteCurrentImage) {
+        formData.imageUrl = null;
+        formData.publicId = null;
+      }
       if (imageUploaded) {
         let getImage = await uploadImage(imageUploaded);
         if (getImage) {
           formData.imageUrl = getImage.image;
           formData.publicId = getImage.publicId;
         }
-      }
-      if (deleteCurrentImage) {
-        formData.imageUrl = null;
-        formData.publicId = null;
       }
       if (brand) {
         if (imageUploaded || deleteCurrentImage) {
@@ -172,37 +173,42 @@ export default function BrandForm({ brand, cancelEdit, actionName }: Props) {
               ) : (
                 //Upload image
                 <>
-                  <div className="mb-8">
-                    <input
-                      type="file"
-                      name="logo"
-                      id="file"
-                      className="sr-only"
-                      onChange={handleImageChange}
-                      accept="image/*"
-                      ref={fileInputRef}
-                    />
-                    <label
-                      htmlFor="file"
-                      className="relative flex min-h-[200px] items-center justify-center rounded-md border border-dashed border-[#e0e0e0] p-12 text-center hover:bg-graydark/5"
-                    >
-                      <div>
-                        <span className="mb-2 block text-xl font-semibold text-[#07074D]">
-                          Drop image here
-                        </span>
-                        <span className="mb-2 block text-base font-medium text-[#6B7280]">
-                          Or
-                        </span>
-                        <span className="inline-flex rounded border border-[#e0e0e0] py-2 px-7 text-base font-medium text-[#07074D]">
-                          Browse
-                        </span>
-                      </div>
-                    </label>
-                  </div>
+                  {deleteCurrentImage && (
+                    <div className="mb-8">
+                      <input
+                        type="file"
+                        name="logo"
+                        id="file"
+                        className="sr-only"
+                        onChange={handleImageChange}
+                        accept="image/*"
+                        ref={fileInputRef}
+                      />
+                      <label
+                        htmlFor="file"
+                        className="relative flex min-h-[200px] items-center justify-center rounded-md border border-dashed border-[#e0e0e0] p-12 text-center hover:bg-graydark/5"
+                      >
+                        <div>
+                          <span className="mb-2 block text-xl font-semibold text-[#07074D]">
+                            Drop image here
+                          </span>
+                          <span className="mb-2 block text-base font-medium text-[#6B7280]">
+                            Or
+                          </span>
+                          <span className="inline-flex rounded border border-[#e0e0e0] py-2 px-7 text-base font-medium text-[#07074D]">
+                            Browse
+                          </span>
+                        </div>
+                      </label>
+                    </div>
+                  )}
                 </>
               )}
 
-              {brand?.image && !deleteCurrentImage && !imageReview && (
+              {brand?.image &&
+              !imageUploaded &&
+              !deleteCurrentImage &&
+              !imageReview ? (
                 <div className="mb-5 rounded-md bg-[#F5F7FB] py-4 px-8">
                   <div className="flex items-center justify-between">
                     <span className="truncate pr-3 text-base font-medium text-[#07074D]"></span>
@@ -211,6 +217,7 @@ export default function BrandForm({ brand, cancelEdit, actionName }: Props) {
                       onClick={() => {
                         setImageUploaded(null);
                         setDeleteCurrentImage(true);
+                        setImageReview(null);
                       }}
                     >
                       <svg
@@ -242,6 +249,8 @@ export default function BrandForm({ brand, cancelEdit, actionName }: Props) {
                     alt="Logo brand preview"
                   />
                 </div>
+              ) : (
+                <></>
               )}
             </CardBody>
             <CardFooter className="pt-0 flex flex-row justify-between gap-10">

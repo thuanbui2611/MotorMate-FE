@@ -229,7 +229,7 @@ export default function VehiclesPage() {
         prev.delete("pageNumber");
         return prev;
       });
-      debugger;
+
       dispatch(setVehicleParams({ pageNumber: 1 }));
     } else if (pageNum) {
       dispatch(setVehicleParams({ pageNumber: +pageNum }));
@@ -241,9 +241,8 @@ export default function VehiclesPage() {
     if (searchQueryParam) {
       const querySearch = searchQueryParam.trim();
       setSearchQuery(querySearch);
-      dispatch(setVehicleParams({ Search: querySearch }));
+      dispatch(setVehicleParams({ Search: querySearch, pageNumber: 1 }));
     } else {
-      debugger;
       dispatch(setVehicleParams({ Search: undefined }));
     }
   }, [searchQueryParam, dispatch]);
@@ -352,7 +351,15 @@ export default function VehiclesPage() {
   };
   // End of handle change filter
 
-  const handleSearch = () => {
+  const handleSearch = (isReset?: boolean) => {
+    if (isReset) {
+      setSearchParams((prev) => {
+        prev.delete("Search");
+        return prev;
+      });
+      setSearchQuery("");
+      return;
+    }
     if (searchQuery) {
       setSearchParams((prev) => {
         prev.set("Search", searchQuery.trim());
@@ -442,12 +449,18 @@ export default function VehiclesPage() {
                   className="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[200px] p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="Search..."
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onChange={(e) => {
+                    if (e.target.value) {
+                      setSearchQuery(e.target.value);
+                    } else {
+                      handleSearch(true);
+                    }
+                  }}
                   onKeyDown={handleKeyDown}
                 />
               </div>
               <button
-                onClick={handleSearch}
+                onClick={() => handleSearch()}
                 className="p-2.5 ml-2 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               >
                 <svg
@@ -616,14 +629,14 @@ export default function VehiclesPage() {
             <table className="w-full table-auto">
               <thead>
                 <tr className=" bg-gray-2 text-left dark:bg-meta-4  font-bold">
-                  <th className="min-w-[220px] py-4 px-4 text-black dark:text-white xl:pl-11">
+                  <th className="min-w-[250px] py-4 px-4 text-black dark:text-white text-center">
                     Vehicle Name
                   </th>
                   <th className="min-w-[150px] py-4 px-4 text-black dark:text-white">
                     Owner
                   </th>
-                  <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
-                    Insurance Expiry
+                  <th className="w-fit py-4 px-4 text-black dark:text-white text-center">
+                    Insurance <br /> Expiry
                   </th>
                   <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
                     Location
@@ -634,7 +647,7 @@ export default function VehiclesPage() {
                   <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
                     Profit
                   </th>
-                  <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
+                  <th className="w-fit py-4 px-4 text-black dark:text-white">
                     Status
                   </th>
                   <th className="py-4 px-4">
@@ -669,7 +682,7 @@ export default function VehiclesPage() {
                           key={vehicle.id}
                           className="dark:border-strokedark border-[#eee] border-b"
                         >
-                          <td className="py-5 px-4 pl-9 xl:pl-11">
+                          <td className="py-5 px-4">
                             <div className="flex items-center h-full ">
                               <div className="h-12 w-12 rounded-md">
                                 <img
@@ -680,13 +693,15 @@ export default function VehiclesPage() {
                               </div>
                               <div className="ml-3 flex flex-1 flex-col">
                                 <div className="flex">
-                                  <h5 className="font-medium text-black dark:text-white">
+                                  <h5 className="font-medium text-black dark:text-white  line-clamp-2">
                                     {vehicle.specifications.modelName}
                                   </h5>
                                   <a
                                     className="bg-blue-500 bg-opacity-20 rounded-full w-4 h-4 ml-1 hover:bg-opacity-50 p-[2px]"
                                     href={
-                                      "https://motormate.vercel.app/product-detail/" +
+                                      process.env
+                                        .REACT_APP_MOTORMATE_CLIENT_BASE_URL +
+                                      "/product-detail/" +
                                       vehicle.id
                                     }
                                     target="_blank"
@@ -735,7 +750,7 @@ export default function VehiclesPage() {
                                   </a>
                                 </div>
 
-                                <p className="text-sm">
+                                <p className="text-sm font-medium">
                                   {vehicle.specifications.color}
                                 </p>
                               </div>
@@ -743,7 +758,7 @@ export default function VehiclesPage() {
                           </td>
 
                           <td className="py-5 px-4">
-                            <p className="text-black dark:text-white">
+                            <p className="text-black dark:text-white line-clamp-1">
                               {vehicle.owner.username}
                             </p>
                           </td>
@@ -759,13 +774,13 @@ export default function VehiclesPage() {
                             </p>
                           </td>
                           <td className="py-5 px-4">
-                            <p className="text-black dark:text-white">
-                              {vehicle.price.toLocaleString()}
+                            <p className="text-meta-3 dark:text-white">
+                              {vehicle.price.toLocaleString()} đ
                             </p>
                           </td>
 
                           <td className="py-5 px-4">
-                            <p className="text-meta-3">10.000</p>
+                            <p className="text-meta-3">10.000 đ</p>
                           </td>
                           <td className="py-5 px-4">
                             <p className="inline-flex rounded-full bg-danger bg-opacity-10 py-1 px-3 text-sm font-bold text-danger">
