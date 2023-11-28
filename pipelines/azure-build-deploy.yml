@@ -27,15 +27,6 @@ stages:
         command: 'custom'
         workingDir: '$(System.DefaultWorkingDirectory)/client'
         customCommand: 'run build --if-present'
-
-    - task: ArchiveFiles@2
-      displayName: "Archive client solution"
-      inputs:
-        rootFolderOrFile: '$(System.DefaultWorkingDirectory)/client/build'
-        includeRootFolder: false
-        archiveType: 'zip'
-        archiveFile: '$(System.DefaultWorkingDirectory)/client.zip'
-        replaceExistingArchive: true
       
     - task: AzureWebApp@1
       displayName: "Deploy to $(webClientAppName)"
@@ -43,5 +34,5 @@ stages:
         azureSubscription: 'DunDon Free Subcription (cfd7c513-8b41-4dc8-b1ed-69bad9822f7d)'
         appType: 'webAppLinux'
         appName: $(webClientAppName)
-        package: '$(System.DefaultWorkingDirectory)/client.zip'
+        package: '$(System.DefaultWorkingDirectory)/client/build'
         runtimeStack: 'NODE|16-lts'
