@@ -35,18 +35,13 @@ stages:
         archiveType: 'zip'
         archiveFile: '$(System.DefaultWorkingDirectory)/client.zip'
         replaceExistingArchive: true
-
-    - task: PublishBuildArtifacts@1
-      inputs:
-        PathtoPublish: '$(System.DefaultWorkingDirectory)/client.zip'
-        ArtifactName: 'drop'
-        publishLocation: 'Container'
     
-    - task: AzureWebApp@1
-      displayName: "Deploy to $(webClientAppName)"
+    - task: AzureRmWebAppDeployment@4
       inputs:
+        ConnectionType: 'AzureRM'
         azureSubscription: 'DunDon Free Subcription (cfd7c513-8b41-4dc8-b1ed-69bad9822f7d)'
         appType: 'webAppLinux'
-        appName: $(webClientAppName)
-        package: '$(System.DefaultWorkingDirectory)/client.zip'
-        runtimeStack: 'NODE|16-lts'
+        WebAppName: 'motormate-frontend-web-client'
+        packageForLinux: '$(System.DefaultWorkingDirectory)/client.zip'
+        RuntimeStack: 'NODE|18-lts'
+        StartupCommand: 'pm2 serve /home/site/wwwroot --no-daemon'
