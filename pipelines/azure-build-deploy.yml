@@ -12,51 +12,36 @@ stages:
 - stage:
   displayName: "Build and Deploy MotorMate Admin and Client"
   jobs:
-  - job: 
+  - job: Client 
     displayName: "Build and Deploy"
     steps:
+    - task: Npm@1
+      displayName: "Npm install"
+      inputs:
+        command: 'install'
+        workingDir: '$(System.DefaultWorkingDirectory)/client'
+    
+    - task: Npm@1
+      displayName: "Npm run build"
+      inputs:
+        command: 'custom'
+        workingDir: '$(System.DefaultWorkingDirectory)/client'
+        customCommand: 'npm run build --if-present'
+
     - task: ArchiveFiles@2
       displayName: "Archive client solution"
       inputs:
-        rootFolderOrFile: '$(System.DefaultWorkingDirectory)/client'
+        rootFolderOrFile: '$(System.DefaultWorkingDirectory)/client/build'
         includeRootFolder: false
         archiveType: 'zip'
         archiveFile: '$(System.DefaultWorkingDirectory)/client.zip'
         replaceExistingArchive: true
       
-    - task: ArchiveFiles@2
-      displayName: "Archive admin solution"
+    - task: AzureWebApp@1
+      displayName: "Deploy to $(webClientAppName)"
       inputs:
-        rootFolderOrFile: '$(System.DefaultWorkingDirectory)/admin-panel'
-        includeRootFolder: false
-        archiveType: 'zip'
-        archiveFile: '$(System.DefaultWorkingDirectory)/admin.zip'
-        replaceExistingArchive: true
-    
-    - task: AzureRmWebAppDeployment@4
-      displayName: 'Azure App Service Deploy: $(webClientAppName)'
-      inputs:
-        azureSubscription: $(azureSubscription)
-        appType: webAppLinux
-        WebAppName: $(webClientAppName)
-        packageForLinux: '$(System.DefaultWorkingDirectory)/client.zip'
-        RuntimeStack: 'NODE|18-lts'
-        StartupCommand: 'npm run start'
-        ScriptType: 'Inline Script'
-        InlineScript: |
-          npm install
-          npm run build --if-present
-      
-    - task: AzureRmWebAppDeployment@4
-      displayName: 'Azure App Service Deploy: $(webAdminAppName)'
-      inputs:
-        azureSubscription: $(azureSubscription)
-        appType: webAppLinux
-        WebAppName: $(webAdminAppName)
-        packageForLinux: '$(System.DefaultWorkingDirectory)/admin.zip'
-        RuntimeStack: 'NODE|18-lts'
-        StartupCommand: 'npm run start'
-        ScriptType: 'Inline Script'
-        InlineScript: |
-          npm install
-          npm run build --if-present
+        azureSubscription: 'DunDon Free Subcription (cfd7c513-8b41-4dc8-b1ed-69bad9822f7d)'
+        appType: 'webAppLinux'
+        appName: $(webClientAppName)
+        package: '$(System.DefaultWorkingDirectory)/client.zip'
+        runtimeStack: 'NODE|16-lts'
