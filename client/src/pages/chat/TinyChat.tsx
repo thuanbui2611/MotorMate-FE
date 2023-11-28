@@ -67,13 +67,13 @@ export default function TinyChat() {
     if (userLoginDetail && userLogin) {
       const connection = new HubConnectionBuilder()
         .withUrl(
-          `https://motormate.azurewebsites.net/messages?userId=${userLoginDetail?.id}&pageNumber=1&pageSize=100`,
+          `${process.env.REACT_APP_MOTORMATE_API_URL}messages?userId=${userLoginDetail?.id}&pageNumber=1&pageSize=100`,
           {
             accessTokenFactory: () => `${userLogin?.token}`,
           }
         )
         .withAutomaticReconnect()
-        // .configureLogging(LogLevel.Information)
+        .configureLogging(LogLevel.Information)
         .build();
       connection
         .start()
@@ -120,13 +120,13 @@ export default function TinyChat() {
 
       const connection = new HubConnectionBuilder()
         .withUrl(
-          `https://motormate.azurewebsites.net/chat-details?chatId=${selectedChat}&pageNumber=${pageNumber}&pageSize=${pageSize}`,
+          `${process.env.REACT_APP_MOTORMATE_API_URL}chat-details?chatId=${selectedChat}&pageNumber=${pageNumber}&pageSize=${pageSize}`,
           {
             accessTokenFactory: () => `${userLogin?.token}`,
           }
         )
         .withAutomaticReconnect()
-        // .configureLogging(LogLevel.Information)
+        .configureLogging(LogLevel.Information)
         .build();
       if (!existingConnection) {
         //Start new connection if not existing connection for that chat
@@ -150,7 +150,6 @@ export default function TinyChat() {
             connection.on("ReceiveMessage", (message: Message) => {
               debugger;
               dispatch(addListMessage(message));
-              // setIsLoadListChat(true);
               setMessagePending(undefined);
               setIsScrollDown(true);
             });
@@ -300,8 +299,6 @@ export default function TinyChat() {
         );
         if (connection)
           await connection.connection.invoke("CreateMessageAsync", request);
-
-        // await connectionMessagesHub.invoke("OnConnectedAsync");
       }
     } catch (error) {
       console.log("Error when send mess: ", error);

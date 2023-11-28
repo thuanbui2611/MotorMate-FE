@@ -56,7 +56,6 @@ export default function Checkout() {
   }, [selectedVehicles]);
 
   useEffect(() => {
-    debugger;
     if (userDetail?.address && userDetail?.email && userDetail?.phoneNumber) {
       scrollToTop();
     } else {
@@ -67,7 +66,6 @@ export default function Checkout() {
   }, []);
 
   useEffect(() => {
-    debugger;
     if (vehiclesCheckout && vehiclesCheckout.length === 0) {
       if (state) {
         setVehiclesCheckout(state.vehicleCheckout);
@@ -120,7 +118,6 @@ export default function Checkout() {
   const onSubmit = async (event: any) => {
     event.preventDefault();
     let vehiclesSelected;
-
     if (deliveryOption === "") {
       toast.error("You need to choose a delivery option!");
       return;
@@ -160,9 +157,7 @@ export default function Checkout() {
       userId: userDetail?.id,
       vehicles: vehiclesSelected,
     };
-    debugger;
     await dispatch(createCheckoutAsync(formData));
-    debugger;
     navigate("/payment");
   };
   return (

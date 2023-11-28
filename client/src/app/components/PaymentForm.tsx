@@ -49,7 +49,6 @@ export default function PaymentForm({ userLogin }: Props) {
   // };
   //End of for react-card
   const handleSubmit = async (event: any) => {
-    debugger;
     setLoading(true);
     event.preventDefault();
 

@@ -23,13 +23,13 @@ export const createCheckoutAsync = createAsyncThunk<Checkout, {}>(
           pickUpDateTime: vehicle.pickUpDateTime.toISOString(),
           dropOffDateTime: vehicle.dropOffDateTime.toISOString(),
           pickUpLocation: vehicle.pickUpLocation,
-      dropOffLocation: vehicle.dropOffLocation,
-        }
-      })
+          dropOffLocation: vehicle.dropOffLocation,
+        };
+      });
       const convertedData = {
         userId: data.userId,
-        vehicles: vehiclesConverted
-      }
+        vehicles: vehiclesConverted,
+      };
       debugger;
       const response = await agent.Checkout.create(convertedData);
       return response;

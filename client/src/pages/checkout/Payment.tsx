@@ -34,7 +34,6 @@ export default function Payment() {
     });
   };
   useEffect(() => {
-    debugger;
     if (!checkout?.clientSecret && !checkoutLoaded) {
       toast.error("Something error, please try again");
       navigate("/my-cart");

@@ -32,12 +32,6 @@ export const getCartAsync = createAsyncThunk<Cart, string>(
       return thunkAPI.rejectWithValue(error);
     }
   }
-  // {
-  //   condition: () => {
-  //     const userDetail = useAppSelector((state) => state.account.userDetail);
-  //     if (!userDetail) return false;
-  //   },
-  // }
 );
 
 export const addToCartAsync = createAsyncThunk<Cart, {}>(
