@@ -13,7 +13,7 @@ stages:
   displayName: "Build and Deploy MotorMate Admin and Client"
   jobs:
   - job: Client 
-    displayName: "Build and Deploy"
+    displayName: "Build and Deploy - Client"
     steps:
     - task: Npm@1
       displayName: "Npm install"
@@ -43,5 +43,39 @@ stages:
         appType: 'webAppLinux'
         WebAppName: 'motormate-frontend-web-client'
         packageForLinux: '$(System.DefaultWorkingDirectory)/client.zip'
+        RuntimeStack: 'NODE|18-lts'
+        StartupCommand: 'pm2 serve /home/site/wwwroot --no-daemon'
+  
+  - job: Admin 
+    displayName: "Build and Deploy - Admin"
+    steps:
+    - task: Npm@1
+      displayName: "Npm install"
+      inputs:
+        command: 'install'
+        workingDir: '$(System.DefaultWorkingDirectory)/admin-panel'
+    
+    - task: Npm@1
+      displayName: "Npm run build"
+      inputs:
+        command: 'custom'
+        workingDir: '$(System.DefaultWorkingDirectory)/admin-panel'
+        customCommand: 'run build --if-present'
+      
+    - task: ArchiveFiles@2
+      inputs:
+        rootFolderOrFile: '$(System.DefaultWorkingDirectory)/admin-panel/build'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '$(System.DefaultWorkingDirectory)/admin.zip'
+        replaceExistingArchive: true
+    
+    - task: AzureRmWebAppDeployment@4
+      inputs:
+        ConnectionType: 'AzureRM'
+        azureSubscription: 'DunDon Free Subcription (cfd7c513-8b41-4dc8-b1ed-69bad9822f7d)'
+        appType: 'webAppLinux'
+        WebAppName: 'motormate-frontend-web-admin'
+        packageForLinux: '$(System.DefaultWorkingDirectory)/admin.zip'
         RuntimeStack: 'NODE|18-lts'
         StartupCommand: 'pm2 serve /home/site/wwwroot --no-daemon'
