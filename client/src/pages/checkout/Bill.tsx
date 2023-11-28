@@ -78,7 +78,7 @@ export default function Bill() {
     scrollToTop();
   }, []);
 
-  if (!orderDetail && !loading) return <NotFound />;
+  if (!orderDetail && !loading && !isLoopFetch) return <NotFound />;
   return loading ? (
     <Loading />
   ) : (
