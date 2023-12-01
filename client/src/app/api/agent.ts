@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 import { store } from "../store/ConfigureStore";
 import { PaginatedResponse } from "../models/Pagination";
 import { useNavigate } from "react-router-dom";
+import { router } from "../routes/router";
 
 axios.defaults.baseURL = process.env.REACT_APP_MOTORMATE_API_URL;
 axios.defaults.headers.post["Content-Type"] = "application/json";
@@ -12,7 +13,6 @@ axios.interceptors.request.use((config) => {
   if (userToken) config.headers.Authorization = `Bearer ${userToken}`;
   return config;
 });
-
 axios.interceptors.response.use(
   async (response) => {
     const pagination = response.headers["x-pagination"];
@@ -57,10 +57,8 @@ axios.interceptors.response.use(
       case 500:
         console.log("Catch 500: ", error.response);
         // toast.error(`${error.response?.statusText}`);
-        // navigate("/server-error", {
-        //   state: { error: data },
-        // });
-        // window.location.href = "/server-error";
+
+        router.navigate("/server-error");
         break;
       default:
         break;

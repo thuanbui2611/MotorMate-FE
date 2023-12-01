@@ -90,7 +90,7 @@ export default function MenuItemUser({ user }: Props) {
           src={
             user.avatar
               ? user.avatar
-              : "https://img.freepik.com/free-icon/user_318-563642.jpg?w=2000"
+              : require("../../app/assets/images/icon/user.png")
           }
           alt="user photo"
         />

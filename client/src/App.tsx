@@ -1,7 +1,6 @@
 import { Outlet } from "react-router-dom";
 import "./app/assets/css/styles.css";
 import "./app/assets/css/custom.css";
-// import "flowbite";
 import { useAppDispatch, useAppSelector } from "./app/store/ConfigureStore";
 import { useCallback, useEffect, useState } from "react";
 import {

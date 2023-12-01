@@ -2,10 +2,8 @@ import { toast } from "react-toastify";
 import { UserDetail } from "../models/User";
 import { useRef, useState } from "react";
 import { uploadImage } from "../utils/Cloudinary";
-import { FieldValues } from "react-hook-form";
 import { useAppDispatch, useAppSelector } from "../store/ConfigureStore";
 import { updateProfileAsync } from "../../pages/profile/ProfileSlice";
-import { useParams } from "react-router-dom";
 import { updateUser } from "../../pages/account/AccountSlice";
 
 interface Props {
@@ -88,7 +86,11 @@ export default function ProfileInfo({ profileUser }: Props) {
               <img
                 className="object-cover w-40 h-40 ml-0 -mb-16 rounded-full md:ml-4 lg:ml-12 lg:-mb-24 lg:w-60 lg:h-60"
                 src={
-                  imageReview ? imageReview?.url : profileUser?.image?.imageUrl
+                  imageReview
+                    ? imageReview?.url
+                    : profileUser?.image?.imageUrl
+                    ? profileUser?.image?.imageUrl
+                    : require("../../app/assets/images/icon/user.png")
                 }
                 alt="Avatar user"
               />

@@ -134,14 +134,6 @@ export default function PaymentForm({ userLogin }: Props) {
                 focused={state.focus as Focused}
               /> */}
               <form onSubmit={handleSubmit}>
-                {/* <LinkAuthenticationElement
-                  options={{
-                    defaultValues: {
-                      email: userLogin.email,
-                    },
-                  }}
-                /> */}
-
                 <PaymentElement />
                 <div className="border-b-[1px] border-r w-full border-gray-300 mt-3"></div>
                 <div className="flex items-center justify-end pt-3 w-full">

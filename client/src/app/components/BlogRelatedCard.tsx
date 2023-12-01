@@ -29,7 +29,7 @@ export default function BlogRelatedCard({ blogRelated }: Props) {
             <div className="line-clamp-3">{blogRelated.title}</div>
           </h2>
           <p className="mt-2 text-sm text-gray-500 line-clamp-3">
-            {blogRelated.content}
+            {blogRelated.shortDescription}
           </p>
         </div>
       </div>
