@@ -1152,9 +1152,9 @@ p {
 .flex-row-login {
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: end;
   gap: 10px;
-  justify-content: space-between;
+  justify-content: flex-end;
 }
 
 .flex-row-login > div > label {

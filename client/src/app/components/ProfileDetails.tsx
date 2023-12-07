@@ -1,10 +1,4 @@
 import { useEffect, useState } from "react";
-import agent from "../api/agent";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { FreeMode, Pagination, Autoplay, Navigation } from "swiper";
-import "swiper/css";
-import "swiper/css/pagination";
-import "swiper/css/navigation";
 import Loading from "./Loading";
 import VehicleForm from "../../pages/profile/VehicleForm";
 import { useAppDispatch, useAppSelector } from "../store/ConfigureStore";
@@ -90,7 +84,15 @@ export default function ProfileDetails() {
                     <li className="flex items-center py-3">
                       <span className="font-bold">Member since</span>
                       <span className="ml-auto text-right break-all">
-                        Aug 10, 2023
+                        {profileUser &&
+                          new Date(profileUser.createdDate).toLocaleDateString(
+                            "en-US",
+                            {
+                              year: "numeric",
+                              month: "short",
+                              day: "numeric",
+                            }
+                          )}
                       </span>
                     </li>
                   </ul>

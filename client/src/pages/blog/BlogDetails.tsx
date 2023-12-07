@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { blogSelectors } from "./BlogSlice";
 import { useParams } from "react-router-dom";
 import agent from "../../app/api/agent";
 import { Blog } from "../../app/models/Blog";
@@ -8,8 +7,8 @@ import parse from "html-react-parser";
 import NotFound from "../../app/errors/NotFound";
 import BlogComment from "./BlogComment";
 import { ConvertToDateTimeStr } from "../../app/utils/ConvertDatetimeToStr";
-import BlogRelatedCarousel from "../../app/components/BlogRelatedCarousel";
 import RelatedBlogs from "./RelatedBlogs";
+import { scrollToTop } from "../../app/utils/ScrollToTop";
 
 export default function BlogDetails() {
   const { id } = useParams<{ id: string }>();
@@ -17,16 +16,16 @@ export default function BlogDetails() {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    debugger;
-    if (loading && !blog) {
-      agent.Blog.details(id!)
-        .then((blog) => {
-          setBlog(blog);
-          setLoading(false);
-        })
-        .catch((error) => console.log(error));
-    }
-  }, []);
+    if (!id) return;
+    setLoading(true);
+    agent.Blog.details(id!)
+      .then((blog) => {
+        setBlog(blog);
+        setLoading(false);
+        scrollToTop();
+      })
+      .catch((error) => console.log(error));
+  }, [id]);
 
   if (!blog && !loading) return <NotFound />;
   return loading ? (

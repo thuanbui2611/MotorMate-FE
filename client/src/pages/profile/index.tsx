@@ -22,7 +22,7 @@ export default function Profile() {
 
   if (profileUserLoaded) {
     return <Loading />;
-  } else if (profileUser?.username !== username?.toLowerCase())
+  } else if (profileUser?.username.toLowerCase() !== username?.toLowerCase())
     return <NotFound />;
   return (
     <>

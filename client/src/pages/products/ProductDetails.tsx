@@ -18,6 +18,7 @@ import { Shop } from "../../app/models/Cart";
 import FadeInSection from "../../app/components/FadeInSection";
 import { toast } from "react-toastify";
 import ChooseDateRentDialog from "../../app/components/ChooseDateRentDialog";
+import { scrollToTop } from "../../app/utils/ScrollToTop";
 
 export default function ProductDetails() {
   const { id } = useParams<{ id: string }>();
@@ -30,13 +31,6 @@ export default function ProductDetails() {
   const userLogin = useAppSelector((state) => state.account.userDetail);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  };
 
   useEffect(() => {
     if (window.scrollY > 0) {

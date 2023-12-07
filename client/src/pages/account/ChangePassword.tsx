@@ -21,7 +21,7 @@ export default function ChangePassword() {
   async function submitForm(data: FieldValues) {
     try {
       if (!resetCode)
-        toast.error("Reset code is required, please check your email !");
+        toast.error("Reset code is required, please check your email!");
       await agent.Account.ChangePassword(data, resetCode!);
       toast.success("Your password has been changed successfully");
     } catch (error) {
@@ -170,7 +170,7 @@ export default function ChangePassword() {
                   type="submit"
                   className="button-submit"
                   sx={{
-                    margin: "20px auto 10px auto",
+                    margin: "20px auto 0 auto",
                     backgroundColor: "#151717",
                     border: "none",
                     color: "white",
@@ -194,7 +194,7 @@ export default function ChangePassword() {
                   Change Password
                 </LoadingButton>
               </div>
-              <p className="p">
+              {/* <p className="p">
                 Already have an account?
                 <a href="/login" className="span">
                   Log in
@@ -204,7 +204,7 @@ export default function ChangePassword() {
 
               <div className="flex justify-center items-center">
                 <LoginGoogle />
-              </div>
+              </div> */}
             </form>
 
             <div className="sm:flex sm:justify-center sm:items-center text-center sm:text-left">

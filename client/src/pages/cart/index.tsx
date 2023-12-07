@@ -417,245 +417,237 @@ export default function Cart() {
                                       {vehicle.licensePlate}
                                     </p>
                                   </td>
-                                  <td className="py-3 px-4">
+                                  <td className="py-5 px-4 flex flex-col items-center justify-center">
                                     {isUpdateRentDate === vehicle.vehicleId ? (
                                       <LoaderButton />
                                     ) : (
                                       <LocalizationProvider
                                         dateAdapter={AdapterDayjs}
                                       >
-                                        <div className="flex flex-col items-center justify-center">
-                                          <div className="flex flex-col items-center justify-center text-center">
-                                            {isEditDateRent ===
-                                            vehicle.vehicleId ? (
-                                              <>
-                                                <DateTimePicker
-                                                  label="Start Date"
-                                                  sx={{
-                                                    "& .MuiOutlinedInput-input":
-                                                      {
-                                                        padding: 1,
-                                                        width: "115px",
-                                                        fontSize: "14px",
-                                                        paddingRight: "0px",
-                                                      },
-                                                    "& .MuiInputBase-root": {
-                                                      paddingRight: "0px",
+                                        <div className="flex flex-col items-center justify-center text-center">
+                                          {isEditDateRent ===
+                                          vehicle.vehicleId ? (
+                                            <>
+                                              <DateTimePicker
+                                                label="Start Date"
+                                                sx={{
+                                                  "& .MuiOutlinedInput-input": {
+                                                    padding: 1,
+                                                    width: "115px",
+                                                    fontSize: "14px",
+                                                    paddingRight: "0px",
+                                                  },
+                                                  "& .MuiInputBase-root": {
+                                                    paddingRight: "0px",
+                                                  },
+                                                  "& .MuiFormLabel-root": {
+                                                    top: "-8px",
+                                                    fontSize: "14px",
+                                                  },
+                                                  "& .MuiIconButton-root": {
+                                                    position: "relative",
+                                                    right: "10px",
+                                                    ":hover": {
+                                                      backgroundColor:
+                                                        "rgba(9, 53, 227, 0.3)",
                                                     },
-                                                    "& .MuiFormLabel-root": {
-                                                      top: "-8px",
-                                                      fontSize: "14px",
-                                                    },
-                                                    "& .MuiIconButton-root": {
-                                                      position: "relative",
-                                                      right: "10px",
-                                                      ":hover": {
-                                                        backgroundColor:
-                                                          "rgba(9, 53, 227, 0.3)",
-                                                      },
-                                                    },
-                                                  }}
-                                                  format="HH:mm, DD/MM/YYYY"
-                                                  onChange={(date: any) =>
-                                                    setStartDate(date)
-                                                  }
-                                                  shouldDisableDate={(
-                                                    date: any
-                                                  ) =>
-                                                    shouldDisableDateStart(
-                                                      date,
-                                                      vehicle
-                                                    )
-                                                  }
-                                                  value={
-                                                    vehicle.pickUpDateTime
-                                                      ? vehicle.pickUpDateTime >
-                                                        new Date()
-                                                        ? dayjs(
-                                                            vehicle.pickUpDateTime
-                                                          )
-                                                        : null
-                                                      : null
-                                                  }
-                                                />
-                                              </>
-                                            ) : (
-                                              <span>
-                                                {vehicle.pickUpDateTime !== null
-                                                  ? vehicle.pickUpDateTime.toLocaleString(
-                                                      [],
-                                                      {
-                                                        year: "numeric",
-                                                        month: "2-digit",
-                                                        day: "2-digit",
-                                                        hour: "2-digit",
-                                                        minute: "2-digit",
-                                                      }
-                                                    )
-                                                  : "N/A"}
-                                              </span>
-                                            )}
-                                          </div>
-
-                                          <div className="relative flex items-center justify-center">
-                                            <p className="text-sm">To</p>
-                                            {isEditDateRent !==
-                                            vehicle.vehicleId ? (
-                                              <div
-                                                className="text-xs font-semibold bg-blue-500 cursor-pointer text-white absolute -bottom-11 rounded-full py-[2px] px-2 w-fit text-center hover:bg-blue-700"
-                                                onClick={() =>
-                                                  handleOpenEditDateRent(
+                                                  },
+                                                }}
+                                                format="HH:mm, DD/MM/YYYY"
+                                                onChange={(date: any) =>
+                                                  setStartDate(date)
+                                                }
+                                                shouldDisableDate={(
+                                                  date: any
+                                                ) =>
+                                                  shouldDisableDateStart(
+                                                    date,
                                                     vehicle
                                                   )
                                                 }
-                                              >
-                                                Edit
-                                              </div>
-                                            ) : (
-                                              <div className="flex justify-center items-center absolute -right-32 space-x-2">
-                                                <svg
-                                                  className="h-5 w-5 lg:h-6 lg:w-6 text-[#14d233] cursor-pointer hover:text-[#11bb2e]"
-                                                  fill="currentColor"
-                                                  version="1.1"
-                                                  id="Layer_1"
-                                                  xmlns="http://www.w3.org/2000/svg"
-                                                  viewBox="0 0 493.464 493.464"
-                                                  xmlSpace="preserve"
-                                                  stroke="#11d45c"
-                                                  onClick={() =>
-                                                    onClickChangeDateRent(
-                                                      vehicle
-                                                    )
-                                                  }
-                                                >
-                                                  <g
-                                                    id="SVGRepo_bgCarrier"
-                                                    strokeWidth="0"
-                                                  ></g>
-                                                  <g
-                                                    id="SVGRepo_tracerCarrier"
-                                                    strokeLinecap="round"
-                                                    strokeLinejoin="round"
-                                                  ></g>
-                                                  <g id="SVGRepo_iconCarrier">
-                                                    <g>
-                                                      <g>
-                                                        <path d="M246.736,0C110.692,0,0.004,110.68,0.004,246.732c0,136.06,110.688,246.732,246.732,246.732 c136.048,0,246.724-110.672,246.724-246.732C493.456,110.68,382.78,0,246.736,0z M360.524,208.716L230.98,338.268 c-2.82,2.824-7.816,2.824-10.64,0l-86.908-86.912c-1.412-1.416-2.192-3.3-2.192-5.324c0.004-2.016,0.784-3.912,2.192-5.336 l11.108-11.104c1.412-1.408,3.3-2.18,5.328-2.18c2.016,0,3.908,0.772,5.316,2.18l67.752,67.752c1.5,1.516,3.94,1.516,5.444,0 l110.392-110.392c2.824-2.824,7.828-2.824,10.644,0l11.108,11.124c1.412,1.4,2.208,3.304,2.208,5.308 C362.732,205.412,361.936,207.3,360.524,208.716z"></path>
-                                                      </g>
-                                                    </g>
-                                                  </g>
-                                                </svg>
-                                                <svg
-                                                  className="h-5 w-5 lg:h-6 lg:w-6 text-[#fa0000] hover:text-[#e00000] cursor-pointer"
-                                                  fill="currentColor"
-                                                  version="1.1"
-                                                  id="Layer_1"
-                                                  xmlns="http://www.w3.org/2000/svg"
-                                                  viewBox="0 0 493.456 493.456"
-                                                  xmlSpace="preserve"
-                                                  stroke="#fa0000"
-                                                  onClick={() =>
-                                                    handleCancelUpdateDateRent()
-                                                  }
-                                                >
-                                                  <g
-                                                    id="SVGRepo_bgCarrier"
-                                                    strokeWidth="0"
-                                                  ></g>
-                                                  <g
-                                                    id="SVGRepo_tracerCarrier"
-                                                    strokeLinecap="round"
-                                                    strokeLinejoin="round"
-                                                  ></g>
-                                                  <g id="SVGRepo_iconCarrier">
-                                                    <g>
-                                                      <g>
-                                                        <path d="M246.73,0C110.682,0,0.002,110.684,0.002,246.744c0,136.032,110.68,246.712,246.728,246.712 s246.724-110.68,246.724-246.712C493.454,110.684,382.778,0,246.73,0z M360.258,348.776l-11.112,11.12 c-2.808,2.836-7.82,2.836-10.644,0l-88.68-88.672c-0.728-0.74-1.704-1.136-2.732-1.136c-1.028,0-2.004,0.4-2.732,1.136 L155.682,359.9c-2.82,2.836-7.828,2.836-10.648,0l-11.108-11.12c-1.412-1.404-2.196-3.304-2.196-5.3 c0-2.02,0.784-3.916,2.196-5.344l88.68-88.672c1.508-1.512,1.508-3.948,0-5.452l-88.68-88.68c-1.412-1.416-2.196-3.308-2.196-5.32 c0-2.02,0.784-3.916,2.196-5.328l11.108-11.108c2.82-2.82,7.828-2.82,10.648,0l88.68,88.672c1.444,1.444,4.016,1.444,5.46,0 l88.676-88.676c2.824-2.824,7.836-2.824,10.644,0l11.112,11.112c2.928,2.924,2.928,7.716,0,10.648l-88.692,88.676 c-1.504,1.504-1.504,3.94,0,5.452l88.696,88.672C363.186,341.072,363.186,345.844,360.258,348.776z"></path>
-                                                      </g>
-                                                    </g>
-                                                  </g>
-                                                </svg>
-                                              </div>
-                                            )}
-                                          </div>
-                                          <div className="flex flex-col items-center justify-center text-center">
-                                            {isEditDateRent ===
-                                            vehicle.vehicleId ? (
-                                              <>
-                                                <DateTimePicker
-                                                  label="End Date"
-                                                  sx={{
-                                                    "& .MuiOutlinedInput-input":
-                                                      {
-                                                        padding: 1,
-                                                        width: "115px",
-                                                        fontSize: "14px",
-                                                        paddingRight: "0px",
-                                                      },
-                                                    "& .MuiInputBase-root": {
-                                                      paddingRight: "0px",
-                                                    },
-                                                    "& .MuiFormLabel-root": {
-                                                      top: "-8px",
-                                                      fontSize: "14px",
-                                                    },
-                                                    "& .MuiIconButton-root": {
-                                                      position: "relative",
-                                                      right: "10px",
-                                                      ":hover": {
-                                                        backgroundColor:
-                                                          "rgba(9, 53, 227, 0.3)",
-                                                      },
-                                                    },
-                                                  }}
-                                                  format="HH:mm, DD/MM/YYYY"
-                                                  disabled={
-                                                    startDate ||
-                                                    vehicle.pickUpDateTime
-                                                      ? false
-                                                      : true
-                                                  }
-                                                  shouldDisableDate={(
-                                                    date: any
-                                                  ) =>
-                                                    shouldDisableDateEnd(
-                                                      date,
-                                                      vehicle
-                                                    )
-                                                  }
-                                                  onChange={(date: any) =>
-                                                    setEndDate(date)
-                                                  }
-                                                  value={
-                                                    vehicle.dropOffDateTime &&
-                                                    vehicle.dropOffDateTime
-                                                      ? vehicle.pickUpDateTime >
-                                                        new Date()
-                                                        ? dayjs(
-                                                            vehicle.dropOffDateTime
-                                                          )
-                                                        : null
+                                                value={
+                                                  vehicle.pickUpDateTime
+                                                    ? vehicle.pickUpDateTime >
+                                                      new Date()
+                                                      ? dayjs(
+                                                          vehicle.pickUpDateTime
+                                                        )
                                                       : null
-                                                  }
-                                                />
-                                              </>
-                                            ) : (
-                                              <span>
-                                                {vehicle.pickUpDateTime !== null
-                                                  ? vehicle.dropOffDateTime.toLocaleString(
-                                                      [],
-                                                      {
-                                                        year: "numeric",
-                                                        month: "2-digit",
-                                                        day: "2-digit",
-                                                        hour: "2-digit",
-                                                        minute: "2-digit",
-                                                      }
-                                                    )
-                                                  : "N/A"}
-                                              </span>
-                                            )}
-                                          </div>
+                                                    : null
+                                                }
+                                              />
+                                            </>
+                                          ) : (
+                                            <span>
+                                              {vehicle.pickUpDateTime !== null
+                                                ? vehicle.pickUpDateTime.toLocaleString(
+                                                    [],
+                                                    {
+                                                      year: "numeric",
+                                                      month: "2-digit",
+                                                      day: "2-digit",
+                                                      hour: "2-digit",
+                                                      minute: "2-digit",
+                                                    }
+                                                  )
+                                                : "N/A"}
+                                            </span>
+                                          )}
+                                        </div>
+
+                                        <div className="relative flex items-center justify-center">
+                                          <p className="text-sm">To</p>
+                                          {isEditDateRent !==
+                                          vehicle.vehicleId ? (
+                                            <div
+                                              className="text-xs font-semibold bg-blue-500 cursor-pointer text-white absolute -bottom-11 rounded-full py-[2px] px-2 w-fit text-center hover:bg-blue-700"
+                                              onClick={() =>
+                                                handleOpenEditDateRent(vehicle)
+                                              }
+                                            >
+                                              Edit
+                                            </div>
+                                          ) : (
+                                            <div className="flex justify-center items-center absolute -right-32 space-x-2">
+                                              <svg
+                                                className="h-5 w-5 lg:h-6 lg:w-6 text-[#14d233] cursor-pointer hover:text-[#11bb2e]"
+                                                fill="currentColor"
+                                                version="1.1"
+                                                id="Layer_1"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 493.464 493.464"
+                                                xmlSpace="preserve"
+                                                stroke="#11d45c"
+                                                onClick={() =>
+                                                  onClickChangeDateRent(vehicle)
+                                                }
+                                              >
+                                                <g
+                                                  id="SVGRepo_bgCarrier"
+                                                  strokeWidth="0"
+                                                ></g>
+                                                <g
+                                                  id="SVGRepo_tracerCarrier"
+                                                  strokeLinecap="round"
+                                                  strokeLinejoin="round"
+                                                ></g>
+                                                <g id="SVGRepo_iconCarrier">
+                                                  <g>
+                                                    <g>
+                                                      <path d="M246.736,0C110.692,0,0.004,110.68,0.004,246.732c0,136.06,110.688,246.732,246.732,246.732 c136.048,0,246.724-110.672,246.724-246.732C493.456,110.68,382.78,0,246.736,0z M360.524,208.716L230.98,338.268 c-2.82,2.824-7.816,2.824-10.64,0l-86.908-86.912c-1.412-1.416-2.192-3.3-2.192-5.324c0.004-2.016,0.784-3.912,2.192-5.336 l11.108-11.104c1.412-1.408,3.3-2.18,5.328-2.18c2.016,0,3.908,0.772,5.316,2.18l67.752,67.752c1.5,1.516,3.94,1.516,5.444,0 l110.392-110.392c2.824-2.824,7.828-2.824,10.644,0l11.108,11.124c1.412,1.4,2.208,3.304,2.208,5.308 C362.732,205.412,361.936,207.3,360.524,208.716z"></path>
+                                                    </g>
+                                                  </g>
+                                                </g>
+                                              </svg>
+                                              <svg
+                                                className="h-5 w-5 lg:h-6 lg:w-6 text-[#fa0000] hover:text-[#e00000] cursor-pointer"
+                                                fill="currentColor"
+                                                version="1.1"
+                                                id="Layer_1"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 493.456 493.456"
+                                                xmlSpace="preserve"
+                                                stroke="#fa0000"
+                                                onClick={() =>
+                                                  handleCancelUpdateDateRent()
+                                                }
+                                              >
+                                                <g
+                                                  id="SVGRepo_bgCarrier"
+                                                  strokeWidth="0"
+                                                ></g>
+                                                <g
+                                                  id="SVGRepo_tracerCarrier"
+                                                  strokeLinecap="round"
+                                                  strokeLinejoin="round"
+                                                ></g>
+                                                <g id="SVGRepo_iconCarrier">
+                                                  <g>
+                                                    <g>
+                                                      <path d="M246.73,0C110.682,0,0.002,110.684,0.002,246.744c0,136.032,110.68,246.712,246.728,246.712 s246.724-110.68,246.724-246.712C493.454,110.684,382.778,0,246.73,0z M360.258,348.776l-11.112,11.12 c-2.808,2.836-7.82,2.836-10.644,0l-88.68-88.672c-0.728-0.74-1.704-1.136-2.732-1.136c-1.028,0-2.004,0.4-2.732,1.136 L155.682,359.9c-2.82,2.836-7.828,2.836-10.648,0l-11.108-11.12c-1.412-1.404-2.196-3.304-2.196-5.3 c0-2.02,0.784-3.916,2.196-5.344l88.68-88.672c1.508-1.512,1.508-3.948,0-5.452l-88.68-88.68c-1.412-1.416-2.196-3.308-2.196-5.32 c0-2.02,0.784-3.916,2.196-5.328l11.108-11.108c2.82-2.82,7.828-2.82,10.648,0l88.68,88.672c1.444,1.444,4.016,1.444,5.46,0 l88.676-88.676c2.824-2.824,7.836-2.824,10.644,0l11.112,11.112c2.928,2.924,2.928,7.716,0,10.648l-88.692,88.676 c-1.504,1.504-1.504,3.94,0,5.452l88.696,88.672C363.186,341.072,363.186,345.844,360.258,348.776z"></path>
+                                                    </g>
+                                                  </g>
+                                                </g>
+                                              </svg>
+                                            </div>
+                                          )}
+                                        </div>
+                                        <div className="flex flex-col items-center justify-center text-center">
+                                          {isEditDateRent ===
+                                          vehicle.vehicleId ? (
+                                            <>
+                                              <DateTimePicker
+                                                label="End Date"
+                                                sx={{
+                                                  "& .MuiOutlinedInput-input": {
+                                                    padding: 1,
+                                                    width: "115px",
+                                                    fontSize: "14px",
+                                                    paddingRight: "0px",
+                                                  },
+                                                  "& .MuiInputBase-root": {
+                                                    paddingRight: "0px",
+                                                  },
+                                                  "& .MuiFormLabel-root": {
+                                                    top: "-8px",
+                                                    fontSize: "14px",
+                                                  },
+                                                  "& .MuiIconButton-root": {
+                                                    position: "relative",
+                                                    right: "10px",
+                                                    ":hover": {
+                                                      backgroundColor:
+                                                        "rgba(9, 53, 227, 0.3)",
+                                                    },
+                                                  },
+                                                }}
+                                                format="HH:mm, DD/MM/YYYY"
+                                                disabled={
+                                                  startDate ||
+                                                  vehicle.pickUpDateTime
+                                                    ? false
+                                                    : true
+                                                }
+                                                shouldDisableDate={(
+                                                  date: any
+                                                ) =>
+                                                  shouldDisableDateEnd(
+                                                    date,
+                                                    vehicle
+                                                  )
+                                                }
+                                                onChange={(date: any) =>
+                                                  setEndDate(date)
+                                                }
+                                                value={
+                                                  vehicle.dropOffDateTime &&
+                                                  vehicle.dropOffDateTime
+                                                    ? vehicle.pickUpDateTime >
+                                                      new Date()
+                                                      ? dayjs(
+                                                          vehicle.dropOffDateTime
+                                                        )
+                                                      : null
+                                                    : null
+                                                }
+                                              />
+                                            </>
+                                          ) : (
+                                            <span>
+                                              {vehicle.pickUpDateTime !== null
+                                                ? vehicle.dropOffDateTime.toLocaleString(
+                                                    [],
+                                                    {
+                                                      year: "numeric",
+                                                      month: "2-digit",
+                                                      day: "2-digit",
+                                                      hour: "2-digit",
+                                                      minute: "2-digit",
+                                                    }
+                                                  )
+                                                : "N/A"}
+                                            </span>
+                                          )}
                                         </div>
                                       </LocalizationProvider>
                                     )}

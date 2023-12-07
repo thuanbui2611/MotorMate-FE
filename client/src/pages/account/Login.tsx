@@ -5,7 +5,7 @@ import { LoadingButton } from "@mui/lab";
 import { useAppDispatch, useAppSelector } from "../../app/store/ConfigureStore";
 import { signInUser } from "./AccountSlice";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 
@@ -27,6 +27,7 @@ export default function Login() {
   });
 
   const dispatch = useAppDispatch();
+
   async function submitForm(data: FieldValues) {
     const result = await dispatch(signInUser(data));
     if (result.meta.requestStatus === "fulfilled") {
@@ -177,11 +178,7 @@ export default function Login() {
                 />
               </div>
 
-              <div className="flex-row-login ">
-                <div className="flex justify-center items-center">
-                  <input type="checkbox" />
-                  <label className="ml-1">Remember me</label>
-                </div>
+              <div className="flex-row-login">
                 <Link to="/forgot-password" className="span md:mr-5">
                   Forgot password?
                 </Link>

@@ -10,6 +10,7 @@ import { useAppDispatch } from "../../app/store/ConfigureStore";
 import { createCheckoutAsync } from "./CheckoutSlice";
 import { toast } from "react-toastify";
 import { CheckoutItems } from "../../app/models/Checkout";
+import LoaderButton from "../../app/components/LoaderButton";
 
 export default function Checkout() {
   const [selectedPaymentOption, setSelectedPaymentOption] =
@@ -23,6 +24,7 @@ export default function Checkout() {
   const { userDetail } = useAppSelector((state) => state.account);
   const [deliveryAddress, setDeliveryAddress] = useState<string>("");
   const [totalPayment, setTotalPayment] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -117,6 +119,8 @@ export default function Checkout() {
 
   const onSubmit = async (event: any) => {
     event.preventDefault();
+    setLoading(true);
+
     let vehiclesSelected;
     if (deliveryOption === "") {
       toast.error("You need to choose a delivery option!");
@@ -157,8 +161,11 @@ export default function Checkout() {
       userId: userDetail?.id,
       vehicles: vehiclesSelected,
     };
-    await dispatch(createCheckoutAsync(formData));
-    navigate("/payment");
+    const result = await dispatch(createCheckoutAsync(formData));
+    if (result.meta.requestStatus.includes("fulfilled")) {
+      navigate("/payment");
+    }
+    setLoading(false);
   };
   return (
     <>
@@ -197,7 +204,7 @@ export default function Checkout() {
                     </div>
                     <div className="flex flex-wrap mb-6 items-center">
                       <div className="w-full md:w-1/3 mb-2 md:mb-0 text-left">
-                        <label className="text-lg  ">Phone number:</label>
+                        <label className="text-lg">Phone number:</label>
                       </div>
                       <div className="w-full md:w-2/3">
                         <input
@@ -530,7 +537,7 @@ export default function Checkout() {
                     Back to cart
                   </Link>
                   <button className="w-fit h-fit" type="submit">
-                    <Payment_btn />
+                    {loading ? <LoaderButton /> : <Payment_btn />}
                   </button>
                 </div>
               </div>
