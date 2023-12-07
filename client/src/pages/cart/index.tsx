@@ -107,11 +107,23 @@ export default function Cart() {
 
   const handleOpenEditDateRent = (vehicle: Vehicle) => {
     setIsEditDateRent(vehicle.vehicleId);
+    //set startDate and endDate default
+    if (vehicle.pickUpDateTime && vehicle.dropOffDateTime) {
+      setStartDate(dayjs(vehicle.pickUpDateTime));
+      setEndDate(dayjs(vehicle.dropOffDateTime));
+    }
   };
 
   const onClickChangeDateRent = async (vehicle: Vehicle) => {
-    if (startDate === undefined || endDate === undefined) {
+    if (!startDate || !endDate) {
       toast.error("Please choose your date rent!");
+      return;
+    }
+    if (
+      startDate.toISOString() === vehicle.pickUpDateTime?.toISOString() &&
+      endDate.toISOString() === vehicle.dropOffDateTime?.toISOString()
+    ) {
+      setIsEditDateRent(undefined);
       return;
     }
     let dateFrom = new Date(startDate);
@@ -419,7 +431,9 @@ export default function Cart() {
                                   </td>
                                   <td className="py-5 px-4 flex flex-col items-center justify-center">
                                     {isUpdateRentDate === vehicle.vehicleId ? (
-                                      <LoaderButton />
+                                      <div className="h-20">
+                                        <LoaderButton />
+                                      </div>
                                     ) : (
                                       <LocalizationProvider
                                         dateAdapter={AdapterDayjs}
@@ -465,16 +479,7 @@ export default function Cart() {
                                                     vehicle
                                                   )
                                                 }
-                                                value={
-                                                  vehicle.pickUpDateTime
-                                                    ? vehicle.pickUpDateTime >
-                                                      new Date()
-                                                      ? dayjs(
-                                                          vehicle.pickUpDateTime
-                                                        )
-                                                      : null
-                                                    : null
-                                                }
+                                                value={startDate}
                                               />
                                             </>
                                           ) : (
@@ -619,17 +624,7 @@ export default function Cart() {
                                                 onChange={(date: any) =>
                                                   setEndDate(date)
                                                 }
-                                                value={
-                                                  vehicle.dropOffDateTime &&
-                                                  vehicle.dropOffDateTime
-                                                    ? vehicle.pickUpDateTime >
-                                                      new Date()
-                                                      ? dayjs(
-                                                          vehicle.dropOffDateTime
-                                                        )
-                                                      : null
-                                                    : null
-                                                }
+                                                value={endDate}
                                               />
                                             </>
                                           ) : (

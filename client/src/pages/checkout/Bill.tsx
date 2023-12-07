@@ -7,6 +7,7 @@ import Loading from "../../app/components/Loading";
 import NotFound from "../../app/errors/NotFound";
 import { useAppSelector } from "../../app/store/ConfigureStore";
 import { toast } from "react-toastify";
+import { scrollToTop } from "../../app/utils/ScrollToTop";
 
 export default function Bill() {
   const [searchParams, setSearchParams] = useSearchParams({});
@@ -68,12 +69,7 @@ export default function Bill() {
       }
     }
   }, [paymentIntent, userDetail, isLoopFetch]);
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  };
+
   useEffect(() => {
     scrollToTop();
   }, []);

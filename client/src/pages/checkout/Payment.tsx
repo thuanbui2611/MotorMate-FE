@@ -7,6 +7,7 @@ import { useAppSelector } from "../../app/store/ConfigureStore";
 import Loading from "../../app/components/Loading";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
+import { scrollToTop } from "../../app/utils/ScrollToTop";
 
 const stripePromise = loadStripe(
   process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY as string
@@ -27,12 +28,6 @@ export default function Payment() {
     }
   }, [userDetail, userLoading]);
 
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  };
   useEffect(() => {
     if (!checkout?.clientSecret && !checkoutLoaded) {
       toast.error("Something error, please try again");

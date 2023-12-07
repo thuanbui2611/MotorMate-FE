@@ -11,6 +11,7 @@ import { createCheckoutAsync } from "./CheckoutSlice";
 import { toast } from "react-toastify";
 import { CheckoutItems } from "../../app/models/Checkout";
 import LoaderButton from "../../app/components/LoaderButton";
+import { scrollToTop } from "../../app/utils/ScrollToTop";
 
 export default function Checkout() {
   const [selectedPaymentOption, setSelectedPaymentOption] =
@@ -29,13 +30,6 @@ export default function Checkout() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { state } = useLocation();
-
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  };
 
   useEffect(() => {
     let total = 0;
