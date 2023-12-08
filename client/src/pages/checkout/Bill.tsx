@@ -43,12 +43,12 @@ export default function Bill() {
               } else {
                 setOrderDetail(res);
                 setIsLoopFetch(false);
+                setLoading(false);
               }
             })
             .catch((error) => {
               console.log(error);
             });
-          setLoading(false);
         }, 5000);
       } else {
         setTimeout(() => {
@@ -59,12 +59,12 @@ export default function Bill() {
               } else {
                 setOrderDetail(res);
                 setIsLoopFetch(false);
+                setLoading(false);
               }
             })
             .catch((error) => {
               console.log(error);
             });
-          setLoading(false);
         }, 1000);
       }
     }

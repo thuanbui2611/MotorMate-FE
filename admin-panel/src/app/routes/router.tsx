@@ -19,6 +19,7 @@ import BlogCategory from "../../pages/blogCategory/BlogCategory";
 import TransactionDetail from "../../pages/transactions/TransactionDetail";
 import NotFound from "../errors/NotFound";
 import RequireAuth from "./RequireAuth";
+import ServerErrors from "../errors/ServerErrors";
 
 export const router = createBrowserRouter([
   {
@@ -57,6 +58,7 @@ export const router = createBrowserRouter([
 
       { path: "login", element: <SignIn /> },
       { path: "not-found", element: <NotFound /> },
+      { path: "server-error", element: <ServerErrors /> },
       { path: "*", element: <Navigate replace to="/not-found" /> },
     ],
   },

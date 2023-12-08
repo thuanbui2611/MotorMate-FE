@@ -10,6 +10,7 @@ import {
 import { ToastContainer } from "react-toastify";
 import Loading from "./app/components/Loading";
 import { getCartAsync } from "./pages/cart/CartSlice";
+import { useJsApiLoader } from "@react-google-maps/api";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -44,8 +45,12 @@ function App() {
   //   }
   //   setLoading(false);
   // }, [dispatch, user?.token]);
+  const { isLoaded } = useJsApiLoader({
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY as string,
+    libraries: ["places"],
+  });
 
-  return loading ? (
+  return loading && !isLoaded ? (
     <Loading />
   ) : (
     <>

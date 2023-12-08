@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import Autocomplete from "@mui/material/Autocomplete";
 import SelectCityVN from "../../app/components/SelectCityVN";
 import { Brand, Collection } from "../../app/models/Brand";
@@ -6,7 +6,6 @@ import { ModelVehicle } from "../../app/models/ModelVehicle";
 import { Color } from "../../app/models/Color";
 import { FieldValues, useForm } from "react-hook-form";
 import { UserDetail } from "../../app/models/User";
-import { Location } from "../../app/models/Address";
 import agent from "../../app/api/agent";
 import { useAppDispatch } from "../../app/store/ConfigureStore";
 import { Image } from "../../app/models/Image";
@@ -19,6 +18,7 @@ import AppTextInput from "../../app/components/AppTextInput";
 import { LoadingButton } from "@mui/lab";
 import { addProductAsync, updateProductAsync } from "./ProfileSlice";
 import { ConvertToDateStr } from "../../app/utils/ConvertDatetimeToStr";
+import { Autocomplete as GoogleAutocomplete } from "@react-google-maps/api";
 interface Props {
   vehicle: Vehicle | null;
   userLoggedIn: UserDetail | null;
@@ -63,10 +63,10 @@ export default function VehicleForm({
   const [selectedModel, setSelectedModel] = useState<ModelVehicle | null>(null);
   const [colors, setColors] = useState<Color[]>([]);
   const [selectedColor, setSelectedColor] = useState<Color | null>(null);
-  const [location, setLocation] = useState<Location | null>(null);
-  const [selectedLocation, setSelectedLocation] = useState<Location | null>(
-    null
-  );
+  const [selectedCity, setSelectedCity] = useState<string | null>(null);
+  const [selectedDistrict, setSelectedDistrict] = useState<string | null>(null);
+  const [defaultAddress, setDefaultAddress] = useState<string>("");
+  const autocompleteRef = useRef<google.maps.places.Autocomplete | null>(null);
 
   const [loadingFetchBrand, setLoadingFetchBrand] = useState(true);
   const [loadingFetchModel, setLoadingFetchModel] = useState(false);
@@ -97,13 +97,6 @@ export default function VehicleForm({
         vehicleDetails.purchaseDate
       );
       reset(vehicleDetails);
-      //get location and set selected location
-      const defaultLocation: Location = {
-        city: vehicle.city,
-        district: vehicle.district,
-        ward: vehicle.ward,
-      };
-      setSelectedLocation(defaultLocation);
 
       //get images and set selected images
       const defaultImage: ImageFile[] = vehicle.images.map((image) => ({
@@ -116,6 +109,9 @@ export default function VehicleForm({
       console.log("Date trans: ", formatDate(vehicleDetails.insuranceExpiry));
       setValue("insuranceExpiry", formatDate(vehicleDetails.insuranceExpiry));
       setValue("purchaseDate", formatDate(vehicleDetails.purchaseDate));
+      //set address
+      setDefaultAddress(vehicleDetails.address);
+      setSelectedCity(vehicleDetails.city);
     }
   }, [vehicle, reset]);
 
@@ -325,12 +321,12 @@ export default function VehicleForm({
     setSelectedColor(newValue);
   };
 
-  const handleLocationChange = (value: Location) => {
-    setLocation(value);
-  };
-
   async function submitForm(data: FieldValues) {
     try {
+      if (!data.address) {
+        toast.error("Please select a valid address");
+        return;
+      }
       let imagesRequest: Image[] | null = [];
       const formData = {
         id: vehicle?.id,
@@ -338,9 +334,9 @@ export default function VehicleForm({
         modelId: selectedModel?.id,
         price: data.price,
         address: data.address,
-        district: location?.district,
-        ward: location?.ward,
-        city: location?.city,
+        district: selectedDistrict ? selectedDistrict : "N/A",
+        ward: "N/A",
+        city: selectedCity,
         purchaseDate: data.purchaseDate,
         conditionPercentage: data.conditionPercentage,
         licensePlate: data.licensePlate,
@@ -387,6 +383,49 @@ export default function VehicleForm({
       console.log("Error when submit form:", error);
     }
   }
+
+  const handleAddressSelect = () => {
+    if (!autocompleteRef.current) return;
+    const place = autocompleteRef.current.getPlace();
+    const address: any = autocompleteRef.current;
+    const fullAddress = address.gm_accessors_.place.em.formattedPrediction;
+    if (!place) {
+      toast.error("Please select a valid address");
+      return;
+    }
+    // Retrieve the address components
+    const addressComponents = place.address_components;
+
+    // Find the city component
+    const cityComponent = addressComponents!.find((component: any) =>
+      component.types.includes("administrative_area_level_1")
+    );
+    const districtComponent = addressComponents!.find((component: any) =>
+      component.types.includes("administrative_area_level_2")
+    );
+
+    // Retrieve the city and district
+    const city = cityComponent ? cityComponent.long_name : "";
+    const district = districtComponent ? districtComponent.long_name : "";
+    const { place_id } = place;
+    debugger;
+    // Validate the place_id to ensure it is a valid selection
+    if (place_id) {
+      setValue("address", fullAddress);
+      setSelectedCity(city);
+      setSelectedDistrict(district);
+    } else {
+      setValue("address", null);
+      toast.error("Please select a valid address");
+    }
+  };
+
+  const handleKeyPress = (event: any) => {
+    if (event.key === "Enter") {
+      event.preventDefault(); // Prevents the form from automatically submitting
+    }
+  };
+
   const handleClickOutside = (event: React.MouseEvent<HTMLDivElement>) => {
     if (event.target === event.currentTarget) {
       onClose();
@@ -407,6 +446,7 @@ export default function VehicleForm({
       >
         <form
           className="relative bg-white w-3/4 max-w-5xl h-fit p-10 pt-6 rounded-xl max-h-[600px] scrollbar overflow-auto"
+          onKeyDown={handleKeyPress}
           onSubmit={handleSubmit(submitForm)}
         >
           <div className="border-b-2 border-neutral-100 border-opacity-100 mb-5 pb-5">
@@ -682,18 +722,19 @@ export default function VehicleForm({
             <label className="block mb-3 text-sm font-semibold text-black">
               Address
             </label>
-            <div className="flex flex-col gap-3">
-              <div className="flex gap-3">
-                <SelectCityVN
-                  defaultLocation={selectedLocation}
-                  onSelect={handleLocationChange}
-                />
-              </div>
-
-              <div className=" w-full md:w-1/2">
-                <AppTextInput
-                  control={control}
-                  label=""
+            <div className="w-full">
+              <GoogleAutocomplete
+                options={{
+                  componentRestrictions: { country: "vn" },
+                }}
+                className=" z-999999"
+                onLoad={(autocomplete) =>
+                  (autocompleteRef.current = autocomplete)
+                }
+                onPlaceChanged={handleAddressSelect}
+              >
+                <TextField
+                  fullWidth
                   size="small"
                   type="text"
                   placeholder="House number, street name..."
@@ -706,8 +747,9 @@ export default function VehicleForm({
                       message: "Invalid address",
                     },
                   })}
+                  defaultValue={defaultAddress}
                 />
-              </div>
+              </GoogleAutocomplete>
             </div>
           </div>
           <div className="mb-1">

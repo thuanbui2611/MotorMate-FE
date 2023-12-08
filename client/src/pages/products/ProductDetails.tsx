@@ -159,7 +159,12 @@ export default function ProductDetails() {
   };
 
   if (loading) return <Loading />;
-  if (!product || product.isLocked) return <NotFound />;
+  if (
+    !product ||
+    product.isLocked ||
+    product.status.toLowerCase() !== "approved"
+  )
+    return <NotFound />;
 
   return (
     <>
@@ -214,13 +219,7 @@ export default function ProductDetails() {
                     <div className="flex items-start justify-start mt-2 font-semibold">
                       <span className="font-semibold">Address:</span>
                       <span className="ml-2 text-orange-based">
-                        {product.address +
-                          ", " +
-                          product.ward +
-                          ", " +
-                          product.district +
-                          ", " +
-                          product.city}
+                        {product.address}
                       </span>
                     </div>
                     <div className="flex mt-6 items-center pb-2 border-b-2 border-gray-100 mb-5">

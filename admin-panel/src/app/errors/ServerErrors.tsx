@@ -1,8 +1,6 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function ServerErrors() {
-  // const navigate = useNavigate();
-  // const { state } = useLocation();
   return (
     <>
       <div className="flex h-screen items-center justify-center p-5 w-full bg-white">
@@ -33,10 +31,16 @@ export default function ServerErrors() {
           <h1 className="mt-5 text-[36px] font-bold text-slate-800 lg:text-[50px]">
             500 - Server error
           </h1>
-          <p className="text-slate-600 mt-5 lg:text-lg">
+          <p className="text-slate-600 mt-5 lg:text-lg mb-5">
             Oops something went wrong. Try to refresh this page or <br /> feel
             free to contact us if the problem presists.
           </p>
+          <Link
+            to="/"
+            className="rounded-full py-1 px-2 bg-gradient-to-r from-[#FF6003] to-[#FF7E06] font-medium text-white hover:brightness-90 transition-all duration-200"
+          >
+            Back to Home page
+          </Link>
         </div>
       </div>
     </>

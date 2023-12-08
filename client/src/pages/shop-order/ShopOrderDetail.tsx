@@ -12,6 +12,7 @@ import Loading from "../../app/components/Loading";
 import ConfirmCancelDialog from "../../app/components/ConfirmCancelDialog";
 import ConfirmDeleteDialog from "../../app/components/ConfirmDeleteDialog";
 import { toast } from "react-toastify";
+import MapsDialog from "../../app/components/MapsDialog";
 
 type StatusOrder = "Canceled" | "Approved" | "Completed";
 export default function ShopOrderDetail() {
@@ -25,6 +26,11 @@ export default function ShopOrderDetail() {
     Vehicle[]
   >([]);
   const [statusToUpdate, setStatusToUpdate] = useState<string>("");
+  const [isOpenMap, setIsOpenMap] = useState<boolean>(false);
+  const [mapInfor, setMapInfor] = useState<{
+    originLocation: string;
+    destinationLocation: string;
+  } | null>(null);
 
   const dispatch = useAppDispatch();
   const { parentOrderId } = useParams();
@@ -181,6 +187,20 @@ export default function ShopOrderDetail() {
     setIsOpenConfirmStatusActionDialog(false);
   };
 
+  const handleClickMap = (vehicle: Vehicle) => {
+    if (!orderDetails) return;
+    setIsOpenMap(true);
+    const mapInfor = {
+      originLocation: vehicle.address,
+      destinationLocation: orderDetails.shops[0].vehicles[0].pickUpLocation,
+    };
+    setMapInfor(mapInfor);
+  };
+
+  const handleCloseMap = () => {
+    setIsOpenMap(false);
+  };
+
   if (!orderDetails && !isLoading) return <NotFound />;
 
   return isLoading ? (
@@ -223,9 +243,6 @@ export default function ShopOrderDetail() {
         </div>
         <div className="mt-10 flex flex-col xl:flex-row jusitfy-center items-stretch w-full xl:space-x-8 space-y-4 md:space-y-6 xl:space-y-0">
           <div className="flex flex-col justify-start items-start w-full space-y-4 md:space-y-6 xl:space-y-8">
-            {/* <p className="text-lg md:text-xl   font-semibold leading-6 xl:leading-5 text-black">
-              Customer’s Cart
-            </p> */}
             <div className="flex flex-col justify-start items-start bg-gray-50 border border-gray-100 rounded-lg shadow-md px-4 py-4 md:py-6 md:p-6 xl:p-8 w-full max-h-[30rem] scrollbar overflow-auto">
               {/* Item start */}
               {orderDetails?.shops[0].vehicles.map((vehicle) => (
@@ -254,7 +271,7 @@ export default function ShopOrderDetail() {
                         alt="Vehicle Image"
                       />
                     </div>
-                    <div className="flex justify-start items-center border-b border-gray-200 md:flex-row flex-col w-fit md:w-full pb-8 space-y-4 md:space-y-0">
+                    <div className="flex justify-start items-center border-b border-gray-200 md:flex-row flex-col w-fit md:w-full pb-8 space-y-2 md:space-y-0">
                       <div className="w-full md:w-[40%] flex flex-col justify-start items-start space-y-2">
                         <h3 className="text-xl xl:text-2xl font-semibold leading-6 text-black">
                           {vehicle.vehicleName}
@@ -306,7 +323,7 @@ export default function ShopOrderDetail() {
                           </p>
                         </div>
                       </div>
-                      <div className="w-full md:w-1/4 flex-1 flex justify-end space-x-8 items-end">
+                      <div className="flex flex-col md:flex-row items-center w-full md:w-1/4 flex-1 justify-end space-x-0 md:space-x-8 md:items-end">
                         <p className="text-base xl:text-lg font-semibold leading-6 text-green-600">
                           {vehicle.price.toLocaleString()} VND
                         </p>
@@ -469,6 +486,52 @@ export default function ShopOrderDetail() {
                           </div>
                         </div>
                       </div>
+                      {orderDetails.shops[0].vehicles[0].pickUpLocation !==
+                        "Pick up at the Vehicle Address" && (
+                        <div
+                          className="absolute right-0 bottom-2 flex text-xs items-center justify-end font-semibold hover:bg-gray-200 rounded-full px-2 py-1 cursor-pointer border border-gray-300"
+                          onClick={() => handleClickMap(vehicle)}
+                        >
+                          <svg
+                            className="mr-[2px]"
+                            height="16px"
+                            width="16px"
+                            version="1.1"
+                            id="Layer_1"
+                            xmlns="http://www.w3.org/2000/svg"
+                            xmlnsXlink="http://www.w3.org/1999/xlink"
+                            viewBox="0 0 512 512"
+                            xmlSpace="preserve"
+                            fill="#000000"
+                          >
+                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                            <g
+                              id="SVGRepo_tracerCarrier"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            ></g>
+                            <g id="SVGRepo_iconCarrier">
+                              <polygon points="154.64,420.096 154.64,59.496 0,134 0,512 "></polygon>
+                              <polygon
+                                style={{ fill: "#333333" }}
+                                points="309.288,146.464 309.288,504.472 154.64,420.096 154.64,59.496 "
+                              ></polygon>
+                              <polygon points="463.928,50.152 309.288,146.464 309.288,504.472 463.928,415.68 "></polygon>
+                              <path
+                                style={{ fill: "#E21B1B" }}
+                                d="M414.512,281.656l-11.92-15.744c-8.8-11.472-85.6-113.984-85.6-165.048 C317.032,39.592,355.272,0,414.512,0S512,39.592,512,100.864c0,50.992-76.8,153.504-85.488,165.048L414.512,281.656z"
+                              ></path>
+                              <circle
+                                style={{ fill: "#FFFFFF" }}
+                                cx="414.512"
+                                cy="101.536"
+                                r="31.568"
+                              ></circle>
+                            </g>
+                          </svg>
+                          Maps
+                        </div>
+                      )}
                     </div>
                   </div>
                 </>
@@ -605,6 +668,7 @@ export default function ShopOrderDetail() {
                     <p className="text-base font-bold leading-4 text-center md:text-left text-gray-800">
                       Shipping Address
                     </p>
+
                     <p className="w-full text-center font-semibold md:text-left text-sm leading-5 text-gray-600">
                       {orderDetails?.shops[0].vehicles[0].pickUpLocation ===
                       "Pick up at the Vehicle Address"
@@ -698,6 +762,13 @@ export default function ShopOrderDetail() {
               ? "blue"
               : "green"
           }
+        />
+      )}
+      {isOpenMap && (
+        <MapsDialog
+          originLocation={mapInfor?.originLocation}
+          destinationLocation={mapInfor?.destinationLocation}
+          onClose={handleCloseMap}
         />
       )}
     </>

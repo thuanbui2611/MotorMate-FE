@@ -1,7 +1,5 @@
-import { useEffect, useState } from "react";
-import SelectCityVN from "../../app/components/SelectCityVN";
+import { useEffect, useRef, useState } from "react";
 import ProcessingBar from "../../app/components/ProcessingBar";
-import { Location } from "../../app/models/Address";
 import { useAppSelector } from "../../app/store/ConfigureStore";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Shop, Vehicle } from "../../app/models/Cart";
@@ -9,23 +7,30 @@ import Payment_btn from "../../app/components/Payment_btn";
 import { useAppDispatch } from "../../app/store/ConfigureStore";
 import { createCheckoutAsync } from "./CheckoutSlice";
 import { toast } from "react-toastify";
-import { CheckoutItems } from "../../app/models/Checkout";
 import LoaderButton from "../../app/components/LoaderButton";
 import { scrollToTop } from "../../app/utils/ScrollToTop";
+import { Autocomplete } from "@react-google-maps/api";
+import MapsDialog from "../../app/components/MapsDialog";
 
 export default function Checkout() {
   const [selectedPaymentOption, setSelectedPaymentOption] =
     useState("cashOnDelivery");
-  const [location, setLocation] = useState<Location | null>(null);
   const [vehiclesCheckout, setVehiclesCheckout] = useState<Shop[]>([]);
 
   const [deliveryOption, setDeliveryOption] = useState("");
   const [totalVehicleCount, setTotalVehicleCount] = useState<number>(0);
   const { selectedVehicles } = useAppSelector((state) => state.cart);
-  const { userDetail } = useAppSelector((state) => state.account);
+  const { userDetail, userLoading } = useAppSelector((state) => state.account);
   const [deliveryAddress, setDeliveryAddress] = useState<string>("");
   const [totalPayment, setTotalPayment] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
+  const [isOpenMap, setIsOpenMap] = useState<boolean>(false);
+  const [mapInfor, setMapInfor] = useState<{
+    originLocation: string;
+    destinationLocation: string;
+  } | null>(null);
+
+  const autocompleteRef = useRef<google.maps.places.Autocomplete | null>(null);
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -52,14 +57,16 @@ export default function Checkout() {
   }, [selectedVehicles]);
 
   useEffect(() => {
+    if (userLoading) return;
     if (userDetail?.address && userDetail?.email && userDetail?.phoneNumber) {
       scrollToTop();
+      setDeliveryAddress(userDetail?.address);
     } else {
       navigate(`/profile/${userDetail?.username}/settings`);
       toast.error("Please update your profile to check out!");
       return;
     }
-  }, []);
+  }, [userLoading]);
 
   useEffect(() => {
     if (vehiclesCheckout && vehiclesCheckout.length === 0) {
@@ -103,32 +110,54 @@ export default function Checkout() {
   };
   //End of select option delivery
 
-  const handleLocationChange = (value: Location) => {
-    setLocation(value);
+  const handleAddressSelect = () => {
+    if (!autocompleteRef.current) return;
+    const place = autocompleteRef.current.getPlace();
+    const address: any = autocompleteRef.current;
+    const fullAddress = address.gm_accessors_.place.em.formattedPrediction;
+    if (!place) {
+      toast.error("Please select a valid address");
+      return;
+    }
+    const { place_id } = place;
+    debugger;
+    // Validate the place_id to ensure it is a valid selection
+    if (place_id) {
+      setDeliveryAddress(fullAddress);
+    } else {
+      setDeliveryAddress("");
+      toast.error("Please select a valid address");
+    }
   };
 
-  const handleInputDeliveryAddress = (event: any) => {
-    setDeliveryAddress(event.target.value);
+  const handleClickMap = (vehicle: Vehicle) => {
+    setIsOpenMap(true);
+    const mapInfor = {
+      originLocation: deliveryAddress,
+      destinationLocation: vehicle.address,
+    };
+    setMapInfor(mapInfor);
+  };
+
+  const handleCloseMap = () => {
+    setIsOpenMap(false);
   };
 
   const onSubmit = async (event: any) => {
     event.preventDefault();
     setLoading(true);
 
+    if (deliveryAddress === "") {
+      toast.error("You need to choose a delivery address!");
+      return;
+    }
     let vehiclesSelected;
     if (deliveryOption === "") {
       toast.error("You need to choose a delivery option!");
       return;
     } else if (deliveryOption === "standardShipping") {
-      const address = deliveryAddress
-        ? deliveryAddress +
-          " " +
-          location?.district +
-          " " +
-          location?.ward +
-          " " +
-          location?.city
-        : "";
+      const address = deliveryAddress;
+
       vehiclesSelected = vehiclesCheckout.flatMap((shop) =>
         shop.vehicles.map((vehicle) => ({
           vehicleId: vehicle.vehicleId,
@@ -248,32 +277,28 @@ export default function Checkout() {
 
                     {deliveryOption === "standardShipping" && (
                       <>
-                        <div className="flex flex-col md:flex-row justify-center items-center md:items-start">
-                          <div className="w-full md:w-1/3 mb-2 md:mb-0 md:pr-10 text-left">
-                            <label className="text-lg">
-                              Select your address:
-                            </label>
-                          </div>
-                          <div className=" flex flex-col gap-3 mb-4 justify-center items-center w-full md:w-2/3 mt-2 md:mt-0">
-                            <SelectCityVN onSelect={handleLocationChange} />
-                          </div>
-                        </div>
-
                         <div className="flex flex-wrap mb-6 items-center">
                           <div className="w-full md:w-1/3 mb-2 md:mb-0 text-left">
                             <label className="text-lg">Delivery address:</label>
                           </div>
                           <div className="w-full md:w-2/3">
-                            <input
-                              className="w-full h-1/3 px-5 py-3 text-lg leading-9 bg-blue-50 border-2 border-blue-400 outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-xl"
-                              type="text"
-                              placeholder="123 Nguyen Thi Kieu"
-                              value={deliveryAddress}
-                              required
-                              onChange={(event) =>
-                                handleInputDeliveryAddress(event)
+                            <Autocomplete
+                              options={{
+                                componentRestrictions: { country: "vn" },
+                              }}
+                              onLoad={(autocomplete) =>
+                                (autocompleteRef.current = autocomplete)
                               }
-                            />
+                              onPlaceChanged={handleAddressSelect}
+                            >
+                              <input
+                                className="w-full h-1/3 px-5 py-3 text-lg leading-9 bg-blue-50 border-2 border-blue-400 outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-xl"
+                                type="text"
+                                placeholder="Enter your address"
+                                defaultValue={deliveryAddress}
+                                required
+                              />
+                            </Autocomplete>
                           </div>
                         </div>
                       </>
@@ -305,7 +330,7 @@ export default function Checkout() {
                         <label className="text-lg">Payment method:</label>
                       </div>
                       <div className="w-full md:w-2/3">
-                        <div className="grid grid-cols-1 md:grid-cols-2 mt-5 ">
+                        <div className="grid grid-rows-1 mt-5">
                           {/* <label className="relative inline-flex mb-5 mr-16 items-center">
                             <input
                               className="relative appearance-none mr-3"
@@ -325,7 +350,7 @@ export default function Checkout() {
                               COD
                             </span>
                           </label> */}
-                          <label className="relative inline-flex mb-5 mr-16 items-center">
+                          <label className="relative flex mb-5 mr-16 items-center">
                             <input
                               className="relative appearance-none mr-3"
                               type="radio"
@@ -335,11 +360,11 @@ export default function Checkout() {
                               checked={true}
                             />
                             <img
-                              style={{ width: "58px", height: "40px" }}
-                              src={require("../../app/assets/images/icon/Visa_icon.png")}
+                              style={{ width: "100px", height: "60px" }}
+                              src={require("../../app/assets/images/icon/paymentCard_ic.jpg")}
                             />
 
-                            <span className="ml-2 text-sm text-black leading-3 font-bold">
+                            <span className="ml-2 text-sm text-black leading-3 font-bold flex-1">
                               International payment cards
                             </span>
                           </label>
@@ -414,12 +439,61 @@ export default function Checkout() {
                             />
                           </div>
                           <div className="w-full flex-col justify-center items-center">
-                            <a
-                              className="inline-block mb-1 text-lg font-bold hover:underline"
-                              href="#"
-                            >
-                              {vehicle.vehicleName}
-                            </a>
+                            <div className="relative">
+                              <Link
+                                to={"/product-detail/" + vehicle.vehicleId}
+                                className="inline-block mb-1 text-lg font-bold hover:underline"
+                              >
+                                {vehicle.vehicleName}
+                              </Link>
+                              <div
+                                className="absolute -right-1 top-0 flex text-xs items-center justify-end font-semibold hover:bg-gray-200 rounded-full px-2 py-1 cursor-pointer border border-gray-300"
+                                onClick={() => handleClickMap(vehicle)}
+                              >
+                                <svg
+                                  className="mr-[2px]"
+                                  height="16px"
+                                  width="16px"
+                                  version="1.1"
+                                  id="Layer_1"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  xmlnsXlink="http://www.w3.org/1999/xlink"
+                                  viewBox="0 0 512 512"
+                                  xmlSpace="preserve"
+                                  fill="#000000"
+                                >
+                                  <g
+                                    id="SVGRepo_bgCarrier"
+                                    stroke-width="0"
+                                  ></g>
+                                  <g
+                                    id="SVGRepo_tracerCarrier"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                  ></g>
+                                  <g id="SVGRepo_iconCarrier">
+                                    <polygon points="154.64,420.096 154.64,59.496 0,134 0,512 "></polygon>
+                                    <polygon
+                                      style={{ fill: "#333333" }}
+                                      points="309.288,146.464 309.288,504.472 154.64,420.096 154.64,59.496 "
+                                    ></polygon>
+                                    <polygon points="463.928,50.152 309.288,146.464 309.288,504.472 463.928,415.68 "></polygon>
+                                    <path
+                                      style={{ fill: "#E21B1B" }}
+                                      d="M414.512,281.656l-11.92-15.744c-8.8-11.472-85.6-113.984-85.6-165.048 C317.032,39.592,355.272,0,414.512,0S512,39.592,512,100.864c0,50.992-76.8,153.504-85.488,165.048L414.512,281.656z"
+                                    ></path>
+                                    <circle
+                                      style={{ fill: "#FFFFFF" }}
+                                      cx="414.512"
+                                      cy="101.536"
+                                      r="31.568"
+                                    ></circle>
+                                  </g>
+                                </svg>
+                                Maps
+                              </div>
+                            </div>
+
                             <div className="flex flex-col sm:flex-row sm:flex-wrap gap-1">
                               <p className="mr-4 text-sm font-medium">
                                 <span className="font-semibold">Color:</span>
@@ -459,7 +533,7 @@ export default function Checkout() {
                                     hour: "2-digit",
                                     minute: "2-digit",
                                   })}{" "}
-                                  To{" "}
+                                  <span className="text-black">to</span>{" "}
                                   {vehicle.dropOffDateTime.toLocaleString([], {
                                     year: "numeric",
                                     month: "2-digit",
@@ -539,6 +613,13 @@ export default function Checkout() {
           </form>
         </div>
       </section>
+      {isOpenMap && (
+        <MapsDialog
+          originLocation={mapInfor?.originLocation}
+          destinationLocation={mapInfor?.destinationLocation}
+          onClose={handleCloseMap}
+        />
+      )}
     </>
   );
 }

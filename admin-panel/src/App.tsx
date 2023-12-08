@@ -5,6 +5,7 @@ import Loader from "./app/components/Loader";
 import "react-toastify/dist/ReactToastify.css";
 import { useAppDispatch, useAppSelector } from "./app/store/ConfigureStore";
 import { fetchUserFromToken } from "./pages/account/AccountSlice";
+import { useJsApiLoader } from "@react-google-maps/api";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -13,7 +14,13 @@ function App() {
   useEffect(() => {
     dispatch(fetchUserFromToken()).finally(() => setLoading(false));
   }, [dispatch, user?.token]);
-  return loading ? (
+
+  const { isLoaded } = useJsApiLoader({
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY as string,
+    libraries: ["places"],
+  });
+
+  return loading && !isLoaded ? (
     <Loader />
   ) : (
     <>

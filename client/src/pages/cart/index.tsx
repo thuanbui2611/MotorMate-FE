@@ -98,6 +98,15 @@ export default function Cart() {
       toast.error("Please choose your date rent first!");
       return;
     }
+    if (
+      shouldDisableDateStart(vehicle.pickUpDateTime, vehicle) ||
+      shouldDisableDateEnd(vehicle.dropOffDateTime, vehicle)
+    ) {
+      toast.error(
+        "This vehicle is not available on this date!. You need to change date rent first!"
+      );
+      return;
+    }
     dispatch(addRemoveSelectedVehicle({ vehicle, shop }));
   };
 
@@ -126,6 +135,7 @@ export default function Cart() {
       setIsEditDateRent(undefined);
       return;
     }
+
     let dateFrom = new Date(startDate);
     let dateTo = new Date(endDate);
     if (endDate === undefined) {
@@ -265,7 +275,8 @@ export default function Cart() {
       dateFrom.getMonth(),
       dateFrom.getDate()
     );
-    if (dateFromOption <= dateStart) return true;
+    if (dateFromOption <= dateStart || dateFromOption <= new Date())
+      return true;
     const disabledDateTimeLocal = getDisabledDateTimeLocal(vehicle);
     if (disabledDateTimeLocal.length === 0) return false;
     let isDisabled: boolean = false;
@@ -281,6 +292,7 @@ export default function Cart() {
     }
     return isDisabled;
   };
+
   return cartLoading || userLoading ? (
     <Loading />
   ) : (
@@ -484,8 +496,19 @@ export default function Cart() {
                                             </>
                                           ) : (
                                             <span>
-                                              {vehicle.pickUpDateTime !== null
-                                                ? vehicle.pickUpDateTime.toLocaleString(
+                                              {vehicle.pickUpDateTime !==
+                                              null ? (
+                                                <span
+                                                  className={` ${
+                                                    shouldDisableDateStart(
+                                                      vehicle.pickUpDateTime,
+                                                      vehicle
+                                                    )
+                                                      ? "line-through text-red-600"
+                                                      : ""
+                                                  }`}
+                                                >
+                                                  {vehicle.pickUpDateTime.toLocaleString(
                                                     [],
                                                     {
                                                       year: "numeric",
@@ -494,8 +517,11 @@ export default function Cart() {
                                                       hour: "2-digit",
                                                       minute: "2-digit",
                                                     }
-                                                  )
-                                                : "N/A"}
+                                                  )}
+                                                </span>
+                                              ) : (
+                                                "N/A"
+                                              )}
                                             </span>
                                           )}
                                         </div>
@@ -629,8 +655,19 @@ export default function Cart() {
                                             </>
                                           ) : (
                                             <span>
-                                              {vehicle.pickUpDateTime !== null
-                                                ? vehicle.dropOffDateTime.toLocaleString(
+                                              {vehicle.dropOffDateTime !==
+                                              null ? (
+                                                <span
+                                                  className={` ${
+                                                    shouldDisableDateEnd(
+                                                      vehicle.dropOffDateTime,
+                                                      vehicle
+                                                    )
+                                                      ? "line-through text-red-600"
+                                                      : ""
+                                                  }`}
+                                                >
+                                                  {vehicle.dropOffDateTime.toLocaleString(
                                                     [],
                                                     {
                                                       year: "numeric",
@@ -639,8 +676,11 @@ export default function Cart() {
                                                       hour: "2-digit",
                                                       minute: "2-digit",
                                                     }
-                                                  )
-                                                : "N/A"}
+                                                  )}
+                                                </span>
+                                              ) : (
+                                                "N/A"
+                                              )}
                                             </span>
                                           )}
                                         </div>

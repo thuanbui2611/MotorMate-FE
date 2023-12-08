@@ -151,12 +151,12 @@ export const VehiclePendingSlice = createSlice({
         state.vehiclesPendingLoaded = true;
       })
       .addCase(getVehiclesPendingAsync.rejected, (state, action) => {
-        console.log("Get vehiclesPending rejected: ", action);
+        console.log("Get Vehicles Pending Rejected: ", action);
         state.vehiclesPendingLoaded = false;
       });
 
     builder.addCase(updateVehiclePendingAsync.fulfilled, (state, action) => {
-      toast.success("Update vehiclesPending successfully!");
+      toast.success("Update Vehicle Pending Successfully!");
       vehiclesPendingAdapter.upsertOne(state, action.payload);
     });
 

@@ -9,6 +9,7 @@ import Loading from "../../app/components/Loading";
 import NotFound from "../../app/errors/NotFound";
 import ConfirmCancelDialog from "../../app/components/ConfirmCancelDialog";
 import { toast } from "react-toastify";
+import MapsDialog from "../../app/components/MapsDialog";
 
 export default function OrderDetail() {
   const [isOpenConfirmCancelDialog, setIsOpenConfirmCancelDialog] =
@@ -24,6 +25,11 @@ export default function OrderDetail() {
   const [selectedShopReview, setSelectedShopReview] = useState<Shop | null>(
     null
   );
+  const [isOpenMap, setIsOpenMap] = useState<boolean>(false);
+  const [mapInfor, setMapInfor] = useState<{
+    originLocation: string;
+    destinationLocation: string;
+  } | null>(null);
   const { userDetail, userLoading } = useAppSelector((state) => state.account);
   const dispatch = useAppDispatch();
   const { parentOrderId } = useParams();
@@ -134,6 +140,33 @@ export default function OrderDetail() {
     setIsOpenConfirmCancelDialog(false);
     setSelectedVehiclesCancel([]);
   };
+
+  const handleClickMap = (vehicle: Vehicle) => {
+    if (!orderDetails || !userDetail) return;
+    setIsOpenMap(true);
+    let mapInfor;
+    if (
+      orderDetails.shops[0].vehicles[0].pickUpLocation ===
+      "Pick up at the Vehicle Address"
+    ) {
+      mapInfor = {
+        originLocation: userDetail.address,
+        destinationLocation: vehicle.address,
+      };
+    } else {
+      mapInfor = {
+        originLocation: vehicle.address,
+        destinationLocation: orderDetails.shops[0].vehicles[0].pickUpLocation,
+      };
+    }
+
+    setMapInfor(mapInfor);
+  };
+
+  const handleCloseMap = () => {
+    setIsOpenMap(false);
+  };
+
   if (!orderDetails && !isLoading) return <NotFound />;
 
   return isLoading ? (
@@ -143,13 +176,13 @@ export default function OrderDetail() {
       <div className="py-14 px-4 md:px-6 2xl:px-20 2xl:container 2xl:mx-auto">
         <div className="flex justify-between items-center">
           <div className="flex flex-col justify-start items-start space-y-2">
-            <h1 className="text-3xl lg:text-4xl font-semibold leading-7 lg:leading-9 ">
+            <h1 className="text-2xl md:text-3xl lg:text-4xl font-semibold leading-7 lg:leading-9 ">
               Order{" "}
               <span className="text-blue-600">
                 #{orderDetails && orderDetails.parentOrderId}
               </span>
             </h1>
-            <p className="text-base dark:text-gray-500 font-medium leading-6 text-gray-600">
+            <p className="text-sm lg:text-base font-medium leading-6 text-gray-600">
               {orderDetails &&
                 new Date(orderDetails.createdAt).toLocaleString([], {
                   year: "numeric",
@@ -161,7 +194,7 @@ export default function OrderDetail() {
             </p>
           </div>
           <div
-            className={`font-bold text-blue-600 w-fit h-fit p-1 px-2 bg-blue-200 rounded-full ${
+            className={`font-bold text-blue-600 w-fit h-fit px-1 py-[2px] md:p-1 md:px-2 bg-blue-200 rounded-full text-sm md:text-base lg:text-lg ${
               orderDetails?.status === "Pending"
                 ? "text-blue-600 bg-blue-200"
                 : orderDetails?.status === "Canceled"
@@ -215,11 +248,11 @@ export default function OrderDetail() {
                 <div className="w-full h-fit bg-white rounded-lg">
                   {shop.vehicles.map((vehicle) => (
                     <div
-                      className="relative mt-4 md:mt-6 flex flex-col md:flex-row justify-center items-center md:space-x-6 xl:space-x-8 w-[95%] mx-4"
+                      className="relative mt-4 md:mt-6 flex flex-col md:flex-row justify-center items-center md:space-x-6 xl:space-x-8 w-full px-4"
                       key={vehicle.vehicleId}
                     >
                       <div
-                        className={`absolute top-0 right-0 font-bold w-fit h-fit p-1  rounded-full text-xs ${
+                        className={`absolute top-0 right-2 sm:right-4 font-bold w-fit h-fit py-[2px] px-1 rounded-full text-xs ${
                           vehicle?.status === "Pending"
                             ? "text-blue-600 bg-blue-200"
                             : vehicle?.status === "Canceled"
@@ -241,8 +274,8 @@ export default function OrderDetail() {
                           alt="Vehicle Image"
                         />
                       </Link>
-                      <div className="flex justify-start items-center border-b border-gray-100 md:flex-row flex-col w-fit md:w-full pb-8 space-y-4 md:space-y-0">
-                        <div className="w-full md:w-1/2 flex flex-col justify-start items-start space-y-2">
+                      <div className="flex justify-start items-center border-b border-gray-200 md:flex-row flex-col w-fit md:w-full pb-8 space-y-2 md:space-y-0">
+                        <div className="w-full md:w-1/2 flex flex-col justify-start items-center md:items-start space-y-2">
                           <Link
                             to={"/product-detail/" + vehicle.vehicleId}
                             className="text-xl xl:text-2xl font-semibold leading-6 text-black hover:text-blue-600 cursor-pointer"
@@ -264,9 +297,12 @@ export default function OrderDetail() {
                               </span>
                               {vehicle.licensePlate}
                             </p>
-                            <p className="text-sm leading-none text-black">
+                            <p
+                              className="text-sm leading-none text-black"
+                              style={{ textTransform: "capitalize" }}
+                            >
                               <span className="text-gray-500">Address: </span>
-                              {vehicle.pickUpLocation}
+                              {vehicle.address.toLowerCase()}
                             </p>
                           </div>
                         </div>
@@ -468,6 +504,49 @@ export default function OrderDetail() {
                             </div>
                           </div>
                         </div>
+                        <div
+                          className="absolute right-3 bottom-3 flex text-xs items-center justify-end font-semibold hover:bg-gray-200 rounded-full px-2 py-1 cursor-pointer border border-gray-300"
+                          onClick={() => handleClickMap(vehicle)}
+                        >
+                          <svg
+                            className="mr-[2px]"
+                            height="16px"
+                            width="16px"
+                            version="1.1"
+                            id="Layer_1"
+                            xmlns="http://www.w3.org/2000/svg"
+                            xmlnsXlink="http://www.w3.org/1999/xlink"
+                            viewBox="0 0 512 512"
+                            xmlSpace="preserve"
+                            fill="#000000"
+                          >
+                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                            <g
+                              id="SVGRepo_tracerCarrier"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            ></g>
+                            <g id="SVGRepo_iconCarrier">
+                              <polygon points="154.64,420.096 154.64,59.496 0,134 0,512 "></polygon>
+                              <polygon
+                                style={{ fill: "#333333" }}
+                                points="309.288,146.464 309.288,504.472 154.64,420.096 154.64,59.496 "
+                              ></polygon>
+                              <polygon points="463.928,50.152 309.288,146.464 309.288,504.472 463.928,415.68 "></polygon>
+                              <path
+                                style={{ fill: "#E21B1B" }}
+                                d="M414.512,281.656l-11.92-15.744c-8.8-11.472-85.6-113.984-85.6-165.048 C317.032,39.592,355.272,0,414.512,0S512,39.592,512,100.864c0,50.992-76.8,153.504-85.488,165.048L414.512,281.656z"
+                              ></path>
+                              <circle
+                                style={{ fill: "#FFFFFF" }}
+                                cx="414.512"
+                                cy="101.536"
+                                r="31.568"
+                              ></circle>
+                            </g>
+                          </svg>
+                          Maps
+                        </div>
                       </div>
                     </div>
                   ))}
@@ -618,6 +697,13 @@ export default function OrderDetail() {
           vehicle={selectedVehicleReview}
           shop={selectedShopReview}
           onClose={handleCloseReviewDialog}
+        />
+      )}
+      {isOpenMap && (
+        <MapsDialog
+          originLocation={mapInfor?.originLocation}
+          destinationLocation={mapInfor?.destinationLocation}
+          onClose={handleCloseMap}
         />
       )}
     </>

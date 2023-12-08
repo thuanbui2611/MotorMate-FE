@@ -38,6 +38,7 @@ export interface Vehicle {
   price: number;
   licensePlate: string;
   image: string;
+  address: string;
 }
 
 export interface TripRequestParams {

@@ -150,12 +150,12 @@ export const VehicleDeniedSlice = createSlice({
         state.vehiclesDeniedLoaded = true;
       })
       .addCase(getVehiclesDeniedAsync.rejected, (state, action) => {
-        console.log("Get vehiclesDenied rejected: ", action);
+        console.log("Get Vehicle Denied rejected: ", action);
         state.vehiclesDeniedLoaded = false;
       });
 
     builder.addCase(updateVehicleDeniedAsync.fulfilled, (state, action) => {
-      toast.success("Update vehiclesDenied successfully!");
+      toast.success("Update Vehicle Denied successfully!");
       vehiclesDeniedAdapter.upsertOne(state, action.payload);
     });
 
