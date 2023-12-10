@@ -4,6 +4,7 @@ import agent from "../../app/api/agent";
 import { BlogParams } from "../../app/models/Blog";
 import Loading from "../../app/components/Loading";
 import { ConvertToDateTimeStr } from "../../app/utils/ConvertDatetimeToStr";
+import { Link } from "react-router-dom";
 
 export default function BlogList() {
   const [loading, setLoading] = useState(true);
@@ -41,7 +42,10 @@ export default function BlogList() {
             <div className="lg:flex items-stretch md:mt-12 mt-8">
               <div className="lg:w-1/2">
                 <div className="sm:flex items-center justify-between xl:gap-x-8 gap-x-6">
-                  <div className="sm:w-1/2 h-full relative rounded-xl shadow-md shadow-white/30">
+                  <Link
+                    to={"/blog/" + blogs[0].id}
+                    className="sm:w-1/2 h-full relative rounded-xl shadow-md shadow-white/30 hover:brightness-90"
+                  >
                     <div>
                       <p className="mt-6 mr-6 py-1 px-2 lg:mt-2 lg:mr-2 bg-gray-600 rounded-full text-xs font-medium leading-3 text-white absolute top-0 right-0">
                         {ConvertToDateTimeStr(blogs[0].createdAt)}
@@ -61,8 +65,11 @@ export default function BlogList() {
                       className="w-full h-64 lg:max-h-80 lg:h-[19vw] rounded-xl"
                       alt="blog image"
                     />
-                  </div>
-                  <div className="sm:w-1/2 h-full sm:mt-0 mt-4 relative  rounded-xl shadow-md shadow-white/30">
+                  </Link>
+                  <Link
+                    to={"/blog/" + blogs[1].id}
+                    className="sm:w-1/2 h-full sm:mt-0 mt-4 relative  rounded-xl shadow-md shadow-white/30 hover:brightness-90"
+                  >
                     <div>
                       <p className="mt-6 mr-6 py-1 px-2 lg:mt-2 lg:mr-2 bg-gray-600 rounded-full text-xs font-medium leading-3 text-white absolute top-0 right-0">
                         {ConvertToDateTimeStr(blogs[1].createdAt)}
@@ -82,9 +89,12 @@ export default function BlogList() {
                       className="w-full h-64 lg:max-h-80 lg:h-[19vw] rounded-xl"
                       alt="blog image"
                     />
-                  </div>
+                  </Link>
                 </div>
-                <div className="relative  rounded-xl shadow-md shadow-white/30">
+                <Link
+                  to={"/blog/" + blogs[2].id}
+                  className="relative rounded-xl shadow-md shadow-white/30 hover:brightness-90"
+                >
                   <div>
                     <p className="mt-6 mr-6 py-1 px-2 lg:mt-2 lg:mr-2 bg-gray-600 rounded-full text-xs font-medium leading-3 text-white absolute top-0 right-0">
                       {ConvertToDateTimeStr(blogs[2].createdAt)}
@@ -104,10 +114,13 @@ export default function BlogList() {
                     alt="blog image"
                     className="w-full mt-8 md:mt-6 sm:block rounded-xl"
                   />
-                </div>
+                </Link>
               </div>
               <div className="lg:w-1/2 xl:ml-8 lg:ml-4 lg:mt-0 md:mt-6 mt-4 lg:flex flex-col justify-between">
-                <div className="relative rounded-xl shadow-md shadow-white/30">
+                <Link
+                  to={"/blog/" + blogs[3].id}
+                  className="relative rounded-xl shadow-md shadow-white/30 hover:brightness-90"
+                >
                   <div>
                     <p className="mt-6 mr-6 py-1 px-2 lg:mt-2 lg:mr-2 bg-gray-600 rounded-full text-xs font-medium leading-3 text-white absolute top-0 right-0">
                       {ConvertToDateTimeStr(blogs[3].createdAt)}
@@ -127,9 +140,12 @@ export default function BlogList() {
                     alt="blog image"
                     className="w-full sm:block rounded-xl"
                   />
-                </div>
+                </Link>
                 <div className="sm:flex items-center justify-between xl:gap-x-8 gap-x-6 md:mt-6 mt-4">
-                  <div className="relative w-full rounded-xl shadow-md shadow-white/30">
+                  <Link
+                    to={"/blog/" + blogs[4].id}
+                    className="relative w-full rounded-xl shadow-md shadow-white/30 hover:brightness-90"
+                  >
                     <div>
                       <p className="mt-6 mr-6 py-1 px-2 lg:mt-2 lg:mr-2 bg-gray-600 rounded-full text-xs font-medium leading-3 text-white absolute top-0 right-0">
                         {ConvertToDateTimeStr(blogs[4].createdAt)}
@@ -149,8 +165,11 @@ export default function BlogList() {
                       className="w-full rounded-xl"
                       alt="blog image"
                     />
-                  </div>
-                  <div className="relative w-full sm:mt-0 mt-4 rounded-xl shadow-md shadow-white/30">
+                  </Link>
+                  <Link
+                    to={"/blog/" + blogs[5].id}
+                    className="relative w-full sm:mt-0 mt-4 rounded-xl shadow-md shadow-white/30 hover:brightness-90"
+                  >
                     <div>
                       <p className="mt-6 mr-6 py-1 px-2 lg:mt-2 lg:mr-2 bg-gray-600 rounded-full text-xs font-medium leading-3 text-white absolute top-0 right-0">
                         {ConvertToDateTimeStr(blogs[5].createdAt)}
@@ -170,7 +189,7 @@ export default function BlogList() {
                       className="w-full rounded-xl"
                       alt="blog image"
                     />
-                  </div>
+                  </Link>
                 </div>
               </div>
             </div>
