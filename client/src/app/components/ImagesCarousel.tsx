@@ -80,7 +80,7 @@ export default function ImagesCarousel({ imagesList, openImage }: Props) {
 
                 <img
                   src={imageUrl}
-                  className="object-scale-down shadow-xl h-96 w-full rounded-xl"
+                  className="object-cover shadow-xl h-96 w-full rounded-xl"
                   style={{ width: "100%" }}
                 />
               </div>

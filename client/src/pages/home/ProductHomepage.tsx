@@ -1,7 +1,7 @@
 import { useSpringCarousel } from "react-spring-carousel";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { store, useAppSelector } from "../../app/store/ConfigureStore";
+import { useAppSelector } from "../../app/store/ConfigureStore";
 import { Vehicle } from "../../app/models/Vehicle";
 import AddToCart from "../../app/components/AddToCart";
 interface Props {
@@ -22,11 +22,11 @@ export default function ProductHomepage({ products }: Props) {
         ratingSVG.push(
           <svg
             key={i}
-            className="w-[2vw] md:w-4 md:h-4 lg:w-5 lg:h-5"
+            className="w-[2vw] min-w-[6px] md:w-4 md:h-4 lg:w-5 lg:h-5"
             viewBox="0 0 24 24"
             xmlns="http://www.w3.org/2000/svg"
             fill="transparent"
-            stroke="white"
+            stroke="#a8a7a7"
           >
             <path
               d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"
@@ -45,9 +45,11 @@ export default function ProductHomepage({ products }: Props) {
         ratingSVG.push(
           <li key={i}>
             <svg
-              className="w-[2vw] md:w-4 md:h-4 lg:w-5 lg:h-5"
+              className="w-[2vw] min-w-[6px] md:w-4 md:h-4 lg:w-5 lg:h-5"
               viewBox="0 0 24 24"
               xmlns="http://www.w3.org/2000/svg"
+              stroke="#a8a7a7"
+              strokeWidth="0.5px"
             >
               <defs>
                 <linearGradient

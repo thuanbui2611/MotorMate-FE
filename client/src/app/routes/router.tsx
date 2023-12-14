@@ -53,21 +53,31 @@ export const router = createBrowserRouter([
           {
             element: <DefaultLayout />,
             children: [
-              {
-                path: "profile/:username/",
-                element: <Profile />,
-                children: [
-                  { path: "", element: <ProfileDetails /> },
-                  { path: "settings", element: <SettingProfile /> },
-                  { path: "my-vehicles", element: <MyProducts /> },
-                ],
-              },
               { path: "check-out", element: <Checkout /> },
               { path: "payment", element: <Payment /> },
               { path: "bill", element: <Bill /> },
               { path: "my-orders", element: <Orders /> },
               { path: "my-orders/:parentOrderId", element: <OrderDetail /> },
               { path: "my-cart", element: <Cart /> },
+            ],
+          },
+        ],
+      },
+      {
+        element: <DefaultLayout />,
+        children: [
+          {
+            path: "profile/:username/",
+            element: <Profile />,
+            children: [
+              { path: "", element: <ProfileDetails /> },
+              {
+                element: <RequireAuth />,
+                children: [
+                  { path: "settings", element: <SettingProfile /> },
+                  { path: "my-vehicles", element: <MyProducts /> },
+                ],
+              },
             ],
           },
         ],

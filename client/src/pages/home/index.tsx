@@ -13,8 +13,11 @@ export default function HomePage() {
   const [products, setProducts] = useState<Vehicle[]>([]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    agent.Vehicle.all()
-      .then((products) => setProducts(products))
+    const params = new URLSearchParams();
+    params.append("pageNumber", "1");
+    params.append("pageSize", "10");
+    agent.Vehicle.listVehicleByStatus(params, "approved")
+      .then((products) => setProducts(products.items))
       .catch((error) => console.log(error))
       .finally(() => setLoading(false));
   }, []);
@@ -408,7 +411,10 @@ export default function HomePage() {
           <div className="flex justify-center">
             <hr className="w-[10%] mt-2 lg:w-[140px] border border-[#ff7e06]"></hr>
           </div>
-          <div className="flex-col px-4 pt-10 sm:px-6 lg:px-8 lg:py-0 mx-auto justify-center items-start">
+          <div
+            className="flex-col px-4 pt-10 sm:px-6 lg:px-8 lg:py-0 mx-auto justify-center items-start"
+            id="procedures"
+          >
             <section className="mx-auto max-w-screen-xl mb-8">
               <div className="flex flex-col md:flex-row justify-center w-fit px-4 py-4 mx-auto lg:py-8 md:px-6">
                 <div className="flex items-center justify-center w-fit mx-auto">

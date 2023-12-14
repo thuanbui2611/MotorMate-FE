@@ -75,7 +75,6 @@ export default function FormAddColors({
         color: data.color,
         hexCode: colorPick,
       };
-      // await agent.Color.create(formData);
       if (color) {
         await dispatch(updateColorAsync(formData));
       } else {
