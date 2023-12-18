@@ -106,7 +106,7 @@ function initParams() {
 }
 
 export const VehicleDeniedSlice = createSlice({
-  name: "vehicle",
+  name: "vehicleDenied",
   initialState: vehiclesDeniedAdapter.getInitialState<VehicleState>({
     vehiclesDenied: null,
     vehiclesDeniedLoaded: false,

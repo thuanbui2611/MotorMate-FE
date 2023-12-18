@@ -18,13 +18,18 @@ import LoaderButton from "../../app/components/LoaderButton";
 import { ConvertToDateStr } from "../../app/utils/ConvertDatetimeToDate";
 import { Collection } from "../../app/models/Collection";
 import { useSearchParams } from "react-router-dom";
-import dataCityVN from "./../../app/data/dataCityVN.json";
 import { City } from "../../app/models/Address";
-import agent from "../../app/api/agent";
 import { Brand } from "../../app/models/Brand";
 import { ModelVehicle } from "../../app/models/ModelVehicle";
 import Autocomplete from "@mui/material/Autocomplete";
 import { TextField } from "@mui/material";
+import SelectPageSize from "../../app/components/SelectPageSize";
+import {
+  getBrandsAsync,
+  getCities,
+  getCollectionsAsync,
+  getModelVehiclesAsync,
+} from "../filter/FilterSlice";
 
 export default function VehiclePending() {
   const [searchParams, setSearchParams] = useSearchParams({});
@@ -35,91 +40,80 @@ export default function VehiclePending() {
   const [confirmDeleteDiaglog, setConfirmDeleteDiaglog] = useState(false);
   const [vehicleDeleted, setVehicleDeleted] = useState<Vehicle>({} as Vehicle);
   const [openDetails, setOpenDetails] = useState(false);
-  const [brands, setBrands] = useState<Brand[]>([]);
   const [selectedBrands, setSelectedBrands] = useState<Brand[]>([]);
-  const [collections, setCollections] = useState<Collection[]>([]);
   const [selectedCollections, setSelectedCollections] = useState<Collection[]>(
     []
   );
+  const [isStartFilter, setIsStartFilter] = useState(false);
+  const [selectedPageSize, setSelectedPageSize] = useState<number>(5);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectedCities, setSelectedCities] = useState<City[]>([]);
-  const [models, setModels] = useState<ModelVehicle[]>([]);
   const [selectedModels, setSelectedModels] = useState<ModelVehicle[]>([]);
-  const [loadingFetchModelsFilter, setLoadingFetchModelsFilter] =
-    useState(true);
-  const [loadingFetchCollectionsFilter, setLoadingFetchCollectionsFilter] =
-    useState(true);
-  const [loadingFetchBrandsFilter, setLoadingFetchBrandsFilter] =
-    useState(true);
-  const [paramsCompleted, setParamsCompleted] = useState(false);
 
   const vehiclesPending = useAppSelector(vehiclePendingSelectors.selectAll);
   const { vehiclesPendingLoaded, metaData, vehiclesParams } = useAppSelector(
     (state) => state.vehiclePending
   );
+
+  //get data for filter from state
+  const {
+    brands,
+    brandLoading,
+    collections,
+    collectionLoading,
+    modelVehicles,
+    modelVehicleLoading,
+    cities,
+  } = useAppSelector((state) => state.filter);
+
   const dispatch = useAppDispatch();
 
   //Get params value from url
   const pageNum = searchParams.get("pageNumber");
+  const pageSize = searchParams.get("pageSize");
   const brandsParam = searchParams.get("Brands");
   const modelsParam = searchParams.get("Models");
   const collectionsParam = searchParams.get("Collections");
   const citiesParam = searchParams.get("Cities");
   const searchQueryParam = searchParams.get("Search");
-  const cities = dataCityVN as City[];
 
   // Get data for filter
   useEffect(() => {
-    //get brands data
-    agent.Brand.all()
-      .then((data) => {
-        setBrands(data);
-        setLoadingFetchBrandsFilter(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching brands for filter:", error);
-      });
-    //get collections data
-    agent.Collection.all()
-      .then((data) => {
-        setCollections(data);
-        setLoadingFetchCollectionsFilter(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching collections for filter", error);
-      });
-    //get models data
-    agent.ModelVehicle.all()
-      .then((data) => {
-        setModels(data);
-        setLoadingFetchModelsFilter(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching models for filter", error);
-      });
+    if (brands.length === 0 && !brandLoading) {
+      dispatch(getBrandsAsync());
+    }
+    if (collections.length === 0 && !collectionLoading) {
+      dispatch(getCollectionsAsync());
+    }
+    if (modelVehicles.length === 0 && !modelVehicleLoading) {
+      dispatch(getModelVehiclesAsync());
+    }
+    if (cities.length === 0) {
+      dispatch(getCities());
+    }
   }, []);
   // End of Get data for filter
   //Get valueFilter from url params, then set selected filterValue and request (dispatch).
   useEffect(() => {
     if (
-      models.length > 0 &&
+      modelVehicles.length > 0 &&
       collections.length > 0 &&
       brands.length > 0 &&
       cities.length > 0
     ) {
       //Model filter
       if (modelsParam !== "") {
+        let modelsFilter: string[] = [];
         if (modelsParam) {
-          const modelsFiltered = modelsParam.split("%2C");
-          const modelsSelected = models.filter((model) =>
-            modelsFiltered.includes(model.name)
-          );
-          setSelectedModels(modelsSelected);
-          dispatch(setVehiclePendingParams({ Models: modelsFiltered }));
-        } else {
-          dispatch(setVehiclePendingParams({ Models: [] }));
-          setSelectedModels([]);
+          modelsFilter = modelsParam.split("%2C");
+        } else if (vehiclesParams.Models && vehiclesParams.Models.length > 0) {
+          modelsFilter = vehiclesParams.Models;
         }
+        const modelsSelected = modelVehicles.filter((model) =>
+          modelsFilter.includes(model.name)
+        );
+        setSelectedModels(modelsSelected);
+        dispatch(setVehiclePendingParams({ Models: modelsFilter }));
       } else {
         setSearchParams((prev) => {
           prev.delete("Models");
@@ -128,19 +122,20 @@ export default function VehiclePending() {
       }
       //Collection filter
       if (collectionsParam !== "") {
+        let collectionsFilter: string[] = [];
         if (collectionsParam) {
-          const collectionsFiltered = collectionsParam.split("%2C");
-          const collectionsSelected = collections.filter((collection) =>
-            collectionsFiltered.includes(collection.name)
-          );
-          setSelectedCollections(collectionsSelected);
-          dispatch(
-            setVehiclePendingParams({ Collections: collectionsFiltered })
-          );
-        } else {
-          dispatch(setVehiclePendingParams({ Collections: [] }));
-          setSelectedCollections([]);
+          collectionsFilter = collectionsParam.split("%2C");
+        } else if (
+          vehiclesParams.Collections &&
+          vehiclesParams.Collections.length > 0
+        ) {
+          collectionsFilter = vehiclesParams.Collections;
         }
+        const collectionsSelected = collections.filter((collection) =>
+          collectionsFilter.includes(collection.name)
+        );
+        setSelectedCollections(collectionsSelected);
+        dispatch(setVehiclePendingParams({ Collections: collectionsFilter }));
       } else {
         setSearchParams((prev) => {
           prev.delete("Collections");
@@ -149,67 +144,63 @@ export default function VehiclePending() {
       }
       //Brand filter
       if (brandsParam !== "") {
+        let brandsFilter: string[] = [];
         if (brandsParam) {
-          const brandsFiltered = brandsParam.split("%2C");
-          const brandsSelected = brands.filter((brand) =>
-            brandsFiltered.includes(brand.name)
-          );
-          setSelectedBrands(brandsSelected);
-          dispatch(setVehiclePendingParams({ Brands: brandsFiltered }));
-        } else {
-          dispatch(setVehiclePendingParams({ Brands: [] }));
-          setSelectedBrands([]);
+          brandsFilter = brandsParam.split("%2C");
+        } else if (vehiclesParams.Brands && vehiclesParams.Brands.length > 0) {
+          brandsFilter = vehiclesParams.Brands;
         }
+        const brandsSelected = brands.filter((brand) =>
+          brandsFilter.includes(brand.name)
+        );
+        setSelectedBrands(brandsSelected);
+        dispatch(setVehiclePendingParams({ Brands: brandsFilter }));
       } else {
         setSearchParams((prev) => {
           prev.delete("Brands");
           return prev;
         });
       }
+
       //City filter
       if (citiesParam !== "") {
+        let citiesFilter: string[] = [];
         if (citiesParam) {
-          const citiesFiltered = citiesParam.split("%2C");
-          const citiesSelected = cities.filter((city) =>
-            citiesFiltered.includes(city.Name)
-          );
-          setSelectedCities(citiesSelected);
-          dispatch(setVehiclePendingParams({ Cities: citiesFiltered }));
-        } else {
-          dispatch(setVehiclePendingParams({ Cities: [] }));
-          setSelectedCities([]);
+          citiesFilter = citiesParam.split("%2C");
+        } else if (vehiclesParams.Cities && vehiclesParams.Cities.length > 0) {
+          citiesFilter = vehiclesParams.Cities;
         }
+        const citiesSelected = cities.filter((city) =>
+          citiesFilter.includes(city.Name)
+        );
+        setSelectedCities(citiesSelected);
+        dispatch(setVehiclePendingParams({ Cities: citiesFilter }));
       } else {
         setSearchParams((prev) => {
           prev.delete("Cities");
           return prev;
         });
-        dispatch(setVehiclePendingParams({ Cities: [] }));
       }
-      setParamsCompleted(true);
-    } else
+    } else {
       switch (true) {
-        case models === null || typeof models === "undefined":
+        case modelVehicles === null || typeof modelVehicles === "undefined":
           console.log("models is null or undefined");
-          setParamsCompleted(true);
           break;
         case collections === null || typeof collections === "undefined":
           console.log("collections is null or undefined");
-          setParamsCompleted(true);
           break;
         case brands === null || typeof brands === "undefined":
           console.log("brands is null or undefined");
-          setParamsCompleted(true);
           break;
         case cities === null || typeof cities === "undefined":
           console.log("cities is null or undefined");
-          setParamsCompleted(true);
           break;
         default:
       }
+    }
   }, [
     modelsParam,
-    models,
+    modelVehicles,
     citiesParam,
     cities,
     brandsParam,
@@ -230,6 +221,24 @@ export default function VehiclePending() {
       dispatch(setVehiclePendingParams({ pageNumber: +pageNum }));
     }
   }, [pageNum, dispatch]);
+  useEffect(() => {
+    if (pageSize === "5") {
+      setSearchParams((prev) => {
+        prev.delete("pageSize");
+        return prev;
+      });
+      dispatch(setVehiclePendingParams({ pageSize: 5 }));
+    } else {
+      let pageSizeCurrent: number = 5;
+      if (pageSize) {
+        pageSizeCurrent = +pageSize;
+      } else {
+        pageSizeCurrent = vehiclesParams.pageSize;
+      }
+      setSelectedPageSize(pageSizeCurrent);
+      dispatch(setVehiclePendingParams({ pageSize: pageSizeCurrent }));
+    }
+  }, [pageSize, dispatch]);
   //End of get valueFilter from url params and set selected
 
   useEffect(() => {
@@ -241,7 +250,22 @@ export default function VehiclePending() {
       dispatch(setVehiclePendingParams({ Search: undefined }));
     }
   }, [searchQueryParam, dispatch]);
-
+  //Starting filter
+  useEffect(() => {
+    if (!isStartFilter) {
+      if (
+        pageNum ||
+        pageSize ||
+        searchQueryParam ||
+        brandsParam ||
+        modelsParam ||
+        collectionsParam ||
+        citiesParam
+      ) {
+        setIsStartFilter(true);
+      }
+    }
+  }, [vehiclesParams, pageNum]);
   // Handle change filter
   const handleSelectCollectionChange = (
     event: React.SyntheticEvent<Element, Event>,
@@ -268,13 +292,21 @@ export default function VehiclePending() {
         prev.delete("Collections");
         return prev;
       });
+      dispatch(setVehiclePendingParams({ Collections: [] }));
+      setSelectedCollections([]);
     }
+    setIsStartFilter(true);
+    setSearchParams((prev) => {
+      prev.set("pageNumber", "1");
+      return prev;
+    });
   };
   const handleSelectModelChange = (
     event: React.SyntheticEvent<Element, Event>,
     newValue: ModelVehicle[]
   ) => {
     // set to url params
+
     if (newValue.length > 0) {
       const modelsFiltered = newValue?.map((model) => model.name);
       if (searchParams.get("Models")) {
@@ -293,7 +325,14 @@ export default function VehiclePending() {
         prev.delete("Models");
         return prev;
       });
+      dispatch(setVehiclePendingParams({ Models: [] }));
+      setSelectedModels([]);
     }
+    setIsStartFilter(true);
+    setSearchParams((prev) => {
+      prev.set("pageNumber", "1");
+      return prev;
+    });
   };
   const handleSelectCityChange = (
     event: React.SyntheticEvent<Element, Event>,
@@ -317,7 +356,14 @@ export default function VehiclePending() {
         prev.delete("Cities");
         return prev;
       });
+      dispatch(setVehiclePendingParams({ Cities: [] }));
+      setSelectedCities([]);
     }
+    setIsStartFilter(true);
+    setSearchParams((prev) => {
+      prev.set("pageNumber", "1");
+      return prev;
+    });
   };
   const handleSelectBrandChange = (
     event: React.SyntheticEvent<Element, Event>,
@@ -342,7 +388,25 @@ export default function VehiclePending() {
         prev.delete("Brands");
         return prev;
       });
+      dispatch(setVehiclePendingParams({ Brands: [] }));
+      setSelectedBrands([]);
     }
+    setIsStartFilter(true);
+    setSearchParams((prev) => {
+      prev.set("pageNumber", "1");
+      return prev;
+    });
+  };
+  const handleSelectPageSize = (pageSize: number) => {
+    setSearchParams((prev) => {
+      prev.set("pageSize", pageSize.toString());
+      return prev;
+    });
+    setSearchParams((prev) => {
+      prev.set("pageNumber", "1");
+      return prev;
+    });
+    setIsStartFilter(true);
   };
   // End of handle change filter
 
@@ -352,6 +416,7 @@ export default function VehiclePending() {
         prev.delete("Search");
         return prev;
       });
+      dispatch(setVehiclePendingParams({ Search: undefined }));
       setSearchQuery("");
       return;
     }
@@ -366,6 +431,10 @@ export default function VehiclePending() {
         return prev;
       });
     }
+    setSearchParams((prev) => {
+      prev.set("pageNumber", "1");
+      return prev;
+    });
   };
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
@@ -376,10 +445,29 @@ export default function VehiclePending() {
 
   useEffect(() => {
     if (!vehiclesPendingLoaded) {
-      debugger;
-      dispatch(getVehiclesPendingAsync());
+      if (
+        isStartFilter &&
+        brands.length > 0 &&
+        modelVehicles.length > 0 &&
+        collections.length > 0 &&
+        cities.length > 0
+      ) {
+        if (
+          vehiclesParams.Search ||
+          (vehiclesParams.Brands && vehiclesParams.Brands.length > 0) ||
+          (vehiclesParams.Models && vehiclesParams.Models.length > 0) ||
+          (vehiclesParams.Collections &&
+            vehiclesParams.Collections.length > 0) ||
+          (vehiclesParams.Cities && vehiclesParams.Cities.length > 0) ||
+          vehiclesParams.pageSize
+        ) {
+          dispatch(getVehiclesPendingAsync());
+        }
+      } else if (searchParams.size === 0 && vehiclesPending.length === 0) {
+        dispatch(getVehiclesPendingAsync());
+      }
     }
-  }, [dispatch, vehiclesParams, paramsCompleted]);
+  }, [dispatch, vehiclesParams, isStartFilter]);
 
   const handleSelectVehicle = (actionName: string, vehicle?: Vehicle) => {
     setOpenEditForm((cur) => !cur);
@@ -545,7 +633,7 @@ export default function VehiclePending() {
               </div>
               <div className="max-w-[25%] min-w-[170px] flex-1">
                 {/* Filter by models */}
-                {loadingFetchModelsFilter ? (
+                {modelVehicleLoading ? (
                   <LoaderButton />
                 ) : (
                   <Autocomplete
@@ -555,7 +643,7 @@ export default function VehiclePending() {
                     multiple={true}
                     disablePortal
                     value={selectedModels}
-                    options={models}
+                    options={modelVehicles}
                     getOptionLabel={(option) => option.name}
                     onChange={(event, newValue) =>
                       handleSelectModelChange(event, newValue)
@@ -568,7 +656,7 @@ export default function VehiclePending() {
               </div>
               <div className="max-w-[25%] min-w-[170px] flex-1">
                 {/* Filter by collections */}
-                {loadingFetchCollectionsFilter ? (
+                {collectionLoading ? (
                   <LoaderButton />
                 ) : (
                   <Autocomplete
@@ -591,7 +679,7 @@ export default function VehiclePending() {
               </div>
               <div className="max-w-[25%] min-w-[170px] flex-1">
                 {/* Filter by brands */}
-                {loadingFetchBrandsFilter ? (
+                {brandLoading ? (
                   <LoaderButton />
                 ) : (
                   <Autocomplete
@@ -640,7 +728,12 @@ export default function VehiclePending() {
                   <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
                     Status
                   </th>
-                  <th className="py-4 px-4"></th>
+                  <th className="py-4 px-4">
+                    <SelectPageSize
+                      onSelectPageSize={handleSelectPageSize}
+                      defaultValue={selectedPageSize}
+                    />
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -841,7 +934,10 @@ export default function VehiclePending() {
             <Pagination
               metaData={metaData}
               onPageChange={(page: number) => {
-                dispatch(setVehiclePendingParams({ pageNumber: page }));
+                setSearchParams((prev) => {
+                  prev.set("pageNumber", page.toString());
+                  return prev;
+                });
               }}
               loading={vehiclesPendingLoaded}
             />

@@ -1,7 +1,7 @@
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/store/ConfigureStore";
 import Loading from "../../app/components/Loading";
-import { MouseEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import {
   getMyOrdersAsync,
@@ -14,9 +14,6 @@ import LoaderButton from "../../app/components/LoaderButton";
 export default function Orders() {
   const [searchParams, setSearchParams] = useSearchParams({});
   const [searchQuery, setSearchQuery] = useState<string>("");
-  // const [paramsCompleted, setParamsCompleted] = useState(false);
-  const [isStartFilter, setIsStartFilter] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
 
   const { userDetail, userLoading } = useAppSelector((state) => state.account);
   const userLogin = userDetail;

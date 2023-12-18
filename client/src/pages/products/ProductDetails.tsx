@@ -19,6 +19,7 @@ import FadeInSection from "../../app/components/FadeInSection";
 import { toast } from "react-toastify";
 import ChooseDateRentDialog from "../../app/components/ChooseDateRentDialog";
 import { scrollToTop } from "../../app/utils/ScrollToTop";
+import { productSelectors } from "./ProductSlice";
 
 export default function ProductDetails() {
   const { id } = useParams<{ id: string }>();
@@ -28,6 +29,9 @@ export default function ProductDetails() {
   const [openSlideShow, setOpenSlideShow] = useState(false);
   const [isOpenRentNow, setIsOpenRentNow] = useState(false);
 
+  const productDetails = useAppSelector((state) =>
+    productSelectors.selectById(state, id!)
+  );
   const userLogin = useAppSelector((state) => state.account.userDetail);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -39,15 +43,24 @@ export default function ProductDetails() {
   }, []);
 
   useEffect(() => {
-    setLoading(true);
+    if (productDetails) {
+      setProduct(productDetails);
+      setLoading(false);
+    }
+  }, [productDetails]);
 
-    agent.Vehicle.details(id!)
-      .then((product) => setProduct(product))
-      .catch((error) => console.log(error))
-      .finally(() => setLoading(false));
-
-    scrollToTop();
-  }, [id]);
+  useEffect(() => {
+    if (id && !productDetails && !product) {
+      setLoading(true);
+      agent.Vehicle.details(id!)
+        .then((product) => {
+          setProduct(product);
+          setLoading(false);
+        })
+        .catch((error) => console.log(error));
+      scrollToTop();
+    }
+  }, [id, productDetails, product]);
 
   const handleOpenImage = (index: number) => {
     setOpenImage(index);
@@ -58,9 +71,9 @@ export default function ProductDetails() {
     }
   }, [openImage]);
 
-  const handleClickChat = (userId: any) => {
+  const handleClickChat = (username: any) => {
     dispatch(setIsOpenChat(true));
-    dispatch(setStartChatToUser(userId));
+    dispatch(setStartChatToUser(username));
   };
 
   const handleClickRentNow = () => {
@@ -83,7 +96,6 @@ export default function ProductDetails() {
       return;
     }
 
-    debugger;
     const vehicleRent: Shop[] = [
       {
         lessorId: product.owner.ownerId,
@@ -106,7 +118,7 @@ export default function ProductDetails() {
         ],
       },
     ];
-    debugger;
+
     dispatch(setSelectedVehicle(vehicleRent));
     navigate("/check-out", { state: { vehicleCheckout: vehicleRent } });
   };
@@ -115,11 +127,10 @@ export default function ProductDetails() {
     if (product.rating === 0) return <></>;
     const ratingInt = Math.floor(product.rating);
     const ratingDecimal = product.rating - ratingInt;
-    debugger;
+
     const ratingSVG = [];
     let percentageColor = "";
     for (let i = 0; i < 5; i++) {
-      debugger;
       if (i < ratingInt) {
         percentageColor = "100%";
       } else {
@@ -160,9 +171,9 @@ export default function ProductDetails() {
 
   if (loading) return <Loading />;
   if (
-    !product ||
-    product.isLocked ||
-    product.status.toLowerCase() !== "approved"
+    (!loading && !product) ||
+    product?.isLocked ||
+    product?.status.toLowerCase() !== "approved"
   )
     return <NotFound />;
 

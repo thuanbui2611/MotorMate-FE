@@ -11,7 +11,7 @@ import AppTextInput from "../../app/components/AppTextInput";
 import { FieldValues, set, useForm } from "react-hook-form";
 import { Collection } from "../../app/models/Collection";
 import { useEffect, useState } from "react";
-import { useAppDispatch } from "../../app/store/ConfigureStore";
+import { useAppDispatch, useAppSelector } from "../../app/store/ConfigureStore";
 import { toast } from "react-toastify";
 import { LoadingButton } from "@mui/lab";
 import { ModelVehicle } from "../../app/models/ModelVehicle";
@@ -19,8 +19,6 @@ import {
   addModelVehicleAsync,
   updateModelVehicleAsync,
 } from "./ModelVehicleSlice";
-import agent from "../../app/api/agent";
-import { Color } from "../../app/models/Color";
 import Autocomplete from "@mui/material/Autocomplete";
 import { Theme, useTheme } from "@mui/material/styles";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
@@ -32,6 +30,8 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import LoaderButton from "../../app/components/LoaderButton";
 import FormAddColors from "../../app/components/FormAddColors";
+import { getCollectionsAsync } from "../filter/FilterSlice";
+import { colorSelectors, getColorsAsync } from "../color/ColorSlice";
 
 interface Props {
   modelVehicle: ModelVehicle | null;
@@ -55,42 +55,31 @@ export default function CollectionForm({
     mode: "all",
   });
 
-  const [loadingFetchCollection, setLoadingFetchCollection] = useState(true);
-  const [loadingFetchColors, setLoadingFetchColors] = useState(true);
-  const [colors, setColors] = useState<Color[]>([]);
-  const [collections, setCollections] = useState<Collection[]>([]);
   const [defaultCollection, setDefaultCollection] = useState<Collection | null>(
     null
   );
   const [addColorDialog, setAddColorDialog] = useState(false);
   const [colorAdded, setColorAdded] = useState(false);
 
-  const fetchColors = async () => {
-    try {
-      const response = await agent.Color.all();
-      setColors(response);
-      setLoadingFetchColors(false);
-    } catch (error) {
-      console.error("Error fetching colors:", error);
-    }
-  };
-
-  const fetchCollection = async () => {
-    try {
-      const response = await agent.Collection.all();
-      setCollections(response);
-      setLoadingFetchCollection(false);
-    } catch (error) {
-      console.error("Error fetching collections:", error);
-    }
-  };
+  const { collections, collectionLoading } = useAppSelector(
+    (state) => state.filter
+  );
+  const { colorLoaded } = useAppSelector((state) => state.color);
+  const colors = useAppSelector(colorSelectors.selectAll);
 
   useEffect(() => {
-    fetchColors();
-    fetchCollection();
+    if (colors.length === 0 && !colorLoaded) {
+      dispatch(getColorsAsync());
+    }
+    if (collections.length === 0 && !collectionLoading) {
+      dispatch(getCollectionsAsync());
+    }
   }, []);
+
   useEffect(() => {
-    fetchColors();
+    if (colorAdded) {
+      dispatch(getColorsAsync()).then(() => setColorAdded(false));
+    }
   }, [colorAdded]);
 
   useEffect(() => {
@@ -237,7 +226,7 @@ export default function CollectionForm({
 
               <div className="flex flex-col justify-between gap-4 md:flex-row">
                 <div className="w-full items-center justify-center md:w-2/3">
-                  {loadingFetchCollection ? (
+                  {collectionLoading ? (
                     <LoaderButton />
                   ) : (
                     <Autocomplete
@@ -285,7 +274,7 @@ export default function CollectionForm({
               </div>
 
               <div className="flex justify-center w-full">
-                {loadingFetchColors ? (
+                {colorLoaded ? (
                   <LoaderButton />
                 ) : (
                   <>

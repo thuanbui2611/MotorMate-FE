@@ -60,7 +60,6 @@ export default function UserForm({ user, cancelEdit, actionName }: Props) {
   }, [reset, setValue, user]);
 
   useEffect(() => {
-    debugger;
     if (roles.length > 0 && user && !selectedRole) {
       const userRole = roles.find(
         (role) => role.name.toLowerCase() === user.roles[0].toLowerCase()

@@ -27,7 +27,7 @@ function getAxiosParams(myOrdersParams: ProfileParams) {
   const params = new URLSearchParams();
   params.append("pageNumber", myOrdersParams.pageNumber.toString());
   params.append("pageSize", myOrdersParams.pageSize.toString());
-  debugger;
+
   if (myOrdersParams.Search) {
     params.append("Search", myOrdersParams.Search);
   }

@@ -19,6 +19,8 @@ export default function Transactions() {
   const [searchParams, setSearchParams] = useSearchParams({});
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectedStatus, setSelectedStatus] = useState<string | null>("All");
+  const [isStartFilter, setIsStartFilter] = useState(false);
+  const [selectedPageSize, setSelectedPageSize] = useState<number>(5);
 
   const transactions = useAppSelector(transactionSelectors.selectAll);
   const { transactionLoaded, metaData, transactionParams } = useAppSelector(
@@ -35,6 +37,7 @@ export default function Transactions() {
   const dispatch = useAppDispatch();
   //Get params value from url
   const pageNum = searchParams.get("pageNumber");
+  const pageSize = searchParams.get("pageSize");
   const searchQueryParam = searchParams.get("SearchQuery");
   const statusParam = searchParams.get("Status");
 
@@ -49,7 +52,25 @@ export default function Transactions() {
       dispatch(setTransactionParams({ pageNumber: +pageNum }));
     }
   }, [pageNum, dispatch]);
-  //End of get valueFilter from url params and set selected
+
+  useEffect(() => {
+    if (pageSize === "5") {
+      setSearchParams((prev) => {
+        prev.delete("pageSize");
+        return prev;
+      });
+      dispatch(setTransactionParams({ pageSize: 5 }));
+    } else {
+      let pageSizeCurrent: number = 5;
+      if (pageSize) {
+        pageSizeCurrent = +pageSize;
+      } else {
+        pageSizeCurrent = transactionParams.pageSize;
+      }
+      setSelectedPageSize(pageSizeCurrent);
+      dispatch(setTransactionParams({ pageSize: pageSizeCurrent }));
+    }
+  }, [pageSize, dispatch]);
 
   useEffect(() => {
     if (searchQueryParam) {
@@ -57,7 +78,11 @@ export default function Transactions() {
       setSearchQuery(querySearch);
       dispatch(setTransactionParams({ SearchQuery: querySearch }));
     } else {
-      dispatch(setTransactionParams({ SearchQuery: undefined }));
+      if (transactionParams.SearchQuery) {
+        setSearchQuery(transactionParams.SearchQuery);
+      } else {
+        dispatch(setTransactionParams({ SearchQuery: undefined }));
+      }
     }
   }, [searchQueryParam, dispatch]);
 
@@ -65,7 +90,11 @@ export default function Transactions() {
     if (statusParam) {
       const status = statusParam.trim();
       setSelectedStatus(status);
-      dispatch(setTransactionParams({ Status: status }));
+      dispatch(setTransactionParams({ Status: status, pageNumber: 1 }));
+      setSearchParams((prev) => {
+        prev.delete("pageNumber");
+        return prev;
+      });
     } else {
       dispatch(setTransactionParams({ Status: undefined }));
     }
@@ -89,6 +118,7 @@ export default function Transactions() {
         return prev;
       });
     }
+    setIsStartFilter(true);
   };
   // End of handle change filter
 
@@ -98,11 +128,16 @@ export default function Transactions() {
         prev.set("SearchQuery", searchQuery.trim());
         return prev;
       });
+      setSearchParams((prev) => {
+        prev.set("pageNumber", "1");
+        return prev;
+      });
     } else {
       setSearchParams((prev) => {
         prev.delete("SearchQuery");
         return prev;
       });
+      dispatch(setTransactionParams({ SearchQuery: undefined }));
     }
   };
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -112,14 +147,33 @@ export default function Transactions() {
   };
   // End of filter
 
+  //Starting filter
+  useEffect(() => {
+    if (!isStartFilter) {
+      if (pageNum || searchQueryParam || statusParam) {
+        setIsStartFilter(true);
+      }
+    }
+  }, [transactionParams, pageNum]);
+
   useEffect(() => {
     if (!transactionLoaded) {
-      dispatch(getTransactionsAsync());
+      if (isStartFilter || transactions.length === 0) {
+        dispatch(getTransactionsAsync());
+      }
     }
-  }, [dispatch, transactionParams]);
+  }, [dispatch, transactionParams, isStartFilter]);
 
   const handleSelectPageSize = (pageSize: number) => {
-    dispatch(setTransactionParams({ pageSize }));
+    setSearchParams((prev) => {
+      prev.set("pageSize", pageSize.toString());
+      return prev;
+    });
+    setSearchParams((prev) => {
+      prev.set("pageNumber", "1");
+      return prev;
+    });
+    setIsStartFilter(true);
   };
 
   return !metaData ? (
@@ -213,7 +267,10 @@ export default function Transactions() {
                   Status
                 </th>
                 <th className="py-4 pr-4 w-fit">
-                  <SelectPageSize onSelectPageSize={handleSelectPageSize} />
+                  <SelectPageSize
+                    defaultValue={selectedPageSize}
+                    onSelectPageSize={handleSelectPageSize}
+                  />
                 </th>
               </tr>
             </thead>

@@ -5,6 +5,7 @@ import { uploadImage } from "../utils/Cloudinary";
 import { useAppDispatch, useAppSelector } from "../store/ConfigureStore";
 import { updateProfileAsync } from "../../pages/profile/ProfileSlice";
 import { updateUser } from "../../pages/account/AccountSlice";
+import { setIsOpenChat, setStartChatToUser } from "../../pages/chat/ChatSlice";
 
 interface Props {
   profileUser: UserDetail | null;
@@ -71,6 +72,11 @@ export default function ProfileInfo({ profileUser }: Props) {
       toast.error("Error: " + error.message);
     }
   }
+
+  const handleClickChat = (username: any) => {
+    dispatch(setIsOpenChat(true));
+    dispatch(setStartChatToUser(username));
+  };
   return (
     <>
       <section className="bg-white pb-12">
@@ -185,10 +191,49 @@ export default function ProfileInfo({ profileUser }: Props) {
                 </label>
               )}
             </div>
-
             <div className="w-fit h-40 ml-0 -mb-32 md:ml-2 lg:ml-4 lg:-mb-48 lg:h-60 flex items-center">
               <div className="text-black font-bold text-center text-2xl lg:text-4xl mt-5 ">
                 {profileUser?.fullName}
+              </div>
+            </div>
+          </div>
+          <div className="absolute flex flex-col w-full md:w-fit md:flex-row justify-center -bottom-28 right-0 md:-bottom-14 md:right-8 items-center">
+            <div
+              className="relative flex items-center justify-center gap-1 md:gap-2 rounded-full text-gray-100 px-2 py-[1px] md:px-2 md:py-1 cursor-pointer text-sm md:text-base font-semibold bg-gradient-to-r from-[#FF6003] to-[#FF7E06] hover:brightness-125"
+              onClick={() => handleClickChat(profileUser?.username)}
+            >
+              Send message
+              <div className="rounded-full pb-[1px] pt-[3px] px-[3px] md:pt-[5px] md:px-[4px] border border-gray-100 bg-slate-100 bg-opacity-20">
+                <svg
+                  className="h-3 w-3 md:w-4 md:h-4"
+                  viewBox="0 0 24.00 24.00"
+                  xmlns="http://www.w3.org/2000/svg"
+                  mirror-in-rtl="true"
+                  fill="#ffffff"
+                  stroke="#ffffff"
+                  strokeWidth="0.00024000000000000003"
+                >
+                  <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                  <g
+                    id="SVGRepo_tracerCarrier"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    stroke="#CCCCCC"
+                    strokeWidth="1.344"
+                  ></g>
+                  <g id="SVGRepo_iconCarrier">
+                    <path
+                      fill="#ffffff"
+                      fillRule="evenodd"
+                      d="M24 3v4a1 1 0 0 1-2 0V3a1 1 0 0 0-.9-.99c-.05 0-.08-.01-.11-.01H3a1.016 1.016 0 0 0-1 1v10a1.016 1.016 0 0 0 1 1h2v2.81l2.69-2.32.57-.49H15a1 1 0 0 1 0 2H9l-4.35 3.76A.969.969 0 0 1 4 20a1.059 1.059 0 0 1-.42-.09A1 1 0 0 1 3 19v-3a3.009 3.009 0 0 1-3-3V3a3.009 3.009 0 0 1 3-3h18a2.832 2.832 0 0 1 .3.02A3 3 0 0 1 24 3z"
+                    ></path>
+                    <path
+                      fill="#ffffff"
+                      fillRule="evenodd"
+                      d="M24 11a1 1 0 0 1-1 1h-3v3a1 1 0 0 1-2 0v-3h-3a1 1 0 0 1 0-2h3V7a1 1 0 0 1 2 0v3h3a1 1 0 0 1 1 1z"
+                    ></path>
+                  </g>
+                </svg>
               </div>
             </div>
           </div>

@@ -22,7 +22,6 @@ export const getColorsAsync = createAsyncThunk<
   { state: RootState }
 >("color/getColorsAsync", async (_, ThunkAPI) => {
   try {
-    debugger;
     const response = await agent.Color.all();
     return response;
   } catch (error: any) {

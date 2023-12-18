@@ -11,7 +11,7 @@ import AppTextInput from "../../app/components/AppTextInput";
 import { FieldValues, useForm } from "react-hook-form";
 import { Collection } from "../../app/models/Collection";
 import { useEffect, useState } from "react";
-import { useAppDispatch } from "../../app/store/ConfigureStore";
+import { useAppDispatch, useAppSelector } from "../../app/store/ConfigureStore";
 import { addCollectionAsync, updateCollectionAsync } from "./CollectionSlice";
 import { toast } from "react-toastify";
 import { LoadingButton } from "@mui/lab";
@@ -19,6 +19,7 @@ import Autocomplete from "@mui/material/Autocomplete";
 import agent from "../../app/api/agent";
 import { Brand } from "../../app/models/Brand";
 import LoaderButton from "../../app/components/LoaderButton";
+import { getBrandsAsync } from "../filter/FilterSlice";
 
 interface Props {
   collection: Collection | null;
@@ -41,21 +42,16 @@ export default function CollectionForm({
   } = useForm({
     mode: "all",
   });
-
-  const [loadingFetchBrand, setLoadingFetchBrand] = useState<boolean>(true);
-  const [brands, setBrands] = useState<Brand[]>([]);
   const [defaultBrand, setDefaultBrand] = useState<Brand | null>(null);
+
+  const { brands, brandLoading } = useAppSelector((state) => state.filter);
+
+  const dispatch = useAppDispatch();
+
   useEffect(() => {
-    const fetchBrands = async () => {
-      try {
-        const response = await agent.Brand.all();
-        setBrands(response);
-        setLoadingFetchBrand(false);
-      } catch (error) {
-        console.error("Error fetching brands:", error);
-      }
-    };
-    fetchBrands();
+    if (brands.length === 0 && !brandLoading) {
+      dispatch(getBrandsAsync());
+    }
   }, []);
 
   useEffect(() => {
@@ -68,8 +64,6 @@ export default function CollectionForm({
       setValue("brandId", collection.brand.id);
     }
   }, [collection, reset, setValue, brands]);
-
-  const dispatch = useAppDispatch();
 
   async function submitForm(data: FieldValues) {
     try {
@@ -125,7 +119,7 @@ export default function CollectionForm({
                   },
                 })}
               />
-              {loadingFetchBrand ? (
+              {brandLoading ? (
                 <LoaderButton />
               ) : (
                 <Autocomplete

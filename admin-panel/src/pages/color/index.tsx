@@ -20,7 +20,7 @@ export default function ColorPage() {
   const { colorLoaded } = useAppSelector((state) => state.color);
 
   useEffect(() => {
-    if (!colorLoaded) {
+    if (!colorLoaded && colors.length === 0) {
       dispatch(getColorsAsync());
     }
   }, [dispatch]);

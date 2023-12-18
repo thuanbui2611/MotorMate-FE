@@ -32,7 +32,6 @@ export default function MyProducts() {
   );
   const productOfUser = useAppSelector(profileSelectors.selectAll);
   const { userDetail, userLoading } = useAppSelector((state) => state.account);
-  debugger;
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();

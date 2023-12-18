@@ -29,7 +29,6 @@ export default function MapsDialog({
   const center = { lat: 10.823099, lng: 106.629662 };
 
   async function calculateRoute() {
-    debugger;
     if (!map || !originRef.current || !destinationRef.current) return;
 
     const directionsService = new google.maps.DirectionsService();

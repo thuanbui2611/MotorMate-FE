@@ -27,7 +27,7 @@ export default function BlogCategory() {
   const { blogCategoryLoaded } = useAppSelector((state) => state.blogCategory);
 
   useEffect(() => {
-    if (!blogCategoryLoaded) {
+    if (!blogCategoryLoaded && categories.length === 0) {
       dispatch(getBlogCategoriesAsync());
     }
   }, [dispatch]);

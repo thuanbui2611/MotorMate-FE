@@ -120,7 +120,7 @@ export default function Checkout() {
       return;
     }
     const { place_id } = place;
-    debugger;
+
     // Validate the place_id to ensure it is a valid selection
     if (place_id) {
       setDeliveryAddress(fullAddress);

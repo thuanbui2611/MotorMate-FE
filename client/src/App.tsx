@@ -48,6 +48,8 @@ function App() {
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY as string,
     libraries: ["places"],
+    language: "vi",
+    region: "VN",
   });
 
   return loading && !isLoaded ? (

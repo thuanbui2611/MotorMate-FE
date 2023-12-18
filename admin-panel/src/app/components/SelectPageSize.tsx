@@ -3,12 +3,21 @@ import TextField from "@mui/material/TextField";
 import { useEffect, useState } from "react";
 interface Props {
   onSelectPageSize: (pageSize: number) => void;
+  defaultValue?: number;
 }
-export default function SelectPageSize({ onSelectPageSize }: Props) {
+export default function SelectPageSize({
+  onSelectPageSize,
+  defaultValue,
+}: Props) {
   const [selectedPageSize, setSelectedPageSize] = useState<string>("5");
 
   const pageSizeOptions: string[] = ["5", "10", "20"];
 
+  useEffect(() => {
+    if (defaultValue) {
+      setSelectedPageSize(defaultValue.toString());
+    }
+  }, [defaultValue]);
   const handleChange = (event: any, newValue: string | null) => {
     if (!newValue) return;
     const valueNumber = +newValue;

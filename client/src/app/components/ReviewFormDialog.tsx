@@ -105,7 +105,6 @@ export default function ReviewFormDialog({ vehicle, shop, onClose }: Props) {
     return dataTransfer.files;
   };
   const removeImageFromList = (file: ImageFile, index: number) => {
-    debugger;
     if (selectedFiles) {
       //Remove image from user upload
       const fileList = Array.from(selectedFiles);
@@ -116,7 +115,6 @@ export default function ReviewFormDialog({ vehicle, shop, onClose }: Props) {
 
   async function onSubmit(data: FieldValues) {
     try {
-      debugger;
       if (rating === undefined) {
         toast.error("Please rate your experience");
         return;
@@ -131,12 +129,12 @@ export default function ReviewFormDialog({ vehicle, shop, onClose }: Props) {
         images: imagesReview,
       };
       // Upload images
-      debugger;
+
       if (selectedFiles) {
         let images = await uploadImages(selectedFiles);
         formData.images = images!;
       }
-      debugger;
+
       await agent.TripRequest.reviewVehicle(formData);
       toast.success("Review successfully");
       onClose();

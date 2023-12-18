@@ -19,6 +19,7 @@ export default function ModelVehiclePage() {
   const [pageNumber, setPageNumber] = useSearchParams({ pageNumber: "" });
   const [actionName, setActionName] = useState(String);
   const [openEditForm, setOpenEditForm] = useState(false);
+  const [isStartFilter, setIsStartFilter] = useState(false);
   const [selectedModelVehicle, setSelectedModelVehicle] =
     useState<ModelVehicle | null>(null);
   const [confirmDeleteDiaglog, setConfirmDeleteDiaglog] = useState(false);
@@ -44,6 +45,14 @@ export default function ModelVehiclePage() {
       dispatch(setModelVehicleParams({ pageNumber: +pageNum }));
     }
   }, [pageNum, dispatch]);
+  //Starting filter
+  useEffect(() => {
+    if (!isStartFilter) {
+      if (pageNum) {
+        setIsStartFilter(true);
+      }
+    }
+  }, [modelVehicleParams, pageNum]);
 
   const handleSelectModelVehicle = (
     actionName: string,
@@ -72,9 +81,11 @@ export default function ModelVehiclePage() {
 
   useEffect(() => {
     if (!modelVehicleLoaded) {
-      dispatch(getModelVehiclesAsync());
+      if (isStartFilter || modelVehicles.length === 0) {
+        dispatch(getModelVehiclesAsync());
+      }
     }
-  }, [dispatch, modelVehicleParams]);
+  }, [dispatch, modelVehicleParams, isStartFilter]);
   if (!metaData) {
     return <Loader />;
   } else

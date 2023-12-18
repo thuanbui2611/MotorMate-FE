@@ -25,7 +25,6 @@ function getAxiosParams(userParams: UserParams) {
   params.append("pageSize", userParams.pageSize.toString());
 
   if (userParams.Roles !== undefined && userParams.Roles.length > 0) {
-    debugger;
     userParams.Roles!.forEach((role) => {
       params.append("Roles", role);
     });
@@ -43,7 +42,6 @@ export const getUsersAsync = createAsyncThunk<
 >("user/getUsersAsync", async (_, ThunkAPI) => {
   const params = getAxiosParams(ThunkAPI.getState().user.userParams);
   try {
-    debugger;
     const response = await agent.User.list(params);
     ThunkAPI.dispatch(setMetaData(response.metaData));
     return response.items;
@@ -76,12 +74,17 @@ export const updateUserAsync = createAsyncThunk<UserDetail, FieldValues>(
   }
 );
 
-export const updateRoleOfUserAsync = createAsyncThunk<UserDetail, {userId: string, roleId: string}>(
+export const updateRoleOfUserAsync = createAsyncThunk<
+  UserDetail,
+  { userId: string; roleId: string }
+>(
   "user/updateRoleOfUserAsync",
-  async (data: {userId: string, roleId: string}, ThunkAPI) => {
+  async (data: { userId: string; roleId: string }, ThunkAPI) => {
     try {
-      debugger;
-      const response = await agent.User.updateRole({userId: data.userId, roleId: data.roleId});
+      const response = await agent.User.updateRole({
+        userId: data.userId,
+        roleId: data.roleId,
+      });
       return response;
     } catch (error: any) {
       return ThunkAPI.rejectWithValue({ error: error.data });
@@ -94,7 +97,7 @@ export const updateIsLockOfUserAsync = createAsyncThunk(
   async (id: string, ThunkAPI) => {
     try {
       const response = await agent.Account.updateIsLockUser({}, id);
-      return {response, id};
+      return { response, id };
     } catch (error: any) {
       return ThunkAPI.rejectWithValue({ error: error.data });
     }
@@ -150,17 +153,18 @@ export const UserSlice = createSlice({
 
     setStatusUser: (state, action) => {
       const id = action.payload;
-      debugger;
+
       //find the user in entites by ID then update the isLock of that user
       const user = state.entities[id];
-      if(user){
-        const message = user?.islocked ? "Unlock user successfully!" : "Lock user successfully!";
+      if (user) {
+        const message = user?.islocked
+          ? "Unlock user successfully!"
+          : "Lock user successfully!";
         toast.success(message);
-      //update the isLock of that user
+        //update the isLock of that user
         user.islocked = !user.islocked;
-        
       }
-    }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -194,7 +198,6 @@ export const UserSlice = createSlice({
       console.log("Update Role for User failed: ", action);
     });
     builder.addCase(updateRoleOfUserAsync.fulfilled, (state, action) => {
-      debugger;
       toast.success("Update user successfully!");
       usersAdapter.upsertOne(state, action.payload);
     });
@@ -202,7 +205,6 @@ export const UserSlice = createSlice({
       usersAdapter.removeOne(state, action.payload);
     });
     builder.addCase(updateIsLockOfUserAsync.fulfilled, (state, action) => {
-      
       // const {id} = action.payload;
       // const user = state.entities[id];
       // if(user){
@@ -210,12 +212,11 @@ export const UserSlice = createSlice({
       //   toast.success(message);
       //   user.islocked = !user.islocked;
       // }
-      
     });
     builder.addCase(updateIsLockOfUserAsync.rejected, (state, action) => {
       toast.error("Fail to update status of User!");
-      debugger;
-      window.location.reload()
+
+      window.location.reload();
     });
   },
 });
@@ -224,5 +225,10 @@ export const userSelectors = usersAdapter.getSelectors(
   (state: RootState) => state.user
 );
 
-export const { setUserParams, resetUserParams, setMetaData, setPageNumber, setStatusUser } =
-  UserSlice.actions;
+export const {
+  setUserParams,
+  resetUserParams,
+  setMetaData,
+  setPageNumber,
+  setStatusUser,
+} = UserSlice.actions;

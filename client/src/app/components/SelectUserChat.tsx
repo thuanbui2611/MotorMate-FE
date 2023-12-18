@@ -6,33 +6,27 @@ import agent from "../api/agent";
 import { Box, Paper, TextField } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../store/ConfigureStore";
 import { setStartChatToUser } from "../../pages/chat/ChatSlice";
+import { getUsersAsync } from "../../pages/filter/FilterSlice";
 
 interface Props {
   onSelect: (user: string) => void;
 }
 export default function SelectUserChat({ onSelect }: Props) {
-  const [users, setUsers] = useState<UserDetail[]>([]);
   const [selectedUser, setSelectedUser] = useState<UserDetail | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
 
   const { startChatToUser } = useAppSelector((state) => state.chat);
+  const { users, usersLoading } = useAppSelector((state) => state.filter);
   const dispatch = useAppDispatch();
+
   useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await agent.User.all();
-        setUsers(response);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching users:", error);
-      }
-    };
-    fetchUsers();
+    if (users.length === 0 && !usersLoading) {
+      dispatch(getUsersAsync());
+    }
   }, []);
 
   // Start chat to user on click message user button
   useEffect(() => {
-    if (startChatToUser && !loading) {
+    if (startChatToUser && !usersLoading) {
       const userSelected =
         users.find(
           (user) =>
@@ -42,7 +36,7 @@ export default function SelectUserChat({ onSelect }: Props) {
       if (userSelected) onSelect(userSelected.username);
       dispatch(setStartChatToUser(null));
     }
-  }, [startChatToUser, loading]);
+  }, [startChatToUser, usersLoading]);
 
   const handleUserChange = (
     event: React.SyntheticEvent<Element, Event>,
@@ -56,7 +50,7 @@ export default function SelectUserChat({ onSelect }: Props) {
 
   return (
     <>
-      {loading ? (
+      {usersLoading ? (
         <LoaderButton />
       ) : (
         <Autocomplete

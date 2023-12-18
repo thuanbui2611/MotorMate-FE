@@ -55,7 +55,6 @@ export const fetchUserFromToken = createAsyncThunk<User>(
       localStorage.setItem("user", JSON.stringify(user));
       return user.token;
     } catch (error) {
-      debugger;
       return thunkAPI.rejectWithValue(error);
     }
   },

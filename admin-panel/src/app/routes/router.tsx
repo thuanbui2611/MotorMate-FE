@@ -5,7 +5,6 @@ import Profile from "../../pages/Profile";
 import Settings from "../../pages/Settings";
 import Brand from "../../pages/brand";
 import Transactions from "../../pages/transactions";
-import Dashboard from "../../pages/Dashboard/Dashboard";
 import SignIn from "../../pages/account/SignIn";
 import Collection from "../../pages/collection";
 import ModelVehicle from "../../pages/modelVehicle";
@@ -15,11 +14,12 @@ import VehicleDenied from "../../pages/vehicles/VehicleDenied";
 import ColorPage from "../../pages/color";
 import UsersPage from "../../pages/users";
 import BlogPage from "../../pages/blog";
-import BlogCategory from "../../pages/blogCategory/BlogCategory";
 import TransactionDetail from "../../pages/transactions/TransactionDetail";
 import NotFound from "../errors/NotFound";
 import RequireAuth from "./RequireAuth";
 import ServerErrors from "../errors/ServerErrors";
+import BlogCategory from "../../pages/blogCategory";
+import Dashboard from "../../pages/dashboard/Dashboard";
 
 export const router = createBrowserRouter([
   {

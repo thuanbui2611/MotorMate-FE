@@ -152,7 +152,6 @@ export const CartSlice = createSlice({
       state.selectedVehicles = action.payload;
     },
     removeVehicleInCart: (state, action) => {
-      debugger;
       const { vehicleId } = action.payload;
       if (state.cart) {
         state.cart.shops.forEach((shop) => {

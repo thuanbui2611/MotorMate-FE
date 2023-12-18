@@ -9,13 +9,13 @@ interface Props {
   blogId: string;
 }
 export default function RelatedBlogs({ blogId }: Props) {
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
   const [relatedBlogs, setRelatedBlogs] = useState<Blog[]>([]);
   useEffect(() => {
     try {
-      if (loading) {
+      if (!loading) {
+        setLoading(true);
         agent.Blog.getRelatedBlogs(blogId).then((blogs) => {
-          debugger;
           setRelatedBlogs(blogs);
           setLoading(false);
         });

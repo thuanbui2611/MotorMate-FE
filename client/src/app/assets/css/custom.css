@@ -1291,7 +1291,7 @@ p {
 }
 
 .inputSearch {
-  width: 170px;
+  width: 200px;
   height: 90%;
   border: none;
   outline: none;
@@ -1312,9 +1312,8 @@ p {
 }
 
 @media (max-width: 640px) {
-  .InputContainer {
-    width: 80%;
-    margin-left: 30px;
+  .InputContainer .inputSearch {
+    width: 150px;
   }
 }
 

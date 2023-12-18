@@ -24,7 +24,7 @@ export default function CollectionPage() {
   const [collectionDeleted, setCollectionDeleted] = useState<Collection>(
     {} as Collection
   );
-
+  const [isStartFilter, setIsStartFilter] = useState(false);
   const collections = useAppSelector(collectionSelectors.selectAll);
   const { collectionLoaded, metaData, collectionParams } = useAppSelector(
     (state) => state.collection
@@ -44,7 +44,15 @@ export default function CollectionPage() {
       dispatch(setCollectionParams({ pageNumber: +pageNum }));
     }
   }, [pageNum, dispatch]);
-  //
+
+  //Starting filter
+  useEffect(() => {
+    if (!isStartFilter) {
+      if (pageNum) {
+        setIsStartFilter(true);
+      }
+    }
+  }, [collectionParams, pageNum]);
 
   const handleSelectCollection = (
     actionName: string,
@@ -73,9 +81,11 @@ export default function CollectionPage() {
 
   useEffect(() => {
     if (!collectionLoaded) {
-      dispatch(getCollectionsAsync());
+      if (isStartFilter || collections.length === 0) {
+        dispatch(getCollectionsAsync());
+      }
     }
-  }, [dispatch, collectionParams]);
+  }, [dispatch, collectionParams, isStartFilter]);
   if (!metaData) {
     return <Loader />;
   } else

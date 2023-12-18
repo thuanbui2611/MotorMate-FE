@@ -38,7 +38,7 @@ const Dashboard = () => {
   };
   const handleUpload = async () => {
     if (!selectedFile) return;
-    debugger;
+
     await recognizeIdentityCard(selectedFile);
   };
   //

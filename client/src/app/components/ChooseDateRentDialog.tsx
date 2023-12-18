@@ -36,7 +36,7 @@ export default function ChooseDateRentDialog({
     let dateTo = new Date(endDate);
 
     setIsSubmitting(true);
-    debugger;
+
     await action(dateFrom, dateTo);
   };
 

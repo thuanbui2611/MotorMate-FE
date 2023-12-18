@@ -23,6 +23,7 @@ export default function BlogPage() {
   const [confirmDeleteDiaglog, setConfirmDeleteDiaglog] = useState(false);
   const [blogDeleted, setBlogDeleted] = useState<Blog>({} as Blog);
   const [openDetails, setOpenDetails] = useState(false);
+  const [isStartFilter, setIsStartFilter] = useState(false);
 
   const blogs = useAppSelector(blogSelectors.selectAll);
   const { blogLoaded, metaData, blogParams } = useAppSelector(
@@ -44,6 +45,15 @@ export default function BlogPage() {
     }
   }, [pageNum, dispatch]);
   //
+
+  //Starting filter
+  useEffect(() => {
+    if (!isStartFilter) {
+      if (pageNum) {
+        setIsStartFilter(true);
+      }
+    }
+  }, [blogParams, pageNum]);
 
   const handleSelectBlog = (actionName: string, user?: Blog) => {
     setOpenEditForm((cur) => !cur);
@@ -79,9 +89,11 @@ export default function BlogPage() {
 
   useEffect(() => {
     if (!blogLoaded) {
-      dispatch(getBlogsAsync());
+      if (isStartFilter || blogs.length === 0) {
+        dispatch(getBlogsAsync());
+      }
     }
-  }, [dispatch, blogParams]);
+  }, [dispatch, blogParams, isStartFilter]);
   if (!metaData) {
     return <Loader />;
   } else

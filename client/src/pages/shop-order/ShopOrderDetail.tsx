@@ -170,7 +170,6 @@ export default function ShopOrderDetail() {
     statusAction: StatusOrder,
     vehicleToUpdate?: Vehicle
   ) => {
-    debugger;
     if (vehicleToUpdate) {
       //Set one vehicle to update
       setSelectedVehiclesToUpdate([vehicleToUpdate]);

@@ -81,7 +81,6 @@ export default function Orders() {
   };
   useEffect(() => {
     if (!shopOrderLoaded && userLogin) {
-      //paramsCompleted
       dispatch(getShopOrdersAsync(userLogin.id));
     }
   }, [dispatch, shopOrderParams, userLogin]);

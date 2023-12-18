@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import * as React from "react";
 import { useAppDispatch, useAppSelector } from "../../app/store/ConfigureStore";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -10,15 +9,10 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import Loading from "../../app/components/Loading";
 import ProductList from "./ProductList";
-
 import { City } from "../../app/models/Address";
 import Autocomplete from "@mui/material/Autocomplete";
 import { TextField } from "@mui/material";
 import { Brand } from "../../app/models/Brand";
-import { useSearchParams } from "react-router-dom";
-
-import dataCityVN from "./../../app/data/dataCityVN.json";
-import agent from "../../app/api/agent";
 import { Collection } from "../../app/models/Collection";
 import { ModelVehicle } from "../../app/models/ModelVehicle";
 import {
@@ -31,36 +25,43 @@ import Pagination from "../../app/components/Pagination";
 import FadeInSection from "../../app/components/FadeInSection";
 import dayjs from "dayjs";
 import { toast } from "react-toastify";
+import {
+  getBrandsAsync,
+  getCities,
+  getCollectionsAsync,
+  getModelVehiclesAsync,
+} from "../filter/FilterSlice";
+import { useSearchParams } from "react-router-dom";
+import { ConvertToDateStr } from "../../app/utils/ConvertDatetimeToStr";
 
 export default function Products() {
   const [searchParams, setSearchParams] = useSearchParams({});
-  const [brands, setBrands] = useState<Brand[]>([]);
   const [selectedBrands, setSelectedBrands] = useState<Brand[]>([]);
-  const [collections, setCollections] = useState<Collection[]>([]);
   const [selectedCollections, setSelectedCollections] = useState<Collection[]>(
     []
   );
   const [selectedCities, setSelectedCities] = useState<City[]>([]);
-  const [models, setModels] = useState<ModelVehicle[]>([]);
   const [selectedModels, setSelectedModels] = useState<ModelVehicle[]>([]);
-  const [loadingFetchModelsFilter, setLoadingFetchModelsFilter] =
-    useState(true);
-  const [loadingFetchCollectionsFilter, setLoadingFetchCollectionsFilter] =
-    useState(true);
-  const [loadingFetchBrandsFilter, setLoadingFetchBrandsFilter] =
-    useState(true);
   const [priceFilter, setPriceFilter] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [paramsCompleted, setParamsCompleted] = useState(false);
+  const [isStartFilter, setIsStartFilter] = useState(false);
   const [startDate, setStartDate] = useState<any>();
   const [endDate, setEndDate] = useState<any>();
-  const [startDateDefault, setStartDateDefault] = useState<any>();
-  const [endDateDefault, setEndDateDefault] = useState<any>();
 
   const products = useAppSelector(productSelectors.selectAll);
   const { productLoaded, metaData, productParams } = useAppSelector(
     (state) => state.product
   );
+  //get data for filter from state
+  const {
+    brands,
+    brandLoading,
+    collections,
+    collectionLoading,
+    modelVehicles,
+    modelVehicleLoading,
+    cities,
+  } = useAppSelector((state) => state.filter);
 
   const dispatch = useAppDispatch();
   //Get params value from url
@@ -74,60 +75,43 @@ export default function Products() {
   const startDateParam = searchParams.get("StartDate");
   const endDateParam = searchParams.get("EndDate");
 
-  const cities = dataCityVN as City[];
-
   // Get data for filter
   useEffect(() => {
-    //get brands data
-    agent.Brand.all()
-      .then((data) => {
-        setBrands(data);
-        setLoadingFetchBrandsFilter(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching brands for filter:", error);
-      });
-    //get collections data
-    agent.Collection.all()
-      .then((data) => {
-        setCollections(data);
-        setLoadingFetchCollectionsFilter(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching collections for filter", error);
-      });
-    //get models data
-    agent.ModelVehicle.all()
-      .then((data) => {
-        setModels(data);
-        setLoadingFetchModelsFilter(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching models for filter", error);
-      });
+    if (brands.length === 0 && !brandLoading) {
+      dispatch(getBrandsAsync());
+    }
+    if (collections.length === 0 && !collectionLoading) {
+      dispatch(getCollectionsAsync());
+    }
+    if (modelVehicles.length === 0 && !modelVehicleLoading) {
+      dispatch(getModelVehiclesAsync());
+    }
+    if (cities.length === 0) {
+      dispatch(getCities());
+    }
   }, []);
   // End of Get data for filter
   //Get valueFilter from url params, then set selected filterValue and request (dispatch).
   useEffect(() => {
     if (
-      models.length > 0 &&
+      modelVehicles.length > 0 &&
       collections.length > 0 &&
       brands.length > 0 &&
       cities.length > 0
     ) {
       //Model filter
       if (modelsParam !== "") {
+        let modelsFilter: string[] = [];
         if (modelsParam) {
-          const modelsFiltered = modelsParam.split("%2C");
-          const modelsSelected = models.filter((model) =>
-            modelsFiltered.includes(model.name)
-          );
-          setSelectedModels(modelsSelected);
-          dispatch(setProductParams({ Models: modelsFiltered }));
-        } else {
-          dispatch(setProductParams({ Models: [] }));
-          setSelectedModels([]);
+          modelsFilter = modelsParam.split("%2C");
+        } else if (productParams.Models && productParams.Models.length > 0) {
+          modelsFilter = productParams.Models;
         }
+        const modelsSelected = modelVehicles.filter((model) =>
+          modelsFilter.includes(model.name)
+        );
+        setSelectedModels(modelsSelected);
+        dispatch(setProductParams({ Models: modelsFilter }));
       } else {
         setSearchParams((prev) => {
           prev.delete("Models");
@@ -136,17 +120,20 @@ export default function Products() {
       }
       //Collection filter
       if (collectionsParam !== "") {
+        let collectionsFilter: string[] = [];
         if (collectionsParam) {
-          const collectionsFiltered = collectionsParam.split("%2C");
-          const collectionsSelected = collections.filter((collection) =>
-            collectionsFiltered.includes(collection.name)
-          );
-          setSelectedCollections(collectionsSelected);
-          dispatch(setProductParams({ Collections: collectionsFiltered }));
-        } else {
-          dispatch(setProductParams({ Collections: [] }));
-          setSelectedCollections([]);
+          collectionsFilter = collectionsParam.split("%2C");
+        } else if (
+          productParams.Collections &&
+          productParams.Collections.length > 0
+        ) {
+          collectionsFilter = productParams.Collections;
         }
+        const collectionsSelected = collections.filter((collection) =>
+          collectionsFilter.includes(collection.name)
+        );
+        setSelectedCollections(collectionsSelected);
+        dispatch(setProductParams({ Collections: collectionsFilter }));
       } else {
         setSearchParams((prev) => {
           prev.delete("Collections");
@@ -155,17 +142,17 @@ export default function Products() {
       }
       //Brand filter
       if (brandsParam !== "") {
+        let brandsFilter: string[] = [];
         if (brandsParam) {
-          const brandsFiltered = brandsParam.split("%2C");
-          const brandsSelected = brands.filter((brand) =>
-            brandsFiltered.includes(brand.name)
-          );
-          setSelectedBrands(brandsSelected);
-          dispatch(setProductParams({ Brands: brandsFiltered }));
-        } else {
-          dispatch(setProductParams({ Brands: [] }));
-          setSelectedBrands([]);
+          brandsFilter = brandsParam.split("%2C");
+        } else if (productParams.Brands && productParams.Brands.length > 0) {
+          brandsFilter = productParams.Brands;
         }
+        const brandsSelected = brands.filter((brand) =>
+          brandsFilter.includes(brand.name)
+        );
+        setSelectedBrands(brandsSelected);
+        dispatch(setProductParams({ Brands: brandsFilter }));
       } else {
         setSearchParams((prev) => {
           prev.delete("Brands");
@@ -174,48 +161,42 @@ export default function Products() {
       }
       //City filter
       if (citiesParam !== "") {
+        let citiesFilter: string[] = [];
         if (citiesParam) {
-          const citiesFiltered = citiesParam.split("%2C");
-          const citiesSelected = cities.filter((city) =>
-            citiesFiltered.includes(city.Name)
-          );
-          setSelectedCities(citiesSelected);
-          dispatch(setProductParams({ Cities: citiesFiltered }));
-        } else {
-          dispatch(setProductParams({ Cities: [] }));
-          setSelectedCities([]);
+          citiesFilter = citiesParam.split("%2C");
+        } else if (productParams.Cities && productParams.Cities.length > 0) {
+          citiesFilter = productParams.Cities;
         }
+        const citiesSelected = cities.filter((city) =>
+          citiesFilter.includes(city.Name)
+        );
+        setSelectedCities(citiesSelected);
+        dispatch(setProductParams({ Cities: citiesFilter }));
       } else {
         setSearchParams((prev) => {
           prev.delete("Cities");
           return prev;
         });
-        dispatch(setProductParams({ Cities: [] }));
       }
-      setParamsCompleted(true);
     } else
       switch (true) {
-        case models === null || typeof models === "undefined":
+        case modelVehicles === null || typeof modelVehicles === "undefined":
           console.log("models is null or undefined");
-          setParamsCompleted(true);
           break;
         case collections === null || typeof collections === "undefined":
           console.log("collections is null or undefined");
-          setParamsCompleted(true);
           break;
         case brands === null || typeof brands === "undefined":
           console.log("brands is null or undefined");
-          setParamsCompleted(true);
           break;
         case cities === null || typeof cities === "undefined":
           console.log("cities is null or undefined");
-          setParamsCompleted(true);
           break;
         default:
       }
   }, [
     modelsParam,
-    models,
+    modelVehicles,
     citiesParam,
     cities,
     brandsParam,
@@ -242,11 +223,19 @@ export default function Products() {
       setPriceFilter(isSortPriceDescParam);
       dispatch(setProductParams({ IsSortPriceDesc: isSortPriceDescParam }));
     } else {
-      setSearchParams((prev) => {
-        prev.delete("IsSortPriceDesc");
-        return prev;
-      });
-      dispatch(setProductParams({ IsSortPriceDesc: undefined }));
+      if (
+        !isStartFilter &&
+        productParams.IsSortPriceDesc !== null &&
+        productParams.IsSortPriceDesc !== undefined
+      ) {
+        setPriceFilter(productParams.IsSortPriceDesc.toString());
+      } else {
+        setSearchParams((prev) => {
+          prev.delete("IsSortPriceDesc");
+          return prev;
+        });
+        dispatch(setProductParams({ IsSortPriceDesc: undefined }));
+      }
     }
   }, [isSortPriceDescParam, dispatch]);
 
@@ -254,22 +243,61 @@ export default function Products() {
     if (searchQueryParam) {
       const querySearch = searchQueryParam.trim();
       setSearchQuery(querySearch);
-      dispatch(setProductParams({ Search: querySearch, pageNumber: 1 }));
+      dispatch(setProductParams({ Search: querySearch }));
     } else {
-      setSearchParams((prev) => {
-        prev.delete("IsSortPriceDesc");
-        return prev;
-      });
-      dispatch(setProductParams({ Search: undefined }));
+      if (productParams.Search) {
+        setSearchQuery(productParams.Search);
+      } else {
+        dispatch(setProductParams({ Search: undefined }));
+      }
     }
   }, [searchQueryParam, dispatch]);
   //End of get valueFilter from url params and set selected
 
+  //Starting filter
   useEffect(() => {
-    if (!productLoaded && paramsCompleted) {
-      dispatch(getProductsAsync());
+    if (!isStartFilter) {
+      if (
+        pageNum ||
+        searchQueryParam ||
+        brandsParam ||
+        modelsParam ||
+        collectionsParam ||
+        startDate ||
+        endDate ||
+        isSortPriceDescParam ||
+        citiesParam
+      ) {
+        setIsStartFilter(true);
+      }
     }
-  }, [dispatch, productParams, paramsCompleted]);
+  }, [productParams, pageNum]);
+
+  useEffect(() => {
+    if (!productLoaded) {
+      const params = searchParams as any;
+      if (
+        isStartFilter &&
+        brands.length > 0 &&
+        modelVehicles.length > 0 &&
+        collections.length > 0 &&
+        cities.length > 0
+      ) {
+        if (
+          productParams.Search ||
+          (productParams.Brands && productParams.Brands.length > 0) ||
+          (productParams.Models && productParams.Models.length > 0) ||
+          (productParams.Collections && productParams.Collections.length > 0) ||
+          (productParams.Cities && productParams.Cities.length > 0) ||
+          productParams.pageSize
+        ) {
+          dispatch(getProductsAsync());
+        }
+      } else if (params.size === 0 && products.length === 0) {
+        dispatch(getProductsAsync());
+      }
+    }
+  }, [dispatch, productParams, isStartFilter]);
 
   // Handle change filter
   const handleSelectCollectionChange = (
@@ -297,7 +325,14 @@ export default function Products() {
         prev.delete("Collections");
         return prev;
       });
+      dispatch(setProductParams({ Collections: [] }));
+      setSelectedCollections([]);
     }
+    setIsStartFilter(true);
+    setSearchParams((prev) => {
+      prev.set("pageNumber", "1");
+      return prev;
+    });
   };
 
   const handleSelectModelChange = (
@@ -305,6 +340,7 @@ export default function Products() {
     newValue: ModelVehicle[]
   ) => {
     // set to url params
+
     if (newValue.length > 0) {
       const modelsFiltered = newValue?.map((model) => model.name);
       if (searchParams.get("Models")) {
@@ -323,7 +359,14 @@ export default function Products() {
         prev.delete("Models");
         return prev;
       });
+      dispatch(setProductParams({ Models: [] }));
+      setSelectedModels([]);
     }
+    setIsStartFilter(true);
+    setSearchParams((prev) => {
+      prev.set("pageNumber", "1");
+      return prev;
+    });
   };
 
   const handleSelectCityChange = (
@@ -348,7 +391,14 @@ export default function Products() {
         prev.delete("Cities");
         return prev;
       });
+      dispatch(setProductParams({ Cities: [] }));
+      setSelectedCities([]);
     }
+    setIsStartFilter(true);
+    setSearchParams((prev) => {
+      prev.set("pageNumber", "1");
+      return prev;
+    });
   };
 
   const handleSelectBrandChange = (
@@ -374,7 +424,14 @@ export default function Products() {
         prev.delete("Brands");
         return prev;
       });
+      dispatch(setProductParams({ Brands: [] }));
+      setSelectedBrands([]);
     }
+    setIsStartFilter(true);
+    setSearchParams((prev) => {
+      prev.set("pageNumber", "1");
+      return prev;
+    });
   };
 
   const handleFilterPriceChange = (event: SelectChangeEvent<string>) => {
@@ -384,6 +441,7 @@ export default function Products() {
       prev.set("IsSortPriceDesc", newValue.toString());
       return prev;
     });
+    setIsStartFilter(true);
   };
   //search
   const handleSearch = (isReset?: boolean) => {
@@ -393,6 +451,7 @@ export default function Products() {
         return prev;
       });
       setSearchQuery("");
+      dispatch(setProductParams({ Search: undefined }));
       return;
     }
     if (searchQuery) {
@@ -406,6 +465,10 @@ export default function Products() {
         return prev;
       });
     }
+    setSearchParams((prev) => {
+      prev.set("pageNumber", "1");
+      return prev;
+    });
   };
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
@@ -416,8 +479,7 @@ export default function Products() {
 
   // Start of DateRent filter
   useEffect(() => {
-    if (startDate && endDate) {
-      debugger;
+    if (startDate && endDate && isStartFilter) {
       setSearchParams((prev) => {
         prev.set("StartDate", startDate.format("DD/MM/YYYY"));
         return prev;
@@ -426,24 +488,20 @@ export default function Products() {
         prev.set("EndDate", endDate.format("DD/MM/YYYY"));
         return prev;
       });
+      setSearchParams((prev) => {
+        prev.set("pageNumber", "1");
+        return prev;
+      });
     }
   }, [startDate, endDate]);
 
   useEffect(() => {
+    let startDateToISO;
+    let endDateToISO;
     if (startDateParam && endDateParam) {
       try {
-        const startDateToISO = formatDateToISO(
-          decodeURIComponent(startDateParam)
-        );
-        const endDateToISO = formatDateToISO(decodeURIComponent(endDateParam));
-        setStartDate(convertToDayjs(decodeURIComponent(startDateParam)));
-        setEndDate(convertToDayjs(decodeURIComponent(endDateParam)));
-        dispatch(
-          setProductParams({
-            DateRentFrom: startDateToISO,
-            DateRentTo: endDateToISO,
-          })
-        );
+        startDateToISO = formatDateToISO(decodeURIComponent(startDateParam));
+        endDateToISO = formatDateToISO(decodeURIComponent(endDateParam));
       } catch (error) {
         toast.error("Please make sure your date is valid");
         console.log(error);
@@ -456,6 +514,20 @@ export default function Products() {
           setProductParams({ DateRentFrom: undefined, DateRentTo: undefined })
         );
       }
+    } else if (productParams.DateRentFrom && productParams.DateRentTo) {
+      startDateToISO = productParams.DateRentFrom;
+      endDateToISO = productParams.DateRentTo;
+    }
+
+    if (startDateToISO && endDateToISO) {
+      setStartDate(convertToDayjs(ConvertToDateStr(startDateToISO)));
+      setEndDate(convertToDayjs(ConvertToDateStr(endDateToISO)));
+      dispatch(
+        setProductParams({
+          DateRentFrom: startDateToISO,
+          DateRentTo: endDateToISO,
+        })
+      );
     } else {
       setSearchParams((prev) => {
         prev.delete("StartDate");
@@ -524,12 +596,15 @@ export default function Products() {
                   },
                 }}
                 format="DD/MM/YYYY"
-                disabled={startDate || startDateDefault ? false : true}
+                disabled={startDate ? false : true}
                 disablePast={true}
                 shouldDisableDate={(date: any) => {
                   return date <= startDate;
                 }}
-                onChange={(date: any) => setEndDate(date)}
+                onChange={(date: any) => {
+                  setEndDate(date);
+                  setIsStartFilter(true);
+                }}
                 value={endDate}
               />
             </div>
@@ -587,7 +662,7 @@ export default function Products() {
                     <div className="flex justify-center items-center h-0">
                       <div className="w-20 pb-2 mb-6 border-b border-rose-600"></div>
                     </div>
-                    {loadingFetchBrandsFilter ? (
+                    {brandLoading ? (
                       <LoaderButton />
                     ) : (
                       <Autocomplete
@@ -625,7 +700,7 @@ export default function Products() {
                       <div className="w-20 pb-2 mb-6 border-b border-rose-600"></div>
                     </div>
                     {/* Filter by collections */}
-                    {loadingFetchCollectionsFilter ? (
+                    {collectionLoading ? (
                       <LoaderButton />
                     ) : (
                       <Autocomplete
@@ -663,7 +738,7 @@ export default function Products() {
                       <div className="w-20 pb-2 mb-6 border-b border-rose-600"></div>
                     </div>
                     {/* Filter by collections */}
-                    {loadingFetchModelsFilter ? (
+                    {modelVehicleLoading ? (
                       <LoaderButton />
                     ) : (
                       <Autocomplete
@@ -672,7 +747,7 @@ export default function Products() {
                         multiple={true}
                         disablePortal
                         value={selectedModels}
-                        options={models}
+                        options={modelVehicles}
                         getOptionLabel={(option) => option.name}
                         onChange={(event, newValue) =>
                           handleSelectModelChange(event, newValue)
@@ -694,9 +769,9 @@ export default function Products() {
                   </div>
                 </div>
 
-                <div className="w-full lg:w-3/4">
-                  <div className="px-3 mb-4">
-                    <div className="items-center justify-between px-3 py-2 bg-gray-200 rounded-md md:flex ">
+                <div className="w-full lg:w-3/4 flex-1 px-1">
+                  <div className="mb-4">
+                    <div className="items-center justify-between px-3 py-2 bg-gray-200 rounded-md flex ">
                       <div className="InputContainer">
                         <input
                           type="text"
@@ -731,13 +806,15 @@ export default function Products() {
                       <div className="flex items-center justify-between">
                         <div className="flex">
                           {/* Filter by price form */}
-                          <FormControl sx={{ m: 1, minWidth: 80 }}>
-                            <InputLabel id="demo-simple-select-autowidth-label">
-                              Price
-                            </InputLabel>
+                          <FormControl
+                            sx={{
+                              m: 1,
+                              minWidth: 80,
+                              backgroundColor: "white",
+                            }}
+                          >
+                            <InputLabel>Price</InputLabel>
                             <Select
-                              labelId="demo-simple-select-autowidth-label"
-                              id="demo-simple-select-autowidth"
                               value={priceFilter}
                               onChange={handleFilterPriceChange}
                               autoWidth
@@ -751,35 +828,16 @@ export default function Products() {
                             </Select>
                           </FormControl>
                           {/* End Filter by price form */}
-
-                          {/* Filter by status form */}
-                          <FormControl sx={{ m: 1, minWidth: 90 }}>
-                            <InputLabel id="demo-simple-select-autowidth-label">
-                              Status
-                            </InputLabel>
-                            <Select
-                              labelId="demo-simple-select-autowidth-label"
-                              id="demo-simple-select-autowidth"
-                              // value={priceFilter}
-                              // onChange={handleFilterByStatusChange}
-                              defaultValue=""
-                              autoWidth
-                              label="Age"
-                            >
-                              <MenuItem value="">
-                                <em>None</em>
-                              </MenuItem>
-                              <MenuItem value={0}>Available</MenuItem>
-                              <MenuItem value={1}>Not available</MenuItem>
-                            </Select>
-                          </FormControl>
-                          {/* End Filter by status form */}
                         </div>
                       </div>
                     </div>
                   </div>
+                  {productLoaded ? (
+                    <Loading />
+                  ) : (
+                    <ProductList products={products} />
+                  )}
 
-                  <ProductList products={products} />
                   <div className="flex justify-center items-center mt-6">
                     <Pagination
                       metaData={metaData}

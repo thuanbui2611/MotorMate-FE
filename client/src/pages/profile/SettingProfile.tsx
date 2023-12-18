@@ -47,7 +47,6 @@ export default function SettingProfile() {
       return;
     }
     const { place_id } = place;
-    debugger;
 
     // Validate the place_id to ensure it is a valid selection
     if (place_id) {
@@ -59,7 +58,6 @@ export default function SettingProfile() {
   };
 
   async function submitForm(data: FieldValues) {
-    debugger;
     if (!userLogin) return;
     if (!data.address) {
       toast.error("Please select a valid address");
@@ -76,7 +74,6 @@ export default function SettingProfile() {
         dateOfBirth: data.dateOfBirth,
       };
 
-      debugger;
       const response = await dispatch(updateProfileAsync(formData));
       if (updateProfileAsync.fulfilled.match(response)) {
         dispatch(updateUser(response.payload));

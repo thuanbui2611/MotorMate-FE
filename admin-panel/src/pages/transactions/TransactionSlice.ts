@@ -6,7 +6,6 @@ import {
 import { MetaData } from "../../app/models/Pagination";
 import { RootState } from "../../app/store/ConfigureStore";
 import agent from "../../app/api/agent";
-import { toast } from "react-toastify";
 import { ParentOrder } from "../../app/models/TripRequest";
 import { TransactionParams } from "../../app/models/Transaction";
 
@@ -23,6 +22,7 @@ const transactionsAdapter = createEntityAdapter<ParentOrder>({
 
 function getAxiosParams(transactionParams: TransactionParams) {
   const params = new URLSearchParams();
+
   params.append("pageNumber", transactionParams.pageNumber.toString());
   params.append("pageSize", transactionParams.pageSize.toString());
 

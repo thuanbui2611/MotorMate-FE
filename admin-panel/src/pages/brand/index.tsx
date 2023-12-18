@@ -31,7 +31,6 @@ export default function BrandPage() {
 
   const pageNum = pageNumber.get("pageNumber");
   useEffect(() => {
-    debugger;
     if (pageNum === "1") {
       setPageNumber((prev) => {
         prev.delete("pageNumber");
@@ -45,7 +44,6 @@ export default function BrandPage() {
 
   //Starting filter
   useEffect(() => {
-    debugger;
     if (!isStartFilter) {
       if (pageNum) {
         setIsStartFilter(true);
@@ -83,7 +81,6 @@ export default function BrandPage() {
 
   useEffect(() => {
     if (!brandLoaded) {
-      debugger;
       if (isStartFilter || brands.length === 0) {
         dispatch(getBrandsAsync());
       }

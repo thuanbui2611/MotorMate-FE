@@ -29,7 +29,7 @@ export default function ConfirmDeleteDialog({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const onDelete = async () => {
     setIsSubmitting(true);
-    debugger;
+
     await actionDelete();
   };
   return (

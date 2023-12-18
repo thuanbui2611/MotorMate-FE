@@ -286,8 +286,14 @@ export default function VehicleDetails({ vehicle, onClose }: Props) {
                               <p className="text-sm leading-5 text-black font-bold">
                                 Available:
                               </p>
-                              <p className="ml-1 text-sm leading-4 break-all inline-flex rounded-full bg-success bg-opacity-10 py-1 px-2 font-bold  text-meta-3">
-                                Available
+                              <p
+                                className={`ml-1 text-sm leading-4 break-all inline-flex rounded-full  bg-opacity-10 py-1 px-2 font-bold ${
+                                  vehicle?.isAvaiable
+                                    ? "text-meta-3 bg-success"
+                                    : "bg-danger text-danger"
+                                }`}
+                              >
+                                {vehicle?.isAvaiable ? "Yes" : "No"}
                               </p>
                             </div>
                             <div className="w-1/2 justify-start flex items-center min-w-fit">

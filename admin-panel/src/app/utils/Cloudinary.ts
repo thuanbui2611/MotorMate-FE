@@ -70,7 +70,6 @@ export async function uploadImages(files: FileList): Promise<Image[] | null> {
 }
 
 export async function deleteImage(publicId: string) {
-  debugger;
   if (!publicId) return console.log("No public id");
   try {
     const timestamp = new Date().getTime();
@@ -92,7 +91,7 @@ export async function deleteImage(publicId: string) {
         }),
       }
     );
-    debugger;
+
     if (response.ok) {
       const data = await response.json();
       console.log("Delete image success data: ", data);

@@ -38,11 +38,13 @@ export const ChatSlice = createSlice({
       state.listChat = action.payload;
     },
     addListMessage: (state, action) => {
+      debugger;
       state.listMessage.push(action.payload);
       // state.listMessage = [...state.listMessage, action.payload];
     },
     loadListMessage: (state, action) => {
       //Check duplicate message id in listMessage then remove it, then add the updated action.payload to listMessage
+      debugger;
       const newListMessage = action.payload as Message[];
       const existedListMessageOfChat = state.listMessage.filter(
         (m) => m.chatId === newListMessage[0].chatId

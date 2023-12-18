@@ -30,14 +30,13 @@ axios.interceptors.response.use(
     switch (status) {
       case 400:
         if ((data as any).errors) {
-          debugger;
           const modalStateErrors: string[] = [];
           for (const key in (data as any).errors) {
             if ((data as any).errors[key]) {
               modalStateErrors.push((data as any).errors[key]);
             }
           }
-          debugger;
+
           toast.error(modalStateErrors.toString());
           // throw modalStateErrors.flat();
         }

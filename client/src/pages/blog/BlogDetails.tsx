@@ -9,22 +9,37 @@ import BlogComment from "./BlogComment";
 import { ConvertToDateTimeStr } from "../../app/utils/ConvertDatetimeToStr";
 import RelatedBlogs from "./RelatedBlogs";
 import { scrollToTop } from "../../app/utils/ScrollToTop";
+import { useAppSelector } from "../../app/store/ConfigureStore";
+import { blogSelectors } from "./BlogSlice";
 
 export default function BlogDetails() {
   const { id } = useParams<{ id: string }>();
   const [blog, setBlog] = useState<Blog | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const blogDetails = useAppSelector((state) =>
+    blogSelectors.selectById(state, id!)
+  );
 
   useEffect(() => {
-    if (!id) return;
-    setLoading(true);
-    agent.Blog.details(id!)
-      .then((blog) => {
-        setBlog(blog);
-        setLoading(false);
-        scrollToTop();
-      })
-      .catch((error) => console.log(error));
+    if (blogDetails) {
+      setBlog(blogDetails);
+      setLoading(false);
+      scrollToTop();
+    }
+  }, [blogDetails]);
+
+  useEffect(() => {
+    if (!blogDetails && id && !blog && !loading) {
+      setLoading(true);
+      agent.Blog.details(id!)
+        .then((blog) => {
+          setBlog(blog);
+          setLoading(false);
+          scrollToTop();
+        })
+        .catch((error) => console.log(error));
+    }
   }, [id]);
 
   if (!blog && !loading) return <NotFound />;

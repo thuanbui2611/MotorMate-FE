@@ -13,13 +13,14 @@ import { Box, TextField } from "@mui/material";
 import { UserDetail } from "../../app/models/User";
 import { deleteImages, uploadImages } from "../../app/utils/Cloudinary";
 import { addVehicleAsync, updateVehicleAsync } from "./VehicleSlice";
-import { useAppDispatch } from "../../app/store/ConfigureStore";
+import { useAppDispatch, useAppSelector } from "../../app/store/ConfigureStore";
 import { Image } from "../../app/models/Image";
 import { LoadingButton } from "@mui/lab";
 import { toast } from "react-toastify";
 import LoaderButton from "../../app/components/LoaderButton";
 import { updateVehiclePendingAsync } from "./VehiclePendingSlice";
 import { ConvertToDateStr } from "../../app/utils/ConvertDatetimeToDate";
+import { getBrandsAsync, getUsersAsync } from "../filter/FilterSlice";
 
 interface Props {
   vehicle: Vehicle | null;
@@ -43,13 +44,11 @@ export default function VehicleForm({
     null
   );
   const [selectedFiles, setSelectedFiles] = useState<FileList | null>(null);
-  const [brands, setBrands] = useState<Brand[]>([]);
+
   const [selectedBrand, setSelectedBrand] = useState<Brand | null>(null);
   const [collections, setCollections] = useState<Collection[]>([]);
   const [selectedCollection, setSelectedCollection] =
     useState<Collection | null>(null);
-
-  const [users, setUsers] = useState<UserDetail[]>([]);
   const [selectedUser, setSelectedUser] = useState<UserDetail | null>(null);
   const [models, setModels] = useState<ModelVehicle[]>([]);
   const [selectedModel, setSelectedModel] = useState<ModelVehicle | null>(null);
@@ -61,9 +60,6 @@ export default function VehicleForm({
   const [defaultAddress, setDefaultAddress] = useState<string>("");
   const autocompleteRef = useRef<google.maps.places.Autocomplete | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const [loadingFetchOwner, setLoadingFetchOwner] = useState(true);
-  const [loadingFetchBrand, setLoadingFetchBrand] = useState(true);
   const [loadingFetchModel, setLoadingFetchModel] = useState(false);
   const {
     control,
@@ -77,6 +73,10 @@ export default function VehicleForm({
   });
 
   const dispatch = useAppDispatch();
+
+  const { users, brands, usersLoading, brandLoading } = useAppSelector(
+    (state) => state.filter
+  );
 
   const getModelsByCollection = async (collectionValue: Collection | null) => {
     try {
@@ -166,27 +166,13 @@ export default function VehicleForm({
 
   useEffect(() => {
     //fetch all brands
-    const fetchBrands = async () => {
-      try {
-        const response = await agent.Brand.all();
-        setBrands(response);
-        setLoadingFetchBrand(false);
-      } catch (error) {
-        console.error("Error fetching brands: ", error);
-      }
-    };
+    if (brands.length === 0 && !brandLoading) {
+      dispatch(getBrandsAsync());
+    }
     //fetch all users
-    const fetchUsers = async () => {
-      try {
-        const response = await agent.User.all();
-        setUsers(response);
-        setLoadingFetchOwner(false);
-      } catch (error) {
-        console.error("Error fetching users:", error);
-      }
-    };
-    fetchUsers();
-    fetchBrands();
+    if (users.length === 0 && !usersLoading) {
+      dispatch(getUsersAsync());
+    }
   }, []);
 
   useEffect(() => {
@@ -376,7 +362,7 @@ export default function VehicleForm({
     const city = cityComponent ? cityComponent.long_name : "";
     const district = districtComponent ? districtComponent.long_name : "";
     const { place_id } = place;
-    debugger;
+
     // Validate the place_id to ensure it is a valid selection
     if (place_id) {
       setValue("address", fullAddress);
@@ -537,7 +523,7 @@ export default function VehicleForm({
               <label className="block mb-2 text-sm font-semibold text-black">
                 Owner
               </label>
-              {loadingFetchOwner ? (
+              {usersLoading ? (
                 <LoaderButton />
               ) : (
                 <Autocomplete
@@ -637,7 +623,7 @@ export default function VehicleForm({
               <label className="block mb-2 text-sm font-semibold text-black">
                 Brand
               </label>
-              {loadingFetchBrand ? (
+              {brandLoading ? (
                 <LoaderButton />
               ) : (
                 <Autocomplete
@@ -1077,8 +1063,8 @@ export default function VehicleForm({
               loading={isSubmitting}
               disabled={
                 isSubmitting ||
-                loadingFetchOwner ||
-                loadingFetchBrand ||
+                usersLoading ||
+                brandLoading ||
                 loadingFetchModel
               }
               type="submit"

@@ -103,7 +103,7 @@ export default function OrderDetail() {
 
   const handleCancelOrder = async (reasonCancel: string) => {
     if (selectedVehiclesCancel.length === 0) return;
-    debugger;
+
     const vehiclesToCancel = selectedVehiclesCancel.filter(
       (vehicle) => vehicle.status.toLowerCase() === "pending"
     );

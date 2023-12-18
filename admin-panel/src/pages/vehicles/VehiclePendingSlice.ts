@@ -57,7 +57,7 @@ export const getVehiclesPendingAsync = createAsyncThunk<
   const params = getAxiosParams(
     ThunkAPI.getState().vehiclePending.vehiclesParams
   );
-  debugger;
+
   console.log(params);
   try {
     const response = await agent.Vehicle.listVehicleByStatus(params, "pending");
@@ -107,7 +107,7 @@ function initParams() {
 }
 
 export const VehiclePendingSlice = createSlice({
-  name: "vehicle",
+  name: "vehiclePending",
   initialState: vehiclesPendingAdapter.getInitialState<VehicleState>({
     vehiclesPending: null,
     vehiclesPendingLoaded: false,

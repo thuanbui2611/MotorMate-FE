@@ -32,7 +32,6 @@ export default function UsersPage() {
   const [openDetails, setOpenDetails] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams({});
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [paramsCompleted, setParamsCompleted] = useState(false);
   const [roles, setRoles] = useState<Role[]>([]);
   const [selectedRoles, setSelectedRoles] = useState<Role[]>([]);
   const [isStartFilter, setIsStartFilter] = useState(false);
@@ -48,51 +47,33 @@ export default function UsersPage() {
   const searchQueryParam = searchParams.get("Query");
   const rolesParam = searchParams.get("Roles");
 
-  //search
+  //fetch role for select and filter
   useEffect(() => {
-    if (searchQueryParam) {
-      const querySearch = searchQueryParam.trim();
-      setSearchQuery(querySearch);
-      dispatch(setUserParams({ Query: querySearch }));
-    } else {
-      dispatch(setUserParams({ Query: undefined }));
+    try {
+      agent.User.getAllRole().then((response) => {
+        setRoles(response);
+      });
+    } catch (error) {
+      console.log(error);
     }
-  }, [searchQueryParam, dispatch]);
-
-  //Starting filter
-  useEffect(() => {
-    if (!isStartFilter) {
-      if (pageNum || searchQueryParam || rolesParam) {
-        setIsStartFilter(true);
-      }
-    }
-  }, [userParams, pageNum]);
+  }, []);
 
   //Roles filter
   useEffect(() => {
     if (roles.length > 0) {
-      debugger;
       if (rolesParam !== "") {
+        let rolesFiltered: string[] = [];
         if (rolesParam) {
-          debugger;
-          const rolesFiltered = rolesParam.split("%2C");
-          const rolesSelected = roles.filter((role) =>
-            rolesFiltered.includes(role.name)
-          );
-          setSelectedRoles(rolesSelected);
-          dispatch(setUserParams({ Roles: rolesFiltered }));
-        } else {
-          debugger;
-          // dispatch(setUserParams({ Roles: [] }));
-          if (userParams.Roles && userParams.Roles.length > 0) {
-            const rolesSelected = roles.filter((role) =>
-              userParams.Roles?.includes(role.name)
-            );
-            setSelectedRoles(rolesSelected);
-          } else {
-            setSelectedRoles([]);
-          }
+          rolesFiltered = rolesParam.split("%2C");
+        } else if (userParams.Roles && userParams.Roles.length > 0) {
+          rolesFiltered = userParams.Roles;
         }
+        const rolesSelected = roles.filter((role) =>
+          rolesFiltered.includes(role.name)
+        );
+        setSelectedRoles(rolesSelected);
+
+        dispatch(setUserParams({ Roles: rolesFiltered }));
       } else {
         setSearchParams((prev) => {
           prev.delete("Roles");
@@ -121,16 +102,28 @@ export default function UsersPage() {
     }
   }, [pageNum, dispatch]);
   //
-  //fetch role for select and filter
+  //search
   useEffect(() => {
-    try {
-      agent.User.getAllRole().then((response) => {
-        setRoles(response);
-      });
-    } catch (error) {
-      console.log(error);
+    if (searchQueryParam) {
+      const querySearch = searchQueryParam.trim();
+      setSearchQuery(querySearch);
+      dispatch(setUserParams({ Query: querySearch }));
+    } else {
+      if (userParams.Query) {
+        setSearchQuery(userParams.Query);
+      } else {
+        dispatch(setUserParams({ Query: undefined }));
+      }
     }
-  }, []);
+  }, [searchQueryParam, dispatch]);
+  //Starting filter
+  useEffect(() => {
+    if (!isStartFilter) {
+      if (pageNum || searchQueryParam || rolesParam) {
+        setIsStartFilter(true);
+      }
+    }
+  }, [userParams, pageNum]);
 
   const handleSelectUser = (actionName: string, user?: UserDetail) => {
     setOpenEditForm((cur) => !cur);
@@ -175,7 +168,6 @@ export default function UsersPage() {
     event: React.SyntheticEvent<Element, Event>,
     newValue: Role[]
   ) => {
-    debugger;
     if (newValue.length > 0) {
       const rolesFiltered = newValue?.map((role) => role.name);
       if (searchParams.get("Roles")) {
@@ -196,13 +188,25 @@ export default function UsersPage() {
       });
       dispatch(setUserParams({ Roles: [] }));
       setSelectedRoles([]);
-      setIsStartFilter(true);
     }
+    setIsStartFilter(true);
+    setSearchParams((prev) => {
+      prev.set("pageNumber", "1");
+      return prev;
+    });
   };
 
   useEffect(() => {
-    if (!userLoaded) {
-      if (isStartFilter || users.length === 0) {
+    if (!userLoaded && roles.length > 0) {
+      if (isStartFilter) {
+        if (
+          (userParams.Roles && userParams.Roles.length > 0) ||
+          userParams.Query ||
+          userParams.pageSize
+        ) {
+          dispatch(getUsersAsync());
+        }
+      } else if (searchParams.size === 0 && users.length === 0) {
         dispatch(getUsersAsync());
       }
     }
@@ -214,11 +218,16 @@ export default function UsersPage() {
         prev.set("Query", searchQuery.trim());
         return prev;
       });
+      setSearchParams((prev) => {
+        prev.set("pageNumber", "1");
+        return prev;
+      });
     } else {
       setSearchParams((prev) => {
         prev.delete("Query");
         return prev;
       });
+      dispatch(setUserParams({ Query: undefined }));
     }
   };
 

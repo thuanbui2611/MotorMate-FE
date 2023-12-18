@@ -7,7 +7,7 @@ import { Color } from "../../app/models/Color";
 import { FieldValues, useForm } from "react-hook-form";
 import { UserDetail } from "../../app/models/User";
 import agent from "../../app/api/agent";
-import { useAppDispatch } from "../../app/store/ConfigureStore";
+import { useAppDispatch, useAppSelector } from "../../app/store/ConfigureStore";
 import { Image } from "../../app/models/Image";
 import { Vehicle } from "../../app/models/Vehicle";
 import { toast } from "react-toastify";
@@ -19,6 +19,7 @@ import { LoadingButton } from "@mui/lab";
 import { addProductAsync, updateProductAsync } from "./ProfileSlice";
 import { ConvertToDateStr } from "../../app/utils/ConvertDatetimeToStr";
 import { Autocomplete as GoogleAutocomplete } from "@react-google-maps/api";
+import { getBrandsAsync } from "../filter/FilterSlice";
 interface Props {
   vehicle: Vehicle | null;
   userLoggedIn: UserDetail | null;
@@ -53,7 +54,7 @@ export default function VehicleForm({
     null
   );
   const [selectedFiles, setSelectedFiles] = useState<FileList | null>(null);
-  const [brands, setBrands] = useState<Brand[]>([]);
+  // const [brands, setBrands] = useState<Brand[]>([]);
   const [selectedBrand, setSelectedBrand] = useState<Brand | null>(null);
   const [collections, setCollections] = useState<Collection[]>([]);
   const [selectedCollection, setSelectedCollection] =
@@ -68,9 +69,10 @@ export default function VehicleForm({
   const [defaultAddress, setDefaultAddress] = useState<string>("");
   const autocompleteRef = useRef<google.maps.places.Autocomplete | null>(null);
 
-  const [loadingFetchBrand, setLoadingFetchBrand] = useState(true);
+  // const [loadingFetchBrand, setLoadingFetchBrand] = useState(true);
   const [loadingFetchModel, setLoadingFetchModel] = useState(false);
 
+  const { brands, brandLoading } = useAppSelector((state) => state.filter);
   const dispatch = useAppDispatch();
 
   const getModelsByCollection = async (collectionValue: Collection | null) => {
@@ -158,16 +160,9 @@ export default function VehicleForm({
 
   useEffect(() => {
     //fetch all brands
-    const fetchBrands = async () => {
-      try {
-        const response = await agent.Brand.all();
-        setBrands(response);
-        setLoadingFetchBrand(false);
-      } catch (error) {
-        console.error("Error fetching brands: ", error);
-      }
-    };
-    fetchBrands();
+    if (brands.length === 0 && !brandLoading) {
+      dispatch(getBrandsAsync());
+    }
   }, []);
 
   useEffect(() => {
@@ -347,7 +342,6 @@ export default function VehicleForm({
         images: imagesRequest,
       };
       console.log("form data:", formData);
-      debugger;
 
       if (vehicle) {
         if (imagesFromServer) {
@@ -408,7 +402,7 @@ export default function VehicleForm({
     const city = cityComponent ? cityComponent.long_name : "";
     const district = districtComponent ? districtComponent.long_name : "";
     const { place_id } = place;
-    debugger;
+
     // Validate the place_id to ensure it is a valid selection
     if (place_id) {
       setValue("address", fullAddress);
@@ -432,7 +426,6 @@ export default function VehicleForm({
     }
   };
   const formatDate = (dateStr: string) => {
-    debugger;
     const parts = dateStr.split("/");
     const formattedDate = `${parts[2]}-${parts[1]}-${parts[0]}`;
     return formattedDate;
@@ -478,7 +471,7 @@ export default function VehicleForm({
               <label className="block mb-2 text-sm font-semibold text-black">
                 Brand
               </label>
-              {loadingFetchBrand ? (
+              {brandLoading ? (
                 <LoaderButton />
               ) : (
                 <Autocomplete

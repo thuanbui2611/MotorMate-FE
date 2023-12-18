@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import { useForm, FieldValues, set } from "react-hook-form";
-import { useAppDispatch } from "../../app/store/ConfigureStore";
+import { useAppDispatch, useAppSelector } from "../../app/store/ConfigureStore";
 import AppTextInput from "../../app/components/AppTextInput";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -24,6 +24,11 @@ import LoaderButton from "../../app/components/LoaderButton";
 import { Box, TextField } from "@mui/material";
 import { Category } from "../../app/models/Category";
 import { UserDetail } from "../../app/models/User";
+import { getUsersAsync } from "../filter/FilterSlice";
+import {
+  blogCategorySelectors,
+  getBlogCategoriesAsync,
+} from "../blogCategory/BlogCategorySlice";
 interface Props {
   blog: Blog | null;
   cancelEdit: () => void;
@@ -37,17 +42,17 @@ export default function BlogForm({ blog, cancelEdit, actionName }: Props) {
     url: string;
   } | null>(null);
   const [deleteCurrentImage, setDeleteCurrentImage] = useState<boolean>(false);
-  const [loadingFetchOwner, setLoadingFetchOwner] = useState(true);
-  const [users, setUsers] = useState<Author[]>([]);
+  const [authors, setAuthors] = useState<Author[]>([]);
   const [selectedAuthor, setSelectedAuthor] = useState<Author | null>(null);
   const [content, setContent] = useState<string>("");
 
-  const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<Category | null>(
     null
   );
-  const [loadingFetchCategories, setLoadingFetchCategories] = useState(true);
 
+  const { users, usersLoading } = useAppSelector((state) => state.filter);
+  const { blogCategoryLoaded } = useAppSelector((state) => state.blogCategory);
+  const categories = useAppSelector(blogCategorySelectors.selectAll);
   const dispatch = useAppDispatch();
   const {
     control,
@@ -62,7 +67,6 @@ export default function BlogForm({ blog, cancelEdit, actionName }: Props) {
   useEffect(() => {
     if (blog) {
       reset(blog);
-      debugger;
       setContent(blog.content);
       setSelectedAuthor(blog.author);
       const selectedCategory: Category = {
@@ -74,32 +78,22 @@ export default function BlogForm({ blog, cancelEdit, actionName }: Props) {
   }, [blog, reset]);
   useEffect(() => {
     //fetch all categories
-    const fetchCategories = async () => {
-      try {
-        const response = await agent.Category.all();
-        setCategories(response);
-        setLoadingFetchCategories(false);
-      } catch (error) {
-        console.error("Error fetching categories:", error);
-      }
-    };
+    if (categories.length === 0 && !blogCategoryLoaded) {
+      dispatch(getBlogCategoriesAsync());
+    }
     //fetch all users
-    const fetchUsers = async () => {
-      try {
-        const response: UserDetail[] = await agent.User.all();
-        const authors: Author[] = response.map((user) => ({
+    if (users.length === 0 && !usersLoading) {
+      dispatch(getUsersAsync()).then((response) => {
+        const users = response.payload as UserDetail[];
+        const authors: Author[] = users.map((user) => ({
           authorId: user.id,
           username: user.username,
           picture: user.image.imageUrl,
         }));
-        setUsers(authors);
-        setLoadingFetchOwner(false);
-      } catch (error) {
-        console.error("Error fetching users:", error);
-      }
-    };
-    fetchUsers();
-    fetchCategories();
+
+        setAuthors(authors);
+      });
+    }
   }, []);
 
   const handleAuthorChange = (
@@ -113,7 +107,7 @@ export default function BlogForm({ blog, cancelEdit, actionName }: Props) {
 
   const handleImageChange = (e: any) => {
     const file = e.target.files[0];
-    debugger;
+
     if (!file.type.startsWith("image/")) {
       toast.error("Accept only image file");
     } else {
@@ -138,7 +132,7 @@ export default function BlogForm({ blog, cancelEdit, actionName }: Props) {
         authorId: selectedAuthor?.authorId,
         categoryId: selectedCategories?.id,
       };
-      debugger;
+
       if (deleteCurrentImage) {
         formData.imageUrl = null;
         formData.publicId = null;
@@ -152,10 +146,9 @@ export default function BlogForm({ blog, cancelEdit, actionName }: Props) {
       }
 
       console.log("Form data:", formData);
-      debugger;
+
       if (blog) {
         if (imageUploaded || deleteCurrentImage) {
-          debugger;
           await deleteImage(blog.image.publicId);
         }
         await dispatch(updateBlogAsync(formData));
@@ -218,14 +211,14 @@ export default function BlogForm({ blog, cancelEdit, actionName }: Props) {
                   <label className="block mb-2 text-sm font-semibold text-black">
                     Author:
                   </label>
-                  {loadingFetchOwner ? (
+                  {usersLoading ? (
                     <LoaderButton />
                   ) : (
                     <Autocomplete
                       size="small"
                       disablePortal
                       value={selectedAuthor}
-                      options={users}
+                      options={authors}
                       getOptionLabel={(option) => option.username}
                       onChange={(event, newValue) =>
                         handleAuthorChange(event, newValue)
@@ -286,7 +279,7 @@ export default function BlogForm({ blog, cancelEdit, actionName }: Props) {
                   },
                 })}
               />
-              {loadingFetchCategories ? (
+              {blogCategoryLoaded ? (
                 <LoaderButton />
               ) : (
                 <Autocomplete

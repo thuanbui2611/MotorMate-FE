@@ -30,7 +30,7 @@ export const createCheckoutAsync = createAsyncThunk<Checkout, {}>(
         userId: data.userId,
         vehicles: vehiclesConverted,
       };
-      debugger;
+
       const response = await agent.Checkout.create(convertedData);
       return response;
     } catch (error) {

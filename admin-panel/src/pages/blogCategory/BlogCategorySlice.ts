@@ -22,7 +22,6 @@ export const getBlogCategoriesAsync = createAsyncThunk<
   { state: RootState }
 >("blogCategory/getBlogCategoriesAsync", async (_, ThunkAPI) => {
   try {
-    debugger;
     const response = await agent.Category.all();
     return response;
   } catch (error: any) {

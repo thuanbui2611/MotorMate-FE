@@ -148,7 +148,6 @@ export default function TinyChat() {
           .start()
           .then(() => {
             connection.on("ReceiveMessage", (message: Message) => {
-              debugger;
               dispatch(addListMessage(message));
               setMessagePending(undefined);
               setIsScrollDown(true);
@@ -185,7 +184,6 @@ export default function TinyChat() {
                 const updatedConnection = connection;
                 updatedConnection.start().then(() => {
                   connection.on("ReceiveMessage", (message: Message) => {
-                    debugger;
                     dispatch(addListMessage(message));
                     setMessagePending(undefined);
                     setIsScrollDown(true);
@@ -227,7 +225,6 @@ export default function TinyChat() {
               );
             //
           } else {
-            debugger;
             existingConnection.connection.on(
               "LoadMessages",
               (chats: Message[], pagination: MetaData) => {}
@@ -536,8 +533,9 @@ export default function TinyChat() {
               <div className="flex justify-between gap-1 border-b-2 py-2 px-1 h-11 sticky top-0 bg-white">
                 <input
                   type="text"
-                  placeholder="Search"
+                  placeholder="Search (Coming soon)"
                   className="py-1 px-1 border-2 border-gray-200 rounded-xl w-full text-center h-full text-xs"
+                  disabled
                 />
                 <div
                   className="flex items-center justify-center w-fit h-fit  bg-gray-200 pt-2 pb-1 px-[6px] rounded-full cursor-pointer hover:bg-gray-300"

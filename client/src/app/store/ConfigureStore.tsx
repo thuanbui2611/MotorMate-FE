@@ -11,6 +11,7 @@ import { MyOrderSlice } from "../../pages/my-order/MyOrderSlice";
 import { ShopOrderSlice } from "../../pages/shop-order/ShopOrderSlice";
 import { ReviewProductSlice } from "../../pages/products/ReviewProductSlice";
 import { BlogCommentSlice } from "../../pages/blog/BlogCommentSlice";
+import { FilterSlice } from "../../pages/filter/FilterSlice";
 
 export const store = configureStore({
   reducer: {
@@ -25,6 +26,7 @@ export const store = configureStore({
     shopOrder: ShopOrderSlice.reducer,
     reviewProduct: ReviewProductSlice.reducer,
     blogComment: BlogCommentSlice.reducer,
+    filter: FilterSlice.reducer,
   },
 });
 
