@@ -83,14 +83,14 @@
 //         <form>
 //         <div className="grid grid-cols-3 gap-5 justify-normal">
 //           <div className="form-group w-full col-span-3">
-//             <label  className="mb-3 block text-sm font-medium text-black dark:text-white"
+//             <label  className="mb-3 block text-sm font-medium text-black dark:text-blue-gray-50"
 //                         htmlFor="id">Bond ID (Input "ALL" to track all bonds with paramaters below)</label>
-//             <input className="w-full rounded border border-stroke bg-gray py-3 pl-3 pr-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+//             <input className="w-full rounded border border-stroke bg-gray py-3 pl-3 pr-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-blue-gray-50 dark:focus:border-primary"
 //                           name="id" onChange={handleChange} value={formState.id} />
 //           </div>
 
 //           <div className="form-group ">
-//             <label className="mb-3 block text-sm font-medium text-black dark:text-white" htmlFor="para">Parameter</label>
+//             <label className="mb-3 block text-sm font-medium text-black dark:text-blue-gray-50" htmlFor="para">Parameter</label>
 //             <div className="relative z-20 w-full rounded border border-stroke p-1.5 pr-8 font-medium outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input">
 //                   <div className="flex flex-wrap items-center"></div>
 //                   <span className="m-1.5 flex items-center justify-center rounded border-[.5px] border-stroke bg-gray py-1.5 px-2.5 text-sm font-medium dark:border-strokedark dark:bg-white/30">
@@ -130,7 +130,7 @@
 //             </div>
 
 //           <div className="form-group">
-//           <label className="mb-3 block text-sm font-medium text-black dark:text-white" htmlFor="criterion">Criterion</label>
+//           <label className="mb-3 block text-sm font-medium text-black dark:text-blue-gray-50" htmlFor="criterion">Criterion</label>
 //             <div className="relative z-20 w-full rounded border border-stroke p-1.5 pr-8 font-medium outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input">
 //                   <div className="flex flex-wrap items-center"></div>
 //                   <span className="m-1.5 flex items-center justify-center rounded border-[.5px] border-stroke bg-gray py-1.5 px-2.5 text-sm font-medium dark:border-strokedark dark:bg-white/30">
@@ -170,13 +170,13 @@
 //                         </div>
 //           </div>
 //             <div className="form-group w-full">
-//             <label  className="mb-3 block text-sm font-medium text-black dark:text-white" htmlFor="value">Value to give Alert</label>
-//             <input className="w-full rounded border border-stroke bg-gray py-3 pl-3 pr-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+//             <label  className="mb-3 block text-sm font-medium text-black dark:text-blue-gray-50" htmlFor="value">Value to give Alert</label>
+//             <input className="w-full rounded border border-stroke bg-gray py-3 pl-3 pr-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-blue-gray-50 dark:focus:border-primary"
 //                            name="value" onChange={handleChange} value={formState.value} />
 //           </div>
 
 //           <div className="form-group">
-//             <label className="mb-3 block text-sm font-medium text-black dark:text-white" htmlFor="type">Alert Type</label>
+//             <label className="mb-3 block text-sm font-medium text-black dark:text-blue-gray-50" htmlFor="type">Alert Type</label>
 //             <div className="relative z-20 w-full rounded border border-stroke p-1.5 pr-8 font-medium outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input">
 //                   <div className="flex flex-wrap items-center"></div>
 //                   <span className={`${formState.type==0?"bg-[#04b20c]":formState.type==1?"bg-[#eab90f]":"bg-[#e13f32]"} m-1.5 flex items-center justify-center rounded border-[.5px] border-stroke py-1.5 px-2.5 text-white font-medium dark:border-strokedark`}>

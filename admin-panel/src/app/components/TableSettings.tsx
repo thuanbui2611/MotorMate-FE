@@ -11,12 +11,12 @@
 //       <table className="table">
 //         <thead>
 //           <tr className="bg-gray-2 text-left dark:bg-meta-4">
-//             <th className="min-w-[220px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">Bond</th>
-//             <th className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white">Paramter</th>
-//             <th className="py-4 px-4 font-medium text-black dark:text-white">Criterion</th>
-//             <th className="py-4 px-4 font-medium text-black dark:text-white">Value to give alert</th>
-//             <th className="py-4 px-4 font-medium text-black dark:text-white">Alert type</th>
-//             <th className="py-4 px-4 font-medium text-black dark:text-white">Actions</th>
+//             <th className="min-w-[220px] py-4 px-4 font-medium text-black dark:text-blue-gray-50 xl:pl-11">Bond</th>
+//             <th className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-blue-gray-50">Paramter</th>
+//             <th className="py-4 px-4 font-medium text-black dark:text-blue-gray-50">Criterion</th>
+//             <th className="py-4 px-4 font-medium text-black dark:text-blue-gray-50">Value to give alert</th>
+//             <th className="py-4 px-4 font-medium text-black dark:text-blue-gray-50">Alert type</th>
+//             <th className="py-4 px-4 font-medium text-black dark:text-blue-gray-50">Actions</th>
 //           </tr>
 //         </thead>
 //         <tbody>

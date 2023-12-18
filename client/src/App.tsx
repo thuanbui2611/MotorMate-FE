@@ -11,6 +11,7 @@ import { ToastContainer } from "react-toastify";
 import Loading from "./app/components/Loading";
 import { getCartAsync } from "./pages/cart/CartSlice";
 import { useJsApiLoader } from "@react-google-maps/api";
+import GoogleMapsWrapper from "./app/components/GoogleMapsWrapper";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -45,14 +46,8 @@ function App() {
   //   }
   //   setLoading(false);
   // }, [dispatch, user?.token]);
-  const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY as string,
-    libraries: ["places"],
-    language: "vi",
-    region: "VN",
-  });
 
-  return loading && !isLoaded ? (
+  return loading ? (
     <Loading />
   ) : (
     <>
@@ -69,7 +64,9 @@ function App() {
         theme="colored"
         style={{ zIndex: 999999 }}
       />
-      <Outlet />
+      <GoogleMapsWrapper>
+        <Outlet />
+      </GoogleMapsWrapper>
     </>
   );
 }

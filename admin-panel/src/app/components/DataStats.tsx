@@ -4,7 +4,7 @@ const DataStats = () => {
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4 xl:gap-0">
         <div className="flex items-center justify-center gap-2 border-b border-stroke pb-5 dark:border-strokedark xl:border-b-0 xl:border-r xl:pb-0">
           <div>
-            <h4 className="mb-0.5 text-xl font-semibold text-black dark:text-white md:text-title-lg">
+            <h4 className="mb-0.5 text-xl font-semibold text-black dark:text-blue-gray-50 md:text-title-lg">
               $4,350
             </h4>
             <p className="text-sm font-medium">Unique Visitors</p>
@@ -27,7 +27,7 @@ const DataStats = () => {
         </div>
         <div className="flex items-center justify-center gap-2 border-b border-stroke pb-5 dark:border-strokedark xl:border-b-0 xl:border-r xl:pb-0">
           <div>
-            <h4 className="mb-0.5 text-xl font-semibold text-black dark:text-white md:text-title-lg">
+            <h4 className="mb-0.5 text-xl font-semibold text-black dark:text-blue-gray-50 md:text-title-lg">
               55.9K
             </h4>
             <p className="text-sm font-medium">Total Pageviews</p>
@@ -50,7 +50,7 @@ const DataStats = () => {
         </div>
         <div className="flex items-center justify-center gap-2 border-b border-stroke pb-5 dark:border-strokedark sm:border-b-0 sm:pb-0 xl:border-r">
           <div>
-            <h4 className="mb-0.5 text-xl font-semibold text-black dark:text-white md:text-title-lg">
+            <h4 className="mb-0.5 text-xl font-semibold text-black dark:text-blue-gray-50 md:text-title-lg">
               54%
             </h4>
             <p className="text-sm font-medium">Bounce Rate</p>
@@ -73,7 +73,7 @@ const DataStats = () => {
         </div>
         <div className="flex items-center justify-center gap-2">
           <div>
-            <h4 className="mb-0.5 text-xl font-semibold text-black dark:text-white md:text-title-lg">
+            <h4 className="mb-0.5 text-xl font-semibold text-black dark:text-blue-gray-50 md:text-title-lg">
               2m 56s
             </h4>
             <p className="text-sm font-medium">Visit Duration</p>

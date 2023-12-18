@@ -12,15 +12,25 @@ import AppTextInput from "../../app/components/AppTextInput";
 import { Box, TextField } from "@mui/material";
 import { UserDetail } from "../../app/models/User";
 import { deleteImages, uploadImages } from "../../app/utils/Cloudinary";
-import { addVehicleAsync, updateVehicleAsync } from "./VehicleSlice";
+import {
+  removeVehicle,
+  updateVehicleAsync,
+  vehicleSelectors,
+} from "./VehicleSlice";
 import { useAppDispatch, useAppSelector } from "../../app/store/ConfigureStore";
 import { Image } from "../../app/models/Image";
 import { LoadingButton } from "@mui/lab";
 import { toast } from "react-toastify";
 import LoaderButton from "../../app/components/LoaderButton";
-import { updateVehiclePendingAsync } from "./VehiclePendingSlice";
+import {
+  addVehicleAsync,
+  updateVehiclePendingAsync,
+  vehiclePendingSelectors,
+} from "./VehiclePendingSlice";
 import { ConvertToDateStr } from "../../app/utils/ConvertDatetimeToDate";
 import { getBrandsAsync, getUsersAsync } from "../filter/FilterSlice";
+import { removeVehicleDenied } from "./VehicleDeniedSlice";
+import GoogleMapsWrapper from "../../app/components/GoogleMapsWrapper";
 
 interface Props {
   vehicle: Vehicle | null;
@@ -114,7 +124,6 @@ export default function VehicleForm({
       //set images from server for delete image in cloudinary
       setImagesFromServer(vehicle.images);
       //set date
-      console.log("Date trans: ", formatDate(vehicleDetails.insuranceExpiry));
       setValue("insuranceExpiry", formatDate(vehicleDetails.insuranceExpiry));
       setValue("purchaseDate", formatDate(vehicleDetails.purchaseDate));
       //set address
@@ -425,19 +434,20 @@ export default function VehicleForm({
 
           //Update images request to formData
           formData.images = resultUpload;
-          //Update to vehicle approved or pending or deny
-          switch (vehicle.status.trim().toLowerCase()) {
-            case "approved":
-              await dispatch(updateVehicleAsync(formData));
-              break;
-            case "pending":
-              await dispatch(updateVehiclePendingAsync(formData));
-              break;
-            case "deny":
-              break;
+          //Update vehicle
+          const result = await dispatch(updateVehiclePendingAsync(formData));
+          //Remove vehicle from list vehicle (vehicle updated will be pending)
+          debugger;
+          if (result.meta.requestStatus === "fulfilled") {
+            switch (vehicle.status.trim().toLowerCase()) {
+              case "approved":
+                dispatch(removeVehicle(vehicle.id));
+                break;
+              case "deny":
+                dispatch(removeVehicleDenied(vehicle.id));
+                break;
+            }
           }
-
-          // await dispatch(updateVehicleAsync(formData));
         }
       } else {
         //ADD VEHICLE

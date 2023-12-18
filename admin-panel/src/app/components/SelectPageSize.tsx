@@ -29,15 +29,8 @@ export default function SelectPageSize({
 
   return (
     <div className="flex items-center justify-center text-center">
-      {/* <input
-        className="font-normal text-center w-10 border border-gray-300 rounded-md bg-white"
-        onChange={(event) => handleChange(event)}
-        value={selectedPageSize}
-        type="number"
-        onKeyDown={handleKeyDown}
-      /> */}
       <Autocomplete
-        className="font-normal text-center w-10"
+        className="font-normal text-center w-10 rounded-md"
         sx={{
           backgroundColor: "white",
           "& .MuiOutlinedInput-root": {

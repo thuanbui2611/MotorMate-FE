@@ -6,25 +6,25 @@ export default function TableBrand() {
           <table className="w-full table-auto">
             <thead>
               <tr className=" bg-gray-2 text-left dark:bg-meta-4  font-bold">
-                <th className="min-w-[220px] py-4 px-4 text-black dark:text-white xl:pl-11">
+                <th className="min-w-[220px] py-4 px-4 text-black dark:text-blue-gray-50 xl:pl-11">
                   Brand Name
                 </th>
-                <th className="min-w-[150px] py-4 px-4 text-black dark:text-white">
+                <th className="min-w-[150px] py-4 px-4 text-black dark:text-blue-gray-50">
                   Owner
                 </th>
-                <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
+                <th className="min-w-[120px] py-4 px-4 text-black dark:text-blue-gray-50">
                   License Plate
                 </th>
-                <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
+                <th className="min-w-[120px] py-4 px-4 text-black dark:text-blue-gray-50">
                   Insurance Expiry
                 </th>
-                <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
+                <th className="min-w-[120px] py-4 px-4 text-black dark:text-blue-gray-50">
                   Price
                 </th>
-                <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
+                <th className="min-w-[120px] py-4 px-4 text-black dark:text-blue-gray-50">
                   Profit
                 </th>
-                <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
+                <th className="min-w-[120px] py-4 px-4 text-black dark:text-blue-gray-50">
                   Status
                 </th>
                 <th className="py-4 px-4"></th>
@@ -33,25 +33,29 @@ export default function TableBrand() {
             <tbody>
               <tr>
                 <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
-                  <h5 className="font-medium text-black dark:text-white">
+                  <h5 className="font-medium text-black dark:text-blue-gray-50">
                     Wave RSX
                   </h5>
                   <p className="text-sm">Red</p>
                 </td>
                 <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                  <p className="text-black dark:text-white">thuan2611</p>
+                  <p className="text-black dark:text-blue-gray-50">thuan2611</p>
                 </td>
                 <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                  <p className="text-black dark:text-white">65L1-24084</p>
+                  <p className="text-black dark:text-blue-gray-50">
+                    65L1-24084
+                  </p>
                 </td>
                 <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                  <p className="text-black dark:text-white">01/01/2024</p>
+                  <p className="text-black dark:text-blue-gray-50">
+                    01/01/2024
+                  </p>
                 </td>
                 <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                  <p className="text-black dark:text-white">100.000</p>
+                  <p className="text-black dark:text-blue-gray-50">100.000</p>
                 </td>
                 <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                  <p className="text-meta-3 dark:text-white">10.000</p>
+                  <p className="text-meta-3 dark:text-blue-gray-50">10.000</p>
                 </td>
                 <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                   <p className="inline-flex rounded-full bg-success bg-opacity-10 py-1 px-3 text-sm font-medium text-success">
@@ -130,25 +134,29 @@ export default function TableBrand() {
               </tr>
               <tr>
                 <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
-                  <h5 className="font-medium text-black dark:text-white">
+                  <h5 className="font-medium text-black dark:text-blue-gray-50">
                     Wave RSX
                   </h5>
                   <p className="text-sm">Red</p>
                 </td>
                 <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                  <p className="text-black dark:text-white">thuan2611</p>
+                  <p className="text-black dark:text-blue-gray-50">thuan2611</p>
                 </td>
                 <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                  <p className="text-black dark:text-white">65L1-24084</p>
+                  <p className="text-black dark:text-blue-gray-50">
+                    65L1-24084
+                  </p>
                 </td>
                 <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                  <p className="text-black dark:text-white">01/01/2024</p>
+                  <p className="text-black dark:text-blue-gray-50">
+                    01/01/2024
+                  </p>
                 </td>
                 <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                  <p className="text-black dark:text-white">100.000</p>
+                  <p className="text-black dark:text-blue-gray-50">100.000</p>
                 </td>
                 <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                  <p className="text-meta-3 dark:text-white">10.000</p>
+                  <p className="text-meta-3 dark:text-blue-gray-50">10.000</p>
                 </td>
                 <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                   <p className="inline-flex rounded-full bg-danger bg-opacity-10 py-1 px-3 text-sm font-medium text-danger">
@@ -227,25 +235,29 @@ export default function TableBrand() {
               </tr>
               <tr>
                 <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
-                  <h5 className="font-medium text-black dark:text-white">
+                  <h5 className="font-medium text-black dark:text-blue-gray-50">
                     Wave RSX
                   </h5>
                   <p className="text-sm">Red</p>
                 </td>
                 <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                  <p className="text-black dark:text-white">thuan2611</p>
+                  <p className="text-black dark:text-blue-gray-50">thuan2611</p>
                 </td>
                 <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                  <p className="text-black dark:text-white">65L1-24084</p>
+                  <p className="text-black dark:text-blue-gray-50">
+                    65L1-24084
+                  </p>
                 </td>
                 <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                  <p className="text-black dark:text-white">01/01/2024</p>
+                  <p className="text-black dark:text-blue-gray-50">
+                    01/01/2024
+                  </p>
                 </td>
                 <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                  <p className="text-black dark:text-white">100.000</p>
+                  <p className="text-black dark:text-blue-gray-50">100.000</p>
                 </td>
                 <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                  <p className="text-meta-3 dark:text-white">10.000</p>
+                  <p className="text-meta-3 dark:text-blue-gray-50">10.000</p>
                 </td>
                 <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                   <p className="inline-flex rounded-full bg-success bg-opacity-10 py-1 px-3 text-sm font-medium text-success">
@@ -324,25 +336,29 @@ export default function TableBrand() {
               </tr>
               <tr>
                 <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
-                  <h5 className="font-medium text-black dark:text-white">
+                  <h5 className="font-medium text-black dark:text-blue-gray-50">
                     Wave RSX
                   </h5>
                   <p className="text-sm">Red</p>
                 </td>
                 <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                  <p className="text-black dark:text-white">thuan2611</p>
+                  <p className="text-black dark:text-blue-gray-50">thuan2611</p>
                 </td>
                 <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                  <p className="text-black dark:text-white">65L1-24084</p>
+                  <p className="text-black dark:text-blue-gray-50">
+                    65L1-24084
+                  </p>
                 </td>
                 <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                  <p className="text-black dark:text-white">01/01/2024</p>
+                  <p className="text-black dark:text-blue-gray-50">
+                    01/01/2024
+                  </p>
                 </td>
                 <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                  <p className="text-black dark:text-white">100.000</p>
+                  <p className="text-black dark:text-blue-gray-50">100.000</p>
                 </td>
                 <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                  <p className="text-meta-3 dark:text-white">10.000</p>
+                  <p className="text-meta-3 dark:text-blue-gray-50">10.000</p>
                 </td>
                 <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                   <p className="inline-flex rounded-full bg-success bg-opacity-10 py-1 px-3 text-sm font-medium text-success">

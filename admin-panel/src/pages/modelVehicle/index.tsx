@@ -146,22 +146,22 @@ export default function ModelVehiclePage() {
             <table className="w-full table-auto">
               <thead>
                 <tr className=" bg-gray-2 text-left dark:bg-meta-4  font-bold">
-                  <th className="min-w-[180px] py-4 px-4 text-black dark:text-white ">
+                  <th className="min-w-[180px] py-4 px-4 text-black dark:text-blue-gray-50 ">
                     Model Name
                   </th>
-                  <th className="min-w-[180px] py-4 px-4 text-black dark:text-white">
+                  <th className="min-w-[180px] py-4 px-4 text-black dark:text-blue-gray-50">
                     Collection name
                   </th>
-                  <th className="w-[120px] py-4 px-4 text-black dark:text-white">
+                  <th className="w-[120px] py-4 px-4 text-black dark:text-blue-gray-50">
                     Color
                   </th>
-                  <th className="min-w-[40px] text-center py-4 px-4 text-black dark:text-white">
+                  <th className="min-w-[40px] text-center py-4 px-4 text-black dark:text-blue-gray-50">
                     Capacity
                   </th>
-                  <th className="min-w-[50px] py-4 px-4 text-black dark:text-white">
+                  <th className="min-w-[50px] py-4 px-4 text-black dark:text-blue-gray-50">
                     Year
                   </th>
-                  <th className="min-w-[60px] text-center py-4 px-4 text-black dark:text-white">
+                  <th className="min-w-[60px] text-center py-4 px-4 text-black dark:text-blue-gray-50">
                     Status
                   </th>
                   <th className="py-4 px-4"></th>
@@ -179,12 +179,12 @@ export default function ModelVehiclePage() {
                     {modelVehicles.map((modelVehicle) => (
                       <tr key={modelVehicle.id}>
                         <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark max-w-45">
-                          <h5 className="font-medium text-black dark:text-white whitespace-normal overflow-wrap-normal line-clamp-3">
+                          <h5 className="font-medium text-black dark:text-blue-gray-50 whitespace-normal overflow-wrap-normal line-clamp-3">
                             {modelVehicle.name}
                           </h5>
                         </td>
                         <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                          <h5 className="font-medium text-black dark:text-white">
+                          <h5 className="font-medium text-black dark:text-blue-gray-50">
                             {modelVehicle.collection.name}
                           </h5>
                         </td>
@@ -192,7 +192,7 @@ export default function ModelVehiclePage() {
                           <div className="flex flex-col max-h-25 overflow-y-auto scrollbar">
                             {modelVehicle.colors.map((color, index) => (
                               <h5
-                                className="font-medium text-left text-black dark:text-white"
+                                className="font-medium text-left text-black dark:text-blue-gray-50"
                                 key={index}
                               >
                                 {color.color}
@@ -201,12 +201,12 @@ export default function ModelVehiclePage() {
                           </div>
                         </td>
                         <td className="border-b text-center border-[#eee] py-5 px-4 dark:border-strokedark">
-                          <h5 className="font-medium text-black dark:text-white">
+                          <h5 className="font-medium text-black dark:text-blue-gray-50">
                             {modelVehicle.capacity}
                           </h5>
                         </td>
                         <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                          <h5 className="font-medium text-black dark:text-white">
+                          <h5 className="font-medium text-black dark:text-blue-gray-50">
                             {modelVehicle.year}
                           </h5>
                         </td>

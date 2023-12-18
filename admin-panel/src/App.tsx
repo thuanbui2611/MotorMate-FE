@@ -6,6 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useAppDispatch, useAppSelector } from "./app/store/ConfigureStore";
 import { fetchUserFromToken } from "./pages/account/AccountSlice";
 import { useJsApiLoader } from "@react-google-maps/api";
+import GoogleMapsWrapper from "./app/components/GoogleMapsWrapper";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -15,14 +16,7 @@ function App() {
     dispatch(fetchUserFromToken()).finally(() => setLoading(false));
   }, [dispatch, user?.token]);
 
-  const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY as string,
-    libraries: ["places"],
-    language: "vi",
-    region: "VN",
-  });
-
-  return loading && !isLoaded ? (
+  return loading ? (
     <Loader />
   ) : (
     <>
@@ -39,7 +33,9 @@ function App() {
         theme="colored"
         style={{ zIndex: 999999 }}
       />
-      <Outlet />
+      <GoogleMapsWrapper>
+        <Outlet />
+      </GoogleMapsWrapper>
     </>
   );
 }

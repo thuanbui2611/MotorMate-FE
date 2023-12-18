@@ -47,7 +47,7 @@ const DropdownUser = () => {
         to="#"
       >
         <span className="hidden text-right sm:block">
-          <span className="block text-sm font-semibold text-black dark:text-white line-clamp-1">
+          <span className="block text-sm font-semibold text-black dark:text-blue-gray-50 line-clamp-1">
             {user ? user.name : "Not login"}
           </span>
           <span className="block text-xs font-semibold">

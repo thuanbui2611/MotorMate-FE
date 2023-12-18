@@ -53,7 +53,7 @@ export default function TransactionDetail() {
   useEffect(() => {
     if (!orderDetails && parentOrderId && !order && userDetail) {
       setIsLoading(true);
-      agent.TripeRequest.parentOrder(parentOrderId).then((response) => {
+      agent.TripRequest.parentOrder(parentOrderId).then((response) => {
         if (response) {
           setOrderDetails(response);
         }
@@ -72,7 +72,7 @@ export default function TransactionDetail() {
       <div className="pb-14 pt-10 px-4 2xl:container mx-auto">
         <div className="flex justify-between items-center">
           <div className="flex flex-col justify-start items-start space-y-2">
-            <h1 className="text-3xl dark:text-white lg:text-4xl font-semibold leading-7 lg:leading-9 text-black">
+            <h1 className="text-3xl dark:text-blue-gray-50 lg:text-4xl font-semibold leading-7 lg:leading-9 text-black">
               Order{" "}
               <span className="text-blue-600">
                 #{orderDetails && orderDetails.parentOrderId}

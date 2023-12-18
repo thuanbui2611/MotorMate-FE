@@ -45,7 +45,7 @@ export const getTransactionsAsync = createAsyncThunk<
     ThunkAPI.getState().transaction.transactionParams
   );
   try {
-    const response = await agent.TripeRequest.list(params);
+    const response = await agent.TripRequest.list(params);
     ThunkAPI.dispatch(setMetaData(response.metaData));
     return response.items;
   } catch (error: any) {

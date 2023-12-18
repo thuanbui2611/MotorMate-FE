@@ -115,7 +115,7 @@ export default function BrandForm({ brand, cancelEdit, actionName }: Props) {
           <CardHeader className="text-center">
             <Typography
               variant="h3"
-              className="text-center py-4 bg-orange-500 text-white rounded-sm dark:bg-boxdark dark:text-white"
+              className="text-center py-4 bg-orange-500 text-white rounded-sm dark:bg-boxdark dark:text-blue-gray-50"
             >
               {actionName}
             </Typography>

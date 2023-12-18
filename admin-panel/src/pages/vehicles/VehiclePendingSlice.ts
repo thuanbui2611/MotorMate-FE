@@ -14,6 +14,7 @@ interface VehicleState {
   vehiclesPending: Vehicle | null;
   vehiclesPendingLoaded: boolean;
   vehiclesParams: VehicleParams;
+  isFetched: boolean;
   metaData: MetaData | null;
 }
 
@@ -57,8 +58,6 @@ export const getVehiclesPendingAsync = createAsyncThunk<
   const params = getAxiosParams(
     ThunkAPI.getState().vehiclePending.vehiclesParams
   );
-
-  console.log(params);
   try {
     const response = await agent.Vehicle.listVehicleByStatus(params, "pending");
     ThunkAPI.dispatch(setMetaData(response.metaData));
@@ -67,6 +66,18 @@ export const getVehiclesPendingAsync = createAsyncThunk<
     return ThunkAPI.rejectWithValue({ error: error.data });
   }
 });
+
+export const addVehicleAsync = createAsyncThunk<Vehicle, FieldValues>(
+  "vehiclesPending/addVehicleAsync",
+  async (data, ThunkAPI) => {
+    try {
+      const response = await agent.Vehicle.create(data);
+      return response;
+    } catch (error: any) {
+      return ThunkAPI.rejectWithValue({ error: error.data });
+    }
+  }
+);
 
 export const updateVehiclePendingAsync = createAsyncThunk<Vehicle, FieldValues>(
   "vehiclesPending/updateVehiclePendingAsync",
@@ -113,6 +124,7 @@ export const VehiclePendingSlice = createSlice({
     vehiclesPendingLoaded: false,
     vehiclesParams: initParams(),
     metaData: null,
+    isFetched: false,
   }),
   reducers: {
     addVehiclePending: (state, action) => {
@@ -146,6 +158,7 @@ export const VehiclePendingSlice = createSlice({
       .addCase(getVehiclesPendingAsync.fulfilled, (state, action) => {
         vehiclesPendingAdapter.setAll(state, action.payload);
         state.vehiclesPendingLoaded = false;
+        state.isFetched = true;
       })
       .addCase(getVehiclesPendingAsync.pending, (state, action) => {
         state.vehiclesPendingLoaded = true;
@@ -155,9 +168,16 @@ export const VehiclePendingSlice = createSlice({
         state.vehiclesPendingLoaded = false;
       });
 
+    builder.addCase(addVehicleAsync.fulfilled, (state, action) => {
+      toast.success("Add vehicle successfully!");
+      vehiclesPendingAdapter.addOne(state, action.payload);
+    });
+
     builder.addCase(updateVehiclePendingAsync.fulfilled, (state, action) => {
       toast.success("Update Vehicle Pending Successfully!");
-      vehiclesPendingAdapter.upsertOne(state, action.payload);
+      if (state.isFetched) {
+        vehiclesPendingAdapter.upsertOne(state, action.payload);
+      }
     });
 
     builder.addCase(deleteVehiclePendingAsync.fulfilled, (state, action) => {

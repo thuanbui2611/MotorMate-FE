@@ -6,16 +6,16 @@ export default function TableTransaction() {
           <table className="w-full table-auto">
             <thead>
               <tr className="bg-gray-2 text-left dark:bg-meta-4">
-                <th className="min-w-[220px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
+                <th className="min-w-[220px] py-4 px-4 font-medium text-black dark:text-blue-gray-50 xl:pl-11">
                   Package
                 </th>
-                <th className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white">
+                <th className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-blue-gray-50">
                   Invoice date
                 </th>
-                <th className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white">
+                <th className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-blue-gray-50">
                   Status
                 </th>
-                <th className="py-4 px-4 font-medium text-black dark:text-white">
+                <th className="py-4 px-4 font-medium text-black dark:text-blue-gray-50">
                   Actions
                 </th>
               </tr>
@@ -23,13 +23,15 @@ export default function TableTransaction() {
             <tbody>
               <tr>
                 <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
-                  <h5 className="font-medium text-black dark:text-white">
+                  <h5 className="font-medium text-black dark:text-blue-gray-50">
                     Free Package
                   </h5>
                   <p className="text-sm">$0.00</p>
                 </td>
                 <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                  <p className="text-black dark:text-white">Jan 13,2023</p>
+                  <p className="text-black dark:text-blue-gray-50">
+                    Jan 13,2023
+                  </p>
                 </td>
                 <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                   <p className="inline-flex rounded-full bg-success bg-opacity-10 py-1 px-3 text-sm font-medium text-success">
@@ -108,13 +110,15 @@ export default function TableTransaction() {
               </tr>
               <tr>
                 <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
-                  <h5 className="font-medium text-black dark:text-white">
+                  <h5 className="font-medium text-black dark:text-blue-gray-50">
                     Standard Package
                   </h5>
                   <p className="text-sm">$59.00</p>
                 </td>
                 <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                  <p className="text-black dark:text-white">Jan 13,2023</p>
+                  <p className="text-black dark:text-blue-gray-50">
+                    Jan 13,2023
+                  </p>
                 </td>
                 <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                   <p className="inline-flex rounded-full bg-success bg-opacity-10 py-1 px-3 text-sm font-medium text-success">
@@ -193,13 +197,15 @@ export default function TableTransaction() {
               </tr>
               <tr>
                 <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
-                  <h5 className="font-medium text-black dark:text-white">
+                  <h5 className="font-medium text-black dark:text-blue-gray-50">
                     Business Package
                   </h5>
                   <p className="text-sm">$99.00</p>
                 </td>
                 <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                  <p className="text-black dark:text-white">Jan 13,2023</p>
+                  <p className="text-black dark:text-blue-gray-50">
+                    Jan 13,2023
+                  </p>
                 </td>
                 <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                   <p className="inline-flex rounded-full bg-danger bg-opacity-10 py-1 px-3 text-sm font-medium text-danger">
@@ -278,13 +284,15 @@ export default function TableTransaction() {
               </tr>
               <tr>
                 <td className="py-5 px-4 pl-9 xl:pl-11">
-                  <h5 className="font-medium text-black dark:text-white">
+                  <h5 className="font-medium text-black dark:text-blue-gray-50">
                     Standard Package
                   </h5>
                   <p className="text-sm">$59.00</p>
                 </td>
                 <td className="py-5 px-4">
-                  <p className="text-black dark:text-white">Jan 13,2023</p>
+                  <p className="text-black dark:text-blue-gray-50">
+                    Jan 13,2023
+                  </p>
                 </td>
                 <td className="py-5 px-4">
                   <p className="inline-flex rounded-full bg-warning bg-opacity-10 py-1 px-3 text-sm font-medium text-warning">

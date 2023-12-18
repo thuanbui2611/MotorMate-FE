@@ -226,6 +226,14 @@ export default function VehicleDetails({ vehicle, onClose }: Props) {
                               {ConvertToDateStr(vehicle!.purchaseDate)}
                             </p>
                           </div>
+                          <div className="flex justify-center items-start">
+                            <p className="text-sm leading-5 text-black font-bold">
+                              Address:
+                            </p>
+                            <p className="ml-1 text-sm leading-4 text-black break-all">
+                              {vehicle?.address}
+                            </p>
+                          </div>
                         </div>
                       </div>
                       <div className="flex flex-col w-full text-left space-y-4">

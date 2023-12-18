@@ -154,19 +154,19 @@ export default function BlogPage() {
             <table className="w-full table-auto">
               <thead>
                 <tr className=" bg-gray-2 text-left dark:bg-meta-4  font-bold">
-                  <th className="min-w-[250px] text-center py-4 px-4 text-black dark:text-white xl:pl-11">
+                  <th className="min-w-[250px] text-center py-4 px-4 text-black dark:text-blue-gray-50 xl:pl-11">
                     Title
                   </th>
-                  <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
+                  <th className="min-w-[120px] py-4 px-4 text-black dark:text-blue-gray-50">
                     Category
                   </th>
-                  <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
+                  <th className="min-w-[120px] py-4 px-4 text-black dark:text-blue-gray-50">
                     Author
                   </th>
-                  <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
+                  <th className="min-w-[120px] py-4 px-4 text-black dark:text-blue-gray-50">
                     Created At
                   </th>
-                  <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
+                  <th className="min-w-[120px] py-4 px-4 text-black dark:text-blue-gray-50">
                     Status
                   </th>
                   <th className="py-4 px-4"></th>
@@ -193,24 +193,24 @@ export default function BlogPage() {
                               />
                             </div>
                             <div className="ml-3 flex flex-1 flex-col">
-                              <h5 className="font-medium text-black dark:text-white">
+                              <h5 className="font-medium text-black dark:text-blue-gray-50">
                                 {blog.title}
                               </h5>
                             </div>
                           </div>
                         </td>
                         <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                          <h5 className="font-medium text-black dark:text-white">
+                          <h5 className="font-medium text-black dark:text-blue-gray-50">
                             {blog.category.name}
                           </h5>
                         </td>
                         <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                          <h5 className="font-medium text-black dark:text-white">
+                          <h5 className="font-medium text-black dark:text-blue-gray-50">
                             {blog.author.username}
                           </h5>
                         </td>
                         <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                          <h5 className="font-medium text-black dark:text-white">
+                          <h5 className="font-medium text-black dark:text-blue-gray-50">
                             {ConvertToDateStr(blog.createdAt)}
                           </h5>
                         </td>

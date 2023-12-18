@@ -706,26 +706,26 @@ export default function VehiclePending() {
             <table className="w-full table-auto">
               <thead>
                 <tr className=" bg-gray-2 text-left dark:bg-meta-4  font-bold">
-                  <th className="min-w-[250px] py-4 px-4 text-black dark:text-white text-center">
+                  <th className="min-w-[250px] py-4 px-4 text-black dark:text-blue-gray-50 text-center">
                     Vehicle Name
                   </th>
-                  <th className="min-w-[150px] py-4 px-4 text-black dark:text-white">
+                  <th className="min-w-[150px] py-4 px-4 text-black dark:text-blue-gray-50">
                     Owner
                   </th>
-                  <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
+                  <th className="min-w-[120px] py-4 px-4 text-black dark:text-blue-gray-50">
                     License Plate
                   </th>
-                  <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
+                  <th className="min-w-[120px] py-4 px-4 text-black dark:text-blue-gray-50">
                     Insurance Expiry
                   </th>
-                  <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
+                  <th className="min-w-[120px] py-4 px-4 text-black dark:text-blue-gray-50">
                     Location
                   </th>
-                  <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
+                  <th className="min-w-[120px] py-4 px-4 text-black dark:text-blue-gray-50">
                     Price
                   </th>
 
-                  <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
+                  <th className="min-w-[120px] py-4 px-4 text-black dark:text-blue-gray-50">
                     Status
                   </th>
                   <th className="py-4 px-4">
@@ -753,7 +753,7 @@ export default function VehiclePending() {
                       <tr>
                         <td colSpan={7}>
                           <div className="flex justify-center items-center w-full h-20">
-                            <p className="text-black dark:text-white">
+                            <p className="text-black dark:text-blue-gray-50">
                               No Items Found.
                             </p>
                           </div>
@@ -775,7 +775,7 @@ export default function VehiclePending() {
                                 />
                               </div>
                               <div className="ml-3 flex flex-col">
-                                <h5 className="font-medium text-black dark:text-white">
+                                <h5 className="font-medium text-black dark:text-blue-gray-50">
                                   {vehicle.specifications.modelName}
                                 </h5>
                                 <p className="text-sm">
@@ -786,27 +786,27 @@ export default function VehiclePending() {
                           </td>
 
                           <td className="py-5 px-4">
-                            <p className="text-black dark:text-white">
+                            <p className="text-black dark:text-blue-gray-50">
                               {vehicle.owner.username}
                             </p>
                           </td>
                           <td className="py-5 px-4">
-                            <p className="text-black dark:text-white">
+                            <p className="text-black dark:text-blue-gray-50">
                               {vehicle.licensePlate}
                             </p>
                           </td>
                           <td className="py-5 px-4">
-                            <p className="text-black dark:text-white">
+                            <p className="text-black dark:text-blue-gray-50">
                               {ConvertToDateStr(vehicle.insuranceExpiry)}
                             </p>
                           </td>
                           <td className="py-5 px-4">
-                            <p className="text-black dark:text-white">
+                            <p className="text-black dark:text-blue-gray-50">
                               {vehicle.city}
                             </p>
                           </td>
                           <td className="py-5 px-4">
-                            <p className="text-black dark:text-white">
+                            <p className="text-black dark:text-blue-gray-50">
                               {vehicle.price.toLocaleString()}
                             </p>
                           </td>

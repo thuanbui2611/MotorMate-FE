@@ -167,12 +167,19 @@ const Category = {
   delete: (id: string) => requests.delete(`api/blog/category/${id}`),
 };
 
-const TripeRequest = {
+const TripRequest = {
   list: (params: URLSearchParams) => requests.get("api/order", params),
   parentOrder: (parentOrderId: string) =>
     requests.get(`api/order/parent/${parentOrderId}`),
 };
-
+const Chart = {
+  totalVehicles: () => requests.get("api/chart/total/vehicles"),
+  totalUsers: () => requests.get("api/chart/total/users"),
+  totalProfit: () => requests.get("api/chart/total/profits"),
+  topLessees: () => requests.get("api/chart/top/lessees"),
+  topLessors: () => requests.get("api/chart/top/lessors"),
+  revenueInYear: (year: string) => requests.get(`api/chart/revenue/${year}`),
+};
 const agent = {
   Account,
   Brand,
@@ -183,7 +190,8 @@ const agent = {
   User,
   Blog,
   Category,
-  TripeRequest,
+  TripRequest,
+  Chart,
 };
 
 export default agent;

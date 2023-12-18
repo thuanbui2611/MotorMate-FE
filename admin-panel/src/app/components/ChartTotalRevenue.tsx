@@ -1,6 +1,12 @@
 import { ApexOptions } from "apexcharts";
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
+import { useAppDispatch, useAppSelector } from "../store/ConfigureStore";
+import { getRevenueInYearAsync } from "../../pages/dashboard/DashboardSlice";
+import LoaderButton from "./LoaderButton";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import DatePicker from "@mui/lab/DatePicker";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 const options: ApexOptions = {
   legend: {
@@ -104,15 +110,6 @@ const options: ApexOptions = {
       show: false,
     },
   },
-  yaxis: {
-    title: {
-      style: {
-        fontSize: "0px",
-      },
-    },
-    min: 0,
-    max: 100,
-  },
 };
 
 interface ChartOneState {
@@ -126,16 +123,109 @@ export default function ChartTotalRevenue() {
   const [state, setState] = useState<ChartOneState>({
     series: [
       {
-        name: "Product One",
-        data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30, 45],
+        name: "Total Revenue",
+        data: [],
       },
-
       {
-        name: "Product Two",
-        data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39, 51],
+        name: "Total Completed Rentals",
+        data: [],
       },
     ],
   });
+  const [selectedYear, setSelectedYear] = useState<number>(
+    new Date().getFullYear()
+  );
+  const { revenueInYear, revenueInYearLoading } = useAppSelector(
+    (state) => state.dashboard
+  );
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (!revenueInYearLoading && revenueInYear === null) {
+      dispatch(getRevenueInYearAsync(selectedYear.toString()));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!revenueInYearLoading) {
+      dispatch(getRevenueInYearAsync(selectedYear.toString()));
+    }
+  }, [selectedYear]);
+
+  useEffect(() => {
+    debugger;
+    if (revenueInYear) {
+      const revenueData = Object.values(
+        revenueInYear.TotalRevenue.totalRevenue.months
+      );
+      const completedTripData = Object.values(
+        revenueInYear.totalRentedAndCompletedVehicles.totalCompletedTrip.months
+      );
+      setState({
+        series: [
+          {
+            name: "Total Revenue",
+            data: revenueData,
+          },
+          {
+            name: "Total Completed Rentals",
+            data: completedTripData,
+          },
+        ],
+      });
+      options.yaxis = {
+        title: {
+          style: {
+            fontSize: "0px",
+          },
+        },
+        min: 0,
+        max: Math.max(...revenueData),
+      };
+
+      setSelectedYear(revenueInYear.TotalRevenue.totalRevenue.year);
+    }
+  }, [revenueInYear]);
+
+  function convertToYearRange(yearString: string) {
+    const year = parseInt(yearString);
+    // Create the start date of the year
+    const startDate = new Date(year, 0, 1);
+    const startDay = startDate.getDate(); // Get the day of the start date
+    const startMonth = startDate.getMonth() + 1; // Get the month of the start date (+1 because January is 0-indexed)
+    const startDateFormatted = `${startDay
+      .toString()
+      .padStart(2, "0")}/${startMonth
+      .toString()
+      .padStart(2, "0")}/${yearString}`;
+
+    // Create the end date of the year
+    const endDate = new Date(year, 11, 31);
+    const endDay = endDate.getDate(); // Get the day of the end date
+    const endMonth = endDate.getMonth() + 1; // Get the month of the end date (+1 because January is 0-indexed)
+    const endDateFormatted = `${endDay.toString().padStart(2, "0")}/${endMonth
+      .toString()
+      .padStart(2, "0")}/${yearString}`;
+
+    const result = `${startDateFormatted} - ${endDateFormatted}`;
+    return result;
+  }
+
+  const renderYearOptions = () => {
+    const currentYear = new Date().getFullYear();
+    const startYear = 2020;
+    const options = [];
+
+    for (let year = currentYear; year >= startYear; year--) {
+      options.push(
+        <option key={year} value={year}>
+          {year}
+        </option>
+      );
+    }
+
+    return options;
+  };
 
   return (
     <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 ">
@@ -147,7 +237,12 @@ export default function ChartTotalRevenue() {
             </span>
             <div className="w-full">
               <p className="font-semibold text-primary">Total Revenue</p>
-              <p className="text-sm font-medium">01/01/2023 - 12/12/2023</p>
+              <p className="text-sm font-medium">
+                {revenueInYear &&
+                  convertToYearRange(
+                    revenueInYear.TotalRevenue.totalRevenue.year.toString()
+                  )}
+              </p>
             </div>
           </div>
           <div className="flex min-w-[220px]">
@@ -158,19 +253,26 @@ export default function ChartTotalRevenue() {
               <p className="font-semibold text-secondary">
                 Total Completed Rentals
               </p>
-              <p className="text-sm font-medium">01/01/2023 - 12/12/2023</p>
+              <p className="text-sm font-medium">
+                {revenueInYear &&
+                  convertToYearRange(
+                    revenueInYear.totalRentedAndCompletedVehicles.totalCompletedTrip.year.toString()
+                  )}
+              </p>
             </div>
           </div>
         </div>
         <div className="flex w-full max-w-45 justify-end">
-          <div className="inline-flex items-center rounded-md bg-white p-1.5 dark:bg-meta-4">
+          <div className="inline-flex items-center rounded-md p-1.5">
             <select
-              id="year"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              className="bg-gray-50 border border-gray-300 bg-white dark:bg-graydark text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-blue-gray-50 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              value={selectedYear}
+              onChange={(e) => setSelectedYear(parseInt(e.target.value))}
             >
-              <option selected>Year</option>
-              <option value="US">2023</option>
-              <option value="CA">2024</option>
+              <option selected disabled>
+                Year
+              </option>
+              {renderYearOptions()}
             </select>
           </div>
         </div>
@@ -178,12 +280,18 @@ export default function ChartTotalRevenue() {
 
       <div>
         <div id="chartOne" className="-ml-5">
-          <ReactApexChart
-            options={options}
-            series={state.series}
-            type="area"
-            height={350}
-          />
+          {revenueInYearLoading ? (
+            <div className="w-full h-30">
+              <LoaderButton />
+            </div>
+          ) : (
+            <ReactApexChart
+              options={options}
+              series={state.series}
+              type="area"
+              height={350}
+            />
+          )}
         </div>
       </div>
     </div>

@@ -715,25 +715,25 @@ export default function VehiclesPage() {
             <table className="w-full table-auto">
               <thead>
                 <tr className=" bg-gray-2 text-left dark:bg-meta-4  font-bold">
-                  <th className="min-w-[250px] py-4 px-4 text-black dark:text-white text-center">
+                  <th className="min-w-[250px] py-4 px-4 text-black dark:text-blue-gray-50 text-center">
                     Vehicle Name
                   </th>
-                  <th className="min-w-[150px] py-4 px-4 text-black dark:text-white">
+                  <th className="min-w-[150px] py-4 px-4 text-black dark:text-blue-gray-50">
                     Owner
                   </th>
-                  <th className="w-fit py-4 px-4 text-black dark:text-white text-center">
+                  <th className="w-fit py-4 px-4 text-black dark:text-blue-gray-50 text-center">
                     Insurance <br /> Expiry
                   </th>
-                  <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
+                  <th className="min-w-[120px] py-4 px-4 text-black dark:text-blue-gray-50">
                     Location
                   </th>
-                  <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
+                  <th className="min-w-[120px] py-4 px-4 text-black dark:text-blue-gray-50">
                     Price
                   </th>
-                  <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
+                  <th className="min-w-[120px] py-4 px-4 text-black dark:text-blue-gray-50">
                     Profit
                   </th>
-                  <th className="w-fit py-4 px-4 text-black dark:text-white">
+                  <th className="w-fit py-4 px-4 text-black dark:text-blue-gray-50">
                     Status
                   </th>
                   <th className="py-4 px-4">
@@ -759,7 +759,7 @@ export default function VehiclesPage() {
                       <tr>
                         <td colSpan={9}>
                           <div className="flex justify-center items-center w-full h-20">
-                            <p className="text-black dark:text-white">
+                            <p className="text-black dark:text-blue-gray-50">
                               No Items Found.
                             </p>
                           </div>
@@ -782,7 +782,7 @@ export default function VehiclesPage() {
                               </div>
                               <div className="ml-3 flex flex-1 flex-col">
                                 <div className="flex">
-                                  <h5 className="font-medium text-black dark:text-white  line-clamp-2">
+                                  <h5 className="font-medium text-black dark:text-blue-gray-50  line-clamp-2">
                                     {vehicle.specifications.modelName}
                                   </h5>
                                   <a
@@ -847,23 +847,23 @@ export default function VehiclesPage() {
                           </td>
 
                           <td className="py-5 px-4">
-                            <p className="text-black dark:text-white line-clamp-1">
+                            <p className="text-black dark:text-blue-gray-50 line-clamp-1">
                               {vehicle.owner.username}
                             </p>
                           </td>
 
                           <td className="py-5 px-4">
-                            <p className="text-black dark:text-white">
+                            <p className="text-black dark:text-blue-gray-50">
                               {ConvertToDateStr(vehicle.insuranceExpiry)}
                             </p>
                           </td>
                           <td className="py-5 px-4">
-                            <p className="text-black dark:text-white">
+                            <p className="text-black dark:text-blue-gray-50">
                               {vehicle.city.replace(/Thành Phố |Tỉnh /g, "")}
                             </p>
                           </td>
                           <td className="py-5 px-4">
-                            <p className="text-meta-3 dark:text-white">
+                            <p className="text-meta-3 dark:text-blue-gray-50">
                               {vehicle.price.toLocaleString()} đ
                             </p>
                           </td>

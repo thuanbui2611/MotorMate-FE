@@ -68,18 +68,6 @@ export const getVehiclesAsync = createAsyncThunk<
   }
 });
 
-export const addVehicleAsync = createAsyncThunk<Vehicle, FieldValues>(
-  "vehicle/addVehicleAsync",
-  async (data, ThunkAPI) => {
-    try {
-      const response = await agent.Vehicle.create(data);
-      return response;
-    } catch (error: any) {
-      return ThunkAPI.rejectWithValue({ error: error.data });
-    }
-  }
-);
-
 export const updateVehicleAsync = createAsyncThunk<Vehicle, FieldValues>(
   "vehicle/updateVehicleAsync",
   async (data, ThunkAPI) => {
@@ -143,6 +131,7 @@ export const VehicleSlice = createSlice({
       vehiclesAdapter.addOne(state, action.payload);
     },
     removeVehicle: (state, action) => {
+      debugger;
       vehiclesAdapter.removeOne(state, action.payload);
     },
     setVehicleParams: (state, action) => {
@@ -192,11 +181,6 @@ export const VehicleSlice = createSlice({
         console.log("Get vehicles rejected: ", action);
         state.vehicleLoaded = false;
       });
-
-    builder.addCase(addVehicleAsync.fulfilled, (state, action) => {
-      toast.success("Add vehicle successfully!");
-      vehiclesAdapter.addOne(state, action.payload);
-    });
 
     builder
       .addCase(lockVehicleAsync.fulfilled, (state, action) => {

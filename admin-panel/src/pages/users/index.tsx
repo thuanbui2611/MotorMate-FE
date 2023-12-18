@@ -367,21 +367,21 @@ export default function UsersPage() {
             <table className="w-full table-auto">
               <thead>
                 <tr className=" bg-gray-2 text-left dark:bg-meta-4  font-bold">
-                  <th className="min-w-[300px] text-left py-4 px-4 text-black dark:text-white xl:pl-11">
+                  <th className="min-w-[300px] text-left py-4 px-4 text-black dark:text-blue-gray-50 xl:pl-11">
                     Full Name
                   </th>
-                  <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
+                  <th className="min-w-[120px] py-4 px-4 text-black dark:text-blue-gray-50">
                     Username
                   </th>
 
-                  <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
+                  <th className="min-w-[120px] py-4 px-4 text-black dark:text-blue-gray-50">
                     Email
                   </th>
-                  <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
+                  <th className="min-w-[120px] py-4 px-4 text-black dark:text-blue-gray-50">
                     PhoneNumber
                   </th>
 
-                  <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
+                  <th className="min-w-[120px] py-4 px-4 text-black dark:text-blue-gray-50">
                     Status
                   </th>
                   <th className="py-4 px-4"></th>
@@ -411,7 +411,7 @@ export default function UsersPage() {
                               />
                             </div>
                             <div className="ml-3 flex flex-col flex-1">
-                              <h5 className="font-semibold text-black dark:text-white line-clamp-2">
+                              <h5 className="font-semibold text-black dark:text-blue-gray-50 line-clamp-2">
                                 {user.fullName}
                               </h5>
                               <div className="flex items-center justify-start gap-1">
@@ -488,7 +488,7 @@ export default function UsersPage() {
                           </div>
                         </td>
                         <td className="px-4 py-5">
-                          <h5 className="font-medium text-black dark:text-white">
+                          <h5 className="font-medium text-black dark:text-blue-gray-50">
                             {user.username}
                           </h5>
                         </td>
@@ -499,7 +499,7 @@ export default function UsersPage() {
                           </h5>
                         </td>
                         <td className="px-4 py-5">
-                          <h5 className="font-medium text-black dark:text-white">
+                          <h5 className="font-medium text-black dark:text-blue-gray-50">
                             {user.phoneNumber}
                           </h5>
                         </td>

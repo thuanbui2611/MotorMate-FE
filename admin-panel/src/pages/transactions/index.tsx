@@ -242,28 +242,28 @@ export default function Transactions() {
           <table className="w-full table-auto">
             <thead>
               <tr className=" bg-gray-2 text-left dark:bg-meta-4  font-bold">
-                <th className="min-w-[150px] py-4 px-4 text-black dark:text-white">
+                <th className="min-w-[150px] py-4 px-4 text-black dark:text-blue-gray-50">
                   Order Tag
                 </th>
-                <th className="min-w-[150px] py-4 px-4 text-black dark:text-white">
+                <th className="min-w-[150px] py-4 px-4 text-black dark:text-blue-gray-50">
                   Lessor
                 </th>
-                <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
+                <th className="min-w-[120px] py-4 px-4 text-black dark:text-blue-gray-50">
                   Lessee
                 </th>
-                <th className="py-4 px-4 text-black dark:text-white text-center">
+                <th className="py-4 px-4 text-black dark:text-blue-gray-50 text-center">
                   Number of <br /> Vehicles
                 </th>
-                <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
+                <th className="min-w-[120px] py-4 px-4 text-black dark:text-blue-gray-50">
                   Price
                 </th>
-                <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
+                <th className="min-w-[120px] py-4 px-4 text-black dark:text-blue-gray-50">
                   Profit
                 </th>
-                <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
+                <th className="min-w-[120px] py-4 px-4 text-black dark:text-blue-gray-50">
                   Order Date
                 </th>
-                <th className="min-w-[100px] py-4 pl-4 text-black dark:text-white">
+                <th className="min-w-[100px] py-4 pl-4 text-black dark:text-blue-gray-50">
                   Status
                 </th>
                 <th className="py-4 pr-4 w-fit">
@@ -289,7 +289,7 @@ export default function Transactions() {
                     <tr>
                       <td colSpan={9}>
                         <div className="flex justify-center items-center w-full h-20">
-                          <p className="text-black dark:text-white">
+                          <p className="text-black dark:text-blue-gray-50">
                             No Items Found.
                           </p>
                         </div>
@@ -311,7 +311,7 @@ export default function Transactions() {
                         </td>
 
                         <td className="py-5 px-4">
-                          <p className="text-black dark:text-white">
+                          <p className="text-black dark:text-blue-gray-50">
                             {transaction.shops.length === 1
                               ? transaction.shops[0].lessorName
                               : transaction.shops[0].lessorName +
@@ -321,19 +321,19 @@ export default function Transactions() {
                           </p>
                         </td>
                         <td className="py-5 px-4">
-                          <p className="text-black dark:text-white">
+                          <p className="text-black dark:text-blue-gray-50">
                             {transaction.fullName}
                           </p>
                         </td>
                         <td className="py-5 px-4">
-                          <p className="text-black dark:text-white text-center">
+                          <p className="text-black dark:text-blue-gray-50 text-center">
                             {transaction.shops
                               .map((shop) => shop.vehicles.length)
                               .reduce((a, b) => a + b, 0)}
                           </p>
                         </td>
                         <td className="py-5 px-4">
-                          <p className="text-meta-3 dark:text-white">
+                          <p className="text-meta-3 dark:text-blue-gray-50">
                             {transaction.totalAmmount.toLocaleString()}
                           </p>
                         </td>
@@ -342,7 +342,7 @@ export default function Transactions() {
                           <p className="text-meta-3">10.000</p>
                         </td>
                         <td className="py-5 px-4">
-                          <p className="text-black dark:text-white">
+                          <p className="text-black dark:text-blue-gray-50">
                             {" "}
                             {new Date(transaction.createdAt).toLocaleString(
                               [],

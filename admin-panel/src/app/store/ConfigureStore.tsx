@@ -13,6 +13,7 @@ import { BlogSlice } from "../../pages/blog/BlogSlice";
 import { BlogCategorySlice } from "../../pages/blogCategory/BlogCategorySlice";
 import { TransactionSlice } from "../../pages/transactions/TransactionSlice";
 import { FilterSlice } from "../../pages/filter/FilterSlice";
+import { DashboardSlice } from "../../pages/dashboard/DashboardSlice";
 
 export const store = configureStore({
   reducer: {
@@ -28,6 +29,7 @@ export const store = configureStore({
     blog: BlogSlice.reducer,
     blogCategory: BlogCategorySlice.reducer,
     transaction: TransactionSlice.reducer,
+    dashboard: DashboardSlice.reducer,
     filter: FilterSlice.reducer,
   },
 });

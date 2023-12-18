@@ -147,13 +147,13 @@ export default function BrandPage() {
             <table className="w-full table-auto">
               <thead>
                 <tr className=" bg-gray-2 text-left dark:bg-meta-4  font-bold">
-                  <th className="min-w-[220px] py-4 px-4 text-black dark:text-white xl:pl-11">
+                  <th className="min-w-[220px] py-4 px-4 text-black dark:text-blue-gray-50 xl:pl-11">
                     Brand Name
                   </th>
-                  <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
+                  <th className="min-w-[120px] py-4 px-4 text-black dark:text-blue-gray-50">
                     Profit
                   </th>
-                  <th className="min-w-[120px] py-4 px-4 text-black dark:text-white">
+                  <th className="min-w-[120px] py-4 px-4 text-black dark:text-blue-gray-50">
                     Status
                   </th>
                   <th className="py-4 px-4"></th>
@@ -174,7 +174,7 @@ export default function BrandPage() {
                           <div className="h-12 w-12 rounded-md">
                             <img src={brand.image.image} alt="logo" />
                           </div>
-                          <h5 className="ml-4 font-medium text-black dark:text-white">
+                          <h5 className="ml-4 font-medium text-black dark:text-blue-gray-50">
                             {brand.name}
                           </h5>
                         </td>
