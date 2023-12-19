@@ -157,13 +157,13 @@ export default function ProductCard({ product, userLogin }: Props) {
           </div>
           <ul className="flex pb-1 items-center">
             <li className="text-sm font-semibold -mb-[2px] mr-1 text-[#ffc73a]">
-              {product.rating}{" "}
+              {product.rating}
             </li>
             {renderRatingSVG(product.rating)}
           </ul>
           <p className="text-lg">
             <span className="text-green-600">
-              ${product.price.toLocaleString()}{" "}
+              {product.price.toLocaleString()} VND
             </span>
           </p>
         </div>

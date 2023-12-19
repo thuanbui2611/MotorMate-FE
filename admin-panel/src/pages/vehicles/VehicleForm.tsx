@@ -555,7 +555,11 @@ export default function VehicleForm({
                         <div className="h-12 w-12 rounded-md mr-2">
                           <img
                             className="h-full w-full rounded-md object-cover"
-                            src={option.image.imageUrl}
+                            src={
+                              option.image.imageUrl
+                                ? option.image.imageUrl
+                                : require("../../app/assets/images/icon/user.png")
+                            }
                             alt="Avatar"
                           />
                         </div>
@@ -574,7 +578,11 @@ export default function VehicleForm({
                             {selectedUser && (
                               <img
                                 className="h-6 w-6 rounded-full"
-                                src={selectedUser.image.imageUrl}
+                                src={
+                                  selectedUser.image.imageUrl
+                                    ? selectedUser.image.imageUrl
+                                    : require("../../app/assets/images/icon/user.png")
+                                }
                                 alt="Avatar"
                                 referrerPolicy="no-referrer"
                               />

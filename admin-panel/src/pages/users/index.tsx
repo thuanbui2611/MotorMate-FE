@@ -406,7 +406,11 @@ export default function UsersPage() {
                             <div className="h-12 w-12 rounded-md">
                               <img
                                 className="h-full w-full rounded-md object-cover"
-                                src={user.image.imageUrl}
+                                src={
+                                  user.image.imageUrl
+                                    ? user.image.imageUrl
+                                    : require("../../app/assets/images/icon/user.png")
+                                }
                                 alt="User image"
                               />
                             </div>
@@ -423,7 +427,7 @@ export default function UsersPage() {
                                       ? "text-blue-500"
                                       : user.roles[0].toLowerCase() === "lessor"
                                       ? "text-green-500"
-                                      : " text-blue-gray-800"
+                                      : " text-blue-gray-800 dark:text-blue-gray-200"
                                   } `}
                                 >
                                   {user.roles[0]}

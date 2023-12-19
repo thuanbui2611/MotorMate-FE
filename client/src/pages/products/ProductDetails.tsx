@@ -46,11 +46,22 @@ export default function ProductDetails() {
     if (productDetails) {
       setProduct(productDetails);
       setLoading(false);
+      scrollToTop();
     }
   }, [productDetails]);
 
   useEffect(() => {
-    if (id && !productDetails && !product) {
+    if (!id) return;
+    if (productDetails && productDetails.id !== id) {
+      setLoading(true);
+      agent.Vehicle.details(id!)
+        .then((product) => {
+          setProduct(product);
+          setLoading(false);
+        })
+        .catch((error) => console.log(error));
+      scrollToTop();
+    } else if (!productDetails) {
       setLoading(true);
       agent.Vehicle.details(id!)
         .then((product) => {
@@ -60,7 +71,7 @@ export default function ProductDetails() {
         .catch((error) => console.log(error));
       scrollToTop();
     }
-  }, [id, productDetails, product]);
+  }, [id]);
 
   const handleOpenImage = (index: number) => {
     setOpenImage(index);
@@ -169,15 +180,13 @@ export default function ProductDetails() {
     return ratingSVG;
   };
 
-  if (loading) return <Loading />;
-  if (
-    (!loading && !product) ||
+  return loading ? (
+    <Loading />
+  ) : !product ||
     product?.isLocked ||
-    product?.status.toLowerCase() !== "approved"
-  )
-    return <NotFound />;
-
-  return (
+    product?.status.toLowerCase() !== "approved" ? (
+    <NotFound />
+  ) : (
     <>
       <div className="mx-auto w-full bg-white">
         <FadeInSection options="fade-in-scale">
@@ -352,7 +361,11 @@ export default function ProductDetails() {
               >
                 <img
                   className="mx-auto my-auto rounded-full shadow-lg cursor-pointer"
-                  src={product.owner.picture}
+                  src={
+                    product.owner.picture
+                      ? product.owner.picture
+                      : require("../../app/assets/images/icon/user.png")
+                  }
                   alt="Shop Avatar"
                 />
               </Link>

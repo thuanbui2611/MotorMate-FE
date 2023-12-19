@@ -1,16 +1,21 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Blog } from "../models/Blog";
 import { ConvertToDateTimeStr } from "../utils/ConvertDatetimeToStr";
+import { scrollToTop } from "../utils/ScrollToTop";
 
 interface Props {
   blogRelated: Blog;
 }
 export default function BlogRelatedCard({ blogRelated }: Props) {
+  const navigate = useNavigate();
   return (
     <>
-      <Link
-        to={`/blog/${blogRelated.id}`}
-        className="flex flex-col items-start col-span-12 overflow-hidden shadow-sm rounded-xl md:col-span-6 lg:col-span-4 hover:brightness-90"
+      <div
+        className=" cursor-pointer flex flex-col items-start col-span-12 overflow-hidden shadow-sm rounded-xl md:col-span-6 lg:col-span-4 hover:brightness-90"
+        onClick={() => {
+          scrollToTop();
+          navigate(`/blog/${blogRelated.id}`);
+        }}
       >
         <div className="block w-full h-full transition duration-200 ease-out transform hover:scale-110">
           <img
@@ -32,7 +37,7 @@ export default function BlogRelatedCard({ blogRelated }: Props) {
             {blogRelated.shortDescription}
           </p>
         </div>
-      </Link>
+      </div>
     </>
   );
 }

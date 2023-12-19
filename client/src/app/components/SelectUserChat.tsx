@@ -2,7 +2,6 @@ import Autocomplete from "@mui/material/Autocomplete";
 import { UserDetail } from "../models/User";
 import { useEffect, useState } from "react";
 import LoaderButton from "./LoaderButton";
-import agent from "../api/agent";
 import { Box, Paper, TextField } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../store/ConfigureStore";
 import { setStartChatToUser } from "../../pages/chat/ChatSlice";
@@ -75,8 +74,12 @@ export default function SelectUserChat({ onSelect }: Props) {
                 <div className="h-8 w-8 rounded-md mr-2 ">
                   <img
                     className="h-full w-full rounded-md object-cover"
-                    src={option.image.imageUrl}
-                    alt="logo"
+                    src={
+                      option.image.imageUrl
+                        ? option.image.imageUrl
+                        : require("../assets/images/icon/user.png")
+                    }
+                    alt="avatar"
                   />
                 </div>
                 <div className="flex-1 line-clamp-1">{option.username}</div>
@@ -117,7 +120,11 @@ export default function SelectUserChat({ onSelect }: Props) {
                       <div className="h-6 w-6 flex justify-center items-center">
                         <img
                           className="h-full w-full rounded-full mb-[1px]"
-                          src={selectedUser.image.imageUrl}
+                          src={
+                            selectedUser.image.imageUrl
+                              ? selectedUser.image.imageUrl
+                              : require("../assets/images/icon/user.png")
+                          }
                           alt="avatar"
                         />
                       </div>

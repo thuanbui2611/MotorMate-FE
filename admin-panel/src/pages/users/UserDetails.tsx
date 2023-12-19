@@ -61,7 +61,11 @@ export default function UserDetails({ user, onClose }: Props) {
                     <div className="flex items-start justify-start flex-shrink-0">
                       <div className="flex items-center justify-center w-full pb-6 space-x-4 md:justify-start">
                         <img
-                          src={user?.image.imageUrl}
+                          src={
+                            user?.image.imageUrl
+                              ? user?.image.imageUrl
+                              : require("../../app/assets/images/icon/user.png")
+                          }
                           className="object-cover w-16 h-16 rounded-md inline-block relative object-center shadow-lg shadow-blue-gray-500/40"
                           alt="avatar"
                         />
@@ -114,9 +118,7 @@ export default function UserDetails({ user, onClose }: Props) {
                               Phone number:
                             </p>
                             <p className="ml-1 text-base leading-4 text-black break-all">
-                              {user?.phoneNumber
-                                ? user?.phoneNumber
-                                : "No phone number"}
+                              {user?.phoneNumber ? user?.phoneNumber : "N/A"}
                             </p>
                           </div>
                           <div className="flex justify-center items-center">
@@ -126,7 +128,7 @@ export default function UserDetails({ user, onClose }: Props) {
                             <p className="ml-1 text-base leading-4 text-black break-all">
                               {user?.dateOfBirth
                                 ? ConvertToDateStr(user?.dateOfBirth)
-                                : "No date of birth"}
+                                : "N/A"}
                             </p>
                           </div>
                           <div className="flex justify-center items-center">
@@ -134,7 +136,7 @@ export default function UserDetails({ user, onClose }: Props) {
                               Address:
                             </p>
                             <p className="ml-1 text-base leading-4 text-black break-all">
-                              {user?.address ? user?.address : "No address"}
+                              {user?.address ? user?.address : "N/A"}
                             </p>
                           </div>
                         </div>
@@ -149,8 +151,14 @@ export default function UserDetails({ user, onClose }: Props) {
                               <p className="text-sm leading-5 text-black font-bold">
                                 IsLocked:
                               </p>
-                              <p className="ml-1 text-base leading-4 text-black break-all">
-                                {/* {vehicle?.licensePlate} */}
+                              <p
+                                className={`ml-1 text-sm leading-4 break-all bg-opacity-10 rounded-full px-[6px] py-[2px] font-semibold ${
+                                  user?.islocked
+                                    ? "bg-danger text-meta-1"
+                                    : "bg-success text-meta-3"
+                                }`}
+                              >
+                                {user?.islocked ? "Locked" : "Active"}
                               </p>
                             </div>
 
@@ -170,14 +178,6 @@ export default function UserDetails({ user, onClose }: Props) {
                                 {/* {ConvertToDateStr(
                                   vehicle!.insuranceExpiry
                                 )} */}
-                              </p>
-                            </div>
-                            <div className="flex justify-center items-center">
-                              <p className="text-sm leading-5 text-black font-bold">
-                                Price:
-                              </p>
-                              <p className="ml-1 text-base leading-4 text-black break-all">
-                                {/* {vehicle?.price + " VND"} */}
                               </p>
                             </div>
                           </div>

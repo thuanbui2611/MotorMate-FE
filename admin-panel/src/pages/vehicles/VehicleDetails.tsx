@@ -119,7 +119,11 @@ export default function VehicleDetails({ vehicle, onClose }: Props) {
                     <div className="flex items-start justify-start flex-shrink-0">
                       <div className="flex items-center justify-center w-full pb-6 space-x-4 md:justify-start">
                         <img
-                          src={vehicle?.owner.picture}
+                          src={
+                            vehicle?.owner.picture
+                              ? vehicle?.owner.picture
+                              : require("../../app/assets/images/icon/user.png")
+                          }
                           className="object-cover w-16 h-16 rounded-md inline-block relative object-center shadow-lg shadow-blue-gray-500/40"
                           alt="avatar"
                         />

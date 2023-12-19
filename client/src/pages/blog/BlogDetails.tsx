@@ -15,7 +15,7 @@ import { blogSelectors } from "./BlogSlice";
 export default function BlogDetails() {
   const { id } = useParams<{ id: string }>();
   const [blog, setBlog] = useState<Blog | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
 
   const blogDetails = useAppSelector((state) =>
     blogSelectors.selectById(state, id!)
@@ -30,7 +30,17 @@ export default function BlogDetails() {
   }, [blogDetails]);
 
   useEffect(() => {
-    if (!blogDetails && id && !blog && !loading) {
+    if (!id && loading) return;
+    if (blogDetails && blogDetails.id !== id) {
+      setLoading(true);
+      agent.Blog.details(id!)
+        .then((blog) => {
+          setBlog(blog);
+          setLoading(false);
+          scrollToTop();
+        })
+        .catch((error) => console.log(error));
+    } else if (!blogDetails) {
       setLoading(true);
       agent.Blog.details(id!)
         .then((blog) => {
@@ -42,14 +52,20 @@ export default function BlogDetails() {
     }
   }, [id]);
 
-  if (!blog && !loading) return <NotFound />;
   return loading ? (
     <Loading />
+  ) : !blog ? (
+    <NotFound />
   ) : (
     <>
-      <div className="bg-gray-50">
+      <div>
+        <div className="absolute w-full lg:w-1/2 inset-y-0 lg:right-0 block -z-10">
+          <span className="absolute right-4 top-40 w-24 h-24 rounded-3xl bg-orange-based blur-xl opacity-40"></span>
+          <span className="absolute -left-6 md:left-4 top-24 lg:top-28 w-24 h-24 rotate-90 skew-x-12 rounded-3xl bg-orange-based blur-xl opacity-30 block"></span>
+        </div>
+        <span className="-z-10 w-4/12 lg:w-2/12 aspect-square bg-gradient-to-tr from-[#FF6003] to-[#FF7E06] absolute -top-5 lg:left-0 rounded-full skew-y-12 blur-2xl opacity-40 skew-x-12 rotate-90"></span>
         <div className=" px-5 md:px-10 py-6 mx-auto">
-          <div className="max-w-screen-2xl px-2 md:px-10 py-6 mx-auto bg-gray-50 rounded-md">
+          <div className="max-w-screen-2xl px-2 md:px-10 py-6 mx-auto rounded-md">
             <div className="flex items-center justify-between mt-4 mb-4 gap-4">
               <a
                 href="#"
@@ -80,7 +96,7 @@ export default function BlogDetails() {
               </div> */}
             </div>
 
-            <div className="flex-col items-center justify-center w-full px-2 md:px-10 mx-auto text-2xl text-gray-700 mt-4 rounded-lg bg-gray-100">
+            <div className="flex-col items-center justify-center w-full px-2 md:px-10 mx-auto text-2xl text-gray-700 mt-4 rounded-lg bg-gray-50">
               <div>
                 <p className="mt-2 p-4 font-medium md:p-8 text-xs md:text-xl">
                   {blog?.shortDescription}

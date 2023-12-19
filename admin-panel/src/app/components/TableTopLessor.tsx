@@ -53,7 +53,11 @@ export default function TableTopLessor() {
                   <div className="flex-shrink-0">
                     <img
                       className="w-9 h-9 object-cover rounded-md"
-                      src={lessor.avatar}
+                      src={
+                        lessor.avatar
+                          ? lessor.avatar
+                          : require("../../app/assets/images/icon/user.png")
+                      }
                       alt="avatar"
                     />
                   </div>

@@ -56,7 +56,15 @@ const DropdownUser = () => {
         </span>
 
         <span className="h-9 w-9 sm:h-12 sm:w-12 rounded-full">
-          <img src={user?.avatar} className="rounded-full" alt="User" />
+          <img
+            src={
+              user?.avatar
+                ? user?.avatar
+                : require("../../app/assets/images/icon/user.png")
+            }
+            className="rounded-full"
+            alt="User"
+          />
         </span>
 
         <svg

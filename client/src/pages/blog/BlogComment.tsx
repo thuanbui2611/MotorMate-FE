@@ -1,4 +1,3 @@
-import { TextField } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../app/store/ConfigureStore";
 import {
   addCommentAsync,
@@ -6,12 +5,12 @@ import {
   getBlogCommentsAsync,
   setBlogCommentParams,
 } from "./BlogCommentSlice";
-import { useEffect, useState } from "react";
-import { BlogComment } from "../../app/models/CommentBlog";
+import { useEffect } from "react";
 import Loading from "../../app/components/Loading";
 import LoaderButton from "../../app/components/LoaderButton";
 import { FieldValues, useForm } from "react-hook-form";
 import AppTextInput from "../../app/components/AppTextInput";
+import { scrollToTop } from "../../app/utils/ScrollToTop";
 interface Props {
   blogId: string | undefined;
 }
@@ -38,10 +37,13 @@ export default function BlogCommentPage({ blogId }: Props) {
   );
 
   useEffect(() => {
-    if (!blogCommentLoaded) {
+    if (blogCommentLoaded || !blogId) return;
+    if (blogComments && blogComments.comments[0].blogId !== blogId) {
+      dispatch(getBlogCommentsAsync(blogId));
+    } else if (!blogComments) {
       dispatch(getBlogCommentsAsync(blogId));
     }
-  }, [blogCommentParams, dispatch]);
+  }, [blogCommentParams, dispatch, blogId]);
 
   async function onCreateComment(data: FieldValues) {
     const formData = {
@@ -153,7 +155,11 @@ export default function BlogCommentPage({ blogId }: Props) {
                 <div className="flex mx-10 w-[92%]">
                   <div>
                     <img
-                      src={comment.avatar}
+                      src={
+                        comment.avatar
+                          ? comment.avatar
+                          : require("../../app/assets/images/icon/user.png")
+                      }
                       alt="user-avatar"
                       className="w-12 h-12 rounded-full shadow-md"
                     />

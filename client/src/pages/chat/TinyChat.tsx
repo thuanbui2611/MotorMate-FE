@@ -486,7 +486,8 @@ export default function TinyChat() {
                             ?.members.find(
                               (member) =>
                                 member.username !== userLoginDetail?.username
-                            )?.avatar || ""
+                            )?.avatar ||
+                          require("../../app/assets/images/icon/user.png")
                         }
                       />
                     </div>
@@ -589,7 +590,8 @@ export default function TinyChat() {
                         chat.members.find(
                           (member) =>
                             member.username !== userLoginDetail?.username
-                        )?.avatar || ""
+                        )?.avatar ||
+                        require("../../app/assets/images/icon/user.png")
                       }
                       className="object-cover w-full h-full rounded-full shadow-md"
                       alt=""
@@ -700,7 +702,11 @@ export default function TinyChat() {
                                 key={chat.id}
                               >
                                 <img
-                                  src={chat.user.avatar}
+                                  src={
+                                    chat.user.avatar
+                                      ? chat.user.avatar
+                                      : require("../../app/assets/images/icon/user.png")
+                                  }
                                   className="object-cover h-6 w-6 rounded-full"
                                   alt="Avatar"
                                 />
@@ -749,7 +755,11 @@ export default function TinyChat() {
                                   </div>
                                 </div>
                                 <img
-                                  src={chat.user.avatar}
+                                  src={
+                                    chat.user.avatar
+                                      ? chat.user.avatar
+                                      : require("../../app/assets/images/icon/user.png")
+                                  }
                                   className="object-cover h-6 w-6 rounded-full"
                                   alt=""
                                 />
@@ -770,7 +780,11 @@ export default function TinyChat() {
                                 {messagePending.content}
                               </div>
                               <img
-                                src={userLogin?.avatar}
+                                src={
+                                  userLogin?.avatar
+                                    ? userLogin?.avatar
+                                    : require("../../app/assets/images/icon/user.png")
+                                }
                                 className="object-cover h-6 w-6 rounded-full"
                                 alt=""
                               />

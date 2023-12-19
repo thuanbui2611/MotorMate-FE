@@ -35,10 +35,16 @@ export default function ReviewProduct({ vehicle }: Props) {
   }, [reviewsFromState]);
 
   useEffect(() => {
-    if (!reviewProductLoaded) {
+    if (!vehicle || reviewProductLoaded) return;
+    if (
+      reviewsFromState &&
+      reviewsFromState.reviewProduct[0].vehicleId !== vehicle.id
+    ) {
+      dispatch(getReviewsProductAsync(vehicle.id));
+    } else if (!reviewsFromState) {
       dispatch(getReviewsProductAsync(vehicle.id));
     }
-  }, [reviewProductParams, dispatch]);
+  }, [reviewProductParams, dispatch, vehicle]);
 
   const renderRatingSVG = (rating: number) => {
     const ratingSVG = [];

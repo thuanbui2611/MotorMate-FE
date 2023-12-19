@@ -233,7 +233,11 @@ export default function BlogForm({ blog, cancelEdit, actionName }: Props) {
                             <div className="h-12 w-12 rounded-md mr-2">
                               <img
                                 className="h-full w-full rounded-md object-cover"
-                                src={option.picture}
+                                src={
+                                  option.picture
+                                    ? option.picture
+                                    : require("../../app/assets/images/icon/user.png")
+                                }
                                 alt="Avatar"
                               />
                             </div>
@@ -252,7 +256,11 @@ export default function BlogForm({ blog, cancelEdit, actionName }: Props) {
                                 {selectedAuthor && (
                                   <img
                                     className="h-6 w-6 rounded-full"
-                                    src={selectedAuthor.picture}
+                                    src={
+                                      selectedAuthor.picture
+                                        ? selectedAuthor.picture
+                                        : require("../../app/assets/images/icon/user.png")
+                                    }
                                     alt="Avatar"
                                     referrerPolicy="no-referrer"
                                   />

@@ -590,7 +590,11 @@ export default function ShopOrderDetail() {
                 <div className="flex justify-center w-full md:justify-start items-center space-x-3 py-8 border-b border-gray-200">
                   <img
                     className="rounded-full w-12 h-12 shadow-lg"
-                    src={orderDetails?.avatar}
+                    src={
+                      orderDetails?.avatar
+                        ? orderDetails?.avatar
+                        : require("../../app/assets/images/icon/user.png")
+                    }
                     alt="avatar"
                   />
                   <div className="flex justify-start items-start flex-col space-y-2">

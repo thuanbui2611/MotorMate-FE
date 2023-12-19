@@ -10,16 +10,19 @@ interface Props {
   vehicle: Vehicle;
 }
 export default function ProductSuggested({ vehicle }: Props) {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [productsSuggested, setProductsSuggested] = useState<Vehicle[]>([]);
   const userLogin = useAppSelector((state) => state.account.userDetail);
 
   useEffect(() => {
+    if (loading) return;
+
+    setLoading(true);
     agent.Vehicle.getRelatedVehicles(vehicle.id).then((data) => {
       setProductsSuggested(data);
       setLoading(false);
     });
-  }, []);
+  }, [vehicle]);
 
   if (loading) return <Loading />;
   return (

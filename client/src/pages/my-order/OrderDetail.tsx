@@ -236,7 +236,11 @@ export default function OrderDetail() {
                       <img
                         alt="Placeholder"
                         className="block rounded-full h-8 w-8"
-                        src={shop.lessorImage}
+                        src={
+                          shop.lessorImage
+                            ? shop.lessorImage
+                            : require("../../app/assets/images/icon/user.png")
+                        }
                       />
                       <div className="ml-2 text-sm font-bold">
                         {shop.lessorName}
