@@ -16,6 +16,7 @@ interface Props extends UseControllerProps {
   maxRows?: number;
   sx?: any;
   disabled?: boolean;
+  onKeyDown?: any;
 }
 
 export default function AppTextInput(props: Props) {
@@ -35,6 +36,7 @@ export default function AppTextInput(props: Props) {
       fullWidth
       disabled={props.disabled}
       variant="outlined"
+      onKeyDown={props.onKeyDown}
       // value={props.value}
       className={props.className}
       error={props.error || !!fieldState.error}

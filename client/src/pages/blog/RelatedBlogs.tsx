@@ -13,18 +13,17 @@ export default function RelatedBlogs({ blogId }: Props) {
   const [relatedBlogs, setRelatedBlogs] = useState<Blog[]>([]);
   useEffect(() => {
     try {
-      if (!loading) {
-        setLoading(true);
-        agent.Blog.getRelatedBlogs(blogId).then((blogs) => {
-          setRelatedBlogs(blogs);
-          setLoading(false);
-        });
-      }
+      if (loading || !blogId) return;
+      setLoading(true);
+      agent.Blog.getRelatedBlogs(blogId).then((blogs) => {
+        setRelatedBlogs(blogs);
+        setLoading(false);
+      });
     } catch (error) {
       toast.error("Error when get related blogs");
       console.log("error when get related blogs", error);
     }
-  }, []);
+  }, [blogId]);
   return loading ? (
     <Loading />
   ) : (

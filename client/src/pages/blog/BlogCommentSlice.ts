@@ -48,7 +48,9 @@ export const getBlogCommentsAsync = createAsyncThunk<
     ThunkAPI.dispatch(setMetaData(response.metaData));
     const blogCommentResponse: BlogComment = {
       comments: response.items,
+      countTotalComments: response.metaData.totalItemCount,
     };
+    debugger;
     return blogCommentResponse;
   } catch (error: any) {
     return ThunkAPI.rejectWithValue({ error: error.data });
@@ -60,6 +62,7 @@ export const addCommentAsync = createAsyncThunk<Comment, FieldValues>(
   async (data, ThunkAPI) => {
     try {
       const response = await agent.Blog.createCommentForBlog(data, data.blogId);
+      debugger;
       return response;
     } catch (error: any) {
       return ThunkAPI.rejectWithValue({ error: error.data });
@@ -119,8 +122,18 @@ export const BlogCommentSlice = createSlice({
       });
     builder.addCase(addCommentAsync.fulfilled, (state, action) => {
       toast.success("Add comment successfully!");
+      debugger;
       const { blogId } = action.payload;
-      state.entities[blogId]?.comments.unshift(action.payload);
+      if (state.entities[blogId]?.comments) {
+        state.entities[blogId]?.comments.unshift(action.payload);
+        state.entities[blogId]!.countTotalComments++;
+      } else {
+        const newBlogComment: BlogComment = {
+          comments: [action.payload],
+          countTotalComments: 1,
+        };
+        blogCommentsAdapter.upsertOne(state, newBlogComment);
+      }
     });
     builder.addCase(addCommentAsync.rejected, (state, action) => {
       toast.success("Add comment failed!");

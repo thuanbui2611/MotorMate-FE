@@ -58,3 +58,11 @@ export interface MonthsInYear {
   November: number;
   December: number;
 }
+
+export interface TotalViewsInMonth {
+  totalViews: {
+    year: number;
+    months: number;
+    days: {};
+  };
+}

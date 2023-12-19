@@ -6,6 +6,7 @@ import {
   TotalProfit,
   TotalUsers,
   TotalVehicles,
+  TotalViewsInMonth,
 } from "../../app/models/Chart";
 import agent from "../../app/api/agent";
 
@@ -22,6 +23,8 @@ interface FilterState {
   topLessorsLoading: boolean;
   revenueInYear: RevenueInYear | null;
   revenueInYearLoading: boolean;
+  totalViewsInMonth: TotalViewsInMonth | null;
+  totalViewsInMonthLoading: boolean;
 }
 
 const initialState: FilterState = {
@@ -37,6 +40,8 @@ const initialState: FilterState = {
   topLessorsLoading: false,
   revenueInYear: null,
   revenueInYearLoading: false,
+  totalViewsInMonth: null,
+  totalViewsInMonthLoading: false,
 };
 
 export const getTotalVehiclesAsync = createAsyncThunk<TotalVehicles>(
@@ -110,6 +115,18 @@ export const getRevenueInYearAsync = createAsyncThunk<RevenueInYear, string>(
     }
   }
 );
+
+export const getTotalViewsInMonthAsync = createAsyncThunk<
+  TotalViewsInMonth,
+  { year: number; month: number }
+>("dashboard/getTotalViewsInMonthAsync", async (date, thunkAPI) => {
+  try {
+    const response = await agent.Chart.totalViewsOfMonth(date.year, date.month);
+    return response;
+  } catch (error) {
+    return thunkAPI.rejectWithValue({ error: (error as any).data });
+  }
+});
 
 export const DashboardSlice = createSlice({
   name: "dashboard",
@@ -186,6 +203,18 @@ export const DashboardSlice = createSlice({
       })
       .addCase(getRevenueInYearAsync.rejected, (state, action) => {
         console.log("Get revenue in year fail");
+      });
+
+    builder
+      .addCase(getTotalViewsInMonthAsync.pending, (state, action) => {
+        state.totalViewsInMonthLoading = true;
+      })
+      .addCase(getTotalViewsInMonthAsync.fulfilled, (state, action) => {
+        state.totalViewsInMonthLoading = false;
+        state.totalViewsInMonth = action.payload;
+      })
+      .addCase(getTotalViewsInMonthAsync.rejected, (state, action) => {
+        console.log("Get total views in month fail");
       });
   },
 });

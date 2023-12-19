@@ -237,7 +237,6 @@ export default function ChartTotalRevenue() {
         </option>
       );
     }
-
     return options;
   };
 

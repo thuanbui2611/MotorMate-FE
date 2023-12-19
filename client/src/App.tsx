@@ -10,8 +10,8 @@ import {
 import { ToastContainer } from "react-toastify";
 import Loading from "./app/components/Loading";
 import { getCartAsync } from "./pages/cart/CartSlice";
-import { useJsApiLoader } from "@react-google-maps/api";
 import GoogleMapsWrapper from "./app/components/GoogleMapsWrapper";
+import { addViews } from "./app/utils/GeoLocationViews";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -39,13 +39,14 @@ function App() {
     initApp().then(() => setLoading(false));
   }, [initApp]);
 
-  // useEffect(() => {
-  //   dispatch(fetchUserFromToken());
-  //   if (user?.token) {
-  //     dispatch(getUserDetails()).then(() => setLoading(false));
-  //   }
-  //   setLoading(false);
-  // }, [dispatch, user?.token]);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      addViews();
+    }, 10000);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, []);
 
   return loading ? (
     <Loading />

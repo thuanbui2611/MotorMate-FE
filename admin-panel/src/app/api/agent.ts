@@ -179,6 +179,8 @@ const Chart = {
   topLessees: () => requests.get("api/chart/top/lessees"),
   topLessors: () => requests.get("api/chart/top/lessors"),
   revenueInYear: (year: string) => requests.get(`api/chart/revenue/${year}`),
+  totalViewsOfMonth: (year: number, month: number) =>
+    requests.get(`api/chart/total/views/${year}/${month}`),
 };
 const agent = {
   Account,

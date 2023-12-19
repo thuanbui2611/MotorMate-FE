@@ -6,11 +6,9 @@ import {
   setBlogCommentParams,
 } from "./BlogCommentSlice";
 import { useEffect } from "react";
-import Loading from "../../app/components/Loading";
 import LoaderButton from "../../app/components/LoaderButton";
 import { FieldValues, useForm } from "react-hook-form";
 import AppTextInput from "../../app/components/AppTextInput";
-import { scrollToTop } from "../../app/utils/ScrollToTop";
 interface Props {
   blogId: string | undefined;
 }
@@ -19,6 +17,7 @@ export default function BlogCommentPage({ blogId }: Props) {
     control,
     register,
     handleSubmit,
+    setValue,
     formState: { isSubmitting },
   } = useForm({
     mode: "all",
@@ -52,17 +51,26 @@ export default function BlogCommentPage({ blogId }: Props) {
       comment: data.comment,
     };
     await dispatch(addCommentAsync(formData));
+    setValue("comment", "");
   }
 
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      handleSubmit(onCreateComment)();
+    }
+  };
   return !metaData ? (
-    <Loading />
+    <div className="flex items-center justify-center h-32">
+      <LoaderButton />
+    </div>
   ) : (
     <>
       <div className="py-12 flex justify-center items-center">
         <div className="flex flex-col justify-start items-start w-full space-y-8">
           <div className="flex justify-start items-start">
             <p className="text-3xl lg:text-4xl font-semibold leading-7 lg:leading-9 text-gray-800 ">
-              Comments ({metaData?.totalItemCount})
+              Comments ({blogComments?.countTotalComments})
             </p>
           </div>
           {/* comment form  */}
@@ -85,6 +93,7 @@ export default function BlogCommentPage({ blogId }: Props) {
               >
                 <AppTextInput
                   control={control}
+                  onKeyDown={handleKeyDown}
                   disabled={userLogin ? false : true}
                   className="w-full px-4 py-3 bg-transparent rounded-lg border-none"
                   multiline
@@ -107,7 +116,7 @@ export default function BlogCommentPage({ blogId }: Props) {
                     pattern: {
                       value:
                         /^(?!.*[<>])(?!.*<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>)(?!.*\b(xss|XSS)\b).*$/i,
-                      message: "Invalid commentt",
+                      message: "Invalid comment",
                     },
                   })}
                 />
@@ -148,10 +157,9 @@ export default function BlogCommentPage({ blogId }: Props) {
             </div>
           </div>
           {/* Comment Start */}
-          {!blogCommentLoaded &&
-            blogComments &&
+          {blogComments &&
             blogComments.comments.map((comment) => (
-              <div className="w-full flex justify-start items-start flex-col bg-gray-50">
+              <div className="w-full flex justify-start items-start flex-col">
                 <div className="flex mx-10 w-[92%]">
                   <div>
                     <img
@@ -196,13 +204,14 @@ export default function BlogCommentPage({ blogId }: Props) {
             metaData.totalItemCount > blogComments.comments.length ? (
               <div
                 className="mx-auto w-24 h-7 text-blue-500 hover:text-blue-700 cursor-pointer text-sm lg:text-base border border-blue-500 rounded-xl px-2 hover:bg-blue-400"
-                onClick={() =>
+                onClick={() => {
                   dispatch(
                     setBlogCommentParams({
                       pageSize: blogCommentParams.pageSize + 5,
                     })
-                  )
-                }
+                  );
+                  dispatch(getBlogCommentsAsync(blogId));
+                }}
               >
                 {blogCommentLoaded ? <LoaderButton /> : "See more"}
               </div>

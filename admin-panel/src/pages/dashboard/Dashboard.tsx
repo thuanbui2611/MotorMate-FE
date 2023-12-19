@@ -11,24 +11,8 @@ import ChartTotalRevenue from "../../app/components/ChartTotalRevenue";
 import { useAppSelector } from "../../app/store/ConfigureStore";
 
 const Dashboard = () => {
-  const [ipAddress, setIPAddress] = useState("");
-  const [country, setCountry] = useState("");
-  const [city, setCity] = useState("");
-  // useEffect(() => {
-  //   const timer = setTimeout(() => {
-  //     fetch(
-  //       "https://ipgeolocation.abstractapi.com/v1/?api_key=c886e37f754842e5b6d4cf0375b326da"
-  //     )
-  //       .then((response) => response.json())
-  //       .then((response) => console.log(response))
-  //       .catch((err) => console.error(err));
-  //   }, 5000);
-  //   return () => {
-  //     clearTimeout(timer);
-  //   };
-  // }, []);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  //
+
   const { user } = useAppSelector((state) => state.account);
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {

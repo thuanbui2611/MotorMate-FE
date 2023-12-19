@@ -11,6 +11,7 @@ export interface Comment {
 }
 export interface BlogComment {
   comments: Comment[];
+  countTotalComments: number;
 }
 export interface BlogCommentParams {
   pageNumber: number;

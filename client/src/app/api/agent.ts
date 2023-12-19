@@ -2,7 +2,6 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import { store } from "../store/ConfigureStore";
 import { PaginatedResponse } from "../models/Pagination";
-import { useNavigate } from "react-router-dom";
 import { router } from "../routes/router";
 
 axios.defaults.baseURL = process.env.REACT_APP_MOTORMATE_API_URL;
@@ -56,8 +55,6 @@ axios.interceptors.response.use(
         break;
       case 500:
         console.log("Catch 500: ", error.response);
-        // toast.error(`${error.response?.statusText}`);
-
         router.navigate("/server-error");
         break;
       default:
@@ -207,6 +204,10 @@ const Checkout = {
   create: (values: {}) => requests.post("api/order/checkout", values),
 };
 
+const Utilities = {
+  addView: (values: {}) => requests.post("api/utils/view", values),
+};
+
 const agent = {
   Account,
   Brand,
@@ -221,6 +222,7 @@ const agent = {
   Email,
   Checkout,
   TripRequest,
+  Utilities,
 };
 
 export default agent;

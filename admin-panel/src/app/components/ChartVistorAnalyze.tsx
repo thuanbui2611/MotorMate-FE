@@ -1,12 +1,16 @@
 import { ApexOptions } from "apexcharts";
 import React, { useState } from "react";
 import ReactApexChart from "react-apexcharts";
+import { useAppDispatch, useAppSelector } from "../store/ConfigureStore";
 
 interface ChartVistorAnylyzeState {
   series: { data: number[] }[];
 }
 
 export default function ChartVistorAnalyze() {
+  const [selectedYear, setSelectedYear] = useState<number>(
+    new Date().getFullYear()
+  );
   const [state, setState] = useState<ChartVistorAnylyzeState>({
     series: [
       {
@@ -19,10 +23,9 @@ export default function ChartVistorAnalyze() {
     ],
   });
 
-  const options: ApexOptions = {
+  const [options, setOptions] = useState<ApexOptions>({
     colors: ["#3C50E0"],
     chart: {
-      fontFamily: "Satoshi, sans-serif",
       type: "bar",
       height: 350,
       toolbar: {
@@ -33,7 +36,6 @@ export default function ChartVistorAnalyze() {
       bar: {
         horizontal: false,
         columnWidth: "55%",
-        // endingShape: "rounded",
         borderRadius: 2,
       },
     },
@@ -125,14 +127,47 @@ export default function ChartVistorAnalyze() {
       //   },
       // },
     },
+  });
+
+  const { totalViewsInMonth, totalViewsInMonthLoading } = useAppSelector(
+    (state) => state.dashboard
+  );
+  const dispatch = useAppDispatch();
+  const renderYearOptions = () => {
+    const currentYear = new Date().getFullYear();
+    const startYear = 2020;
+    const options = [];
+
+    for (let year = currentYear; year >= startYear; year--) {
+      options.push(
+        <option key={year} value={year}>
+          {year}
+        </option>
+      );
+    }
+    return options;
   };
 
   return (
     <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5">
-      <div>
+      <div className="flex items-center justify-between">
         <h3 className="text-xl font-semibold text-black dark:text-blue-gray-50">
           Visitors Analytics
         </h3>
+        <div className="flex w-full max-w-45 justify-end">
+          <div className="inline-flex items-center rounded-md p-1.5">
+            <select
+              className="bg-gray-50 border border-gray-300 bg-white dark:bg-graydark text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-blue-gray-50 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              value={selectedYear}
+              onChange={(e) => setSelectedYear(parseInt(e.target.value))}
+            >
+              <option selected disabled>
+                Year
+              </option>
+              {renderYearOptions()}
+            </select>
+          </div>
+        </div>
       </div>
 
       <div className="mb-2">
