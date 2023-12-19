@@ -29,6 +29,7 @@ stages:
               customCommand: "run build:prod --if-present"
 
           - task: ArchiveFiles@2
+            displayName: "Archive prod client files"
             inputs:
               rootFolderOrFile: "$(System.DefaultWorkingDirectory)/client/build"
               includeRootFolder: false
@@ -37,6 +38,7 @@ stages:
               replaceExistingArchive: true
 
           - task: AzureRmWebAppDeployment@4
+            displayName: "Deploy to Motormate Client"
             inputs:
               ConnectionType: "AzureRM"
               azureSubscription: "DunDon Free Subcription (cfd7c513-8b41-4dc8-b1ed-69bad9822f7d)"
@@ -63,6 +65,7 @@ stages:
               customCommand: "run build:prod --if-present"
 
           - task: ArchiveFiles@2
+            displayName: "Archive prod admin files"
             inputs:
               rootFolderOrFile: "$(System.DefaultWorkingDirectory)/admin-panel/build"
               includeRootFolder: false
@@ -71,6 +74,7 @@ stages:
               replaceExistingArchive: true
 
           - task: AzureRmWebAppDeployment@4
+            displayName: "Deploy to Motormate Admin"
             inputs:
               ConnectionType: "AzureRM"
               azureSubscription: "DunDon Free Subcription (cfd7c513-8b41-4dc8-b1ed-69bad9822f7d)"
