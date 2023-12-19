@@ -22,11 +22,11 @@ stages:
               workingDir: "$(System.DefaultWorkingDirectory)/client"
 
           - task: Npm@1
-            displayName: "Npm run build"
+            displayName: "Npm run build:prod"
             inputs:
               command: "custom"
               workingDir: "$(System.DefaultWorkingDirectory)/client"
-              customCommand: "run build --if-present"
+              customCommand: "run build:prod --if-present"
 
           - task: ArchiveFiles@2
             inputs:
@@ -56,11 +56,11 @@ stages:
               workingDir: "$(System.DefaultWorkingDirectory)/admin-panel"
 
           - task: Npm@1
-            displayName: "Npm run build"
+            displayName: "Npm run build:prod"
             inputs:
               command: "custom"
               workingDir: "$(System.DefaultWorkingDirectory)/admin-panel"
-              customCommand: "run build --if-present"
+              customCommand: "run build:prod --if-present"
 
           - task: ArchiveFiles@2
             inputs:
