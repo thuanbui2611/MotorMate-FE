@@ -1,4 +1,5 @@
-trigger: none
+trigger:
+- "*"
 
 pool:
   name: Linux-agent
@@ -38,6 +39,7 @@ stages:
               replaceExistingArchive: true
 
           - task: AzureRmWebAppDeployment@4
+            condition: in(variables['Build.SourceBranch'], 'refs/heads/master', 'refs/heads/main', 'refs/heads/develop')
             displayName: "Deploy to Motormate Client"
             inputs:
               ConnectionType: "AzureRM"
@@ -74,6 +76,7 @@ stages:
               replaceExistingArchive: true
 
           - task: AzureRmWebAppDeployment@4
+            condition: in(variables['Build.SourceBranch'], 'refs/heads/master', 'refs/heads/main', 'refs/heads/develop')
             displayName: "Deploy to Motormate Admin"
             inputs:
               ConnectionType: "AzureRM"
