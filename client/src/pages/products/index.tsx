@@ -560,6 +560,7 @@ export default function Products() {
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <div className="flex items-center justify-center gap-4">
               <DatePicker
+                className="shadow-lg"
                 label="Start Date"
                 sx={{
                   "& .MuiOutlinedInput-input": {
@@ -581,6 +582,7 @@ export default function Products() {
               />
 
               <DatePicker
+                className="shadow-lg"
                 label="End Date"
                 sx={{
                   "& .MuiOutlinedInput-input": {
@@ -612,7 +614,12 @@ export default function Products() {
         </div>
 
         <div className="flex flex-wrap justify-center items-center w-full">
-          <section className="py-10 bg-gray-50 rounded-md w-full md:w-[90%]">
+          <section className="py-10 rounded-md w-full md:w-[90%]">
+            <div className="absolute -z-10 w-full lg:w-1/2 inset-y-0 lg:right-0 lg:block">
+              <span className="absolute right-6 md:right-4 top-24 lg:top-28 w-24 h-24 rotate-90 skew-x-12 rounded-3xl bg-gradient-to-tr from-[#FF6003] to-[#FF7E06]  blur-xl opacity-60 lg:opacity-95 lg:block "></span>
+              <span className="absolute right-4 bottom-12 w-24 h-24 rounded-3xl bg-orange-based blur-xl opacity-80"></span>
+            </div>
+            <span className="w-4/12 -z-10 lg:w-2/12 aspect-square bg-gradient-to-tr from-[#FF6003] to-[#FF7E06] absolute -top-5 lg:left-0 rounded-full skew-y-12 blur-2xl opacity-40 skew-x-12 rotate-90"></span>
             {/* max-w-7xl lg:py-6 md:px-6 */}
             <div className="px-4 py-4 mx-auto">
               <div className="flex flex-wrap mb-24">
@@ -771,7 +778,7 @@ export default function Products() {
 
                 <div className="w-full lg:w-3/4 flex-1 px-1">
                   <div className="mb-4">
-                    <div className="items-center justify-between px-3 py-2 bg-gray-200 rounded-md flex ">
+                    <div className="items-center justify-between px-3 py-2 bg-gray-100 rounded-md flex ">
                       <div className="InputContainer">
                         <input
                           type="text"

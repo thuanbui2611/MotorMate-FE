@@ -77,7 +77,7 @@ export const getProductsAsync = createAsyncThunk<
 function initParams() {
   return {
     pageNumber: 1,
-    pageSize: 2,
+    pageSize: 8,
     Brands: [],
     Collections: [],
     Models: [],
