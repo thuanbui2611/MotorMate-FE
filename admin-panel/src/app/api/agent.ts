@@ -174,6 +174,7 @@ const TripRequest = {
 };
 const Chart = {
   totalVehicles: () => requests.get("api/chart/total/vehicles"),
+  totalViews: () => requests.get("api/chart/total/views"),
   totalUsers: () => requests.get("api/chart/total/users"),
   totalProfit: () => requests.get("api/chart/total/profits"),
   topLessees: () => requests.get("api/chart/top/lessees"),

@@ -70,6 +70,7 @@ export default function SettingProfile() {
         lastName: data.lastName,
         address: data.address,
         phoneNumber: data.phoneNumber,
+        bio: data.bio,
         image: userLogin?.image || null,
         dateOfBirth: data.dateOfBirth,
       };
@@ -467,6 +468,7 @@ export default function SettingProfile() {
                           },
                         },
                       }}
+                      {...register("bio")}
                     />
                   </div>
                 </div>

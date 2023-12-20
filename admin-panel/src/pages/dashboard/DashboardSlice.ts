@@ -6,6 +6,7 @@ import {
   TotalProfit,
   TotalUsers,
   TotalVehicles,
+  TotalViews,
   TotalViewsInMonth,
 } from "../../app/models/Chart";
 import agent from "../../app/api/agent";
@@ -13,6 +14,8 @@ import agent from "../../app/api/agent";
 interface FilterState {
   totalVehicles: TotalVehicles | null;
   totalVehiclesLoading: boolean;
+  totalViews: TotalViews | null;
+  totalViewsLoading: boolean;
   totalUsers: TotalUsers | null;
   totalUsersLoading: boolean;
   totalProfits: TotalProfit | null;
@@ -30,6 +33,8 @@ interface FilterState {
 const initialState: FilterState = {
   totalVehicles: null,
   totalVehiclesLoading: false,
+  totalViews: null,
+  totalViewsLoading: false,
   totalUsers: null,
   totalUsersLoading: false,
   totalProfits: null,
@@ -49,6 +54,18 @@ export const getTotalVehiclesAsync = createAsyncThunk<TotalVehicles>(
   async (_, thunkAPI) => {
     try {
       const response = await agent.Chart.totalVehicles();
+      return response;
+    } catch (error) {
+      return thunkAPI.rejectWithValue({ error: (error as any).data });
+    }
+  }
+);
+
+export const getTotalViewsAsync = createAsyncThunk<TotalViews>(
+  "dashboard/getTotalViewsAsync",
+  async (_, thunkAPI) => {
+    try {
+      const response = await agent.Chart.totalViews();
       return response;
     } catch (error) {
       return thunkAPI.rejectWithValue({ error: (error as any).data });
@@ -142,6 +159,18 @@ export const DashboardSlice = createSlice({
         state.totalVehicles = action.payload;
       })
       .addCase(getTotalVehiclesAsync.rejected, (state, action) => {
+        console.log("Get total vehicles fail");
+      });
+
+      builder
+      .addCase(getTotalViewsAsync.pending, (state, action) => {
+        state.totalViewsLoading = true;
+      })
+      .addCase(getTotalViewsAsync.fulfilled, (state, action) => {
+        state.totalViewsLoading = false;
+        state.totalViews = action.payload;
+      })
+      .addCase(getTotalViewsAsync.rejected, (state, action) => {
         console.log("Get total vehicles fail");
       });
 

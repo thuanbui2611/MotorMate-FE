@@ -88,7 +88,7 @@ export default function ChartTotalRevenue() {
       },
     },
     dataLabels: {
-      enabled: false,
+      enabled: true,
     },
     markers: {
       size: 4,
@@ -178,7 +178,6 @@ export default function ChartTotalRevenue() {
         ],
       });
 
-      debugger;
       let maxRevenue = Math.max(...revenueData);
       if (maxRevenue > 100) {
         setOptions((prevOptions) => ({

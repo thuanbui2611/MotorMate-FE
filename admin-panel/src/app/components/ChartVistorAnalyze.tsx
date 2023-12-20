@@ -1,7 +1,9 @@
 import { ApexOptions } from "apexcharts";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
 import { useAppDispatch, useAppSelector } from "../store/ConfigureStore";
+import { getTotalViewsInMonthAsync } from "../../pages/dashboard/DashboardSlice";
+import LoaderButton from "./LoaderButton";
 
 interface ChartVistorAnylyzeState {
   series: { data: number[] }[];
@@ -11,14 +13,13 @@ export default function ChartVistorAnalyze() {
   const [selectedYear, setSelectedYear] = useState<number>(
     new Date().getFullYear()
   );
+  const [selectedMonth, setSelectedMonth] = useState<number>(
+    new Date().getMonth() + 1
+  );
   const [state, setState] = useState<ChartVistorAnylyzeState>({
     series: [
       {
-        data: [
-          168, 385, 201, 298, 187, 195, 291, 110, 215, 390, 280, 112, 123, 212,
-          270, 190, 310, 115, 90, 380, 112, 223, 292, 170, 290, 110, 115, 290,
-          380, 312,
-        ],
+        data: [],
       },
     ],
   });
@@ -51,38 +52,7 @@ export default function ChartVistorAnalyze() {
       title: {
         text: "Days",
       },
-      categories: [
-        "1",
-        "2",
-        "3",
-        "4",
-        "5",
-        "6",
-        "7",
-        "8",
-        "9",
-        "10",
-        "11",
-        "12",
-        "13",
-        "14",
-        "15",
-        "16",
-        "17",
-        "18",
-        "19",
-        "20",
-        "21",
-        "22",
-        "23",
-        "24",
-        "25",
-        "26",
-        "27",
-        "28",
-        "29",
-        "30",
-      ],
+      categories: [],
       axisBorder: {
         show: false,
       },
@@ -148,6 +118,58 @@ export default function ChartVistorAnalyze() {
     return options;
   };
 
+  const renderMonthOptions = () => {
+    const options = [];
+    for (let month = 1; month <= 12; month++) {
+      options.push(
+        <option key={month} value={month}>
+          {month}
+        </option>
+      );
+    }
+    return options;
+  };
+
+  useEffect(() => {
+    if (!totalViewsInMonthLoading && totalViewsInMonth === null) {
+      dispatch(
+        getTotalViewsInMonthAsync({ year: selectedYear, month: selectedMonth })
+      );
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!totalViewsInMonthLoading && totalViewsInMonth !== null) {
+      dispatch(
+        getTotalViewsInMonthAsync({ year: selectedYear, month: selectedMonth })
+      );
+    }
+  }, [selectedMonth, selectedYear]);
+
+  useEffect(() => {
+    if (totalViewsInMonth) {
+      debugger;
+      const dataViews: number[] = Object.values(
+        totalViewsInMonth.totalViews.days
+      );
+      const days = Object.keys(totalViewsInMonth.totalViews.days);
+      setOptions((prevOptions) => ({
+        ...prevOptions,
+        xaxis: {
+          ...prevOptions.xaxis,
+          categories: days,
+        },
+      }));
+      setState({
+        series: [
+          {
+            data: dataViews,
+          },
+        ],
+      });
+    }
+  }, [totalViewsInMonth]);
+
   return (
     <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5">
       <div className="flex items-center justify-between">
@@ -157,7 +179,19 @@ export default function ChartVistorAnalyze() {
         <div className="flex w-full max-w-45 justify-end">
           <div className="inline-flex items-center rounded-md p-1.5">
             <select
-              className="bg-gray-50 border border-gray-300 bg-white dark:bg-graydark text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-blue-gray-50 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              className="bg-gray-50 border border-gray-300 bg-white dark:bg-graydark text-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-15 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-blue-gray-50 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              value={selectedMonth}
+              onChange={(e) => setSelectedMonth(parseInt(e.target.value))}
+            >
+              <option selected disabled>
+                Month
+              </option>
+              {renderMonthOptions()}
+            </select>
+          </div>
+          <div className="inline-flex items-center rounded-md p-1.5">
+            <select
+              className="bg-gray-50 border border-gray-300 bg-white dark:bg-graydark text-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-blue-gray-50 dark:focus:ring-blue-500 dark:focus:border-blue-500"
               value={selectedYear}
               onChange={(e) => setSelectedYear(parseInt(e.target.value))}
             >
@@ -172,12 +206,18 @@ export default function ChartVistorAnalyze() {
 
       <div className="mb-2">
         <div id="chartFour" className="-ml-5">
-          <ReactApexChart
-            options={options}
-            series={state.series}
-            type="bar"
-            height={350}
-          />
+          {totalViewsInMonthLoading ? (
+            <div className="w-full h-[350px] flex items-center justify-center">
+              <LoaderButton />{" "}
+            </div>
+          ) : (
+            <ReactApexChart
+              series={state.series}
+              options={options}
+              type="bar"
+              height={350}
+            />
+          )}
         </div>
       </div>
     </div>

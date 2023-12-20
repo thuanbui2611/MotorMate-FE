@@ -3,6 +3,10 @@ export interface TotalVehicles {
   percentageIncreaseByLastWeek: number;
 }
 
+export interface TotalViews {
+  totalViews: number;
+  percentageIncreaseByLastWeek: number;
+}
 export interface TotalUsers {
   totalUsers: number;
   percentageIncreaseByLastWeek: number;

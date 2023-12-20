@@ -27,6 +27,7 @@ export interface Shop {
 export interface Vehicle {
   requestId: string;
   vehicleId: string;
+  isReviewed: boolean;
   status: string;
   vehicleName: string;
   pickUpLocation: string;

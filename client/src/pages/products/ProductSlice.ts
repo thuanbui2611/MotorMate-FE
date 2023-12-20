@@ -56,11 +56,11 @@ function getAxiosParams(productParams: VehicleParams) {
   return params;
 }
 
-export const getProductsAsync = createAsyncThunk<
+export const getProductsApprovedAsync = createAsyncThunk<
   Vehicle[],
   void,
   { state: RootState }
->("product/getProductsAsync", async (_, ThunkAPI) => {
+>("product/getProductsApprovedAsync", async (_, ThunkAPI) => {
   const params = getAxiosParams(ThunkAPI.getState().product.productParams);
   try {
     const response = await agent.Vehicle.listVehicleByStatus(
@@ -121,14 +121,14 @@ export const ProductSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getProductsAsync.fulfilled, (state, action) => {
+      .addCase(getProductsApprovedAsync.fulfilled, (state, action) => {
         productsAdapter.setAll(state, action.payload);
         state.productLoaded = false;
       })
-      .addCase(getProductsAsync.pending, (state, action) => {
+      .addCase(getProductsApprovedAsync.pending, (state, action) => {
         state.productLoaded = true;
       })
-      .addCase(getProductsAsync.rejected, (state, action) => {
+      .addCase(getProductsApprovedAsync.rejected, (state, action) => {
         console.log("Get products rejected: ", action);
         state.productLoaded = false;
       });

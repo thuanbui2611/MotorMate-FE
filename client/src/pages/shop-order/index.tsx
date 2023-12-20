@@ -1,7 +1,7 @@
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/store/ConfigureStore";
 import Loading from "../../app/components/Loading";
-import { MouseEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import Pagination from "../../app/components/Pagination";
 import {
@@ -244,7 +244,17 @@ export default function Orders() {
                             </p>
                           </td>
                           <td className="px-5 py-5 border-b border-gray-200">
-                            <span className="relative inline-block px-2 py-1 font-bold text-blue-600 bg-blue-200 leading-tight rounded-full text-sm">
+                            <span
+                              className={`relative inline-block px-2 py-1 font-bold text-blue-600 bg-blue-200 leading-tight rounded-full text-sm ${
+                                order?.status === "Pending"
+                                  ? "text-blue-600 bg-blue-200"
+                                  : order?.status === "Canceled"
+                                  ? "text-red-600 bg-red-200"
+                                  : order?.status === "On Going"
+                                  ? "text-orange-based bg-orange-100"
+                                  : "text-green-600 bg-green-200"
+                              }`}
+                            >
                               {order.status}
                             </span>
                           </td>

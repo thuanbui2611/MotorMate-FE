@@ -12,6 +12,7 @@ export interface UserDetail {
   firstName: string;
   lastName: string;
   fullName: string;
+  bio: string;
   username: string;
   image: Image;
   email: string;

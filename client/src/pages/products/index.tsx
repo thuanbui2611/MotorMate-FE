@@ -16,7 +16,7 @@ import { Brand } from "../../app/models/Brand";
 import { Collection } from "../../app/models/Collection";
 import { ModelVehicle } from "../../app/models/ModelVehicle";
 import {
-  getProductsAsync,
+  getProductsApprovedAsync,
   productSelectors,
   setProductParams,
 } from "./ProductSlice";
@@ -291,10 +291,10 @@ export default function Products() {
           (productParams.Cities && productParams.Cities.length > 0) ||
           productParams.pageSize
         ) {
-          dispatch(getProductsAsync());
+          dispatch(getProductsApprovedAsync());
         }
       } else if (params.size === 0 && products.length === 0) {
-        dispatch(getProductsAsync());
+        dispatch(getProductsApprovedAsync());
       }
     }
   }, [dispatch, productParams, isStartFilter]);

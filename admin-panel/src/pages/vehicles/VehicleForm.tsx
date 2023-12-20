@@ -435,6 +435,10 @@ export default function VehicleForm({
           //Update images request to formData
           formData.images = resultUpload;
           //Update vehicle
+          if (formData.images.length === 0 || !formData.images) {
+            toast.error("Vehicle need at least one image");
+            return;
+          }
           const result = await dispatch(updateVehiclePendingAsync(formData));
           //Remove vehicle from list vehicle (vehicle updated will be pending)
           debugger;
@@ -451,6 +455,10 @@ export default function VehicleForm({
         }
       } else {
         //ADD VEHICLE
+        if (formData.images.length === 0 || !formData.images) {
+          toast.error("Vehicle need at least one image");
+          return;
+        }
         if (selectedFiles) {
           let images = await uploadImages(selectedFiles);
           formData.images = images!;

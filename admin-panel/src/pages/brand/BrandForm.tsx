@@ -84,6 +84,11 @@ export default function BrandForm({ brand, cancelEdit, actionName }: Props) {
           formData.publicId = getImage.publicId;
         }
       }
+
+      if (!formData.imageUrl) {
+        toast.error("Brand need a logo");
+        return;
+      }
       if (brand) {
         if (imageUploaded || deleteCurrentImage) {
           await deleteImage(brand.image.publicId);
