@@ -39,25 +39,24 @@ export default function BlogList() {
                 adventures, helpful tips, and captivating stories
               </p>
             </div>
-            <div className="lg:flex items-stretch md:mt-12 mt-8">
+            <div className="flex flex-col gap-7 lg:gap-0 lg:flex-row items-stretch md:mt-12 mt-8">
               <div className="lg:w-1/2">
-                <div className="sm:flex items-center justify-between xl:gap-x-8 gap-x-6">
+                <div className="flex flex-col gap-y-3 sm:gap-y-0 sm:flex-row items-center justify-between xl:gap-x-8 gap-x-6">
                   <Link
                     to={"/blog/" + blogs[0].id}
                     className="sm:w-1/2 h-full relative rounded-xl shadow-md shadow-white/30 hover:brightness-90"
                   >
                     <div>
-                      <p className="mt-6 mr-6 py-1 px-2 lg:mt-2 lg:mr-2 bg-gray-600 rounded-full text-xs font-medium leading-3 text-white absolute top-0 right-0">
+                      <p className="mt-2 mr-2 md:mt-6 md:mr-6 py-1 px-2 lg:mt-2 lg:mr-2 bg-gray-800/50 rounded-full text-xs font-medium leading-3 text-white absolute top-0 right-0">
                         {ConvertToDateTimeStr(blogs[0].createdAt)}
                       </p>
-                      <div className="absolute bottom-0 sm:-bottom-1 left-0 titleBlogHome bg-gray-400/50 rounded-t-3xl rounded-b-xl w-full">
-                        <h2 className="text-xl font-semibold text-white line-clamp-1">
+                      <div className="absolute -bottom-1 left-0 titleBlogHome bg-gray-400/50 rounded-t-3xl rounded-b-xl w-full">
+                        <h2 className="font-semibold text-white line-clamp-1">
                           {blogs[0].title}
                         </h2>
-                        <p className="text-base leading-4 text-white mt-2 line-clamp-1">
+                        <p className="text-base  text-white mt-2 line-clamp-1">
                           {blogs[0].category.name}
                         </p>
-                        <div className="flex items-center mt-4 cursor-pointer text-white hover:text-gray-200 hover:underline"></div>
                       </div>
                     </div>
                     <img
@@ -71,17 +70,16 @@ export default function BlogList() {
                     className="sm:w-1/2 h-full sm:mt-0 mt-4 relative  rounded-xl shadow-md shadow-white/30 hover:brightness-90"
                   >
                     <div>
-                      <p className="mt-6 mr-6 py-1 px-2 lg:mt-2 lg:mr-2 bg-gray-600 rounded-full text-xs font-medium leading-3 text-white absolute top-0 right-0">
+                      <p className="mt-2 mr-2 md:mt-6 md:mr-6 py-1 px-2 lg:mt-2 lg:mr-2 bg-gray-800/50 rounded-full text-xs font-medium leading-3 text-white absolute top-0 right-0">
                         {ConvertToDateTimeStr(blogs[1].createdAt)}
                       </p>
-                      <div className="absolute bottom-0 sm:-bottom-1 left-0 titleBlogHome bg-gray-400/50 rounded-t-3xl rounded-b-xl w-full">
-                        <h2 className="text-xl font-semibold text-white line-clamp-1">
+                      <div className="absolute -bottom-1 left-0 titleBlogHome bg-gray-400/50 rounded-t-3xl rounded-b-xl w-full">
+                        <h2 className="font-semibold text-white line-clamp-1">
                           {blogs[1].title}
                         </h2>
-                        <p className="text-base leading-4 text-white mt-2 line-clamp-1">
+                        <p className="text-base  text-white mt-2 line-clamp-1">
                           {blogs[1].category.name}
                         </p>
-                        <div className="flex items-center mt-4 cursor-pointer text-white hover:text-gray-200 hover:underline"></div>
                       </div>
                     </div>
                     <img
@@ -96,17 +94,16 @@ export default function BlogList() {
                   className="relative rounded-xl shadow-md shadow-white/30 hover:brightness-90"
                 >
                   <div>
-                    <p className="mt-6 mr-6 py-1 px-2 lg:mt-2 lg:mr-2 bg-gray-600 rounded-full text-xs font-medium leading-3 text-white absolute top-0 right-0">
+                    <p className="mt-2 mr-2 md:mt-6 md:mr-6 py-1 px-2 lg:mt-2 lg:mr-2 bg-gray-800/50 rounded-full text-xs font-medium leading-3 text-white absolute top-0 right-0">
                       {ConvertToDateTimeStr(blogs[2].createdAt)}
                     </p>
                     <div className="absolute bottom-0 left-0 titleBlogHome bg-gray-400/50 rounded-t-3xl rounded-b-xl w-full">
                       <h2 className="font-semibold text-white">
                         {blogs[2].title}
                       </h2>
-                      <p className="text-base leading-4 text-white mt-2">
+                      <p className="text-base  text-white mt-2">
                         {blogs[2].category.name}
                       </p>
-                      <div className="flex items-center mt-4 cursor-pointer text-white hover:text-gray-200 hover:underline"></div>
                     </div>
                   </div>
                   <img
@@ -116,23 +113,22 @@ export default function BlogList() {
                   />
                 </Link>
               </div>
-              <div className="lg:w-1/2 xl:ml-8 lg:ml-4 lg:mt-0 md:mt-6 mt-4 lg:flex flex-col justify-between">
+              <div className="lg:w-1/2 xl:ml-8 lg:ml-4 lg:flex flex-col justify-between">
                 <Link
                   to={"/blog/" + blogs[3].id}
                   className="relative rounded-xl shadow-md shadow-white/30 hover:brightness-90"
                 >
                   <div>
-                    <p className="mt-6 mr-6 py-1 px-2 lg:mt-2 lg:mr-2 bg-gray-600 rounded-full text-xs font-medium leading-3 text-white absolute top-0 right-0">
+                    <p className="mt-2 mr-2 md:mt-6 md:mr-6 py-1 px-2 lg:mt-2 lg:mr-2 bg-gray-800/50 rounded-full text-xs font-medium leading-3 text-white absolute top-0 right-0">
                       {ConvertToDateTimeStr(blogs[3].createdAt)}
                     </p>
                     <div className="absolute bottom-0 lg:-bottom-1 left-0 titleBlogHome bg-gray-400/50 rounded-t-3xl rounded-b-xl w-full">
-                      <h2 className="text-xl font-semibold 5 text-white line-clamp-2">
+                      <h2 className="font-semibold 5 text-white line-clamp-2">
                         {blogs[3].title}
                       </h2>
-                      <p className="text-base leading-4 text-white mt-2 line-clamp-1">
+                      <p className="text-base  text-white mt-2 line-clamp-1">
                         {blogs[3].category.name}
                       </p>
-                      <div className="flex items-center mt-4 cursor-pointer text-white hover:text-gray-200 hover:underline"></div>
                     </div>
                   </div>
                   <img
@@ -141,23 +137,22 @@ export default function BlogList() {
                     className="w-full sm:block rounded-xl"
                   />
                 </Link>
-                <div className="sm:flex items-center justify-between xl:gap-x-8 gap-x-6 md:mt-6 mt-4">
+                <div className="flex flex-col sm:flex-row items-center justify-between xl:gap-x-8 gap-x-6 md:mt-6 mt-7 gap-y-8 sm:gap-y-0">
                   <Link
                     to={"/blog/" + blogs[4].id}
                     className="relative w-full rounded-xl shadow-md shadow-white/30 hover:brightness-90"
                   >
                     <div>
-                      <p className="mt-6 mr-6 py-1 px-2 lg:mt-2 lg:mr-2 bg-gray-600 rounded-full text-xs font-medium leading-3 text-white absolute top-0 right-0">
+                      <p className="mt-2 mr-2 md:mt-6 md:mr-6 py-1 px-2 lg:mt-2 lg:mr-2 bg-gray-800/50 rounded-full text-xs font-medium leading-3 text-white absolute top-0 right-0">
                         {ConvertToDateTimeStr(blogs[4].createdAt)}
                       </p>
-                      <div className="absolute bottom-0 sm:-bottom-1 left-0 titleBlogHome bg-gray-400/50 rounded-t-3xl rounded-b-xl w-full">
-                        <h2 className="text-xl font-semibold 5 text-white line-clamp-2">
+                      <div className="absolute -bottom-1 left-0 titleBlogHome bg-gray-400/50 rounded-t-3xl rounded-b-xl w-full">
+                        <h2 className="font-semibold text-white line-clamp-1">
                           {blogs[4].title}
                         </h2>
-                        <p className="text-base leading-4 text-white mt-2 line-clamp-1">
+                        <p className="text-base  text-white mt-2 line-clamp-1">
                           {blogs[4].category.name}
                         </p>
-                        <div className="flex items-center mt-4 cursor-pointer text-white hover:text-gray-200 hover:underline"></div>
                       </div>
                     </div>
                     <img
@@ -168,20 +163,19 @@ export default function BlogList() {
                   </Link>
                   <Link
                     to={"/blog/" + blogs[5].id}
-                    className="relative w-full sm:mt-0 mt-4 rounded-xl shadow-md shadow-white/30 hover:brightness-90"
+                    className="relative w-full rounded-xl shadow-md shadow-white/30 hover:brightness-90"
                   >
                     <div>
-                      <p className="mt-6 mr-6 py-1 px-2 lg:mt-2 lg:mr-2 bg-gray-600 rounded-full text-xs font-medium leading-3 text-white absolute top-0 right-0">
+                      <p className="mt-2 mr-2 md:mt-6 md:mr-6 py-1 px-2 lg:mt-2 lg:mr-2 bg-gray-800/50 rounded-full text-xs font-medium leading-3 text-white absolute top-0 right-0">
                         {ConvertToDateTimeStr(blogs[5].createdAt)}
                       </p>
-                      <div className="absolute bottom-0 sm:-bottom-1 left-0 titleBlogHome bg-gray-400/50 rounded-t-3xl rounded-b-xl w-full">
-                        <h2 className="text-xl font-semibold text-white line-clamp-2">
+                      <div className="absolute -bottom-1 left-0 titleBlogHome bg-gray-400/50 rounded-t-3xl rounded-b-xl w-full">
+                        <h2 className="font-semibold text-white line-clamp-1">
                           {blogs[5].title}
                         </h2>
-                        <p className="text-base leading-4 text-white mt-2 line-clamp-1">
+                        <p className="text-base  text-white mt-2 line-clamp-1">
                           {blogs[5].category.name}
                         </p>
-                        <div className="flex items-center mt-4 cursor-pointer text-white hover:text-gray-200 hover:underline"></div>
                       </div>
                     </div>
                     <img

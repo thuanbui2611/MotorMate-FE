@@ -66,13 +66,15 @@ export default function BlogCommentPage({ blogId }: Props) {
     </div>
   ) : (
     <>
-      <div className="py-12 flex justify-center items-center">
-        <div className="flex flex-col justify-start items-start w-full space-y-8">
-          <div className="flex justify-start items-start">
-            <p className="text-3xl lg:text-4xl font-semibold leading-7 lg:leading-9 text-gray-800 ">
-              Comments ({blogComments?.countTotalComments})
-            </p>
-          </div>
+      <div className="py-12 flex flex-col gap-8">
+        <p className="text-3xl lg:text-4xl font-semibold leading-7 lg:leading-9 text-gray-800 ">
+          Comments (
+          {blogComments?.countTotalComments
+            ? blogComments?.countTotalComments
+            : 0}
+          )
+        </p>
+        <div className="flex flex-col justify-start items-center w-full space-y-8">
           {/* comment form  */}
           <div className="w-full flex justify-start items-start">
             <div>
@@ -83,10 +85,10 @@ export default function BlogCommentPage({ blogId }: Props) {
                     : require("../../app/assets/images/icon/user.png")
                 }
                 alt="user-avatar"
-                className="w-12 h-12 rounded-full shadow-md"
+                className="w-12 h-12 rounded-full shadow-md min-w-[48px]"
               />
             </div>
-            <div className="w-full flex justify-start items-start flex-col  bg-gray-200/50 ml-2 rounded-2xl p-4">
+            <div className="w-full flex justify-start min-w-[279px] items-start flex-col  bg-gray-200/50 ml-2 rounded-2xl p-4">
               <form
                 className="flex items-center justify-center w-full"
                 onSubmit={handleSubmit(onCreateComment)}
@@ -159,8 +161,8 @@ export default function BlogCommentPage({ blogId }: Props) {
           {/* Comment Start */}
           {blogComments &&
             blogComments.comments.map((comment) => (
-              <div className="w-full flex justify-start items-start flex-col">
-                <div className="flex mx-10 w-[92%]">
+              <div className="w-[90%] flex justify-start items-start flex-col">
+                <div className="flex w-full min-w-max">
                   <div>
                     <img
                       src={
@@ -172,12 +174,12 @@ export default function BlogCommentPage({ blogId }: Props) {
                       className="w-12 h-12 rounded-full shadow-md"
                     />
                   </div>
-                  <div className="w-full flex justify-start items-start flex-col bg-gray-200/50 ml-2 rounded-2xl p-4">
+                  <div className="w-full flex-1 justify-start items-start flex-col bg-gray-200/50 ml-2 rounded-2xl p-4">
                     <div className="flex w-full justify-between items-start">
-                      <p className="text-base leading-none text-black font-bold">
+                      <p className="text-sm sm:text-base leading-none text-black font-bold">
                         {comment.username}
                       </p>
-                      <p className="text-sm leading-none text-black ">
+                      <p className="text-xs sm:text-sm leading-none text-black font-medium text-right ml-2 sm:ml-0">
                         {new Date(comment.createdAt).toLocaleString([], {
                           year: "numeric",
                           month: "2-digit",
