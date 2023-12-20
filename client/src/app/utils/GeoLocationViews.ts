@@ -1,16 +1,13 @@
 import agent from "../api/agent";
 
 export async function addViews() {
-  debugger;
   let ipLocation: any;
   try {
     let permissionFetch: boolean = false;
     const viewLocalStore = JSON.parse(localStorage.getItem("view")!);
-    debugger;
     if (viewLocalStore) {
       //Check time if go to another day
       if (viewLocalStore.isLimit) {
-        debugger;
         const currentDate = new Date();
         const viewLocalStoreDate = new Date(viewLocalStore.date);
         const isSameDay =
@@ -25,7 +22,6 @@ export async function addViews() {
       permissionFetch = true;
     }
     if (!permissionFetch) return;
-    debugger;
     const response = await fetch(
       `https://ipgeolocation.abstractapi.com/v1/?api_key=${process.env.REACT_APP_GEO_LOCATION_API_KEY}`
     );
@@ -38,7 +34,6 @@ export async function addViews() {
 
   try {
     if (ipLocation) {
-      debugger;
       const viewsRequest = {
         continent: ipLocation.continent,
         continentGeoNameId: ipLocation.continent_geoname_id.toString(),
@@ -51,6 +46,7 @@ export async function addViews() {
         region: ipLocation.region,
         regionGeoNameId: ipLocation.region_geoname_id.toString(),
       };
+      
       const result = await agent.Utilities.addView(viewsRequest);
       if (result) {
         const viewLocalStore = {
@@ -58,9 +54,19 @@ export async function addViews() {
           date: new Date().toISOString(),
         };
         localStorage.setItem("view", JSON.stringify(viewLocalStore));
-      }
+      } 
     }
-  } catch (error) {
+  } catch (error: any) {
     console.log("Error when add views:", error);
+    if(error.data.statusCode === 409)
+    {
+      const viewLocalStore = {
+        isLimit: true,
+        totalViewCountInToday: 5,
+        date: new Date().toISOString(),
+      };
+      localStorage.setItem("view", JSON.stringify(viewLocalStore));
+    } 
+    
   }
 }

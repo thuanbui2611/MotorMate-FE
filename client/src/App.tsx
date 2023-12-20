@@ -42,7 +42,7 @@ function App() {
   useEffect(() => {
     const timer = setTimeout(() => {
       addViews();
-    }, 10000);
+    }, 15000);
     return () => {
       clearTimeout(timer);
     };
