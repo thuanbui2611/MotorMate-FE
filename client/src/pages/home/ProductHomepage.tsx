@@ -111,7 +111,7 @@ export default function ProductHomepage({ products }: Props) {
                       <img
                         className="object-cover h-full w-full rounded-t-lg md:rounded-t-2xl hover:scale-110 transition-all"
                         src={
-                          product.images[0].image
+                          product.images && product.images[0].image
                             ? product.images[0].image
                             : undefined
                         }
