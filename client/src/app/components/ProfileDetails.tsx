@@ -159,65 +159,67 @@ export default function ProfileDetails() {
               </div>
 
               <div className="w-full md:w-9/12 mx-2 bg-white">
-                <div className="flex justify-between items-center m-10 mb-0">
+                <div className="flex flex-col sm:flex-row justify-center items-center sm:justify-between sm:items-center p-5">
                   <h2 className="text-2xl md:text-4xl lg:text-5xl tracking-tight font-extrabold text-gradient">
                     Motorcycle for rent:
                   </h2>
                   {userLogin?.username.toLowerCase().trim() ===
                     profileUser?.username.toLowerCase().trim() && (
-                    <button
-                      onClick={handleAddVehicle}
-                      type="button"
-                      className="flex items-center w-fit h-fit text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-                    >
-                      <svg
-                        className="h-5 w-5 mr-2"
-                        viewBox="0 0 21.00 21.00"
-                        version="1.1"
-                        xmlns="http://www.w3.org/2000/svg"
-                        xmlnsXlink="http://www.w3.org/1999/xlink"
-                        fill="#ffffff"
-                        stroke="#ffffff"
+                    <div className="flex items-end justify-end w-full mt-2 sm:mt-0 sm:w-fit">
+                      <button
+                        onClick={handleAddVehicle}
+                        type="button"
+                        className="flex items-center justify-center w-fit h-fit text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-2 py-1 sm:px-3 sm:py-2.5 focus:outline-none"
                       >
-                        <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-                        <g
-                          id="SVGRepo_tracerCarrier"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        ></g>
-                        <g id="SVGRepo_iconCarrier">
-                          <title>plus_circle [#ffffff]</title>
-                          <desc>Created with Sketch.</desc> <defs> </defs>
+                        <svg
+                          className="h-5 w-5 mr-2"
+                          viewBox="0 0 21.00 21.00"
+                          version="1.1"
+                          xmlns="http://www.w3.org/2000/svg"
+                          xmlnsXlink="http://www.w3.org/1999/xlink"
+                          fill="#ffffff"
+                          stroke="#ffffff"
+                        >
+                          <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
                           <g
-                            id="Page-1"
-                            strokeWidth="0.00021000000000000004"
-                            fill="none"
-                            fillRule="evenodd"
-                          >
+                            id="SVGRepo_tracerCarrier"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          ></g>
+                          <g id="SVGRepo_iconCarrier">
+                            <title>plus_circle [#ffffff]</title>
+                            <desc>Created with Sketch.</desc> <defs> </defs>
                             <g
-                              id="Dribbble-Light-Preview"
-                              transform="translate(-419.000000, -520.000000)"
-                              fill="#ffffff"
+                              id="Page-1"
+                              strokeWidth="0.00021000000000000004"
+                              fill="none"
+                              fillRule="evenodd"
                             >
                               <g
-                                id="icons"
-                                transform="translate(56.000000, 160.000000)"
+                                id="Dribbble-Light-Preview"
+                                transform="translate(-419.000000, -520.000000)"
+                                fill="#ffffff"
                               >
-                                <path
-                                  d="M374.55,369 L377.7,369 L377.7,371 L374.55,371 L374.55,374 L372.45,374 L372.45,371 L369.3,371 L369.3,369 L372.45,369 L372.45,366 L374.55,366 L374.55,369 Z M373.5,378 C368.86845,378 365.1,374.411 365.1,370 C365.1,365.589 368.86845,362 373.5,362 C378.13155,362 381.9,365.589 381.9,370 C381.9,374.411 378.13155,378 373.5,378 L373.5,378 Z M373.5,360 C367.70085,360 363,364.477 363,370 C363,375.523 367.70085,380 373.5,380 C379.29915,380 384,375.523 384,370 C384,364.477 379.29915,360 373.5,360 L373.5,360 Z"
-                                  id="plus_circle-[#ffffff]"
-                                ></path>
+                                <g
+                                  id="icons"
+                                  transform="translate(56.000000, 160.000000)"
+                                >
+                                  <path
+                                    d="M374.55,369 L377.7,369 L377.7,371 L374.55,371 L374.55,374 L372.45,374 L372.45,371 L369.3,371 L369.3,369 L372.45,369 L372.45,366 L374.55,366 L374.55,369 Z M373.5,378 C368.86845,378 365.1,374.411 365.1,370 C365.1,365.589 368.86845,362 373.5,362 C378.13155,362 381.9,365.589 381.9,370 C381.9,374.411 378.13155,378 373.5,378 L373.5,378 Z M373.5,360 C367.70085,360 363,364.477 363,370 C363,375.523 367.70085,380 373.5,380 C379.29915,380 384,375.523 384,370 C384,364.477 379.29915,360 373.5,360 L373.5,360 Z"
+                                    id="plus_circle-[#ffffff]"
+                                  ></path>
+                                </g>
                               </g>
                             </g>
                           </g>
-                        </g>
-                      </svg>
-                      <span>Add a vehicle</span>
-                    </button>
+                        </svg>
+                        <span>Add Vehicle</span>
+                      </button>{" "}
+                    </div>
                   )}
                 </div>
 
-                <div className="mx-10">
+                <div className="mx-10 pb-8">
                   {products && products.length > 0 ? (
                     <ProductCarousel
                       userLogin={userLogin}

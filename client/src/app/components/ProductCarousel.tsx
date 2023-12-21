@@ -18,16 +18,16 @@ export default function ProductCarousel({ products, userLogin }: Props) {
     );
 
   const [itemsPerSlide, setItemsPerSlide] = useState(4);
+  const [gutter, setGutter] = useState(20);
+
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth <= 500) {
+      if (window.innerWidth <= 600) {
         setItemsPerSlide(1);
-      } else if (window.innerWidth <= 850) {
+      } else if (window.innerWidth <= 1200) {
         setItemsPerSlide(2);
-      } else if (window.innerWidth <= 1100) {
-        setItemsPerSlide(3);
       } else {
-        setItemsPerSlide(4);
+        setItemsPerSlide(3);
       }
     };
     handleResize(); // Initial check
@@ -39,13 +39,13 @@ export default function ProductCarousel({ products, userLogin }: Props) {
 
   const { carouselFragment, slideToPrevItem, slideToNextItem } =
     useSpringCarousel({
-      autoplay: products.length < itemsPerSlide ? false : true,
-      slideToNextItem: products.length < itemsPerSlide ? false : true,
-      slideToPrevItem: products.length < itemsPerSlide ? false : true,
+      // autoplay: products.length < itemsPerSlide ? false : true,
+      slideToNextItem: products.length <= itemsPerSlide ? false : true,
+      slideToPrevItem: products.length <= itemsPerSlide ? false : true,
       itemsPerSlide:
         products.length < itemsPerSlide ? products.length : itemsPerSlide,
-      withLoop: products.length < itemsPerSlide ? false : true,
-      gutter: 24,
+      withLoop: products.length <= itemsPerSlide ? false : true,
+      gutter: gutter,
       items: products.map((product) => {
         return {
           ...products,

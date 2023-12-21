@@ -30,7 +30,7 @@ export default function ProductSuggested({ vehicle }: Props) {
       {/* <!-- Card Blog --> */}
       <div className="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
         {/* <!-- Title --> */}
-        <div className="max-w-2xl text-center mx-auto ">
+        <div className="max-w-2xl text-center mx-auto">
           <h2 className="text-2xl font-bold md:text-4xl md:leading-tight dark:text-white">
             Related
           </h2>

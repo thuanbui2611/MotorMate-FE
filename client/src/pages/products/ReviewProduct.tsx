@@ -72,29 +72,6 @@ export default function ReviewProduct({ vehicle }: Props) {
         </li>
       );
     }
-    let ratingText = "";
-    switch (rating) {
-      case 1:
-        ratingText = "Very Bad";
-        break;
-      case 2:
-        ratingText = "Bad";
-        break;
-      case 3:
-        ratingText = "Normal";
-        break;
-      case 4:
-        ratingText = "Good";
-        break;
-      case 5:
-        ratingText = "Excellent";
-        break;
-    }
-    ratingSVG.push(
-      <li className="text-gradient ml-2 font-bold -mt-1 text-lg">
-        {ratingText}
-      </li>
-    );
     return ratingSVG;
   };
 
@@ -123,7 +100,7 @@ export default function ReviewProduct({ vehicle }: Props) {
                       <img
                         src={review.avatar}
                         alt="user-avatar"
-                        className="mb-5 rounded-full h-12 w-12"
+                        className="mb-5 rounded-full h-12 w-12 min-w-[48px]"
                       />
                     </div>
                     <div className="flex flex-col justify-start items-start space-y-2 mt-1">
@@ -133,80 +110,21 @@ export default function ReviewProduct({ vehicle }: Props) {
                       <p className="text-sm leading-none text-gray-600 ">
                         14 July 2021
                       </p>
-                      <div className="cursor-pointer mt-2 md:mt-0">
+                      <div className="flex flex-col sm:flex-row cursor-pointer mt-2 md:mt-0">
                         <ul className="flex pb-1">
                           {renderRatingSVG(review.rating)}
-                          {/* <li>
-                          <svg
-                            viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="20"
-                            height="20"
-                            fill="#ffc73a"
-                          >
-                            <path
-                              d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"
-                              pathLength="360"
-                            ></path>
-                          </svg>
-                        </li>
-                        <li>
-                          <svg
-                            viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="20"
-                            height="20"
-                            fill="#ffc73a"
-                          >
-                            <path
-                              d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"
-                              pathLength="360"
-                            ></path>
-                          </svg>
-                        </li>
-                        <li>
-                          <svg
-                            viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="20"
-                            height="20"
-                            fill="#ffc73a"
-                          >
-                            <path
-                              d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"
-                              pathLength="360"
-                            ></path>
-                          </svg>
-                        </li>
-                        <li>
-                          <svg
-                            viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="20"
-                            height="20"
-                            fill="#ffc73a"
-                          >
-                            <path
-                              d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"
-                              pathLength="360"
-                            ></path>
-                          </svg>
-                        </li>
-                        <li>
-                          <svg
-                            viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="20"
-                            height="20"
-                            fill="#ffc73a"
-                          >
-                            <path
-                              d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"
-                              pathLength="360"
-                            ></path>
-                          </svg>
-                        </li> */}
                         </ul>
+                        <div className="text-gradient ml-0 mt-0 sm:ml-2 font-bold sm:-mt-1 text-lg">
+                          {review.rating === 1
+                            ? "Very Bad"
+                            : review.rating === 2
+                            ? "Bad"
+                            : review.rating === 3
+                            ? "Normal"
+                            : review.rating === 4
+                            ? "Good"
+                            : "Excellent"}
+                        </div>
                       </div>
                     </div>
                   </div>

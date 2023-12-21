@@ -136,7 +136,7 @@ export default function MyProducts() {
   ) : (
     <>
       <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default sm:px-7.5 xl:pb-1 min-h-screen">
-        <div className="flex justify-between items-center">
+        <div className="flex flex-col sm:flex-row justify-start items-start sm:justify-between sm:items-center">
           <div className="flex bg-gray-50 items-center p-2 w-fit rounded-xl shadow-sm">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -163,144 +163,58 @@ export default function MyProducts() {
               style={{ boxShadow: "none" }}
             />
           </div>
-          <button
-            onClick={() => handleSelectVehicle("Add new Vehicle")}
-            type="button"
-            className="flex items-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-          >
-            <svg
-              className="h-5 w-5 mr-2"
-              viewBox="0 0 21.00 21.00"
-              version="1.1"
-              xmlns="http://www.w3.org/2000/svg"
-              xmlnsXlink="http://www.w3.org/1999/xlink"
-              fill="#ffffff"
-              stroke="#ffffff"
+          <div className="flex items-end justify-end w-full sm:w-fit mt-4 sm:mt-0">
+            <button
+              onClick={() => handleSelectVehicle("Add new Vehicle")}
+              type="button"
+              className="flex items-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-2 py-1 md:px-3 md:py-2.5  focus:outline-none "
             >
-              <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-              <g
-                id="SVGRepo_tracerCarrier"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              ></g>
-              <g id="SVGRepo_iconCarrier">
+              <svg
+                className="h-5 w-5 mr-2"
+                viewBox="0 0 21.00 21.00"
+                version="1.1"
+                xmlns="http://www.w3.org/2000/svg"
+                xmlnsXlink="http://www.w3.org/1999/xlink"
+                fill="#ffffff"
+                stroke="#ffffff"
+              >
+                <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
                 <g
-                  id="Page-1"
-                  strokeWidth="0.00021000000000000004"
-                  fill="none"
-                  fillRule="evenodd"
-                >
+                  id="SVGRepo_tracerCarrier"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                ></g>
+                <g id="SVGRepo_iconCarrier">
                   <g
-                    id="Dribbble-Light-Preview"
-                    transform="translate(-419.000000, -520.000000)"
-                    fill="#ffffff"
+                    id="Page-1"
+                    strokeWidth="0.00021000000000000004"
+                    fill="none"
+                    fillRule="evenodd"
                   >
-                    <g id="icons" transform="translate(56.000000, 160.000000)">
-                      <path
-                        d="M374.55,369 L377.7,369 L377.7,371 L374.55,371 L374.55,374 L372.45,374 L372.45,371 L369.3,371 L369.3,369 L372.45,369 L372.45,366 L374.55,366 L374.55,369 Z M373.5,378 C368.86845,378 365.1,374.411 365.1,370 C365.1,365.589 368.86845,362 373.5,362 C378.13155,362 381.9,365.589 381.9,370 C381.9,374.411 378.13155,378 373.5,378 L373.5,378 Z M373.5,360 C367.70085,360 363,364.477 363,370 C363,375.523 367.70085,380 373.5,380 C379.29915,380 384,375.523 384,370 C384,364.477 379.29915,360 373.5,360 L373.5,360 Z"
-                        id="plus_circle-[#ffffff]"
-                      ></path>
+                    <g
+                      id="Dribbble-Light-Preview"
+                      transform="translate(-419.000000, -520.000000)"
+                      fill="#ffffff"
+                    >
+                      <g
+                        id="icons"
+                        transform="translate(56.000000, 160.000000)"
+                      >
+                        <path
+                          d="M374.55,369 L377.7,369 L377.7,371 L374.55,371 L374.55,374 L372.45,374 L372.45,371 L369.3,371 L369.3,369 L372.45,369 L372.45,366 L374.55,366 L374.55,369 Z M373.5,378 C368.86845,378 365.1,374.411 365.1,370 C365.1,365.589 368.86845,362 373.5,362 C378.13155,362 381.9,365.589 381.9,370 C381.9,374.411 378.13155,378 373.5,378 L373.5,378 Z M373.5,360 C367.70085,360 363,364.477 363,370 C363,375.523 367.70085,380 373.5,380 C379.29915,380 384,375.523 384,370 C384,364.477 379.29915,360 373.5,360 L373.5,360 Z"
+                          id="plus_circle-[#ffffff]"
+                        ></path>
+                      </g>
                     </g>
                   </g>
                 </g>
-              </g>
-            </svg>
-            <span>Add new vehicle</span>
-          </button>
-        </div>
-        <div className="flex overflow-auto scrollbar max-h-[333px] justify-center items-center">
-          <div className="flex flex-wrap space-x-2 space-y-2 justify-start items-center mb-2 w-full">
-            <div className="max-w-[25%] min-w-[220px] flex-1  ml-2 mt-2">
-              {/* Filter city */}
-              {/* {!cities ? (
-                  <LoaderButton />
-                ) : (
-                  <Autocomplete
-                    fullWidth={true}
-                    size="small"
-                    multiple={true}
-                    disablePortal
-                    value={selectedCities}
-                    options={cities}
-                    getOptionLabel={(option) => option.Name}
-                    onChange={(event, newValue) =>
-                      handleSelectCityChange(event, newValue)
-                    }
-                    renderInput={(params) => (
-                      <TextField {...params} placeholder="Cities" />
-                    )}
-                  />
-                )} */}
-            </div>
-            <div className="max-w-[25%] min-w-[170px] flex-1">
-              {/* Filter by models */}
-              {/* {loadingFetchModelsFilter ? (
-                  <LoaderButton />
-                ) : (
-                  <Autocomplete
-                    fullWidth={true}
-                    size="small"
-                    multiple={true}
-                    disablePortal
-                    value={selectedModels}
-                    options={models}
-                    getOptionLabel={(option) => option.name}
-                    onChange={(event, newValue) =>
-                      handleSelectModelChange(event, newValue)
-                    }
-                    renderInput={(params) => (
-                      <TextField {...params} placeholder="Models" />
-                    )}
-                  />
-                )} */}
-            </div>
-            <div className="max-w-[25%] min-w-[170px] flex-1">
-              {/* Filter by collections */}
-              {/* {loadingFetchCollectionsFilter ? (
-                  <LoaderButton />
-                ) : (
-                  <Autocomplete
-                    fullWidth={true}
-                    size="small"
-                    multiple={true}
-                    disablePortal
-                    value={selectedCollections}
-                    options={collections}
-                    getOptionLabel={(option) => option.name}
-                    onChange={(event, newValue) =>
-                      handleSelectCollectionChange(event, newValue)
-                    }
-                    renderInput={(params) => (
-                      <TextField {...params} placeholder="Collections" />
-                    )}
-                  />
-                )} */}
-            </div>
-            <div className="max-w-[25%] min-w-[170px] flex-1">
-              {/* Filter by brands */}
-              {/* {loadingFetchBrandsFilter ? (
-                  <LoaderButton />
-                ) : (
-                  <Autocomplete
-                    fullWidth={true}
-                    size="small"
-                    multiple={true}
-                    disablePortal
-                    value={selectedBrands}
-                    options={brands}
-                    getOptionLabel={(option) => option.name}
-                    onChange={(event, newValue) =>
-                      handleSelectBrandChange(event, newValue)
-                    }
-                    renderInput={(params) => (
-                      <TextField {...params} placeholder="Brands" />
-                    )}
-                  />
-                )} */}
-            </div>
+              </svg>
+              <span className="text-xs sm:text-sm">Add Vehicle</span>
+            </button>
           </div>
         </div>
-        <div className="max-w-full overflow-x-auto scrollbar rounded-lg border-gray-300 border shadow-md mb-5">
+
+        <div className="max-w-full overflow-x-auto scrollbar rounded-lg border-gray-300 border shadow-md my-5">
           <table className="w-full table-auto">
             <thead>
               <tr className="bg-gray-100 text-left font-bold">
