@@ -9,11 +9,13 @@ interface Props {
 }
 
 export default function ProductCard({ product, userLogin }: Props) {
-  const renderRatingSVG = (rating: number) => {
+  const renderRatingSVG = (product: Vehicle) => {
+    const rating = product.rating;
     const ratingInt = Math.floor(rating);
     const ratingDecimal = rating - ratingInt;
     const ratingSVG = [];
     let percentageColor = "";
+    let percentageColor2 = "";
     if (rating === 0) {
       for (let i = 0; i < 5; i++) {
         ratingSVG.push(
@@ -36,8 +38,10 @@ export default function ProductCard({ product, userLogin }: Props) {
       for (let i = 0; i < 5; i++) {
         if (i < ratingInt) {
           percentageColor = "100%";
+          percentageColor2 = "20%";
         } else {
           percentageColor = ratingDecimal * 100 + "%";
+          percentageColor2 = "0%";
         }
         ratingSVG.push(
           <li key={i}>
@@ -50,20 +54,20 @@ export default function ProductCard({ product, userLogin }: Props) {
             >
               <defs>
                 <linearGradient
-                  id={`colorGradient${i}`}
+                  id={`${product.id + i}`}
                   x1="0"
                   y1="0"
                   x2="1"
                   y2="0"
                 >
                   <stop offset={percentageColor} stopColor="#ffc73a" />
-                  <stop offset="20%" stopColor="#ffffff" />
+                  <stop offset={percentageColor2} stopColor="#ffffff" />
                 </linearGradient>
               </defs>
               <path
                 d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"
                 pathLength="360"
-                fill={`url(#colorGradient${i})`}
+                fill={`url(#${product.id + i})`}
               ></path>
             </svg>
           </li>
@@ -159,7 +163,7 @@ export default function ProductCard({ product, userLogin }: Props) {
             <li className="text-sm font-semibold -mb-[2px] mr-1 text-[#ffc73a]">
               {product.rating}
             </li>
-            {renderRatingSVG(product.rating)}
+            {renderRatingSVG(product)}
           </ul>
           <p className="text-lg">
             <span className="text-green-600">

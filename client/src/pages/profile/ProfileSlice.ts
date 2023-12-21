@@ -195,6 +195,10 @@ export const ProfileSlice = createSlice({
       toast.success("Update profile successfully!");
       state.profileUser = action.payload;
     });
+    builder.addCase(updateProfileAsync.rejected, (state, action) => {
+      toast.success("Update profile failed!");
+      console.log("Update profile failed: ", action);
+    });
   },
 });
 

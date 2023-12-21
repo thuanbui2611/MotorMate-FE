@@ -11,6 +11,7 @@ export interface Review {
   title: string;
   content: string;
   images: string[];
+  createdAt: string;
 }
 
 export interface ReviewParams {

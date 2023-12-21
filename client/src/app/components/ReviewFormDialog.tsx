@@ -3,15 +3,13 @@ import {
   Dialog,
   DialogHeader,
   DialogBody,
-  DialogFooter,
 } from "@material-tailwind/react";
 import { LoadingButton } from "@mui/lab";
-import { TextField } from "@mui/material";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { Image } from "../../app/models/Image";
 import { Shop, Vehicle } from "../models/TripRequest";
-import { useAppSelector } from "../store/ConfigureStore";
+import { useAppDispatch, useAppSelector } from "../store/ConfigureStore";
 import { uploadImages } from "../utils/Cloudinary";
 import agent from "../api/agent";
 import { FieldValues, useForm } from "react-hook-form";
@@ -31,19 +29,19 @@ export default function ReviewFormDialog({ vehicle, shop, onClose }: Props) {
     null
   );
   const [rating, setRating] = useState<number>();
-  const { userDetail, userLoading } = useAppSelector((state) => state.account);
+  const { userDetail } = useAppSelector((state) => state.account);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const {
     control,
     register,
-    reset,
     handleSubmit,
-    setValue,
     formState: { isSubmitting },
   } = useForm({
     mode: "all",
   });
+
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     //add selected images when user upload

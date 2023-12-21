@@ -12,11 +12,13 @@ export default function ProductHomepage({ products }: Props) {
   const [currentSlide, setCurrentSlide] = useState(products[0].id);
   const userLogin = useAppSelector((state) => state.account.userDetail);
 
-  const renderRatingSVG = (rating: number) => {
+  const renderRatingSVG = (product: Vehicle) => {
+    const rating = product.rating;
     const ratingInt = Math.floor(rating);
     const ratingDecimal = rating - ratingInt;
     const ratingSVG = [];
     let percentageColor = "";
+    let percentageColor2 = "";
     if (rating === 0) {
       for (let i = 0; i < 5; i++) {
         ratingSVG.push(
@@ -39,8 +41,10 @@ export default function ProductHomepage({ products }: Props) {
       for (let i = 0; i < 5; i++) {
         if (i < ratingInt) {
           percentageColor = "100%";
+          percentageColor2 = "20%";
         } else {
           percentageColor = ratingDecimal * 100 + "%";
+          percentageColor2 = "0%";
         }
         ratingSVG.push(
           <li key={i}>
@@ -53,7 +57,7 @@ export default function ProductHomepage({ products }: Props) {
             >
               <defs>
                 <linearGradient
-                  id={`colorGradient${i}`}
+                  id={`${product.id + i}`}
                   x1="0"
                   y1="0"
                   x2="1"
@@ -61,13 +65,13 @@ export default function ProductHomepage({ products }: Props) {
                 >
                   {/* set value for color, $.1 -> 10%, $.2 -> 20%... */}
                   <stop offset={percentageColor} stopColor="#ffc73a" />
-                  <stop offset="20%" stopColor="#ffffff" />
+                  <stop offset={percentageColor2} stopColor="#ffffff" />
                 </linearGradient>
               </defs>
               <path
                 d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"
                 pathLength="360"
-                fill={`url(#colorGradient${i})`}
+                fill={`url(#${product.id + i})`}
               ></path>
             </svg>
           </li>
@@ -211,7 +215,7 @@ export default function ProductHomepage({ products }: Props) {
                     <ul
                       className={`flex ${product.rating === 0 && "gap-[2px]"}`}
                     >
-                      {renderRatingSVG(product.rating)}
+                      {renderRatingSVG(product)}
                     </ul>
                   </div>
 

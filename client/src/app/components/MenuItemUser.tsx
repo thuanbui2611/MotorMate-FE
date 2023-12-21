@@ -153,12 +153,12 @@ export default function MenuItemUser({ user }: Props) {
             </Link>
           </li>
           <li>
-            <button
+            <div
               onClick={() => dispatch(signOut())}
-              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
             >
               Sign out
-            </button>
+            </div>
           </li>
         </ul>
       </div>

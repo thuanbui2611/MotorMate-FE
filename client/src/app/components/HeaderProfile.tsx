@@ -6,12 +6,15 @@ import { useAppDispatch, useAppSelector } from "../store/ConfigureStore";
 import { updateProfileAsync } from "../../pages/profile/ProfileSlice";
 import { updateUser } from "../../pages/account/AccountSlice";
 import { setIsOpenChat, setStartChatToUser } from "../../pages/chat/ChatSlice";
+import LoaderButton from "./LoaderButton";
 
 interface Props {
   profileUser: UserDetail | null;
 }
 
 export default function ProfileInfo({ profileUser }: Props) {
+  const [updateProfileLoading, setUpdateProfileLoading] =
+    useState<boolean>(false);
   const [imageUploaded, setImageUploaded] = useState<File | null>();
   const [imageReview, setImageReview] = useState<{
     name: string;
@@ -48,12 +51,14 @@ export default function ProfileInfo({ profileUser }: Props) {
   async function changeAvatar() {
     try {
       setIsClickConfirm(true);
+      setUpdateProfileLoading(true);
       if (imageUploaded) {
         const image = await uploadImage(imageUploaded);
         const formData = {
           username: userLogin?.username,
           firstName: userLogin?.firstName,
           lastName: userLogin?.lastName,
+          bio: userLogin?.bio,
           address: userLogin?.address,
           phoneNumber: userLogin?.phoneNumber,
           image: {
@@ -62,10 +67,10 @@ export default function ProfileInfo({ profileUser }: Props) {
           },
           dataOfBirth: userLogin?.dateOfBirth,
         };
-        console.log(formData);
         const response = await dispatch(updateProfileAsync(formData));
         if (response.meta.requestStatus === "fulfilled") {
           dispatch(updateUser(response.payload));
+          setUpdateProfileLoading(false);
         }
       }
     } catch (error: any) {
@@ -89,17 +94,24 @@ export default function ProfileInfo({ profileUser }: Props) {
 
           <div className="absolute flex flex-col w-full md:w-fit md:flex-row justify-center bottom-0 left-0 items-center ">
             <div className="relative">
-              <img
-                className="object-cover w-40 h-40 ml-0 -mb-16 rounded-full md:ml-4 lg:ml-12 lg:-mb-24 lg:w-60 lg:h-60"
-                src={
-                  imageReview
-                    ? imageReview?.url
-                    : profileUser?.image?.imageUrl
-                    ? profileUser?.image?.imageUrl
-                    : require("../../app/assets/images/icon/user.png")
-                }
-                alt="Avatar user"
-              />
+              {updateProfileLoading ? (
+                <div className="flex items-center justify-center w-40 h-40 ml-0 -mb-16 rounded-full md:ml-4 lg:ml-12 lg:-mb-24 lg:w-60 lg:h-60 border-black border">
+                  <LoaderButton />
+                </div>
+              ) : (
+                <img
+                  className="object-cover w-40 h-40 ml-0 -mb-16 rounded-full md:ml-4 lg:ml-12 lg:-mb-24 lg:w-60 lg:h-60"
+                  src={
+                    imageReview
+                      ? imageReview?.url
+                      : profileUser?.image?.imageUrl
+                      ? profileUser?.image?.imageUrl
+                      : require("../../app/assets/images/icon/user.png")
+                  }
+                  alt="Avatar user"
+                />
+              )}
+
               {imageReview && !isClickConfirm && (
                 <div className="absolute flex items-center space-x-2 right-10 -bottom-24 lg:right-20 lg:-bottom-36 w-fit">
                   <svg

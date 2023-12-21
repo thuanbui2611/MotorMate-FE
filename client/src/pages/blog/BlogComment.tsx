@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import LoaderButton from "../../app/components/LoaderButton";
 import { FieldValues, useForm } from "react-hook-form";
 import AppTextInput from "../../app/components/AppTextInput";
+import { Link } from "react-router-dom";
 interface Props {
   blogId: string | undefined;
 }
@@ -176,9 +177,12 @@ export default function BlogCommentPage({ blogId }: Props) {
                   </div>
                   <div className="w-full flex-1 justify-start items-start flex-col bg-gray-200/50 ml-2 rounded-2xl p-4">
                     <div className="flex w-full justify-between items-start">
-                      <p className="text-sm sm:text-base leading-none text-black font-bold">
+                      <Link
+                        to={"/profile/" + comment.username}
+                        className="text-sm sm:text-base leading-none text-black font-bold hover:underline"
+                      >
                         {comment.username}
-                      </p>
+                      </Link>
                       <p className="text-xs sm:text-sm leading-none text-black font-medium text-right ml-2 sm:ml-0">
                         {new Date(comment.createdAt).toLocaleString([], {
                           year: "numeric",

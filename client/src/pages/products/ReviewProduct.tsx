@@ -104,17 +104,25 @@ export default function ReviewProduct({ vehicle }: Props) {
                       />
                     </div>
                     <div className="flex flex-col justify-start items-start space-y-2 mt-1">
-                      <p className="text-base font-medium leading-none text-gray-800 ">
+                      <p className="text-base font-semibold leading-none text-gray-800 ">
                         {review.username}
                       </p>
-                      <p className="text-sm leading-none text-gray-600 ">
-                        14 July 2021
+                      <p className="text-sm leading-none font-medium text-gray-600 ">
+                        {review.createdAt &&
+                          new Date(review.createdAt).toLocaleDateString(
+                            "en-GB",
+                            {
+                              day: "2-digit",
+                              month: "2-digit",
+                              year: "numeric",
+                            }
+                          )}
                       </p>
                       <div className="flex flex-col sm:flex-row cursor-pointer mt-2 md:mt-0">
                         <ul className="flex pb-1">
                           {renderRatingSVG(review.rating)}
                         </ul>
-                        <div className="text-gradient ml-0 mt-0 sm:ml-2 font-bold sm:-mt-1 text-lg">
+                        <div className="text-gradient ml-0 mt-0 sm:ml-2 font-bold sm:-mt-1 text-base md:text-lg">
                           {review.rating === 1
                             ? "Very Bad"
                             : review.rating === 2
@@ -130,7 +138,7 @@ export default function ReviewProduct({ vehicle }: Props) {
                   </div>
                 </div>
 
-                <div className="w-full flex justify-start items-start flex-col bg-gray-50 md:px-8 py-8">
+                <div className="w-full flex justify-start items-start flex-col bg-gray-50 md:px-8 py-8 pt-2">
                   <div className="flex flex-col md:flex-row justify-between w-full">
                     <div className="flex flex-row justify-between items-start">
                       <p className="text-lg md:text-2xl font-bold leading-normal text-gray-800 dark:text-white">
