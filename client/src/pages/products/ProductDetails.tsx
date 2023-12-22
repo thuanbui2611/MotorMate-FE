@@ -134,52 +134,71 @@ export default function ProductDetails() {
     navigate("/check-out", { state: { vehicleCheckout: vehicleRent } });
   };
   const renderRatingSVG = () => {
-    if (!product?.rating) return;
-    if (product.rating === 0) return <></>;
+    if (product?.rating === null || product?.rating === undefined) return;
     const ratingInt = Math.floor(product.rating);
     const ratingDecimal = product.rating - ratingInt;
 
     const ratingSVG = [];
-    let percentageColor = "";
-    for (let i = 0; i < 5; i++) {
-      if (i < ratingInt) {
-        percentageColor = "100%";
-      } else {
-        percentageColor = ratingDecimal * 100 + "%";
+    let percentageColor = "0%";
+    let percentageColor2 = "0%";
+    let endStar = false;
+    if (product.rating === 0) {
+      for (let i = 0; i < 5; i++) {
+        ratingSVG.push(addRatingSVG(percentageColor, percentageColor2, i));
       }
-      ratingSVG.push(
-        <li key={i}>
-          <svg
-            className="w-8 h-8"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <defs>
-              <linearGradient
-                id={`colorGradient${i}`}
-                x1="0"
-                y1="0"
-                x2="1"
-                y2="0"
-              >
-                {/* set value for color, $.1 -> 10%, $.2 -> 20%... */}
-                <stop offset={percentageColor} stopColor="#ffc73a" />
-                <stop offset="20%" stopColor="#ffffff" />
-              </linearGradient>
-            </defs>
-            <path
-              d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"
-              pathLength="360"
-              fill={`url(#colorGradient${i})`}
-            ></path>
-          </svg>
-        </li>
-      );
+    } else {
+      for (let i = 0; i < 5; i++) {
+        if (i < ratingInt) {
+          percentageColor = "100%";
+          percentageColor2 = "20%";
+        } else if (ratingDecimal > 0 && !endStar) {
+          percentageColor = ratingDecimal * 100 + "%";
+          percentageColor2 = "0%";
+          endStar = true;
+        } else if (endStar) {
+          percentageColor = "0%";
+          percentageColor2 = "0%";
+        }
+        ratingSVG.push(addRatingSVG(percentageColor, percentageColor2, i));
+      }
     }
-
     return ratingSVG;
   };
 
+  const addRatingSVG = (
+    percentageColor: string,
+    percentageColor2: string,
+    key: any
+  ) => {
+    return (
+      <li key={key}>
+        <svg
+          className="w-8 h-8"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <defs>
+            <linearGradient
+              id={`colorGradient${key}`}
+              x1="0"
+              y1="0"
+              x2="1"
+              y2="0"
+            >
+              {/* set value for color, $.1 -> 10%, $.2 -> 20%... */}
+              <stop offset={percentageColor} stopColor="#ffc73a" />
+              <stop offset={percentageColor2} stopColor="#ffffff" />
+            </linearGradient>
+          </defs>
+          <path
+            d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"
+            pathLength="360"
+            fill={`url(#colorGradient${key})`}
+          ></path>
+        </svg>
+      </li>
+    );
+  };
   return loading ? (
     <Loading />
   ) : !product ||
@@ -354,13 +373,13 @@ export default function ProductDetails() {
         <FadeInSection options="fade-in-scale">
           {/* Shop information */}
           <div className="flex bg-white border border-gray-200 mt-10 w-fit rounded-2xl shadow-lg mx-auto">
-            <div className="flex text-center justify-center items-center text-gray-500 md:pr-2 ">
+            <div className="flex text-center justify-center items-center text-gray-500 md:pr-2 min-w-[200px]">
               <Link
                 to={"/profile/" + product.owner.username}
-                className="flex justify-center items-center w-20 h-20 pl-2 md:w-32 md:h-32"
+                className="flex justify-center items-center pl-2"
               >
                 <img
-                  className="mx-auto my-auto rounded-full shadow-lg cursor-pointer"
+                  className="rounded-full shadow-lg cursor-pointer w-14 h-14 sm:w-20 sm:h-20 md:w-28 md:h-28"
                   src={
                     product.owner.picture
                       ? product.owner.picture
@@ -372,7 +391,10 @@ export default function ProductDetails() {
 
               <div className="w-fit inline-flex flex-col text-left pl-3">
                 <h3 className="mr-2 mb-1 text-base font-medium md:text-2xl md:font-bold tracking-tight text-gray-900 hover:text-blue-600 line-clamp-2">
-                  <Link to={"/profile/" + product.owner.username}>
+                  <Link
+                    to={"/profile/" + product.owner.username}
+                    className=" line-clamp-2"
+                  >
                     {product.owner.name}
                   </Link>
                 </h3>
@@ -419,7 +441,7 @@ export default function ProductDetails() {
                 </div>
               </div>
             </div>
-            <div className="flex flex-col p-2 md:p-4 gap-2 md:gap-3 justify-center items-start border-l-2">
+            <div className="flex flex-col p-2 md:p-4 gap-2 md:gap-3 justify-center items-start border-l-2 max-w-[200px] sm:max-w-md">
               <div className="flex-col md:flex md:gap-2">
                 <div className="font-medium text-xs md:text-base">
                   Product:

@@ -15,8 +15,11 @@ export default function Profile() {
   const dispatch = useAppDispatch();
   useEffect(() => {
     //Fetch user
-    if (username && profileUser?.username !== username) {
-      dispatch(getProfileByUsernameAsync(username));
+    if (
+      username?.toLowerCase() &&
+      profileUser?.username !== username.toLowerCase()
+    ) {
+      dispatch(getProfileByUsernameAsync(username.toLowerCase()));
     }
   }, [username]);
 

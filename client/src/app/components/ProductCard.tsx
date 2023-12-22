@@ -16,6 +16,7 @@ export default function ProductCard({ product, userLogin }: Props) {
     const ratingSVG = [];
     let percentageColor = "";
     let percentageColor2 = "";
+    let endStar = false;
     if (rating === 0) {
       for (let i = 0; i < 5; i++) {
         ratingSVG.push(
@@ -39,44 +40,51 @@ export default function ProductCard({ product, userLogin }: Props) {
         if (i < ratingInt) {
           percentageColor = "100%";
           percentageColor2 = "20%";
-        } else {
+        } else if (ratingDecimal > 0 && !endStar) {
           percentageColor = ratingDecimal * 100 + "%";
+          percentageColor2 = "0%";
+          endStar = true;
+        } else if (endStar) {
+          percentageColor = "0%";
           percentageColor2 = "0%";
         }
         ratingSVG.push(
-          <li key={i}>
-            <svg
-              className="w-[2vw] min-w-[14px] md:w-4 md:h-4 lg:w-5 lg:h-5"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-              stroke="#a8a7a7"
-              strokeWidth="0.5px"
-            >
-              <defs>
-                <linearGradient
-                  id={`${product.id + i}`}
-                  x1="0"
-                  y1="0"
-                  x2="1"
-                  y2="0"
-                >
-                  <stop offset={percentageColor} stopColor="#ffc73a" />
-                  <stop offset={percentageColor2} stopColor="#ffffff" />
-                </linearGradient>
-              </defs>
-              <path
-                d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"
-                pathLength="360"
-                fill={`url(#${product.id + i})`}
-              ></path>
-            </svg>
-          </li>
+          addRatingSVG(percentageColor, percentageColor2, product.id, i)
         );
       }
     }
     return ratingSVG;
   };
-
+  const addRatingSVG = (
+    percentageColor: string,
+    percentageColor2: string,
+    key: any,
+    index: number
+  ) => {
+    return (
+      <li key={key}>
+        <svg
+          className="w-[2vw] min-w-[14px] md:w-4 md:h-4 lg:w-5 lg:h-5"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+          stroke="#a8a7a7"
+          strokeWidth="0.5px"
+        >
+          <defs>
+            <linearGradient id={`${key + index}`} x1="0" y1="0" x2="1" y2="0">
+              <stop offset={percentageColor} stopColor="#ffc73a" />
+              <stop offset={percentageColor2} stopColor="#ffffff" />
+            </linearGradient>
+          </defs>
+          <path
+            d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"
+            pathLength="360"
+            fill={`url(#${key + index})`}
+          ></path>
+        </svg>
+      </li>
+    );
+  };
   return product.isLocked ? (
     <></>
   ) : (

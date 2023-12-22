@@ -175,13 +175,14 @@ export default function ReviewProduct({ vehicle }: Props) {
             metaData.totalItemCount > reviews.length ? (
               <div
                 className="flex items-center justify-center mx-auto w-24 h-7 text-blue-500 hover:text-blue-700 cursor-pointer text-sm lg:text-base border border-blue-500 rounded-xl px-2 hover:bg-blue-400"
-                onClick={() =>
+                onClick={() => {
                   dispatch(
                     setReviewProductParams({
                       pageSize: reviewProductParams.pageSize + 5,
                     })
-                  )
-                }
+                  );
+                  dispatch(getReviewsProductAsync(vehicle.id));
+                }}
               >
                 {reviewProductLoaded ? <LoaderButton /> : <span>See more</span>}
               </div>

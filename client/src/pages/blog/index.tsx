@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 import agent from "../../app/api/agent";
 import { TextField } from "@mui/material";
 import FadeInSection from "../../app/components/FadeInSection";
+import { scrollToTop } from "../../app/utils/ScrollToTop";
 
 export default function BlogPage() {
   const [pageNumber, setPageNumber] = useSearchParams({ pageNumber: "" });
