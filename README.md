@@ -12,11 +12,27 @@ development and shape its vision for success:
 features may include real-time availability and pricing information, user reviews and ratings for rental service providers, personalized recommendations based on user preferences, and real-time chat integration. By embracing emerging technologies and user-centric design principles, the project aims to create an application that truly delights its users, optimizing the user journey, minimizing friction, and ensuring a seamless rental process.
 - **Foster a vibrant community:** The Motormate web app has a vision beyond being a mere rental platform - it strives to create a lively community of motorcycle enthusiasts. The project will integrate social features that enable users to connect and share their experiences, routes, and recommendations with fellow riders who share the same passion. By incorporating forums, user-generated content, and interactive elements, the Motormate web app will provide a dedicated space for riders to gather, inspire one another, and foster a sense of camaraderie.
 
-- ## Related Link
+## Related Link
 
 - **The Application can be view at:** [MOTORMATE WEBSITE](https://motormate.vercel.app/)
 - **The Admin Panel Application can be view at:** [MOTORMATE ADMIN WEBSITE](https://motormate-admin.vercel.app/)
 - **API Deffinition can be view at:** [API DEFFINITION](https://motormate.azurewebsites.net/swagger/index.html)
+
+## Application Image
+
+### Home Page & Chat box
+![chat-1](https://github.com/thuanbui2611/MotorMate-FE/assets/97430065/e0df17da-4b57-4c48-b8cc-4a94e330cd5b)
+![chat-2](https://github.com/thuanbui2611/MotorMate-FE/assets/97430065/e0393269-6eb6-40d9-8282-28911b3b07ea)
+
+### Checkout
+![checkout](https://github.com/thuanbui2611/MotorMate-FE/assets/97430065/102243eb-b93c-4942-bbe4-187a70da7bd9)
+
+### Payment
+![payment](https://github.com/thuanbui2611/MotorMate-FE/assets/97430065/ac225e2a-415b-42d5-b380-f6c979af0a0b)
+
+### Bill
+![bill](https://github.com/thuanbui2611/MotorMate-FE/assets/97430065/cdb6e4a1-80d2-4d96-bf52-74d3426dca8e)
+
 
 ## Technology Stack
 
